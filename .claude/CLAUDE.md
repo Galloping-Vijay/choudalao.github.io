@@ -88,9 +88,9 @@ git push
 
 ## 相关文档
 
-- [博客搭建文档](BLOG_SETUP.md) - 如何搭建和迁移博客
-- [写博客流程文档](WRITE_BLOG.md) - 如何写新文章并发布
-- [项目 README](README.md) - 项目介绍
+- [博客搭建文档](../BLOG_SETUP.md) - 如何搭建和迁移博客
+- [写博客流程文档](../WRITE_BLOG.md) - 如何写新文章并发布
+- [项目 README](../README.md) - 项目介绍
 
 ---
 

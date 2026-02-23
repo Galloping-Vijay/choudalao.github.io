@@ -3,7 +3,8 @@
     "allow": [
       "Bash(cd:*)",
       "Bash(hugo version:*)",
-      "Bash(./hugo.exe server*)"
+      "Bash(./hugo.exe server*)",
+      "Bash(npm uninstall:*)"
     ]
   },
   "statusline": {
