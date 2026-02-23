@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>php,过滤,过滤html标签,过滤html - 臭大佬博客</title>
+	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
+	<meta name="description" content="php,过滤,过滤html标签,过滤html">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link rel="dns-prefetch" href="//fonts.googleapis.com">
+	<link rel="dns-prefetch" href="//fonts.gstatic.com">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
+
+	<link rel="stylesheet" href="/css/style.css">
+	
+
+	<link rel="shortcut icon" href="/favicon.ico">
+		
+</head>
+<body class="body">
+	<div class="container container--outer">
+		<header class="header">
+	<div class="container header__container">
+		
+	<div class="logo">
+		<a class="logo__link" href="/" title="臭大佬博客" rel="home">
+			<div class="logo__item logo__text">
+					<div class="logo__title">臭大佬博客</div>
+					
+				</div>
+		</a>
+	</div>
+		
+<nav class="menu">
+	<button class="menu__btn" aria-haspopup="true" aria-expanded="false" tabindex="0">
+		<span class="menu__btn-title" tabindex="-1">菜单</span>
+	</button>
+	<ul class="menu__list">
+		<li class="menu__item">
+			<a class="menu__link" href="/">
+				
+				<span class="menu__text">首页</span>
+				
+			</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/post/">
+				
+				<span class="menu__text">归档</span>
+				
+			</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/about/">
+				
+				<span class="menu__text">关于</span>
+				
+			</a>
+		</li>
+	</ul>
+</nav>
+
+	</div>
+</header>
+		<div class="wrapper flex">
+			<div class="primary">
+			
+<main class="main" role="main">
+	<article class="post">
+		<header class="post__header">
+			<h1 class="post__title">php,过滤,过滤html标签,过滤html</h1>
+			
+		</header>
+		<div class="content post__content clearfix">
+			<p>&lt;p&gt;今天在做需求的时候遇到一个问题,就是数据内容中包含html标签(主要是因为里面的a标签冲突),然后这个内容是放在一个a标签内的,我在遍历的时候发现,页面无法显示内容,于是百度了一下,发现a标签内不能再套用a标签,说明如下:&lt;br&gt;&lt;/p&gt;&lt;p pingfang=&quot;&quot; microsoft=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot;&gt;&lt;span&gt;&lt;strong&gt;说明：&lt;/strong&gt;&lt;/span&gt;&lt;span&gt;&lt;strong&gt;&lt;/strong&gt;&lt;span&gt;a标签不能嵌套，若a标签中嵌套了a标签，浏览器会自动添加结束符号，故不能嵌套&lt;/span&gt;&lt;br&gt;&lt;/span&gt;&lt;/p&gt;&lt;p pingfang=&quot;&quot; microsoft=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot;&gt;&lt;span hiragino=&quot;&quot; sans=&quot;&quot; microsoft=&quot;&quot; color:=&quot;&quot; font-size:=&quot;&quot;&gt;&lt;strong&gt;例如:&lt;/strong&gt;&lt;/span&gt;&lt;/p&gt;&lt;p pingfang=&quot;&quot; microsoft=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot;&gt;&lt;span&gt;悦遇博客&amp;nbsp;悦遇商城&lt;/span&gt;&lt;/p&gt;&lt;p pingfang=&quot;&quot; microsoft=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot;&gt;&lt;span&gt;&lt;strong&gt;浏览器解析：&lt;/strong&gt;&lt;/span&gt;&lt;span&gt;&lt;strong&gt;&lt;/strong&gt;&lt;br&gt;&lt;/span&gt;&lt;/p&gt;&lt;pre class=&quot;brush:html;toolbar:false&quot;&gt;悦遇博客&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;悦遇商城&lt;br&gt;&lt;/pre&gt;&lt;p pingfang=&quot;&quot; microsoft=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot;&gt;&lt;span&gt;如果代码结构复杂，会导致html层级错乱&lt;/span&gt;&lt;/p&gt;&lt;p pingfang=&quot;&quot; microsoft=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot;&gt;&lt;span hiragino=&quot;&quot; sans=&quot;&quot; microsoft=&quot;&quot; line-height:=&quot;&quot; font-size:=&quot;&quot;&gt;不能嵌套的还有：&amp;nbsp;h不能直接套h标签&amp;nbsp;p标签是不可以套块标签的&lt;/span&gt;&lt;/p&gt;&lt;p pingfang=&quot;&quot; microsoft=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot;&gt;&lt;strong&gt;&lt;span hiragino=&quot;&quot; sans=&quot;&quot; microsoft=&quot;&quot; color:=&quot;&quot; line-height:=&quot;&quot; font-size:=&quot;&quot;&gt;解决办法：&lt;/span&gt;&lt;/strong&gt;&lt;br&gt;&lt;strong&gt;&lt;span hiragino=&quot;&quot; sans=&quot;&quot; microsoft=&quot;&quot; color:=&quot;&quot; line-height:=&quot;&quot; font-size:=&quot;&quot;&gt;1:span点击触发事件&lt;/span&gt;&lt;/strong&gt;&lt;/p&gt;&lt;pre class=&quot;brush:html;toolbar:false&quot;&gt;悦遇博客&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;悦遇商城&lt;br&gt;&lt;/pre&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;pre lay-lang=&quot;JavaScript&quot;&gt;&lt;code class=&quot;JavaScript&quot;&gt;function redict(canshu) {</p>
+<p>//接下来使用js代码进行页面跳转<br>
+window.location.href = canshu;</p>
+<p>}&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p pingfang=&quot;&quot; microsoft=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot;&gt;&lt;strong&gt;&lt;span hiragino=&quot;&quot; sans=&quot;&quot; microsoft=&quot;&quot; color:=&quot;&quot; line-height:=&quot;&quot; font-size:=&quot;&quot;&gt;2:使用php的htmlspecialchars() 函数&lt;/span&gt;&lt;/strong&gt;&lt;/p&gt;&lt;p pingfang=&quot;&quot; microsoft=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot;&gt;&lt;strong&gt;&lt;pre lay-lang=&quot;JavaScript&quot;&gt;&lt;code class=&quot;JavaScript&quot;&gt;$str=&lsquo;悦遇博客        悦遇商城  &lsquo;;
+echo htmlspecialchars($str);&lt;/code&gt;&lt;/pre&gt;&lt;/strong&gt;&lt;/p&gt;&lt;p pingfang=&quot;&quot; microsoft=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot;&gt;&lt;strong&gt;&lt;span hiragino=&quot;&quot; sans=&quot;&quot; microsoft=&quot;&quot; color:=&quot;&quot; line-height:=&quot;&quot; font-size:=&quot;&quot;&gt;&lt;br&gt;&lt;/span&gt;&lt;/strong&gt;&lt;/p&gt;&lt;p pingfang=&quot;&quot; microsoft=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot;&gt;输出如下:&lt;/p&gt;&lt;pre lay-lang=&quot;JavaScript&quot;&gt;&lt;code class=&quot;JavaScript&quot;&gt;&amp;amp; lt;a href=&quot;&amp;amp; gt;悦遇博客    &amp;amp; lt;a href=&quot;shop.meetoyou.com&quot;&amp;amp; gt;    悦遇商城&amp;amp; lt;/a&amp;amp; gt;&lt;/code&gt;&lt;/pre&gt;&lt;p pingfang=&quot;&quot; microsoft=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot;&gt;&lt;span hiragino=&quot;&quot; sans=&quot;&quot; microsoft=&quot;&quot; color:=&quot;&quot; line-height:=&quot;&quot; font-size:=&quot;&quot;&gt;&lt;/span&gt;&lt;strong pingfang=&quot;&quot; microsoft=&quot;&quot; white-space:=&quot;&quot;&gt;&lt;span hiragino=&quot;&quot; sans=&quot;&quot; microsoft=&quot;&quot; color:=&quot;&quot; line-height:=&quot;&quot;&gt;3:使用php&lt;/span&gt;&lt;/strong&gt;&lt;strong pingfang=&quot;&quot; microsoft=&quot;&quot; white-space:=&quot;&quot;&gt;&lt;span hiragino=&quot;&quot; sans=&quot;&quot; microsoft=&quot;&quot; color:=&quot;&quot; line-height:=&quot;&quot;&gt;的strip_tags()&lt;/span&gt;&lt;/strong&gt;&lt;strong&gt;&lt;span hiragino=&quot;&quot; sans=&quot;&quot; microsoft=&quot;&quot; color:=&quot;&quot; line-height:=&quot;&quot;&gt;函数&lt;/span&gt;&lt;/strong&gt;&lt;/p&gt;&lt;p pingfang=&quot;&quot; microsoft=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot;&gt;&lt;strong&gt;&lt;pre lay-lang=&quot;JavaScript&quot;&gt;&lt;code class=&quot;JavaScript&quot;&gt;$str=&quot;悦遇博客&quot;;
+echo strip_tags($str);&lt;/code&gt;&lt;/pre&gt;&lt;/strong&gt;&lt;/p&gt;&lt;p pingfang=&quot;&quot; microsoft=&quot;&quot; background-color:=&quot;&quot;&gt;输出如下:&lt;/p&gt;&lt;p pingfang=&quot;&quot; microsoft=&quot;&quot; background-color:=&quot;&quot;&gt;&lt;span hiragino=&quot;&quot; sans=&quot;&quot; microsoft=&quot;&quot; color:=&quot;&quot; line-height:=&quot;&quot;&gt;悦遇博客&lt;/span&gt;&lt;/p&gt;&lt;p pingfang=&quot;&quot; microsoft=&quot;&quot; background-color:=&quot;&quot;&gt;&lt;span hiragino=&quot;&quot; sans=&quot;&quot; microsoft=&quot;&quot; color:=&quot;&quot; line-height:=&quot;&quot;&gt;&lt;br&gt;&lt;/span&gt;&lt;/p&gt;&lt;p pingfang=&quot;&quot; microsoft=&quot;&quot; background-color:=&quot;&quot;&gt;&lt;strong pingfang=&quot;&quot; microsoft=&quot;&quot; white-space:=&quot;&quot;&gt;&lt;span hiragino=&quot;&quot; sans=&quot;&quot; microsoft=&quot;&quot; color:=&quot;&quot; line-height:=&quot;&quot;&gt;strip_tags和htmlspecialchars区别&lt;/span&gt;&lt;/strong&gt;&lt;/p&gt;&lt;p pingfang=&quot;&quot; microsoft=&quot;&quot; background-color:=&quot;&quot;&gt;&lt;span hiragino=&quot;&quot; sans=&quot;&quot; microsoft=&quot;&quot; color:=&quot;&quot; line-height:=&quot;&quot;&gt;&lt;br&gt;&lt;/span&gt;&lt;/p&gt;&lt;p pingfang=&quot;&quot; microsoft=&quot;&quot; background-color:=&quot;&quot;&gt;&lt;span hiragino=&quot;&quot; sans=&quot;&quot; microsoft=&quot;&quot; color:=&quot;&quot; line-height:=&quot;&quot;&gt;&lt;span microsoft=&quot;&quot; font-size:=&quot;&quot; background-color:=&quot;&quot;&gt;php htmlspecialchars函数用于将预定于的字符转换为html实体，而strip_tags函数用于去除过滤掉html或php标签，从字面意思上看，二者描述不一样，但是他们都可以用来去掉html标签，那么这两个函数在去除html标签上到底用什么区别呢？&lt;/span&gt;&lt;/span&gt;&lt;/p&gt;&lt;p pingfang=&quot;&quot; microsoft=&quot;&quot; background-color:=&quot;&quot;&gt;&lt;br&gt;&lt;/p&gt;&lt;p pingfang=&quot;&quot; microsoft=&quot;&quot; background-color:=&quot;&quot;&gt;&lt;span hiragino=&quot;&quot; sans=&quot;&quot; microsoft=&quot;&quot; color:=&quot;&quot; line-height:=&quot;&quot; background-color:=&quot;&quot;&gt;&lt;br&gt;&lt;/span&gt;&lt;/p&gt;&lt;p pingfang=&quot;&quot; microsoft=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot;&gt;&lt;strong&gt;&lt;span hiragino=&quot;&quot; sans=&quot;&quot; microsoft=&quot;&quot; color:=&quot;&quot; line-height:=&quot;&quot;&gt;&lt;/span&gt;&lt;/strong&gt;&lt;/p&gt;&lt;p microsoft=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot;&gt;&lt;strong&gt;区别一：&lt;/strong&gt;&lt;/p&gt;&lt;p microsoft=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot;&gt;strip_tags函数使用来去除HTML标签的，而htmlspecialchars并没有去除html标签，只是把标签转换为HTML实例，所以二者之间最大的区别是一个是删除掉HTML标签，一个是将html标签转换为其他字符。&lt;/p&gt;&lt;p microsoft=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot;&gt;&amp;nbsp;&lt;/p&gt;&lt;p microsoft=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot;&gt;&lt;strong&gt;区别二：&lt;/strong&gt;&lt;/p&gt;&lt;p microsoft=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot;&gt;如果需要去除HTML标签的字符串里面的标签原来就有错，例如少了大于的符号，在使用strip_tags函数会传回错误，而htmlspecialchars不会有错误出现，依然后转换为HTML实体。&lt;/p&gt;&lt;p microsoft=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot;&gt;&amp;nbsp;&lt;/p&gt;&lt;p microsoft=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot;&gt;&lt;strong&gt;区别三：&lt;/strong&gt;&lt;/p&gt;&lt;p microsoft=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot;&gt;在防止XSS攻击时，一般建议使用htmlspecialchars函数，因为strip_tags虽然可以删除HTML标签，但是它不会删除&lt;code&gt;&quot;或&rsquo;。因此就算你使用了&lt;/code&gt;strip_tags,仍然需要使用htmlspecialchars函数来过滤掉&lt;code&gt;&quot;或&rsquo;&lt;/code&gt;&lt;/p&gt;&lt;p microsoft=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot;&gt;在表单提交或用户留言板里，如果你希望数据原始输出带浏览器，那么请使用htmlspecialchars函数，不要使用strip_tags函数。&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;</p>
+
+		</div>
+	</article>
+</main>
+
+
+
+
+			</div>
+			
+		</div>
+		<footer class="footer">
+	<div class="container footer__container flex">
+		
+		<div class="footer__copyright">
+			&copy; 2026 臭大佬博客.
+			<span class="footer__copyright-credits">基于 <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> 引擎和 <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> 主题</span>
+		</div>
+	</div>
+</footer>
+	</div>
+<script async defer src="/js/menu.js"></script>
+</body>
+</html>

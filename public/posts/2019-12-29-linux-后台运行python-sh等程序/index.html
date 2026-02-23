@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Linux 后台运行python .sh等程序 - 臭大佬博客</title>
+	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
+	<meta name="description" content="Linux 后台运行python .sh等程序，以及查看和关闭后台运行程序操作">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link rel="dns-prefetch" href="//fonts.googleapis.com">
+	<link rel="dns-prefetch" href="//fonts.gstatic.com">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
+
+	<link rel="stylesheet" href="/css/style.css">
+	
+
+	<link rel="shortcut icon" href="/favicon.ico">
+		
+</head>
+<body class="body">
+	<div class="container container--outer">
+		<header class="header">
+	<div class="container header__container">
+		
+	<div class="logo">
+		<a class="logo__link" href="/" title="臭大佬博客" rel="home">
+			<div class="logo__item logo__text">
+					<div class="logo__title">臭大佬博客</div>
+					
+				</div>
+		</a>
+	</div>
+		
+<nav class="menu">
+	<button class="menu__btn" aria-haspopup="true" aria-expanded="false" tabindex="0">
+		<span class="menu__btn-title" tabindex="-1">菜单</span>
+	</button>
+	<ul class="menu__list">
+		<li class="menu__item">
+			<a class="menu__link" href="/">
+				
+				<span class="menu__text">首页</span>
+				
+			</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/post/">
+				
+				<span class="menu__text">归档</span>
+				
+			</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/about/">
+				
+				<span class="menu__text">关于</span>
+				
+			</a>
+		</li>
+	</ul>
+</nav>
+
+	</div>
+</header>
+		<div class="wrapper flex">
+			<div class="primary">
+			
+<main class="main" role="main">
+	<article class="post">
+		<header class="post__header">
+			<h1 class="post__title">Linux 后台运行python .sh等程序</h1>
+			
+		</header>
+		<div class="content post__content clearfix">
+			<h1 id="问题">问题</h1>
+<p>这不马上春节了嘛，所以就开始研究抢票程序了，哈哈哈，看看我的程序，</p>
+<p><img src="https://www.choudalao.com/uploads/20191229/20191229201150dBgVBH.png" alt=""></p>
+<p>程序是跑起来了，但是当我关闭终端（xshell）的时候，刷票也就退出了，这不是我要的结果啊，其实很多时候，像python文件以及一些.sh文件操作，我们都希望它在后台一直运行着，那怎么保持后台运行呢？</p>
+<h1 id="后台运行命令">后台运行命令</h1>
+<p>首先我们先来介绍几个命令</p>
+<h3 id="命令">&amp;命令</h3>
+<p>加在一个命令的最后，可以把这个命令放在后台执行</p>
+<h3 id="nohup命令">nohup命令</h3>
+<p>不挂断的运行命令</p>
+<h1 id="查看当前后台运行的命令">查看当前后台运行的命令</h1>
+<h3 id="jobs命令">jobs命令</h3>
+<p>查看当前终端后台运行的任务</p>
+<p>jobs -l选项可显示当前终端所有任务的PID，jobs的状态可以是running，stopped，Terminated。+ 号表示当前任务，- 号表示后一个任务。</p>
+<p><img src="https://www.choudalao.com/uploads/20191229/20191229202347g68tPA.png" alt=""></p>
+<h3 id="ps命令">ps命令</h3>
+<p>查看当前的所有进程</p>
+<p>ps -aux | grep &ldquo;test.sh&rdquo;    #a:显示所有程序  u:以用户为主的格式来显示   x:显示所有程序，不以终端机来区分</p>
+<p><img src="https://www.choudalao.com/uploads/20191229/20191229202331IDnH8f.png" alt=""></p>
+<h3 id="ps和jobs区别">ps和jobs区别</h3>
+<p>jobs和ps,区别是jobs用于查看当前终端后台运行的任务，换了终端就看不到了。而ps命令用于查看瞬间进程的动态，可以看到别的终端运行的后台进程。</p>
+<h1 id="关闭当前后台运行的命令">关闭当前后台运行的命令</h1>
+<p>有开启，肯定要知道关闭啊，</p>
+<p>kill命令：结束进程
+通过jobs命令查看jobnum，然后执行   kill %jobnum
+通过ps命令查看进程号PID，然后执行  kill %PID
+如果是前台进程的话，直接执行 Ctrl+c 就可以终止了</p>
+<p>栗子：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>kill -s <span style="color:#ae81ff">9</span> <span style="color:#ae81ff">1827</span>
+</span></span></code></pre></div><p>其中-s 9 制定了传递给进程的信号是９，即强制、尽快终止进程。各个终止信号及其作用见附录。1827是PID</p>
+<h1 id="前后台进程的切换与控制">前后台进程的切换与控制</h1>
+<p>（1）fg命令</p>
+<p>功能：将后台中的命令调至前台继续运行</p>
+<p>如果后台中有多个命令，可以先用jobs查看jobnun，然后用 fg %jobnum 将选中的命令调出。</p>
+<p>（2）Ctrl + z 命令</p>
+<p>功能：将一个正在前台执行的命令放到后台，并且处于暂停状态</p>
+<p>（3）bg命令</p>
+<p>功能：将一个在后台暂停的命令，变成在后台继续执行</p>
+<p>如果后台中有多个命令，可以先用jobs查看jobnum，然后用 bg %jobnum 将选中的命令调出继续执行。</p>
+<h1 id="例子">例子</h1>
+<p>就以微信群控那个为例吧！</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>nohup python -u WechatAddGroupHelper.py &gt; python.log 2&gt;&amp;<span style="color:#ae81ff">1</span> &amp;
+</span></span></code></pre></div><p>&gt; 表示把标准输出（STDOUT）重定向到 那个文件，这里重定向到了python.log
+&amp; 表示在后台执行脚本
+1是标准输出（STDOUT）的文件描述符，2是标准错误（STDERR）的文件描述符
+1&gt; python.log 简化为 &gt; python.log，表示把标准输出重定向到python.log这个文件
+2&gt;&amp;1 表示把标准错误重定向到标准输出，这里&amp;1表示标准输出 ， 为什么需要将标准错误重定向到标准输出的原因，是因为标准错误没有缓冲区，而STDOUT有。 这就会导致 commond &gt; python.log ，2&gt; python.log 文件python.log被两次打开，而STDOUT和 STDERR将会竞争覆盖，这肯定不是我门想要的
+-u参数，使得python不启用缓冲。</p>
+
+		</div>
+	</article>
+</main>
+
+
+
+
+			</div>
+			
+		</div>
+		<footer class="footer">
+	<div class="container footer__container flex">
+		
+		<div class="footer__copyright">
+			&copy; 2026 臭大佬博客.
+			<span class="footer__copyright-credits">基于 <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> 引擎和 <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> 主题</span>
+		</div>
+	</div>
+</footer>
+	</div>
+<script async defer src="/js/menu.js"></script>
+</body>
+</html>

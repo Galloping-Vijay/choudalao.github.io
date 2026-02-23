@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>PHPer的Go之路 -- Go 项目基本工程管理示例 - 臭大佬博客</title>
+	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
+	<meta name="description" content="Go 项目基本工程管理示例">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link rel="dns-prefetch" href="//fonts.googleapis.com">
+	<link rel="dns-prefetch" href="//fonts.gstatic.com">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
+
+	<link rel="stylesheet" href="/css/style.css">
+	
+
+	<link rel="shortcut icon" href="/favicon.ico">
+		
+</head>
+<body class="body">
+	<div class="container container--outer">
+		<header class="header">
+	<div class="container header__container">
+		
+	<div class="logo">
+		<a class="logo__link" href="/" title="臭大佬博客" rel="home">
+			<div class="logo__item logo__text">
+					<div class="logo__title">臭大佬博客</div>
+					
+				</div>
+		</a>
+	</div>
+		
+<nav class="menu">
+	<button class="menu__btn" aria-haspopup="true" aria-expanded="false" tabindex="0">
+		<span class="menu__btn-title" tabindex="-1">菜单</span>
+	</button>
+	<ul class="menu__list">
+		<li class="menu__item">
+			<a class="menu__link" href="/">
+				
+				<span class="menu__text">首页</span>
+				
+			</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/post/">
+				
+				<span class="menu__text">归档</span>
+				
+			</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/about/">
+				
+				<span class="menu__text">关于</span>
+				
+			</a>
+		</li>
+	</ul>
+</nav>
+
+	</div>
+</header>
+		<div class="wrapper flex">
+			<div class="primary">
+			
+<main class="main" role="main">
+	<article class="post">
+		<header class="post__header">
+			<h1 class="post__title">PHPer的Go之路 -- Go 项目基本工程管理示例</h1>
+			
+		</header>
+		<div class="content post__content clearfix">
+			<h1 id="编写计算器工程源码">编写计算器工程源码</h1>
+<p>新建一个src目录存放代码,由于我用到了git管理,所以会有一些git库管理的文件,这里可以忽略,我们主要关心src里面的内容.</p>
+<p>我们假设这个工程被划分为两个部分：</p>
+<p>可执行程序，名为 calc，内部只包含一个 calc.go 文件，该文件是计算器程序的入口文件；
+算法库，名为 simplemath，每个计算操作对应于一个同名的 Go 文件，比如 add.go 用于计算加法运算。
+这样，对应的工程目录组织应该如下所示：</p>
+<p><img src="https://www.choudalao.com/uploads/20191112/20191112111403GTjm5a.png" alt=""></p>
+<p>然后我们来编写每个 Go 文件的源代码，src/calc/calc.go 的源码如下：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 引入其它包</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> (
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;fmt&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;os&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;simplemath&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;strconv&#34;</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 定义一个用于打印程序使用指南的函数</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">Usage</span> = <span style="color:#66d9ef">func</span>() {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;USAGE: calc command [arguments] ...&#34;</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;\nThe commands are:\n\tadd\t计算两个数值相加\n\tsqrt\t计算一个非负数的平方根&#34;</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 程序入口函数</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">/*
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">	 * 用于获取命令行参数，注意程序名本身是第一个参数，
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">	 * 比如 calc add 1 2 这条指令，第一个参数是 calc
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">	 */</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">args</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Args</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// 除程序名本身外，至少需要传入两个其它参数，否则退出</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">args</span> <span style="color:#f92672">==</span> <span style="color:#66d9ef">nil</span> <span style="color:#f92672">||</span> len(<span style="color:#a6e22e">args</span>) &lt; <span style="color:#ae81ff">3</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">Usage</span>()
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">return</span>
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// 第二个参数表示计算方法</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">switch</span> <span style="color:#a6e22e">args</span>[<span style="color:#ae81ff">1</span>] {
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// 如果是加法的话</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">case</span> <span style="color:#e6db74">&#34;add&#34;</span>:
+</span></span><span style="display:flex;"><span>		<span style="color:#75715e">// 至少需要包含四个参数</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">if</span> len(<span style="color:#a6e22e">args</span>) <span style="color:#f92672">!=</span> <span style="color:#ae81ff">4</span> {
+</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;USAGE: calc add &lt;integer1&gt;&lt;integer2&gt;&#34;</span>)
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">return</span>
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>		<span style="color:#75715e">// 获取待相加的数值，并将类型转化为整型</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">v1</span>, <span style="color:#a6e22e">err1</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">strconv</span>.<span style="color:#a6e22e">Atoi</span>(<span style="color:#a6e22e">args</span>[<span style="color:#ae81ff">2</span>])
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">v2</span>, <span style="color:#a6e22e">err2</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">strconv</span>.<span style="color:#a6e22e">Atoi</span>(<span style="color:#a6e22e">args</span>[<span style="color:#ae81ff">3</span>])
+</span></span><span style="display:flex;"><span>		<span style="color:#75715e">// 获取参数出错，则退出</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err1</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> <span style="color:#f92672">||</span> <span style="color:#a6e22e">err2</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;USAGE: calc add &lt;integer1&gt;&lt;integer2&gt;&#34;</span>)
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">return</span>
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>		<span style="color:#75715e">// 从 simplemath 包引入 Add 方法进行加法计算</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">ret</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">simplemath</span>.<span style="color:#a6e22e">Add</span>(<span style="color:#a6e22e">v1</span>, <span style="color:#a6e22e">v2</span>)
+</span></span><span style="display:flex;"><span>		<span style="color:#75715e">// 打印计算结果</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;Result: &#34;</span>, <span style="color:#a6e22e">ret</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// 如果是计算平方根的话</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">case</span> <span style="color:#e6db74">&#34;sqrt&#34;</span>:
+</span></span><span style="display:flex;"><span>		<span style="color:#75715e">// 至少需要包含三个参数</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">if</span> len(<span style="color:#a6e22e">args</span>) <span style="color:#f92672">!=</span> <span style="color:#ae81ff">3</span> {
+</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;USAGE: calc sqrt &lt;integer&gt;&#34;</span>)
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">return</span>
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>		<span style="color:#75715e">// 获取待计算平方根的数值，并将类型转化为整型</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">v</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">strconv</span>.<span style="color:#a6e22e">Atoi</span>(<span style="color:#a6e22e">args</span>[<span style="color:#ae81ff">2</span>])
+</span></span><span style="display:flex;"><span>		<span style="color:#75715e">// 获取参数出错，则退出</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;USAGE: calc sqrt &lt;integer&gt;&#34;</span>)
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">return</span>
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>		<span style="color:#75715e">// 从 simplemath 包引入 Sqrt 方法进行平方根计算</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">ret</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">simplemath</span>.<span style="color:#a6e22e">Sqrt</span>(<span style="color:#a6e22e">v</span>)
+</span></span><span style="display:flex;"><span>		<span style="color:#75715e">// 打印计算结果</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;Result: &#34;</span>, <span style="color:#a6e22e">ret</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// 如果计算方法不支持，打印程序使用指南</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">default</span>:
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">Usage</span>()
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>这段代码相信对于有 PHP 编程基础的人来说，都不困难，需要注意的是在 Go 语言中，<strong>通过 var 来声明变量</strong>，<strong>并且可以将匿名函数赋值给变量以便后续使用</strong>，此外，还可以通过 <strong>:= 运算符来声明并初始化变量</strong>，这个时候，不需要通过 var 声明该变量，比如  args := os.Args 就是如此，需要明确的是，虽然看起来有点和动态语言声明变量类似，但与 PHP 不同，<strong>Go 是强类型语言</strong>，只不过底层会自动根据赋值判断对应变量的类型，如果你试图声明一个没有初始化值的变量，就会报错，关于 Go 语言变量声明和初始化我们后面还会详细介绍，这里简单了解下即可。</p>
+<p>接下来，我们编辑 src/simplemath/add.go 和 src/simplemath/sqrt.g 代码如下:</p>
+<p>add.go</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">simplemath</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">Add</span>(<span style="color:#a6e22e">a</span> <span style="color:#66d9ef">int</span>, <span style="color:#a6e22e">b</span> <span style="color:#66d9ef">int</span>) <span style="color:#66d9ef">int</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">a</span> <span style="color:#f92672">+</span> <span style="color:#a6e22e">b</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>sqrt.go</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">simplemath</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> <span style="color:#e6db74">&#34;math&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">Sqrt</span>(<span style="color:#a6e22e">i</span> <span style="color:#66d9ef">int</span>) <span style="color:#66d9ef">int</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">v</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">math</span>.<span style="color:#a6e22e">Sqrt</span>(float64(<span style="color:#a6e22e">i</span>))
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> int(<span style="color:#a6e22e">v</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h1 id="配置-gopath-环境变量">配置 GOPATH 环境变量</h1>
+<p>查看go的相关环境参数</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">go</span> <span style="color:#a6e22e">env</span>
+</span></span></code></pre></div><p>这里几个比较关键的变量 GOPATH 和GOROOT；
+GOPATH是go get指令默认下载和安装包的位置，通过go get指令，获取go的包，默认下载到GOPATH所指示的目录中。
+GOROOT是go安装的位置，也是go可执行文件的位置，也就是说，当我们命令行中打出go的指令时，系统能不能准确调用go的可执行文件 </p>
+<h2 id="win10下">win10下：</h2>
+<p><img src="https://www.choudalao.com/uploads/20191112/20191112114556AG5Kcv.png" alt=""></p>
+<p>我们发现GOPATH不是我们的项目路径，这时候我们需要设置环境变量GOPATH，如图所示：</p>
+<p><img src="https://www.choudalao.com/uploads/20191112/20191112115043FNGjZD.png" alt=""></p>
+<p><img src="https://www.choudalao.com/uploads/20191112/20191112115121hprzbm.png" alt=""></p>
+<p>确定关闭窗口后，需要重启cmd工具，重新打开后输入 go env 如下：</p>
+<p><img src="https://www.choudalao.com/uploads/20191112/20191112115333lx411H.png" alt=""></p>
+<h2 id="ubuntu下">ubuntu下</h2>
+<p><img src="https://www.choudalao.com/uploads/20191112/20191112122439EBwiwL.png" alt=""></p>
+<h3 id="配置环境变量">配置环境变量</h3>
+<p>默认的时候，GOPATH是没有配置好的，那么我们怎么修改这些环境变量呢
+首先，我们可以按照自己的意愿，在一个位置建一个文件夹，比如</p>
+<pre tabindex="0"><code>mkdir /www/wwwroot/default/goCode
+</code></pre><p>然后，配置环境变量有三个方法：</p>
+<h4 id="最根本的方法就是修改etcprofile文件">最根本的方法就是修改/etc/profile文件</h4>
+<pre tabindex="0"><code>sudo vim /etc/profile
+</code></pre><blockquote>
+<p>*注意这里必须要sudo，因为系统目录下的文档不允许任意修改的 
+在最后添加export GOPATH=/www/wwwroot/default/goCode 
+这个办法修改是对所有的用户都生效的,修改之后要重启就会另修改生效</p>
+</blockquote>
+<h4 id="这个办法也可以修改用户目录下的profile文件">这个办法也可以，修改用户目录下的.profile文件</h4>
+<p>比如这里是/home/ubuntu/.profile 
+通过vim /home/ubuntu/.profile打开之后就能修改了 
+修改的方法跟第一种是一样的，就是再最后添加 
+export GOPATH=/www/wwwroot/default/goCode</p>
+<h4 id="临时性的起作用只有本次生效当你关闭terminal之后不再生效">临时性的起作用，只有本次生效，当你关闭terminal之后，不再生效</h4>
+<p>直接在命令行中 
+ubuntu@VM-0-9-ubuntu:~$ export GOPATH=/www/wwwroot/default/goCode</p>
+<h5 id="这里演示第一种方法">这里演示第一种方法</h5>
+<p><img src="https://www.choudalao.com/uploads/20191112/20191112134021tD1zk5.png" alt=""></p>
+<p>使文件立刻生效，</p>
+<pre tabindex="0"><code>source /etc/profile
+</code></pre><p>为了能够构建这个工程，需要先把这个工程的根目录加入到环境变量 GOPATH 中，假设计算器项目根目录 calc 目录位于 ~/go 下，如果是基于 GoLand 进行开发的话，可以通过「首选项（Preferences）-&gt;Go-&gt;GOPATH」（Windows 的话对应的路径是 File-&gt;Settings-&gt;Go-&gt;GOPATH）界面来进行设置：</p>
+<p><img src="https://www.choudalao.com/uploads/20191112/20191112121115BVlxDz.png" alt=""></p>
+<h1 id="构建-go-工程">构建 Go 工程</h1>
+<p>现在我们开始构建工程。假设我们希望把生成的可执行文件放到我们设置的GOPATH目录下的calc/bin目录中，进入到bin目录。执行指令如下：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">cd</span> <span style="color:#a6e22e">bin</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">go</span> <span style="color:#a6e22e">build</span> <span style="color:#a6e22e">calc</span>
+</span></span></code></pre></div><h2 id="win10下-1">win10下</h2>
+<p><img src="https://www.choudalao.com/uploads/20191112/201911121212437z8GWy.png" alt=""></p>
+<p>这样就会在bin下生成执行文件calc</p>
+<p><img src="https://www.choudalao.com/uploads/20191112/2019111212142696hsFW.png" alt=""></p>
+<p>现在我们就可以执行calc文件了</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">calc</span>  <span style="color:#a6e22e">help</span>
+</span></span></code></pre></div><p><img src="https://www.choudalao.com/uploads/20191112/20191112121625eUJtuG.png" alt=""></p>
+<p><img src="https://www.choudalao.com/uploads/20191112/20191112121810DHR4F7.png" alt=""></p>
+<h2 id="ubuntu下-1">ubuntu下</h2>
+<p>ubuntu下需要注意权限问题，</p>
+<p><img src="https://www.choudalao.com/uploads/20191112/20191112140628mXEWSC.png" alt=""></p>
+<p>运行如下命令（这边和上面win有点不一样，不知道为啥需要用 ./calc 才能运行，这边先记录一下，后期研究）</p>
+<pre tabindex="0"><code>./calc help
+</code></pre><p><img src="https://www.choudalao.com/uploads/20191112/20191112140939xRCAYr.png" alt=""></p>
+<p><img src="https://www.choudalao.com/uploads/20191112/20191112141126TM0SNh.png" alt=""></p>
+<h1 id="注意">注意</h1>
+<p>如果在运行的时候报如下错误</p>
+<pre tabindex="0"><code>can&#39;t load package: package calc: cannot find package &#34;calc&#34; in any of:
+</code></pre><p><img src="https://www.choudalao.com/uploads/20191112/20191112141237urjEJN.png" alt=""></p>
+<p>可能存在的问题是：</p>
+<ol>
+<li>$PATHON未配置；</li>
+<li>$PATHON配置了但未生效，需要重启erminal 窗口；</li>
+<li>如果是linux下，可能是权限问题呢，需要注意权限问题；</li>
+</ol>
+
+		</div>
+	</article>
+</main>
+
+
+
+
+			</div>
+			
+		</div>
+		<footer class="footer">
+	<div class="container footer__container flex">
+		
+		<div class="footer__copyright">
+			&copy; 2026 臭大佬博客.
+			<span class="footer__copyright-credits">基于 <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> 引擎和 <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> 主题</span>
+		</div>
+	</div>
+</footer>
+	</div>
+<script async defer src="/js/menu.js"></script>
+</body>
+</html>

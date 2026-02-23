@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Posts - 臭大佬博客</title>
+	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
+	<meta name="description" content="">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link rel="dns-prefetch" href="//fonts.googleapis.com">
+	<link rel="dns-prefetch" href="//fonts.gstatic.com">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
+
+	<link rel="stylesheet" href="/css/style.css">
+	
+	<link rel="alternate" type="application/rss+xml" href="/posts/index.xml" title="臭大佬博客">
+
+	<link rel="shortcut icon" href="/favicon.ico">
+		
+</head>
+<body class="body">
+	<div class="container container--outer">
+		<header class="header">
+	<div class="container header__container">
+		
+	<div class="logo">
+		<a class="logo__link" href="/" title="臭大佬博客" rel="home">
+			<div class="logo__item logo__text">
+					<div class="logo__title">臭大佬博客</div>
+					
+				</div>
+		</a>
+	</div>
+		
+<nav class="menu">
+	<button class="menu__btn" aria-haspopup="true" aria-expanded="false" tabindex="0">
+		<span class="menu__btn-title" tabindex="-1">菜单</span>
+	</button>
+	<ul class="menu__list">
+		<li class="menu__item">
+			<a class="menu__link" href="/">
+				
+				<span class="menu__text">首页</span>
+				
+			</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/post/">
+				
+				<span class="menu__text">归档</span>
+				
+			</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/about/">
+				
+				<span class="menu__text">关于</span>
+				
+			</a>
+		</li>
+	</ul>
+</nav>
+
+	</div>
+</header>
+		<div class="wrapper flex">
+			<div class="primary">
+			
+<main class="main list" role="main">
+	<header class="main__header">
+		<h1 class="main__title">Posts</h1>
+	</header><article class="list__item post">
+	
+	<header class="list__header">
+		<h2 class="list__title post__title">
+			<a href="/posts/2023-01-30-goland-%E6%8E%92%E5%BA%8F/" rel="bookmark">
+			goland 排序
+			</a>
+		</h2>
+		
+	</header>
+	<div class="content list__excerpt post__content clearfix">
+		<h1 id="对map进行排序">对map进行排序</h1>
+<h2 id="代码">代码</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> (
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;fmt&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;sort&#34;</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 给key排序，从小到大</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">Map</span>(<span style="color:#a6e22e">maps</span> <span style="color:#66d9ef">map</span>[<span style="color:#66d9ef">int</span>]<span style="color:#66d9ef">string</span>) (<span style="color:#a6e22e">keys</span> []<span style="color:#66d9ef">int</span>) {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">keys</span> = []<span style="color:#66d9ef">int</span>{}
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// 得到各个key</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">key</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">range</span> <span style="color:#a6e22e">maps</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">keys</span> = append(<span style="color:#a6e22e">keys</span>, <span style="color:#a6e22e">key</span>)
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// 给key排序，从小到大</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">sort</span>.<span style="color:#a6e22e">Sort</span>(<span style="color:#a6e22e">sort</span>.<span style="color:#a6e22e">IntSlice</span>(<span style="color:#a6e22e">keys</span>)) <span style="color:#75715e">// 或者 sort.Ints(keys)</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// 如果key是字符串,可以使用sort.Strings(keys)</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 给key排序，从大到小</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">Map2</span>(<span style="color:#a6e22e">maps</span> <span style="color:#66d9ef">map</span>[<span style="color:#66d9ef">int</span>]<span style="color:#66d9ef">string</span>) (<span style="color:#a6e22e">keys</span> []<span style="color:#66d9ef">int</span>) {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">keys</span> = []<span style="color:#66d9ef">int</span>{}
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// 得到各个key</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">key</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">range</span> <span style="color:#a6e22e">maps</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">keys</span> = append(<span style="color:#a6e22e">keys</span>, <span style="color:#a6e22e">key</span>)
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// 给key排序，从大到小</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">sort</span>.<span style="color:#a6e22e">Sort</span>(<span style="color:#a6e22e">sort</span>.<span style="color:#a6e22e">Reverse</span>(<span style="color:#a6e22e">sort</span>.<span style="color:#a6e22e">IntSlice</span>(<span style="color:#a6e22e">keys</span>)))
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">maps</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">map</span>[<span style="color:#66d9ef">int</span>]<span style="color:#66d9ef">string</span>{
+</span></span><span style="display:flex;"><span>		<span style="color:#ae81ff">1</span>: <span style="color:#e6db74">&#34;星期一&#34;</span>,
+</span></span><span style="display:flex;"><span>		<span style="color:#ae81ff">2</span>: <span style="color:#e6db74">&#34;星期二&#34;</span>,
+</span></span><span style="display:flex;"><span>		<span style="color:#ae81ff">3</span>: <span style="color:#e6db74">&#34;星期三&#34;</span>,
+</span></span><span style="display:flex;"><span>		<span style="color:#ae81ff">4</span>: <span style="color:#e6db74">&#34;星期四&#34;</span>,
+</span></span><span style="display:flex;"><span>		<span style="color:#ae81ff">5</span>: <span style="color:#e6db74">&#34;星期五&#34;</span>,
+</span></span><span style="display:flex;"><span>		<span style="color:#ae81ff">6</span>: <span style="color:#e6db74">&#34;星期六&#34;</span>,
+</span></span><span style="display:flex;"><span>		<span style="color:#ae81ff">7</span>: <span style="color:#e6db74">&#34;星期天&#34;</span>,
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">keys</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">Map2</span>(<span style="color:#a6e22e">maps</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// 遍历map</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">key</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">range</span> <span style="color:#a6e22e">keys</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;key = %v,value = %v\n&#34;</span>, <span style="color:#a6e22e">key</span>, <span style="color:#a6e22e">maps</span>[<span style="color:#a6e22e">key</span>])
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h1 id="切片排序">切片排序</h1>
+<h2 id="代码-1">代码</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> (
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;fmt&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;sort&#34;</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">Person</span> <span style="color:#66d9ef">struct</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">Name</span> <span style="color:#66d9ef">string</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">Age</span>  <span style="color:#66d9ef">int</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">ByNum</span> []<span style="color:#a6e22e">Person</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">a</span> <span style="color:#a6e22e">ByNum</span>) <span style="color:#a6e22e">Len</span>() <span style="color:#66d9ef">int</span>           { <span style="color:#66d9ef">return</span> len(<span style="color:#a6e22e">a</span>) }
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">a</span> <span style="color:#a6e22e">ByNum</span>) <span style="color:#a6e22e">Swap</span>(<span style="color:#a6e22e">i</span>, <span style="color:#a6e22e">j</span> <span style="color:#66d9ef">int</span>)      { <span style="color:#a6e22e">a</span>[<span style="color:#a6e22e">i</span>], <span style="color:#a6e22e">a</span>[<span style="color:#a6e22e">j</span>] = <span style="color:#a6e22e">a</span>[<span style="color:#a6e22e">j</span>], <span style="color:#a6e22e">a</span>[<span style="color:#a6e22e">i</span>] }
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">a</span> <span style="color:#a6e22e">ByNum</span>) <span style="color:#a6e22e">Less</span>(<span style="color:#a6e22e">i</span>, <span style="color:#a6e22e">j</span> <span style="color:#66d9ef">int</span>) <span style="color:#66d9ef">bool</span> { <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">a</span>[<span style="color:#a6e22e">i</span>].<span style="color:#a6e22e">Age</span> &lt; <span style="color:#a6e22e">a</span>[<span style="color:#a6e22e">j</span>].<span style="color:#a6e22e">Age</span> }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">people</span> <span style="color:#f92672">:=</span> []<span style="color:#a6e22e">Person</span>{
+</span></span><span style="display:flex;"><span>		{<span style="color:#e6db74">&#34;Alice&#34;</span>, <span style="color:#ae81ff">25</span>},
+</span></span><span style="display:flex;"><span>		{<span style="color:#e6db74">&#34;Bob&#34;</span>, <span style="color:#ae81ff">30</span>},
+</span></span><span style="display:flex;"><span>		{<span style="color:#e6db74">&#34;Charlie&#34;</span>, <span style="color:#ae81ff">20</span>},
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;Before sorting:&#34;</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">people</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">sort</span>.<span style="color:#a6e22e">Sort</span>(<span style="color:#a6e22e">ByNum</span>(<span style="color:#a6e22e">people</span>))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;After sorting:&#34;</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">people</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div>
+	</div>
+</article><article class="list__item post">
+	
+	<header class="list__header">
+		<h2 class="list__title post__title">
+			<a href="/posts/2023-01-18-goland-%E6%8E%A7%E5%88%B6%E5%8F%B0%E8%BE%93%E5%87%BA%E9%97%AE%E9%A2%98/" rel="bookmark">
+			goland 控制台输出问题
+			</a>
+		</h2>
+		
+	</header>
+	<div class="content list__excerpt post__content clearfix">
+		<h1 id="问题">问题</h1>
+<p>控制台输出被切断了,想要全部输出,设置如下:
+<code>HELP -&gt; Find Action… -&gt; 输入 Registry -&gt; 选择 Registry… -&gt; 找到 go.run.processes.with.pty -&gt; 取消勾选状态 -&gt; close</code></p>
+	</div>
+</article><article class="list__item post">
+	
+	<header class="list__header">
+		<h2 class="list__title post__title">
+			<a href="/posts/2023-01-04-%E5%80%9F%E5%8A%A9-golang-set-%E6%9D%A5%E5%88%A4%E6%96%AD%E5%88%87%E7%89%87%E4%B8%AD%E6%98%AF%E5%90%A6%E5%AD%98%E5%9C%A8%E6%9F%90%E4%B8%AA%E5%85%83%E7%B4%A0/" rel="bookmark">
+			借助 golang-set 来判断切片中是否存在某个元素
+			</a>
+		</h2>
+		
+	</header>
+	<div class="content list__excerpt post__content clearfix">
+		<h1 id="代码">代码</h1>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> (
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;fmt&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">mapset</span> <span style="color:#e6db74">&#34;github.com/deckarep/golang-set&#34;</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">sl</span> = []<span style="color:#66d9ef">interface</span>{}{<span style="color:#e6db74">&#34;a&#34;</span>, <span style="color:#e6db74">&#34;b&#34;</span>, <span style="color:#e6db74">&#34;c&#34;</span>, <span style="color:#e6db74">&#34;d&#34;</span>, <span style="color:#e6db74">&#34;e&#34;</span>, <span style="color:#e6db74">&#34;f&#34;</span>, <span style="color:#e6db74">&#34;g&#34;</span>, <span style="color:#e6db74">&#34;h&#34;</span>, <span style="color:#e6db74">&#34;i&#34;</span>, <span style="color:#e6db74">&#34;j&#34;</span>, <span style="color:#e6db74">&#34;k&#34;</span>, <span style="color:#e6db74">&#34;l&#34;</span>, <span style="color:#e6db74">&#34;m&#34;</span>, <span style="color:#e6db74">&#34;n&#34;</span>, <span style="color:#e6db74">&#34;o&#34;</span>, <span style="color:#e6db74">&#34;p&#34;</span>, <span style="color:#e6db74">&#34;q&#34;</span>, <span style="color:#e6db74">&#34;r&#34;</span>, <span style="color:#e6db74">&#34;s&#34;</span>, <span style="color:#e6db74">&#34;t&#34;</span>, <span style="color:#e6db74">&#34;u&#34;</span>, <span style="color:#e6db74">&#34;v&#34;</span>, <span style="color:#e6db74">&#34;w&#34;</span>, <span style="color:#e6db74">&#34;x&#34;</span>, <span style="color:#e6db74">&#34;y&#34;</span>, <span style="color:#e6db74">&#34;z&#34;</span>}
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">s</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">mapset</span>.<span style="color:#a6e22e">NewSetFromSlice</span>(<span style="color:#a6e22e">sl</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">s</span>.<span style="color:#a6e22e">Contains</span>(<span style="color:#e6db74">&#34;m&#34;</span>))	<span style="color:#75715e">// true</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">s</span>.<span style="color:#a6e22e">Contains</span>(<span style="color:#e6db74">&#34;mm&#34;</span>))	<span style="color:#75715e">// false</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div>
+	</div>
+</article><article class="list__item post">
+	
+	<header class="list__header">
+		<h2 class="list__title post__title">
+			<a href="/posts/2022-12-13-nginx-location%E8%B7%AF%E5%BE%84%E5%8C%B9%E9%85%8D%E9%97%AE%E9%A2%98/" rel="bookmark">
+			nginx location路径匹配问题
+			</a>
+		</h2>
+		
+	</header>
+	<div class="content list__excerpt post__content clearfix">
+		<h1 id="描述">描述</h1>
+<p>现在很多前端web程序都是打包单页面程序，只能有一个入口，这样会导致刷新页面报404</p>
+<p><img src="https://www.choudalao.com/uploads/20221213/20221213145314tyHdtl.png" alt=""></p>
+<p>其实在 nginx 中加个配置就能解决，</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">location</span> <span style="color:#f92672">/</span> {
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">#</span> <span style="color:#a6e22e">其他代码</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">try_files</span> <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">uri</span> <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">uri</span><span style="color:#f92672">/</span> <span style="color:#f92672">/</span><span style="color:#a6e22e">index</span>.<span style="color:#a6e22e">html</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>解释:
+<code>匹配所有“/”开头的路径到html目录下。try_files的含义是：首先会匹配$uri文件，如果没有去匹配$url/文件，如果再没有去找/index.html</code></p>
+	</div>
+</article><article class="list__item post">
+	
+	<header class="list__header">
+		<h2 class="list__title post__title">
+			<a href="/posts/2022-12-08-go-%E8%A1%A8%E6%83%85%E5%8C%85%E5%A4%84%E7%90%86/" rel="bookmark">
+			go 表情包处理
+			</a>
+		</h2>
+		
+	</header>
+	<div class="content list__excerpt post__content clearfix">
+		<h1 id="代码">代码</h1>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">stringsTool</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> (
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;regexp&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;strconv&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;strings&#34;</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// UnicodeEmojiDecode</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// @Summary 表情解码</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// @Tags</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// Method</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// @Accept application/json</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// @Product application/json</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// @param s</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// @return string</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// @Router /api/v1/xxx [get]</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// @Author Vijay</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// @Security Bearer</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">UnicodeEmojiDecode</span>(<span style="color:#a6e22e">s</span> <span style="color:#66d9ef">string</span>) <span style="color:#66d9ef">string</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">//emoji表情的数据表达式</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">re</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">regexp</span>.<span style="color:#a6e22e">MustCompile</span>(<span style="color:#e6db74">&#34;\\[[\\\\u0-9a-zA-Z]+\\]&#34;</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">//提取emoji数据表达式</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">reg</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">regexp</span>.<span style="color:#a6e22e">MustCompile</span>(<span style="color:#e6db74">&#34;\\[\\\\u|]&#34;</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">src</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">re</span>.<span style="color:#a6e22e">FindAllString</span>(<span style="color:#a6e22e">s</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">0</span>; <span style="color:#a6e22e">i</span> &lt; len(<span style="color:#a6e22e">src</span>); <span style="color:#a6e22e">i</span><span style="color:#f92672">++</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">e</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">reg</span>.<span style="color:#a6e22e">ReplaceAllString</span>(<span style="color:#a6e22e">src</span>[<span style="color:#a6e22e">i</span>], <span style="color:#e6db74">&#34;&#34;</span>)
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">p</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">strconv</span>.<span style="color:#a6e22e">ParseInt</span>(<span style="color:#a6e22e">e</span>, <span style="color:#ae81ff">16</span>, <span style="color:#ae81ff">32</span>)
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">==</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">s</span> = <span style="color:#a6e22e">strings</span>.<span style="color:#a6e22e">Replace</span>(<span style="color:#a6e22e">s</span>, <span style="color:#a6e22e">src</span>[<span style="color:#a6e22e">i</span>], string(rune(<span style="color:#a6e22e">p</span>)), <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">s</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// UnicodeEmojiCode</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// @Summary 表情转换</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// @Tags</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// Method</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// @Accept application/json</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// @Product application/json</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// @param s</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// @return string</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// @Router /api/v1/xxx [get]</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// @Author Vijay</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// @Security Bearer</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">UnicodeEmojiCode</span>(<span style="color:#a6e22e">s</span> <span style="color:#66d9ef">string</span>) <span style="color:#66d9ef">string</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">ret</span> <span style="color:#f92672">:=</span> <span style="color:#e6db74">&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">rs</span> <span style="color:#f92672">:=</span> []rune(<span style="color:#a6e22e">s</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">0</span>; <span style="color:#a6e22e">i</span> &lt; len(<span style="color:#a6e22e">rs</span>); <span style="color:#a6e22e">i</span><span style="color:#f92672">++</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">if</span> len(string(<span style="color:#a6e22e">rs</span>[<span style="color:#a6e22e">i</span>])) <span style="color:#f92672">==</span> <span style="color:#ae81ff">4</span> {
+</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">u</span> <span style="color:#f92672">:=</span> <span style="color:#e6db74">`[\u`</span> <span style="color:#f92672">+</span> <span style="color:#a6e22e">strconv</span>.<span style="color:#a6e22e">FormatInt</span>(int64(<span style="color:#a6e22e">rs</span>[<span style="color:#a6e22e">i</span>]), <span style="color:#ae81ff">16</span>) <span style="color:#f92672">+</span> <span style="color:#e6db74">`]`</span>
+</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">ret</span> <span style="color:#f92672">+=</span> <span style="color:#a6e22e">u</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>		} <span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">ret</span> <span style="color:#f92672">+=</span> string(<span style="color:#a6e22e">rs</span>[<span style="color:#a6e22e">i</span>])
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">ret</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div>
+	</div>
+</article><article class="list__item post">
+	
+	<header class="list__header">
+		<h2 class="list__title post__title">
+			<a href="/posts/2022-12-03-galand-%E6%B7%BB%E5%8A%A0%E6%96%B9%E6%B3%95%E6%B3%A8%E9%87%8A/" rel="bookmark">
+			galand 添加方法注释
+			</a>
+		</h2>
+		
+	</header>
+	<div class="content list__excerpt post__content clearfix">
+		<h1 id="如何安装插件">如何安装插件</h1>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">file</span> <span style="color:#f92672">--</span>&gt; <span style="color:#a6e22e">settings</span> <span style="color:#f92672">--</span>&gt; <span style="color:#a6e22e">plugins</span>
+</span></span></code></pre></div><p>搜索 <code>Goanno</code>,安装</p>
+<h1 id="设置模板">设置模板</h1>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">Tools</span> <span style="color:#f92672">--</span>&gt; <span style="color:#a6e22e">Goanno</span> <span style="color:#a6e22e">Setting</span>
+</span></span></code></pre></div><p>模板示例</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#75715e">// ${function_name} </span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// @Summary ${todo}</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// @Receiver ${receiver}</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// @Param ${params}</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// @Return ${return_types}</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// @Router /api/v1/xxx [get]</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// @Author Vijay</span>
+</span></span></code></pre></div><h1 id="使用">使用</h1>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#ae81ff">1.</span><span style="color:#a6e22e">快捷键ctrl</span> <span style="color:#f92672">+</span> <span style="color:#a6e22e">commond</span> <span style="color:#f92672">+</span> <span style="color:#f92672">/</span> <span style="color:#960050;background-color:#1e0010">（</span> <span style="color:#a6e22e">windows系统</span> <span style="color:#a6e22e">ctrl</span> <span style="color:#f92672">+</span> <span style="color:#a6e22e">alt</span> <span style="color:#f92672">+</span> <span style="color:#f92672">/</span><span style="color:#960050;background-color:#1e0010">）</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">2.</span><span style="color:#a6e22e">手动生成</span><span style="color:#960050;background-color:#1e0010">：</span><span style="color:#a6e22e">右键</span> <span style="color:#f92672">-</span>&gt; <span style="color:#a6e22e">Generate</span> <span style="color:#f92672">-</span>&gt; <span style="color:#a6e22e">Goanno</span>
+</span></span></code></pre></div><h3 id="修改或查看快捷键">修改或查看快捷键</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">file</span><span style="color:#f92672">--</span>&gt; <span style="color:#a6e22e">Kymap</span><span style="color:#f92672">--</span>&gt; <span style="color:#a6e22e">Pugins</span> <span style="color:#f92672">--</span>&gt; <span style="color:#a6e22e">Goanno</span>
+</span></span></code></pre></div>
+	</div>
+</article><article class="list__item post">
+	
+	<header class="list__header">
+		<h2 class="list__title post__title">
+			<a href="/posts/2022-11-23-go%E7%9A%84flag%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8/" rel="bookmark">
+			go的flag简单使用
+			</a>
+		</h2>
+		
+	</header>
+	<div class="content list__excerpt post__content clearfix">
+		<p>golang的flag模块包含一些类型约束的方法，分为两种方式注册不同类型的flag,带有Var的函数其返回flag的值保存到p指向的变量，而不带Var的函数其返回的是保存该flag值的指针</p>
+	</div>
+</article><article class="list__item post">
+	
+	<header class="list__header">
+		<h2 class="list__title post__title">
+			<a href="/posts/2022-11-22-go%E4%BD%BF%E7%94%A8reflect%E5%8C%85%E4%BF%AE%E6%94%B9%E7%BB%93%E6%9E%84%E4%BD%93%E7%9A%84%E5%80%BC/" rel="bookmark">
+			go使用reflect包修改结构体的值
+			</a>
+		</h2>
+		
+	</header>
+	<div class="content list__excerpt post__content clearfix">
+		<h1 id="问题">问题</h1>
+<p>有个方法是通用的,参数是Interface,可以丢进来任何结构体,这时候,就不知道 interface 里面有哪些成员了,假设我们知道 interface 里面有 ShopId 字段,并且我们要修改它的值,该怎么操作呢?</p>
+	</div>
+</article><article class="list__item post">
+	
+	<header class="list__header">
+		<h2 class="list__title post__title">
+			<a href="/posts/2022-10-29-go%E7%9A%84viper%E5%8C%85%E8%AF%BB%E5%8F%96yml%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6/" rel="bookmark">
+			go的viper包读取yml配置文件
+			</a>
+		</h2>
+		
+	</header>
+	<div class="content list__excerpt post__content clearfix">
+		<h1 id="代码">代码</h1>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> (
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;fmt&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;github.com/spf13/viper&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;os&#34;</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">//获取当前项目目录</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">work</span>, <span style="color:#a6e22e">_</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Getwd</span>()
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// 读取当前文件夹下的 settings.yml文件</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">//设置文件名和文件后缀</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">viper</span>.<span style="color:#a6e22e">SetConfigName</span>(<span style="color:#e6db74">&#34;settings&#34;</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">viper</span>.<span style="color:#a6e22e">SetConfigType</span>(<span style="color:#e6db74">&#34;yml&#34;</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">//配置文件所在的文件夹</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">viper</span>.<span style="color:#a6e22e">AddConfigPath</span>(<span style="color:#a6e22e">work</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">viper</span>.<span style="color:#a6e22e">ReadInConfig</span>()
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>		panic(<span style="color:#a6e22e">err</span>)
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">//获取全部文件内容</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;all settings: &#34;</span>, <span style="color:#a6e22e">viper</span>.<span style="color:#a6e22e">AllSettings</span>())
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">//根据内容类型，解析出不同类型</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">viper</span>.<span style="color:#a6e22e">GetString</span>(<span style="color:#e6db74">&#34;settings.logger.path&#34;</span>))
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>settings.yml 文件内容如下</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">settings</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">logger</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#960050;background-color:#1e0010">#</span> <span style="color:#a6e22e">日志存放路径</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">path</span>: <span style="color:#a6e22e">temp</span><span style="color:#f92672">/</span><span style="color:#a6e22e">logs</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#960050;background-color:#1e0010">#</span> <span style="color:#a6e22e">日志输出</span><span style="color:#960050;background-color:#1e0010">，</span><span style="color:#a6e22e">file</span><span style="color:#960050;background-color:#1e0010">：</span><span style="color:#a6e22e">文件</span><span style="color:#960050;background-color:#1e0010">，</span><span style="color:#66d9ef">default</span><span style="color:#960050;background-color:#1e0010">：</span><span style="color:#a6e22e">命令行</span><span style="color:#960050;background-color:#1e0010">，</span><span style="color:#a6e22e">其他</span><span style="color:#960050;background-color:#1e0010">：</span><span style="color:#a6e22e">命令行</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">stdout</span>: <span style="color:#960050;background-color:#1e0010">&#39;&#39;</span> <span style="color:#960050;background-color:#1e0010">#</span><span style="color:#a6e22e">控制台日志</span><span style="color:#960050;background-color:#1e0010">，</span><span style="color:#a6e22e">启用后</span><span style="color:#960050;background-color:#1e0010">，</span><span style="color:#a6e22e">不输出到文件</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#960050;background-color:#1e0010">#</span> <span style="color:#a6e22e">日志等级</span>, <span style="color:#a6e22e">trace</span>, <span style="color:#a6e22e">debug</span>, <span style="color:#a6e22e">info</span>, <span style="color:#a6e22e">warn</span>, <span style="color:#66d9ef">error</span>, <span style="color:#a6e22e">fatal</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">level</span>: <span style="color:#a6e22e">trace</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#960050;background-color:#1e0010">#</span> <span style="color:#a6e22e">数据库日志开关</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">enableddb</span>: <span style="color:#66d9ef">false</span>
+</span></span></code></pre></div><p>结果</p>
+	</div>
+</article><article class="list__item post">
+	
+	<header class="list__header">
+		<h2 class="list__title post__title">
+			<a href="/posts/2022-10-15-%E5%AE%9D%E5%A1%94-mysql-%E5%A4%96%E7%BD%91-root-%E6%97%A0%E6%B3%95%E8%BF%9E%E6%8E%A5/" rel="bookmark">
+			宝塔 mysql 外网 root 无法连接
+			</a>
+		</h2>
+		
+	</header>
+	<div class="content list__excerpt post__content clearfix">
+		<h1 id="问题">问题</h1>
+<p>默认情况下，宝塔里数据库的 root 账号是无法访问数据库的，如果用各个库去连接的话，又多又麻烦，所以，像测试库或者本地，不需要考虑安全因素的，完全可以直接用 root账号来管理。</p>
+	</div>
+</article>
+</main>
+
+<div class="pagination">
+	<a class="pagination__item pagination__item--prev btn" href="/posts/page/4/">«</a>
+	<span class="pagination__item pagination__item--current">5/35</span>
+	<a class="pagination__item pagination__item--next btn" href="/posts/page/6/">»</a>
+</div>
+
+			</div>
+			
+
+		</div>
+		<footer class="footer">
+	<div class="container footer__container flex">
+		
+		<div class="footer__copyright">
+			&copy; 2026 臭大佬博客.
+			<span class="footer__copyright-credits">基于 <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> 引擎和 <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> 主题</span>
+		</div>
+	</div>
+</footer>
+	</div>
+<script async defer src="/js/menu.js"></script>
+</body>
+</html>

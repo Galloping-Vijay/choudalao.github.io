@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Linux - 臭大佬博客</title>
+	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
+	<meta name="description" content="">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link rel="dns-prefetch" href="//fonts.googleapis.com">
+	<link rel="dns-prefetch" href="//fonts.gstatic.com">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
+
+	<link rel="stylesheet" href="/css/style.css">
+	
+	<link rel="alternate" type="application/rss+xml" href="/categories/linux/index.xml" title="臭大佬博客">
+
+	<link rel="shortcut icon" href="/favicon.ico">
+		
+</head>
+<body class="body">
+	<div class="container container--outer">
+		<header class="header">
+	<div class="container header__container">
+		
+	<div class="logo">
+		<a class="logo__link" href="/" title="臭大佬博客" rel="home">
+			<div class="logo__item logo__text">
+					<div class="logo__title">臭大佬博客</div>
+					
+				</div>
+		</a>
+	</div>
+		
+<nav class="menu">
+	<button class="menu__btn" aria-haspopup="true" aria-expanded="false" tabindex="0">
+		<span class="menu__btn-title" tabindex="-1">菜单</span>
+	</button>
+	<ul class="menu__list">
+		<li class="menu__item">
+			<a class="menu__link" href="/">
+				
+				<span class="menu__text">首页</span>
+				
+			</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/post/">
+				
+				<span class="menu__text">归档</span>
+				
+			</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/about/">
+				
+				<span class="menu__text">关于</span>
+				
+			</a>
+		</li>
+	</ul>
+</nav>
+
+	</div>
+</header>
+		<div class="wrapper flex">
+			<div class="primary">
+			
+<main class="main list" role="main">
+	<header class="main__header">
+		<h1 class="main__title">Linux</h1>
+	</header><article class="list__item post">
+	
+	<header class="list__header">
+		<h2 class="list__title post__title">
+			<a href="/posts/2026-01-19-%E8%A7%A3%E5%86%B3-wsl2-windows-hosts-%E5%BC%80%E5%90%AF-vpn-%E5%90%8E%E6%97%A0%E6%B3%95%E8%AE%BF%E9%97%AE%E6%9C%AC%E5%9C%B0-web-%E6%9C%8D%E5%8A%A1%E7%9A%84%E9%97%AE%E9%A2%98/" rel="bookmark">
+			解决 WSL2 &#43; Windows Hosts &#43; 开启 VPN 后无法访问本地 Web 服务的问题
+			</a>
+		</h2>
+		
+	</header>
+	<div class="content list__excerpt post__content clearfix">
+		<h2 id="问题">问题</h2>
+<blockquote>
+<p><strong>场景描述</strong>：</p>
+<ul>
+<li>你在 <strong>WSL2 中运行了一个 Web 服务（如 Nginx、Go、Php、Node.js 等）</strong>。</li>
+<li>在 <strong>Windows 的 <code>hosts</code> 文件中绑定了域名（如 <code>dev.wsl.net -&gt; 172.x.x.x</code>）</strong>，以便在 Windows 浏览器中访问该服务。</li>
+<li><strong>不开 VPN 时一切正常</strong>，但一旦开启公司或个人的 <strong>全流量接管型 VPN</strong>，Windows 就无法解析该域名，导致页面打不开。</li>
+</ul>
+</blockquote>
+<p>本文将详细介绍这个问题的原因，并提供一个简单有效的解决方案：<strong>使用 <code>.localhost</code> 域名</strong>。</p>
+	</div>
+</article><article class="list__item post">
+	
+	<header class="list__header">
+		<h2 class="list__title post__title">
+			<a href="/posts/2025-07-11-win%E5%88%9D%E5%A7%8B%E5%8C%96%E8%84%9A%E6%9C%AC/" rel="bookmark">
+			Win初始化脚本
+			</a>
+		</h2>
+		
+	</header>
+	<div class="content list__excerpt post__content clearfix">
+		<h1 id="前言">前言</h1>
+<p>每次电脑重启或开机的时候，你是不是也会有很多不可避免的繁琐操作。比如我要配置开发环境，需要进入wsl里面去启动 NGINX、REDIS、MYSQL等服务，需要 WSL 和 WIN 做端口映射等等，极其繁琐&hellip;要是能弄个脚本，每次点一下就完成所有操作，那是不是就舒服多了？</p>
+	</div>
+</article><article class="list__item post">
+	
+	<header class="list__header">
+		<h2 class="list__title post__title">
+			<a href="/posts/2024-04-12-jenkins-%E7%9A%84-generic-webhook-trigger-%E6%8F%92%E4%BB%B6%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8/" rel="bookmark">
+			Jenkins 的 Generic Webhook Trigger 插件简单使用
+			</a>
+		</h2>
+		
+	</header>
+	<div class="content list__excerpt post__content clearfix">
+		<h1 id="介绍">介绍</h1>
+<p><code>Generic Webhook Trigger</code>可以用来接收参数,传递给构建脚本,这点非常适用于<code>webhook</code>,下面我们以get传参来演示使用</p>
+<h1 id="使用">使用</h1>
+<h3 id="安装">安装</h3>
+<h3 id="配置generic-webhook-trigger插件">配置Generic Webhook Trigger插件</h3>
+<p>在Jenkins Pipeline Job的配置中，找到“Generic Webhook Trigger”部分，进行如下配置：</p>
+	</div>
+</article><article class="list__item post">
+	
+	<header class="list__header">
+		<h2 class="list__title post__title">
+			<a href="/posts/2024-03-27-redis%E7%9A%84stream%E6%93%8D%E4%BD%9C/" rel="bookmark">
+			Redis的Stream操作
+			</a>
+		</h2>
+		
+	</header>
+	<div class="content list__excerpt post__content clearfix">
+		<h1 id="介绍">介绍</h1>
+<h1 id="基本操作">基本操作</h1>
+<h3 id="添加">添加</h3>
+<p>*号表示服务器自动生成ID，后面顺序跟着一堆key/value,<code>stream-name</code>表示Stream名</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">XADD</span> <span style="color:#a6e22e">stream</span><span style="color:#f92672">-</span><span style="color:#a6e22e">name</span> <span style="color:#f92672">*</span> <span style="color:#a6e22e">name</span> <span style="color:#a6e22e">boy</span> <span style="color:#a6e22e">age</span> <span style="color:#ae81ff">20</span>
+</span></span></code></pre></div><h3 id="获取列表">获取列表</h3>
+<p>~~ 获取消息列表，会自动过滤已经删除的消息
+-表示最小值, +表示最大值~~</p>
+	</div>
+</article><article class="list__item post">
+	
+	<header class="list__header">
+		<h2 class="list__title post__title">
+			<a href="/posts/2024-02-16-%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84%E5%AE%B9%E5%99%A8%E6%A3%80%E6%B5%8B%E8%84%9A%E6%9C%AC/" rel="bookmark">
+			一个简单的容器检测脚本
+			</a>
+		</h2>
+		
+	</header>
+	<div class="content list__excerpt post__content clearfix">
+		<h1 id="代码">代码</h1>
+<h3 id="imtimersh定时器检测">imTimer.sh:定时器检测</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">#</span>!<span style="color:#f92672">/</span><span style="color:#a6e22e">bin</span><span style="color:#f92672">/</span><span style="color:#a6e22e">bash</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">while</span> <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">do</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#960050;background-color:#1e0010">#</span> <span style="color:#a6e22e">检测脚本</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">restart</span>.<span style="color:#a6e22e">sh</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">sleep</span> <span style="color:#ae81ff">5</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">done</span>
+</span></span></code></pre></div><h3 id="restartsh检测和重启代码">restart.sh:检测和重启代码</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">#</span>!<span style="color:#f92672">/</span><span style="color:#a6e22e">bin</span><span style="color:#f92672">/</span><span style="color:#a6e22e">bash</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">env</span>=<span style="color:#e6db74">&#34;prod&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">httpUrl</span>=<span style="color:#e6db74">&#34;http://127.0.0.1:3200/system/state&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">#</span> <span style="color:#a6e22e">项目</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">objName</span>=<span style="color:#e6db74">&#34;im&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">#</span> <span style="color:#a6e22e">设置镜像名</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">imagesName</span>=<span style="color:#e6db74">&#34;${objName}&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">containerName</span>=<span style="color:#960050;background-color:#1e0010">$</span>{<span style="color:#a6e22e">objName</span>}
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">#</span> <span style="color:#a6e22e">当前时间</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">currentTime</span>=<span style="color:#960050;background-color:#1e0010">$</span>(<span style="color:#a6e22e">date</span> <span style="color:#f92672">+</span><span style="color:#e6db74">&#34;%Y%m%d%H%M%S&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">#</span> <span style="color:#a6e22e">检测容器是否可以访问</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">response</span>=<span style="color:#960050;background-color:#1e0010">$</span>(<span style="color:#a6e22e">curl</span> <span style="color:#f92672">--</span><span style="color:#a6e22e">write</span><span style="color:#f92672">-</span><span style="color:#a6e22e">out</span> <span style="color:#f92672">%</span>{<span style="color:#a6e22e">http_code</span>} <span style="color:#f92672">--</span><span style="color:#a6e22e">silent</span> <span style="color:#f92672">--</span><span style="color:#a6e22e">output</span> <span style="color:#f92672">/</span><span style="color:#a6e22e">dev</span><span style="color:#f92672">/</span><span style="color:#a6e22e">null</span> <span style="color:#960050;background-color:#1e0010">$</span>{<span style="color:#a6e22e">httpUrl</span>})
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">#</span> <span style="color:#a6e22e">查看进程是否存在</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">exist</span>=<span style="color:#960050;background-color:#1e0010">$</span>(<span style="color:#a6e22e">docker</span> <span style="color:#a6e22e">inspect</span> <span style="color:#f92672">--</span><span style="color:#a6e22e">format</span> <span style="color:#960050;background-color:#1e0010">&#39;</span>{{.<span style="color:#a6e22e">State</span>.<span style="color:#a6e22e">Running</span>}}<span style="color:#960050;background-color:#1e0010">&#39;</span> <span style="color:#960050;background-color:#1e0010">$</span>{<span style="color:#a6e22e">containerName</span>})
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">echo</span> <span style="color:#e6db74">&#34;时间 ${currentTime}&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">echo</span> <span style="color:#e6db74">&#34;容器 ${containerName} 状态:${exist}&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">echo</span> <span style="color:#e6db74">&#34;地址 ${httpUrl}  状态:${response}&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> [ <span style="color:#e6db74">&#34;${exist}&#34;</span> <span style="color:#f92672">!=</span> <span style="color:#e6db74">&#34;true&#34;</span> ] <span style="color:#f92672">||</span> [ <span style="color:#e6db74">&#34;$response&#34;</span> <span style="color:#f92672">-</span><span style="color:#a6e22e">ne</span> <span style="color:#ae81ff">200</span> ]; <span style="color:#a6e22e">then</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">echo</span> <span style="color:#e6db74">&#34;容器 ${containerName} 执行重启&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">docker</span> <span style="color:#a6e22e">start</span> <span style="color:#960050;background-color:#1e0010">$</span>{<span style="color:#a6e22e">containerName</span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">logFile</span>=<span style="color:#960050;background-color:#1e0010">$</span>{<span style="color:#a6e22e">containerName</span>}<span style="color:#f92672">-</span><span style="color:#e6db74">&#34;${currentTime}&#34;</span>.<span style="color:#a6e22e">log</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">echo</span> <span style="color:#e6db74">&#34;写入 ${logFile} 日志&#34;</span>
+</span></span><span style="display:flex;"><span> <span style="color:#a6e22e">docker</span> <span style="color:#a6e22e">logs</span> <span style="color:#f92672">-</span><span style="color:#a6e22e">f</span> <span style="color:#960050;background-color:#1e0010">$</span>{<span style="color:#a6e22e">containerName</span>} &gt; <span style="color:#f92672">/</span><span style="color:#a6e22e">wwwlogs</span><span style="color:#f92672">/</span><span style="color:#960050;background-color:#1e0010">$</span>{<span style="color:#a6e22e">objName</span>}<span style="color:#f92672">/</span><span style="color:#a6e22e">temp</span><span style="color:#f92672">/</span><span style="color:#960050;background-color:#1e0010">$</span>{<span style="color:#a6e22e">logFile</span>} <span style="color:#f92672">&amp;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">fi</span>
+</span></span></code></pre></div><h3 id="执行">执行</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">nohup</span> <span style="color:#a6e22e">imTimer</span>.<span style="color:#a6e22e">sh</span> <span style="color:#f92672">&amp;</span>
+</span></span></code></pre></div><h3 id="查看和杀死进程">查看和杀死进程</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">pgrep</span> <span style="color:#f92672">-</span><span style="color:#a6e22e">f</span> <span style="color:#a6e22e">imTimer</span>.<span style="color:#a6e22e">sh</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span> <span style="color:#a6e22e">kill</span> &lt;<span style="color:#a6e22e">PID</span>&gt;
+</span></span></code></pre></div><h5 id="查看占用高的进程">查看占用高的进程</h5>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">top</span>
+</span></span></code></pre></div><h5 id="查看是哪个程序">查看是哪个程序</h5>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">ps</span> <span style="color:#f92672">-</span><span style="color:#a6e22e">ef</span> | <span style="color:#a6e22e">grep</span> &lt;<span style="color:#a6e22e">PID</span>&gt;
+</span></span></code></pre></div>
+	</div>
+</article><article class="list__item post">
+	
+	<header class="list__header">
+		<h2 class="list__title post__title">
+			<a href="/posts/2023-09-14-%E5%AE%B9%E5%99%A8%E6%A3%80%E6%B5%8B%E5%8F%8A%E8%87%AA%E5%90%AF%E5%8A%A8/" rel="bookmark">
+			容器检测及自启动
+			</a>
+		</h2>
+		
+	</header>
+	<div class="content list__excerpt post__content clearfix">
+		<h1 id="场景">场景</h1>
+<p>目前还没有上 k8s, 当容器意外停止时(如容器里面的go服务抛出panic),服务就不能用了,可能会影响正常的业务,这时候,就需要有个监测的脚本,去检测容器是否正常,如果停止,需要启动它.</p>
+	</div>
+</article><article class="list__item post">
+	
+	<header class="list__header">
+		<h2 class="list__title post__title">
+			<a href="/posts/2023-09-04-%E5%88%A9%E7%94%A8kind%E5%9C%A8win10-wsl2-%E4%B8%AD%E6%90%AD%E5%BB%BA-k8s-%E7%8E%AF%E5%A2%83/" rel="bookmark">
+			利用kind在WIN10 WSL2 中搭建 K8s 环境
+			</a>
+		</h2>
+		
+	</header>
+	<div class="content list__excerpt post__content clearfix">
+		<p>利用<code>kind</code>在<code>WIN10</code> <code>WSL2</code> 中搭建 <code>K8s</code> 环境</p>
+<h2 id="安装kubectl">安装kubectl</h2>
+<p>在<code>Ubuntu</code>上安装<code>kubectl</code>，您可以按照以下步骤进行操作：
+打开终端，并使用以下命令下载kubectl的最新版本：</p>
+	</div>
+</article><article class="list__item post">
+	
+	<header class="list__header">
+		<h2 class="list__title post__title">
+			<a href="/posts/2023-05-17-git%E5%BC%80%E5%8F%91%E8%A7%84%E8%8C%83/" rel="bookmark">
+			git开发规范
+			</a>
+		</h2>
+		
+	</header>
+	<div class="content list__excerpt post__content clearfix">
+		<h1 id="git开发规范">git开发规范</h1>
+<p>master分支：线上分支，不允许随意提交修改，仅允许develop分支合并，仅管理员操作;
+develop：为开发分支,所有分支都应该从该分支进行检出;
+release：测试分支,对应测试环境,当功能开发完成,要进行测试时,把代码推送至该分支,该分支只能推送,不能合并到自己的分支;
+feature-名字：程序员开发使用的功能分支，从develop上检出的开发分支
+##开发流程:
+每个任务或缺陷,都应该拉取单独的分支进行开发!
+###创建分支
+当开始开发一个任务时,以tapd的任务id作为分支名,如 &ldquo;【ID1000536】【手机端】&ndash;聊天室&ndash;弹幕功能自定义&rdquo;,那么任务分支名为 ID1000536,如果是修复缺陷,那么以缺陷id作为分支名,如分支名: ID1000536,应该切换到develop分支,拉取最新代码,.然后在develop分支基础上创建任务(bug)分支.
+###任务完成发布测试
+当任务完成,把任务分支合并到 release分支, release分支对应测试环境,不能将release分支合并到自己的分支.</p>
+	</div>
+</article><article class="list__item post">
+	
+	<header class="list__header">
+		<h2 class="list__title post__title">
+			<a href="/posts/2023-05-15-docker-%E6%89%93%E5%8C%85%E6%8E%A8%E9%80%81-%E9%92%A9%E5%AD%90%E6%9B%B4%E6%96%B0%E6%B5%8B%E8%AF%95%E7%AB%99%E5%AE%B9%E5%99%A8/" rel="bookmark">
+			docker 打包推送 &#43; 钩子更新测试站容器
+			</a>
+		</h2>
+		
+	</header>
+	<div class="content list__excerpt post__content clearfix">
+		<h1 id="问题">问题</h1>
+<p>刚开始测试站更新的流程如下:</p>
+<ul>
+<li>本地构建<code>go</code>项目</li>
+<li>本地打包镜像</li>
+<li>本地推送镜像库</li>
+<li>到测试服务器上,拉取镜像</li>
+</ul>
+<p>每次都要这么繁琐的操作,也是有点累,所以准备做一个升级,一步到位,思路如下
+本地写一个脚本,主要是为了构建项目和推送镜像到远程仓库,然后测试站通过钩子触发更新镜像.</p>
+	</div>
+</article><article class="list__item post">
+	
+	<header class="list__header">
+		<h2 class="list__title post__title">
+			<a href="/posts/2023-03-13-%E6%B8%85%E7%90%86-docker-%E5%8D%A0%E7%94%A8%E7%9A%84%E7%A3%81%E7%9B%98%E7%A9%BA%E9%97%B4/" rel="bookmark">
+			清理 docker 占用的磁盘空间
+			</a>
+		</h2>
+		
+	</header>
+	<div class="content list__excerpt post__content clearfix">
+		<h1 id="问题">问题</h1>
+<p>Docker 很占用空间，每当我们运行容器、拉取镜像、部署应用、构建自己的镜像时，我们的磁盘空间会被大量占用。</p>
+<p>如果你也被这个问题所困扰，咱们就一起看一下 Docker 是如何使用磁盘空间的，以及如何回收。</p>
+	</div>
+</article>
+</main>
+
+<div class="pagination">
+	<span class="pagination__item pagination__item--current">1/6</span>
+	<a class="pagination__item pagination__item--next btn" href="/categories/linux/page/2/">»</a>
+</div>
+
+			</div>
+			
+
+		</div>
+		<footer class="footer">
+	<div class="container footer__container flex">
+		
+		<div class="footer__copyright">
+			&copy; 2026 臭大佬博客.
+			<span class="footer__copyright-credits">基于 <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> 引擎和 <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> 主题</span>
+		</div>
+	</div>
+</footer>
+	</div>
+<script async defer src="/js/menu.js"></script>
+</body>
+</html>

@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Posts - 臭大佬博客</title>
+	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
+	<meta name="description" content="">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link rel="dns-prefetch" href="//fonts.googleapis.com">
+	<link rel="dns-prefetch" href="//fonts.gstatic.com">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
+
+	<link rel="stylesheet" href="/css/style.css">
+	
+	<link rel="alternate" type="application/rss+xml" href="/posts/index.xml" title="臭大佬博客">
+
+	<link rel="shortcut icon" href="/favicon.ico">
+		
+</head>
+<body class="body">
+	<div class="container container--outer">
+		<header class="header">
+	<div class="container header__container">
+		
+	<div class="logo">
+		<a class="logo__link" href="/" title="臭大佬博客" rel="home">
+			<div class="logo__item logo__text">
+					<div class="logo__title">臭大佬博客</div>
+					
+				</div>
+		</a>
+	</div>
+		
+<nav class="menu">
+	<button class="menu__btn" aria-haspopup="true" aria-expanded="false" tabindex="0">
+		<span class="menu__btn-title" tabindex="-1">菜单</span>
+	</button>
+	<ul class="menu__list">
+		<li class="menu__item">
+			<a class="menu__link" href="/">
+				
+				<span class="menu__text">首页</span>
+				
+			</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/post/">
+				
+				<span class="menu__text">归档</span>
+				
+			</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/about/">
+				
+				<span class="menu__text">关于</span>
+				
+			</a>
+		</li>
+	</ul>
+</nav>
+
+	</div>
+</header>
+		<div class="wrapper flex">
+			<div class="primary">
+			
+<main class="main list" role="main">
+	<header class="main__header">
+		<h1 class="main__title">Posts</h1>
+	</header><article class="list__item post">
+	
+	<header class="list__header">
+		<h2 class="list__title post__title">
+			<a href="/posts/2020-07-22-phper%E7%9A%84go%E4%B9%8B%E8%B7%AF-%E8%AF%BB%E5%86%99%E6%96%87%E4%BB%B6/" rel="bookmark">
+			PHPer的Go之路 --读写文件
+			</a>
+		</h2>
+		
+	</header>
+	<div class="content list__excerpt post__content clearfix">
+		<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> (
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;fmt&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;io/ioutil&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;os&#34;</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">绝对路径读取文件
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">*/</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">realRead</span>() {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">data</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">ioutil</span>.<span style="color:#a6e22e">ReadFile</span>(<span style="color:#e6db74">&#34;E:/goCode/test.txt&#34;</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;读取文件报错：&#34;</span>, <span style="color:#a6e22e">err</span>)
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">return</span>
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;文件内容:&#34;</span>, string(<span style="color:#a6e22e">data</span>))
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">写入文件
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> */</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">writeFile</span>() {
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// 创建文件</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">f</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Create</span>(<span style="color:#e6db74">&#34;test.txt&#34;</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">err</span>)
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">return</span>
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">l</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">f</span>.<span style="color:#a6e22e">WriteString</span>(<span style="color:#e6db74">&#34;哈喽鸭，德玛西亚&#34;</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">err</span>)
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">f</span>.<span style="color:#a6e22e">Close</span>()
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">return</span>
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">l</span>, <span style="color:#e6db74">&#34;写入成功&#34;</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">err</span> = <span style="color:#a6e22e">f</span>.<span style="color:#a6e22e">Close</span>()
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">err</span>)
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">return</span>
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// 写入文件</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">writeFile</span>()
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// 读取文件内容</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">realRead</span>()
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p><img src="https://www.choudalao.com/uploads/20200722/20200722143205cHFp3L.png" alt=""></p>
+	</div>
+</article><article class="list__item post">
+	
+	<header class="list__header">
+		<h2 class="list__title post__title">
+			<a href="/posts/2020-07-22-raise-httperrorreqfull_url-code-msg-hdrs-fp-urlliberrorhttperror-http-error-403/" rel="bookmark">
+			raise HTTPError(req.full_url, code, msg, hdrs, fp) urllib.error.HTTPError: HTTP Error 403: Forbidden
+			</a>
+		</h2>
+		
+	</header>
+	<div class="content list__excerpt post__content clearfix">
+		<h1 id="问题">问题</h1>
+<p>使用 <code>urllib.request.urlretrieve</code> 下载图片时报如下错误：</p>
+<blockquote>
+<p>raise HTTPError(req.full_url, code, msg, hdrs, fp)
+urllib.error.HTTPError: HTTP Error 403: Forbidden</p>
+</blockquote>
+<p><img src="https://www.choudalao.com/uploads/20200722/20200722122034soCSAy.png" alt=""></p>
+<p>有些网站验证请求信息中的UserAgent(它的信息包括硬件平台、系统软件、应用软件和用户个人偏好),如果UserAgent存在异常或者是不存在,那么这次请求将会被拒绝(如上错误信息所示)
+所以可以尝试在请求中加入UserAgent的信息。</p>
+	</div>
+</article><article class="list__item post">
+	
+	<header class="list__header">
+		<h2 class="list__title post__title">
+			<a href="/posts/2020-07-20-phper%E7%9A%84go%E4%B9%8B%E8%B7%AF-%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/" rel="bookmark">
+			PHPer的Go之路 --异常处理
+			</a>
+		</h2>
+		
+	</header>
+	<div class="content list__excerpt post__content clearfix">
+		<h1 id="panic">panic</h1>
+<p><code>php</code> 使用 <code>try...catch</code> 对异常进行捕获和处理，在 <code>go</code> 中 使用 panic 抛出。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> <span style="color:#e6db74">&#34;fmt&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">defer</span> <span style="color:#66d9ef">func</span>() {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;defer会执行&#34;</span>)
+</span></span><span style="display:flex;"><span>	}()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">a</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">a</span> <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>) {
+</span></span><span style="display:flex;"><span>		panic(<span style="color:#e6db74">&#34;除数是0&#34;</span>)
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">c</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">100</span> <span style="color:#f92672">/</span> <span style="color:#a6e22e">a</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;上面出现异常，不会执行到这里&#34;</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;%d&#34;</span>, <span style="color:#a6e22e">c</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p><img src="https://www.choudalao.com/uploads/20200720/202007201119430SjvJ8.png" alt=""></p>
+<h1 id="recover">recover</h1>
+<p>在<code>php</code>中对异常的捕获和处理，避免程序崩溃，使用的是<code>try...catch...finally</code>，在<code>go</code>中，对应的实现方式是：通过 recover() 函数对 panic 进行捕获和处理，panic 的捕获和其他代码的恢复执行需要放到 defer 语句中完成。</p>
+	</div>
+</article><article class="list__item post">
+	
+	<header class="list__header">
+		<h2 class="list__title post__title">
+			<a href="/posts/2020-07-17-phper%E7%9A%84go%E4%B9%8B%E8%B7%AF-sync%E5%8C%85/" rel="bookmark">
+			PHPer的Go之路 --sync包
+			</a>
+		</h2>
+		
+	</header>
+	<div class="content list__excerpt post__content clearfix">
+		<p>好久没有学习Go啦，都颓废了，最近看到微软放弃对拍黄片（PHP）的支持，如果要在 Windows 上运行最新的 PHP 版本，则需要使用 WSL 并在 Linux 环境中运行 PHP。</p>
+<blockquote>
+<p>我们知道，对于漏洞修复，当前的发布日期是 2 年，而对于安全修复，则是 1 年之后。这意味着 PHP 7.2 将在 11 月停止支持。PHP 7.3 仅在 11 月才进入安全修复模式。PHP 7.4 将继续进行一年的错误修复，然后再进行一年的安全修复。只要官方支持，我们致力于在 Windows 上针对 7.2、7.3 和 7.4 维护 PHP 的开发和构建。但是，我们不会以 8.0 及更高版本的任何能力支持 Windows 的 PHP。</p>
+	</div>
+</article><article class="list__item post">
+	
+	<header class="list__header">
+		<h2 class="list__title post__title">
+			<a href="/posts/2020-07-13-%E5%AE%9A%E6%97%B6%E5%BA%93apscheduler/" rel="bookmark">
+			定时库APScheduler
+			</a>
+		</h2>
+		
+	</header>
+	<div class="content list__excerpt post__content clearfix">
+		<p>#简介
+apscheduler 使用起来十分方便。提供了基于日期、固定时间间隔以及crontab 类型的任务，我们可以在主程序的运行过程中快速增加新作业或删除旧作业，如果把作业存储在数据库中，那么作业的状态会被保存，当调度器重启时，不必重新添加作业，作业会恢复原状态继续执行。apscheduler 可以当作一个跨平台的调度工具来使用，可以做为 linux 系统crontab 工具或 windows 计划任务程序的替换。注意，apscheduler 不是一个守护进程或服务，它自身不带有任何命令行工具。它主要是要在现有的应用程序中运行，也就是说，apscheduler 为我们提供了构建专用调度器或调度服务的基础模块。</p>
+	</div>
+</article><article class="list__item post">
+	
+	<header class="list__header">
+		<h2 class="list__title post__title">
+			<a href="/posts/2020-07-04-hyperf-%E5%88%9D%E4%BD%93%E9%AA%8C/" rel="bookmark">
+			Hyperf 初体验
+			</a>
+		</h2>
+		
+	</header>
+	<div class="content list__excerpt post__content clearfix">
+		<h1 id="前言">前言</h1>
+<p>swoole框架这些年挺火的，这不，搞了个外包是Hyperf框架的，之前只接触过easyswoole,还没撸过Hyperf。感谢外包，让我学习了一波，哈哈哈。</p>
+	</div>
+</article><article class="list__item post">
+	
+	<header class="list__header">
+		<h2 class="list__title post__title">
+			<a href="/posts/2020-07-02-php%E7%BB%8F%E5%85%B8%E9%9D%A2%E8%AF%95%E9%A2%98%E5%85%AB-swoole%E7%9B%B8%E5%85%B3/" rel="bookmark">
+			php经典面试题八 -- Swoole相关
+			</a>
+		</h2>
+		
+	</header>
+	<div class="content list__excerpt post__content clearfix">
+		<h3 id="restful-api风格">RESTful API风格</h3>
+<p>链接地址：<a href="https://www.choudalao.com/article/231" title="RESTful API风格">RESTful API风格</a></p>
+<h3 id="网络七层协议">网络七层协议</h3>
+<p>链接地址：<a href="https://www.choudalao.com/article/197" title="网络七层协议、三次握手、四次挥手">网络七层协议、三次握手、四次挥手</a></p>
+<h3 id="并发与并行">并发与并行</h3>
+<h4 id="并发">并发</h4>
+<p>并发是不同的代码块交替执行，也就是交替可以做不同的事情。</p>
+<p>当你在敲代码的时候,突然女朋友回来了(程序员怎么可能有女朋友?),然后你去开门,开完门后你又继续敲代码(是的,你这样肯定没有女朋友)&hellip;..这就是并发,敲代码和开门交替进行。</p>
+	</div>
+</article><article class="list__item post">
+	
+	<header class="list__header">
+		<h2 class="list__title post__title">
+			<a href="/posts/2020-06-28-deprecated-directive-track_errors-is-deprecated-in-unknown-on-line-0/" rel="bookmark">
+			Deprecated: Directive &#39;track_errors&#39; is deprecated in Unknown on line 0
+			</a>
+		</h2>
+		
+	</header>
+	<div class="content list__excerpt post__content clearfix">
+		<h1 id="问题">问题</h1>
+<p>在命令行运行php命令的时候，报如下提示：
+Deprecated: Directive &rsquo;track_errors&rsquo; is deprecated in Unknown on line 0
+<img src="https://www.choudalao.com/uploads/20200628/20200628140644usRWWp.png" alt=""></p>
+<h1 id="解决方法">解决方法</h1>
+<p>打开<code>php.ini</code>，搜索<code>track_errors</code>，</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>track_errors<span style="color:#f92672">=</span>On
+</span></span></code></pre></div><p>改成</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>track_errors<span style="color:#f92672">=</span>Off
+</span></span></code></pre></div><p><img src="https://www.choudalao.com/uploads/20200628/20200628140904JCXXa5.png" alt="">
+然后重启nginx或者apache,重新运行：
+<img src="https://www.choudalao.com/uploads/20200628/20200628141053V1IWti.png" alt=""></p>
+	</div>
+</article><article class="list__item post">
+	
+	<header class="list__header">
+		<h2 class="list__title post__title">
+			<a href="/posts/2020-06-17-the-mix-manifest-does-not-exist/" rel="bookmark">
+			The Mix manifest does not exist.
+			</a>
+		</h2>
+		
+	</header>
+	<div class="content list__excerpt post__content clearfix">
+		<h1 id="错误信息">错误信息</h1>
+<p><del>ErrorException (E_ERROR)
+The Mix manifest does not exist. (View: /xxxx/vendor/laravel/horizon/resources/views/layout.blade.php)
+Previous exceptions</del>
+<img src="https://www.choudalao.com/uploads/20200617/20200617101507DsMEJs.png" alt=""></p>
+<h1 id="方案">方案</h1>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>php artisan vendor:publish --provider<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;Laravel\Horizon\HorizonServiceProvider&#34;</span>
+</span></span></code></pre></div><p><img src="https://www.choudalao.com/uploads/20200617/20200617102249pPeXI5.png" alt=""></p>
+	</div>
+</article><article class="list__item post">
+	
+	<header class="list__header">
+		<h2 class="list__title post__title">
+			<a href="/posts/2020-06-11-select-list-is-not-in-group-by-clause-and-contains-nonaggregated-column-xxx-whic/" rel="bookmark">
+			SELECT list is not in GROUP BY clause and contains nonaggregated column &#39;XXX&#39; which is not functionally dependent on columns in GROUP BY clause; this is incompatible with sql_mode=only_full_group_by
+			</a>
+		</h2>
+		
+	</header>
+	<div class="content list__excerpt post__content clearfix">
+		<h1 id="环境">环境</h1>
+<p>php 7.2
+laravel 5.7
+mysql 5.7</p>
+<h1 id="问题">问题</h1>
+<p>在使用laravel进行分组查询的时候，发现报错了，查询语句如下：
+<img src="https://www.choudalao.com/uploads/20200611/202006111133374HHPYd.png" alt=""></p>
+<p>报错如下：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span>Expression <span style="color:#f92672">#</span><span style="color:#ae81ff">10</span> <span style="color:#66d9ef">of</span> <span style="color:#66d9ef">SELECT</span> list <span style="color:#66d9ef">is</span> <span style="color:#66d9ef">not</span> <span style="color:#66d9ef">in</span> <span style="color:#66d9ef">GROUP</span> <span style="color:#66d9ef">BY</span> clause <span style="color:#66d9ef">and</span> <span style="color:#66d9ef">contains</span> nonaggregated <span style="color:#66d9ef">column</span> <span style="color:#e6db74">&#39;gd_white_ip_list_bmdapis.id&#39;</span> which <span style="color:#66d9ef">is</span> <span style="color:#66d9ef">not</span> functionally dependent <span style="color:#66d9ef">on</span> columns <span style="color:#66d9ef">in</span> <span style="color:#66d9ef">GROUP</span> <span style="color:#66d9ef">BY</span> clause; this <span style="color:#66d9ef">is</span> incompatible <span style="color:#66d9ef">with</span> sql_mode<span style="color:#f92672">=</span>only_full_group_by
+</span></span></code></pre></div><p><img src="https://www.choudalao.com/uploads/20200611/20200611114032vquYNo.png" alt=""></p>
+<h1 id="方案">方案</h1>
+<p>网上查了一下，解决方案主要有两种，
+1：修改laravel数据库配置文件;
+2：修改mysql配置文件。</p>
+	</div>
+</article>
+</main>
+
+<div class="pagination">
+	<a class="pagination__item pagination__item--prev btn" href="/posts/page/18/">«</a>
+	<span class="pagination__item pagination__item--current">19/35</span>
+	<a class="pagination__item pagination__item--next btn" href="/posts/page/20/">»</a>
+</div>
+
+			</div>
+			
+
+		</div>
+		<footer class="footer">
+	<div class="container footer__container flex">
+		
+		<div class="footer__copyright">
+			&copy; 2026 臭大佬博客.
+			<span class="footer__copyright-credits">基于 <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> 引擎和 <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> 主题</span>
+		</div>
+	</div>
+</footer>
+	</div>
+<script async defer src="/js/menu.js"></script>
+</body>
+</html>

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>清理 docker 占用的磁盘空间 - 臭大佬博客</title>
+	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
+	<meta name="description" content="清理 docker 占用的磁盘空间">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link rel="dns-prefetch" href="//fonts.googleapis.com">
+	<link rel="dns-prefetch" href="//fonts.gstatic.com">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
+
+	<link rel="stylesheet" href="/css/style.css">
+	
+
+	<link rel="shortcut icon" href="/favicon.ico">
+		
+</head>
+<body class="body">
+	<div class="container container--outer">
+		<header class="header">
+	<div class="container header__container">
+		
+	<div class="logo">
+		<a class="logo__link" href="/" title="臭大佬博客" rel="home">
+			<div class="logo__item logo__text">
+					<div class="logo__title">臭大佬博客</div>
+					
+				</div>
+		</a>
+	</div>
+		
+<nav class="menu">
+	<button class="menu__btn" aria-haspopup="true" aria-expanded="false" tabindex="0">
+		<span class="menu__btn-title" tabindex="-1">菜单</span>
+	</button>
+	<ul class="menu__list">
+		<li class="menu__item">
+			<a class="menu__link" href="/">
+				
+				<span class="menu__text">首页</span>
+				
+			</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/post/">
+				
+				<span class="menu__text">归档</span>
+				
+			</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/about/">
+				
+				<span class="menu__text">关于</span>
+				
+			</a>
+		</li>
+	</ul>
+</nav>
+
+	</div>
+</header>
+		<div class="wrapper flex">
+			<div class="primary">
+			
+<main class="main" role="main">
+	<article class="post">
+		<header class="post__header">
+			<h1 class="post__title">清理 docker 占用的磁盘空间</h1>
+			
+		</header>
+		<div class="content post__content clearfix">
+			<h1 id="问题">问题</h1>
+<p>Docker 很占用空间，每当我们运行容器、拉取镜像、部署应用、构建自己的镜像时，我们的磁盘空间会被大量占用。</p>
+<p>如果你也被这个问题所困扰，咱们就一起看一下 Docker 是如何使用磁盘空间的，以及如何回收。</p>
+<h1 id="方法">方法</h1>
+<h3 id="查看-docker-占用的空间">查看 docker 占用的空间</h3>
+<p>用于查看Docker的磁盘使用情况:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">docker</span> <span style="color:#a6e22e">system</span> <span style="color:#a6e22e">df</span>
+</span></span></code></pre></div><p>TYPE 列出了docker 使用磁盘的 4 种类型：</p>
+<p>Images：所有镜像占用的空间，包括拉取下来的镜像，和本地构建的。
+Containers：运行的容器占用的空间，表示每个容器的读写层的空间。
+Local Volumes：容器挂载本地数据卷的空间。
+Build Cache：镜像构建过程中产生的缓存空间(只有在使用 BuildKit 时才有，Docker 18.09 以后可用)。
+最后的 RECLAIMABLE 是可回收大小。</p>
+<p>下面就分别了解一下这几个类型。</p>
+<p>容器的磁盘占用
+每次创建一个容器时，都会有一些文件和目录被创建，例如：</p>
+<p>/var/lib/docker/containers/ID目录，如果容器使用了默认的日志模式，他的所有日志都会以JSON形式保存到此目录下。</p>
+<p>/var/lib/docker/overlay2 目录下含有容器的读写层，如果容器使用自己的文件系统保存了数据，那么就会写到此目录下。</p>
+<p>清理磁盘，删除关闭的容器、无用的数据卷和网络，以及dangling镜像(即无tag的镜像)。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">docker</span> <span style="color:#a6e22e">system</span> <span style="color:#a6e22e">prune</span>
+</span></span></code></pre></div><p>将没有容器使用Docker镜像都删掉。注意，这两个命令会把你暂时关闭的容器，以及暂时没有用到的Docker镜像都删掉了…所以使用之前一定要想清楚.。我没用过，因为会清理 没有开启的 Docker</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">docker</span> <span style="color:#a6e22e">system</span> <span style="color:#a6e22e">prune</span> <span style="color:#f92672">-</span><span style="color:#a6e22e">a</span>
+</span></span></code></pre></div><h3 id="一键删除所有已经停止的容器">一键删除所有已经停止的容器</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">docker</span> <span style="color:#a6e22e">container</span> <span style="color:#a6e22e">prune</span>
+</span></span></code></pre></div><p>上面的 docker container prune 命令是删除停止的容器，如果想删除所有容器(包括停止的、正在运行的)，可以使用下面这2个命令：
+<code>docker rm -f (dockerps−aq) docker container rm -f $(docker container ls -aq)</code> 镜像的磁盘占用,有一些镜像是隐形的：
+子镜像，就是被其他镜像引用的中间镜像，不能被删除。
+悬挂状态的镜像，就是不会再被使用的镜像，可以被删除。
+下面的命令列出所有悬挂状态的镜像：
+<code>docker image ls -f dangling=true</code>删除这类镜像：<code>dockerimagerm(docker image ls -f dangling=true -q)</code>或者：<code>docker image prune</code>
+如果想删除所有镜像，可以使用下面的命令：<code>dockerimagerm(docker image ls -q)</code>
+注意，正在被容器使用的镜像是不能被删除的。</p>
+<h3 id="数据卷的磁盘占用">数据卷的磁盘占用</h3>
+<p>数据卷是容器自身文件体统之外的数据存储。
+删除不再使用的数据卷：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">docker</span> <span style="color:#a6e22e">volume</span> <span style="color:#a6e22e">prune</span>
+</span></span></code></pre></div><h3 id="build-cache-的磁盘占用">Build Cache 的磁盘占用</h3>
+<p>Docker 18.09 引入了 BuildKit，提升了构建过程的性能、安全、存储管理等能力。
+删除 build cache 可以使用命令：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">docker</span> <span style="color:#a6e22e">builder</span> <span style="color:#a6e22e">prune</span>
+</span></span></code></pre></div><h3 id="一键清理">一键清理</h3>
+<p>通过上面的说明，我们知道了像容器、镜像、数据卷都提供了 prune这个子命令，帮助我们回收空间。</p>
+<p>其实，docker 系统层面也有 prune 这个子命令，可以一键清理没用的空间：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">docker</span> <span style="color:#a6e22e">system</span> <span style="color:#a6e22e">prune</span>
+</span></span></code></pre></div><p>本文转载:https://www.cnblogs.com/seaskyccl/articles/16424203.html</p>
+
+		</div>
+	</article>
+</main>
+
+
+
+
+			</div>
+			
+		</div>
+		<footer class="footer">
+	<div class="container footer__container flex">
+		
+		<div class="footer__copyright">
+			&copy; 2026 臭大佬博客.
+			<span class="footer__copyright-credits">基于 <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> 引擎和 <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> 主题</span>
+		</div>
+	</div>
+</footer>
+	</div>
+<script async defer src="/js/menu.js"></script>
+</body>
+</html>

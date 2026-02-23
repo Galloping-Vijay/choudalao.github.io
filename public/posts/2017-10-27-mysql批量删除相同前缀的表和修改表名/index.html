@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>mysql批量删除相同前缀的表和修改表名 - 臭大佬博客</title>
+	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
+	<meta name="description" content="mysql批量删除相同前缀的表和修改表名Select CONCAT( &#39;ALTER TABLE &#39;, table_name, &#39;RENAME TO &#39;, table_name,&#39;;&#39; )">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link rel="dns-prefetch" href="//fonts.googleapis.com">
+	<link rel="dns-prefetch" href="//fonts.gstatic.com">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
+
+	<link rel="stylesheet" href="/css/style.css">
+	
+
+	<link rel="shortcut icon" href="/favicon.ico">
+		
+</head>
+<body class="body">
+	<div class="container container--outer">
+		<header class="header">
+	<div class="container header__container">
+		
+	<div class="logo">
+		<a class="logo__link" href="/" title="臭大佬博客" rel="home">
+			<div class="logo__item logo__text">
+					<div class="logo__title">臭大佬博客</div>
+					
+				</div>
+		</a>
+	</div>
+		
+<nav class="menu">
+	<button class="menu__btn" aria-haspopup="true" aria-expanded="false" tabindex="0">
+		<span class="menu__btn-title" tabindex="-1">菜单</span>
+	</button>
+	<ul class="menu__list">
+		<li class="menu__item">
+			<a class="menu__link" href="/">
+				
+				<span class="menu__text">首页</span>
+				
+			</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/post/">
+				
+				<span class="menu__text">归档</span>
+				
+			</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/about/">
+				
+				<span class="menu__text">关于</span>
+				
+			</a>
+		</li>
+	</ul>
+</nav>
+
+	</div>
+</header>
+		<div class="wrapper flex">
+			<div class="primary">
+			
+<main class="main" role="main">
+	<article class="post">
+		<header class="post__header">
+			<h1 class="post__title">mysql批量删除相同前缀的表和修改表名</h1>
+			
+		</header>
+		<div class="content post__content clearfix">
+			<p>&lt;p&gt;&amp;nbsp;由于博客升级,要把原来的系统和数据全都替换掉,安装完之后发现原来的数据表全都还在,根据表名前缀的区别,可以批量的删掉原来的数据表,操作如下:&lt;/p&gt;&lt;p&gt;执行sql语句:&lt;/p&gt;&lt;pre lay-lang=&quot;JavaScript&quot;&gt;&lt;code class=&quot;JavaScript&quot;&gt;Select CONCAT( &lsquo;drop table &lsquo;, table_name, &lsquo;;&rsquo; )
+FROM information_schema.tables
+Where table_name LIKE &lsquo;pre_%&rsquo;;&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;span&gt;解释:like<code>pre_%</code>,其中pre_为你需要删除的表前缀,根据你自己的需求修改,&lt;/span&gt;&lt;/p&gt;&lt;p&gt;执行查询,会自动把匹配的表生成出 drop table table_name这样的SQL语句,&lt;/p&gt;&lt;p&gt;运行结果如下:&lt;/p&gt;&lt;p&gt;&lt;img src=&quot;http://www.yuemeet.com/data/upload/2017-10-27/59f2a343ab8ba.png&quot; title=&quot;59f2a343ab8ba.png&quot; alt=&quot;59f2a343ab8ba.png&quot; _src=&quot;/data/upload/2017-10-27/59f2a343ab8ba.png&quot;&gt;&lt;/p&gt;&lt;p&gt;批量复制一下到记事本或者et之类的编辑工具中,确定你的sql语句是否正确.这么一来也可以安全的审核一下语句,避免误操作.&lt;/p&gt;&lt;p&gt;最好用记事本打开,这样可以去掉样式,检查之后复制到sqlyog里面运行:&lt;/p&gt;&lt;p&gt;&lt;img src=&quot;http://www.yuemeet.com/data/upload/2017-10-27/59f2a7a5621d7.png&quot; title=&quot;59f2a7a5621d7.png&quot; alt=&quot;59f2a7a5621d7.png&quot; <em>src=&quot;/data/upload/2017-10-27/59f2a7a5621d7.png&quot;&gt;&lt;/p&gt;&lt;p&gt;ok,成功删除相同表前缀的文章了!&lt;/p&gt;&lt;h3&gt;拓展:&lt;br&gt;&lt;/h3&gt;&lt;p&gt;批量修改表前缀:&lt;/p&gt;&lt;pre lay-lang=&quot;JavaScript&quot;&gt;&lt;code class=&quot;JavaScript&quot;&gt;Select CONCAT( &lsquo;ALTER TABLE &lsquo;, table_name, &lsquo;RENAME TO &lsquo;, table_name,&rsquo;;&rsquo; )
+FROM information_schema.tables
+Where table_name LIKE &lsquo;uc</em>%&rsquo;;<br>
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;pre class=&quot;brush:sql;toolbar:false;&quot;&gt;批量复制一下到记事本或者&amp;nbsp;et之类的编辑工具中,然后批量替换&amp;nbsp;RENAME&amp;nbsp;TO&amp;nbsp;uc&amp;nbsp;成&amp;nbsp;RENAME&amp;nbsp;TO&amp;nbsp;你想要的表前缀完成后&amp;nbsp;再执行&lt;br&gt;&lt;/pre&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;</p>
+
+		</div>
+	</article>
+</main>
+
+
+
+
+			</div>
+			
+		</div>
+		<footer class="footer">
+	<div class="container footer__container flex">
+		
+		<div class="footer__copyright">
+			&copy; 2026 臭大佬博客.
+			<span class="footer__copyright-credits">基于 <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> 引擎和 <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> 主题</span>
+		</div>
+	</div>
+</footer>
+	</div>
+<script async defer src="/js/menu.js"></script>
+</body>
+</html>

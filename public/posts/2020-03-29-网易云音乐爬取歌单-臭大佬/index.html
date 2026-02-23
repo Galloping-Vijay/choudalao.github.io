@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>网易云音乐爬取歌单 | 臭大佬 - 臭大佬博客</title>
+	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
+	<meta name="description" content="网易云音乐爬取歌单">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link rel="dns-prefetch" href="//fonts.googleapis.com">
+	<link rel="dns-prefetch" href="//fonts.gstatic.com">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
+
+	<link rel="stylesheet" href="/css/style.css">
+	
+
+	<link rel="shortcut icon" href="/favicon.ico">
+		
+</head>
+<body class="body">
+	<div class="container container--outer">
+		<header class="header">
+	<div class="container header__container">
+		
+	<div class="logo">
+		<a class="logo__link" href="/" title="臭大佬博客" rel="home">
+			<div class="logo__item logo__text">
+					<div class="logo__title">臭大佬博客</div>
+					
+				</div>
+		</a>
+	</div>
+		
+<nav class="menu">
+	<button class="menu__btn" aria-haspopup="true" aria-expanded="false" tabindex="0">
+		<span class="menu__btn-title" tabindex="-1">菜单</span>
+	</button>
+	<ul class="menu__list">
+		<li class="menu__item">
+			<a class="menu__link" href="/">
+				
+				<span class="menu__text">首页</span>
+				
+			</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/post/">
+				
+				<span class="menu__text">归档</span>
+				
+			</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/about/">
+				
+				<span class="menu__text">关于</span>
+				
+			</a>
+		</li>
+	</ul>
+</nav>
+
+	</div>
+</header>
+		<div class="wrapper flex">
+			<div class="primary">
+			
+<main class="main" role="main">
+	<article class="post">
+		<header class="post__header">
+			<h1 class="post__title">网易云音乐爬取歌单 | 臭大佬</h1>
+			
+		</header>
+		<div class="content post__content clearfix">
+			<h1 id="分析">分析</h1>
+<p>打开网易云音乐的网页端。我们点击更多来获取我们要的歌单。
+<img src="https://www.choudalao.com/uploads/20200329/20200329135809efQf5k.png" alt="">
+<img src="https://www.choudalao.com/uploads/20200329/20200329135830yyThHS.png" alt="">
+点击分页，可以发现，这里是根据offset和limit的值来分页的，limit的默认值是35，每增加一页，offset的值增加35.最后一页是38,由此可以得到我们的基础url为<code>https://music.163.com/#/discover/playlist/?order=hot&amp;cat=全部&amp;limit=35&amp;offset=</code>
+<img src="https://www.choudalao.com/uploads/20200329/20200329135924DQB6vE.png" alt="">
+分析每一个歌单，可以发现我们要的内容在这里面：
+<img src="https://www.choudalao.com/uploads/20200329/202003291443468dUz2b.png" alt="">
+我们查看源代码可以发现，这些数据是动态加载的，如果直接使用requests是无法获取到节点的。我们需要用到Selenium，相关的基础介绍请先查看<a href="https://www.choudalao.com/article/123" title="臭大佬教你使用 Selenium 模拟浏览器操作">臭大佬教你使用 Selenium 模拟浏览器操作</a></p>
+<h1 id="爬取歌单">爬取歌单</h1>
+<h3 id="数据表">数据表</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>CREATE TABLE <span style="color:#960050;background-color:#1e0010">`</span>song_list<span style="color:#960050;background-color:#1e0010">`</span> (
+</span></span><span style="display:flex;"><span>  <span style="color:#960050;background-color:#1e0010">`</span>id<span style="color:#960050;background-color:#1e0010">`</span> int(<span style="color:#ae81ff">11</span>) NOT NULL AUTO_INCREMENT,
+</span></span><span style="display:flex;"><span>  <span style="color:#960050;background-color:#1e0010">`</span>title<span style="color:#960050;background-color:#1e0010">`</span> varchar(<span style="color:#ae81ff">255</span>) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT <span style="color:#e6db74">&#39;&#39;</span> COMMENT <span style="color:#e6db74">&#39;歌单名&#39;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#960050;background-color:#1e0010">`</span>link<span style="color:#960050;background-color:#1e0010">`</span> varchar(<span style="color:#ae81ff">255</span>) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT <span style="color:#e6db74">&#39;&#39;</span> COMMENT <span style="color:#e6db74">&#39;链接&#39;</span>,
+</span></span><span style="display:flex;"><span>  PRIMARY KEY (<span style="color:#960050;background-color:#1e0010">`</span>id<span style="color:#960050;background-color:#1e0010">`</span>)
+</span></span><span style="display:flex;"><span>) ENGINE<span style="color:#f92672">=</span>InnoDB DEFAULT CHARSET<span style="color:#f92672">=</span>utf8mb4 COLLATE<span style="color:#f92672">=</span>utf8mb4_unicode_ci;
+</span></span></code></pre></div><h3 id="代码">代码</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># coding:utf-8</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> bs4 <span style="color:#f92672">import</span> BeautifulSoup
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> pymysql
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> selenium <span style="color:#f92672">import</span> webdriver
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 引入 selenium  和实例化一个浏览器引擎</span>
+</span></span><span style="display:flex;"><span>DRIVER <span style="color:#f92672">=</span> webdriver<span style="color:#f92672">.</span>Chrome()
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 链接数据库</span>
+</span></span><span style="display:flex;"><span>CON <span style="color:#f92672">=</span> pymysql<span style="color:#f92672">.</span>connect(host<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;localhost&#39;</span>, port<span style="color:#f92672">=</span><span style="color:#ae81ff">3306</span>, user<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;root&#39;</span>, password<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;root&#39;</span>, db<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;python_test&#39;</span>,
+</span></span><span style="display:flex;"><span>                      charset<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;utf8mb4&#39;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 得到一个可以执行SQL语句的光标对象</span>
+</span></span><span style="display:flex;"><span>cur <span style="color:#f92672">=</span> CON<span style="color:#f92672">.</span>cursor()
+</span></span><span style="display:flex;"><span>BASEURL <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;https://music.163.com&#39;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 数据库操作</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">db_write</span>(sql):
+</span></span><span style="display:flex;"><span>    print(sql)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">try</span>:
+</span></span><span style="display:flex;"><span>        cur<span style="color:#f92672">.</span>execute(sql)
+</span></span><span style="display:flex;"><span>        CON<span style="color:#f92672">.</span>commit()
+</span></span><span style="display:flex;"><span>        print(<span style="color:#e6db74">&#34;数据写入成功&#34;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">except</span> <span style="color:#a6e22e">Exception</span> <span style="color:#66d9ef">as</span> e:
+</span></span><span style="display:flex;"><span>        print(e)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 获取歌单</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">get_song_list</span>(limit<span style="color:#f92672">=</span><span style="color:#ae81ff">35</span>, offset<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>):
+</span></span><span style="display:flex;"><span>    reqUrl <span style="color:#f92672">=</span> BASEURL <span style="color:#f92672">+</span> <span style="color:#e6db74">&#39;/#/discover/playlist/?order=hot&amp;cat=全部&amp;limit=&#39;</span> <span style="color:#f92672">+</span> str(limit) <span style="color:#f92672">+</span> <span style="color:#e6db74">&#39;&amp;offset=&#39;</span> <span style="color:#f92672">+</span> str(offset)
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 打开一个网页</span>
+</span></span><span style="display:flex;"><span>    DRIVER<span style="color:#f92672">.</span>get(reqUrl)
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 使用selenium切换frame</span>
+</span></span><span style="display:flex;"><span>    DRIVER<span style="color:#f92672">.</span>switch_to<span style="color:#f92672">.</span>frame(<span style="color:#e6db74">&#34;g_iframe&#34;</span>)
+</span></span><span style="display:flex;"><span>    req <span style="color:#f92672">=</span> DRIVER<span style="color:#f92672">.</span>page_source<span style="color:#f92672">.</span>encode(<span style="color:#e6db74">&#39;utf-8&#39;</span>)
+</span></span><span style="display:flex;"><span>    soup <span style="color:#f92672">=</span> BeautifulSoup(req, <span style="color:#e6db74">&#39;lxml&#39;</span>)
+</span></span><span style="display:flex;"><span>    songs <span style="color:#f92672">=</span> soup<span style="color:#f92672">.</span>select(<span style="color:#e6db74">&#34;p.dec &gt; a&#34;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> song <span style="color:#f92672">in</span> songs:
+</span></span><span style="display:flex;"><span>        title <span style="color:#f92672">=</span> song<span style="color:#f92672">.</span>get(<span style="color:#e6db74">&#39;title&#39;</span>)
+</span></span><span style="display:flex;"><span>        link <span style="color:#f92672">=</span> BASEURL <span style="color:#f92672">+</span> song<span style="color:#f92672">.</span>get(<span style="color:#e6db74">&#39;href&#39;</span>)
+</span></span><span style="display:flex;"><span>        sql <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;insert into song_list(title,link)values(&#39;</span><span style="color:#e6db74">{title}</span><span style="color:#e6db74">&#39;,&#39;</span><span style="color:#e6db74">{link}</span><span style="color:#e6db74">&#39;)&#34;</span><span style="color:#f92672">.</span>format(title<span style="color:#f92672">=</span>title, link<span style="color:#f92672">=</span>link)
+</span></span><span style="display:flex;"><span>        db_write(sql)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">get_song</span>():
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">pass</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> __name__ <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;__main__&#39;</span>:
+</span></span><span style="display:flex;"><span>    limit <span style="color:#f92672">=</span> <span style="color:#ae81ff">35</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> p <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">38</span>):
+</span></span><span style="display:flex;"><span>        offset <span style="color:#f92672">=</span> limit <span style="color:#f92672">*</span> p
+</span></span><span style="display:flex;"><span>        get_song_list(limit, offset)
+</span></span></code></pre></div><h3 id="运行结果">运行结果</h3>
+<p><img src="https://www.choudalao.com/uploads/20200329/20200329164635fZbn7v.png" alt="">
+<img src="https://www.choudalao.com/uploads/20200329/20200329164825lr2kIH.png" alt=""></p>
+
+		</div>
+	</article>
+</main>
+
+
+
+
+			</div>
+			
+		</div>
+		<footer class="footer">
+	<div class="container footer__container flex">
+		
+		<div class="footer__copyright">
+			&copy; 2026 臭大佬博客.
+			<span class="footer__copyright-credits">基于 <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> 引擎和 <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> 主题</span>
+		</div>
+	</div>
+</footer>
+	</div>
+<script async defer src="/js/menu.js"></script>
+</body>
+</html>

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>深入理解计算机系统之三 -- C程序编码 - 臭大佬博客</title>
+	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
+	<meta name="description" content="C程序编码">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link rel="dns-prefetch" href="//fonts.googleapis.com">
+	<link rel="dns-prefetch" href="//fonts.gstatic.com">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
+
+	<link rel="stylesheet" href="/css/style.css">
+	
+
+	<link rel="shortcut icon" href="/favicon.ico">
+		
+</head>
+<body class="body">
+	<div class="container container--outer">
+		<header class="header">
+	<div class="container header__container">
+		
+	<div class="logo">
+		<a class="logo__link" href="/" title="臭大佬博客" rel="home">
+			<div class="logo__item logo__text">
+					<div class="logo__title">臭大佬博客</div>
+					
+				</div>
+		</a>
+	</div>
+		
+<nav class="menu">
+	<button class="menu__btn" aria-haspopup="true" aria-expanded="false" tabindex="0">
+		<span class="menu__btn-title" tabindex="-1">菜单</span>
+	</button>
+	<ul class="menu__list">
+		<li class="menu__item">
+			<a class="menu__link" href="/">
+				
+				<span class="menu__text">首页</span>
+				
+			</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/post/">
+				
+				<span class="menu__text">归档</span>
+				
+			</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/about/">
+				
+				<span class="menu__text">关于</span>
+				
+			</a>
+		</li>
+	</ul>
+</nav>
+
+	</div>
+</header>
+		<div class="wrapper flex">
+			<div class="primary">
+			
+<main class="main" role="main">
+	<article class="post">
+		<header class="post__header">
+			<h1 class="post__title">深入理解计算机系统之三 -- C程序编码</h1>
+			
+		</header>
+		<div class="content post__content clearfix">
+			<p>假设有一个<code>hello.c</code>程序，代码如下：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#75715e">#include &lt;stdio.h&gt;
+</span></span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">int</span> <span style="color:#a6e22e">main</span>()
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">printf</span>(<span style="color:#e6db74">&#34;hello, world</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>我们在<code>unix</code>系统中编译</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-c" data-lang="c"><span style="display:flex;"><span>gcc <span style="color:#f92672">-</span>o hello hello.c
+</span></span></code></pre></div><p>编译后执行<code>./hello</code>，就能看到结果了。</p>
+<p><img src="https://www.choudalao.com/uploads/20210307/20210307213646Uy256z.png" alt=""></p>
+<p>当我们在系统上执行<code>hello</code>程序时，系统发生了什么？</p>
+<p><code>hello</code>程序的生命周期是从一个高级C语言程序开始的，因为这种形式能够被人读懂。然而，为了在系统上运行<code>hello.c</code>程序，每条C语句都必须被其他程序转化为一系列的低级机器语言指令。然后这些指令按照一种称为可执行目标程序的格式打好包，并以二进制磁盘文件的形式存放起来。目标程序也称为可执行目标文件。</p>
+<p>在<code>Unix</code>系统上，从源文件到目标文件的转化是由编译器驱动程序完成的：</p>
+<p>在这里， GCC编译器驱动程序读取源程序文件<code>hello.c</code>，并把它翻译成一个可执行目标文件<code>hello</code>。这个翻译过程可分为四个阶段完成，如图所示。执行这四个阶段的程序（预处理器、编译器 、汇编器和链接器）一起构成了编译系统（compilation system)。</p>
+<p><img src="https://www.choudalao.com/uploads/20210307/202103072120139cxhMa.png" alt=""></p>
+<p><strong>预处理阶段</strong>：预处理器（CPP)根据以字符#开头的命令，修改原始的C程序。比如<code>hello.c</code>中第1行的<code>#include&lt;stdio.h&gt;</code>命令告 诉预处理器读取系统头文件<code>stdio.h</code>的内容，并把它直接插入 程序文本中。结果就得到了另一个C程序，通常是以<code>.i</code>作为文件扩展名。</p>
+<p><strong>编译阶段</strong>：编译器(ccl) 将文本文件<code>hello.i</code>翻译成文本文件<code>hello.s</code>，它包含一个汇编语言程序。该程序包含函数<code>main</code>的定义。</p>
+<p>在命令行上使用“-S”选项，就能看到C语言编译器产生的汇编代码,这会使GCC运行编译器，产生一个汇编文件<code>hello.s</code>，但是不做其他进一步的工作。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#a6e22e">gcc</span> <span style="color:#f92672">-</span><span style="color:#a6e22e">Og</span> <span style="color:#f92672">-</span><span style="color:#a6e22e">S</span> <span style="color:#a6e22e">hello</span><span style="color:#f92672">.</span><span style="color:#a6e22e">c</span>
+</span></span></code></pre></div><p><img src="https://www.choudalao.com/uploads/20210307/20210307214017bJ4IDB.png" alt="">
+<img src="https://www.choudalao.com/uploads/20210307/20210307214127HvMD9S.png" alt=""></p>
+<p><strong>汇编阶段</strong>：接下来，汇编器(as)将<code>hello.s</code>翻译成机器语言指令，把这些指令打包成一种叫做可重定位目标程序 （relocatable object program) 的格式，并将结果保存在目标文件<code>hello.o</code>中。<code>hello.o</code>文件是一个二进制文件，它包含的 17个字节是函数<code>main</code>的指令编码。如果我们在文本编辑器中打开<code>hello.o</code>文件，将看到一堆乱码。</p>
+<p>如果我们使用 “-C” 命令行选项，GCC会编译并汇编该代码：这就会产生目标代码文件<code>hello.o</code>, 它是二进制格式的，所以无法直接査看。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#a6e22e">gcc</span> <span style="color:#f92672">-</span><span style="color:#a6e22e">Og</span> <span style="color:#f92672">-</span><span style="color:#a6e22e">c</span> <span style="color:#a6e22e">hello</span><span style="color:#f92672">.</span><span style="color:#a6e22e">c</span>
+</span></span></code></pre></div><p><img src="https://www.choudalao.com/uploads/20210307/202103072146387oqGpf.png" alt=""></p>
+<p><img src="https://www.choudalao.com/uploads/20210307/20210307214705g4Zrbe.png" alt=""></p>
+<p>在<code>Linux</code>系统中，带 ‘-d’ 命令行标志的程序<code>OBJDUMP</code>(表示 “object dump”)可以充当这个角色：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#a6e22e">objdump</span> <span style="color:#f92672">-</span><span style="color:#a6e22e">d</span> <span style="color:#a6e22e">hello</span><span style="color:#f92672">.</span><span style="color:#a6e22e">o</span>
+</span></span></code></pre></div><p><img src="https://www.choudalao.com/uploads/20210308/202103080039517rYw23.png" alt=""></p>
+<p><strong>链接阶段</strong>： 请注意，<code>hello</code>程序调用了<code>printf</code>函数，它是每个C编译器都提供的标准C库中的一个函数。<code>printf</code>函数存在于一个名为<code>printf.o</code>的单独的预编译好了的目标文件中，而这个文件必须以某种方式合并到我们的<code>hello.o</code>程序中。链接器(Id)就负责处理这种合并。结果就得到<code>hello</code>文件，它是一个可执行目标文件(或者简称为可执行文件），可以被加载到内存中，由系统执行。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-c" data-lang="c"><span style="display:flex;"><span>gcc <span style="color:#f92672">-</span>o hello hello.c
+</span></span></code></pre></div><p><img src="https://www.choudalao.com/uploads/20210307/20210307215844HBOV1s.png" alt=""></p>
+
+		</div>
+	</article>
+</main>
+
+
+
+
+			</div>
+			
+		</div>
+		<footer class="footer">
+	<div class="container footer__container flex">
+		
+		<div class="footer__copyright">
+			&copy; 2026 臭大佬博客.
+			<span class="footer__copyright-credits">基于 <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> 引擎和 <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> 主题</span>
+		</div>
+	</div>
+</footer>
+	</div>
+<script async defer src="/js/menu.js"></script>
+</body>
+</html>

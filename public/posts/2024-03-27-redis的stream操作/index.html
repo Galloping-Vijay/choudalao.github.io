@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Redis的Stream操作 - 臭大佬博客</title>
+	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
+	<meta name="description" content="Redis的Stream操作">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link rel="dns-prefetch" href="//fonts.googleapis.com">
+	<link rel="dns-prefetch" href="//fonts.gstatic.com">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
+
+	<link rel="stylesheet" href="/css/style.css">
+	
+
+	<link rel="shortcut icon" href="/favicon.ico">
+		
+</head>
+<body class="body">
+	<div class="container container--outer">
+		<header class="header">
+	<div class="container header__container">
+		
+	<div class="logo">
+		<a class="logo__link" href="/" title="臭大佬博客" rel="home">
+			<div class="logo__item logo__text">
+					<div class="logo__title">臭大佬博客</div>
+					
+				</div>
+		</a>
+	</div>
+		
+<nav class="menu">
+	<button class="menu__btn" aria-haspopup="true" aria-expanded="false" tabindex="0">
+		<span class="menu__btn-title" tabindex="-1">菜单</span>
+	</button>
+	<ul class="menu__list">
+		<li class="menu__item">
+			<a class="menu__link" href="/">
+				
+				<span class="menu__text">首页</span>
+				
+			</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/post/">
+				
+				<span class="menu__text">归档</span>
+				
+			</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/about/">
+				
+				<span class="menu__text">关于</span>
+				
+			</a>
+		</li>
+	</ul>
+</nav>
+
+	</div>
+</header>
+		<div class="wrapper flex">
+			<div class="primary">
+			
+<main class="main" role="main">
+	<article class="post">
+		<header class="post__header">
+			<h1 class="post__title">Redis的Stream操作</h1>
+			
+		</header>
+		<div class="content post__content clearfix">
+			<h1 id="介绍">介绍</h1>
+<h1 id="基本操作">基本操作</h1>
+<h3 id="添加">添加</h3>
+<p>*号表示服务器自动生成ID，后面顺序跟着一堆key/value,<code>stream-name</code>表示Stream名</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">XADD</span> <span style="color:#a6e22e">stream</span><span style="color:#f92672">-</span><span style="color:#a6e22e">name</span> <span style="color:#f92672">*</span> <span style="color:#a6e22e">name</span> <span style="color:#a6e22e">boy</span> <span style="color:#a6e22e">age</span> <span style="color:#ae81ff">20</span>
+</span></span></code></pre></div><h3 id="获取列表">获取列表</h3>
+<p>~~ 获取消息列表，会自动过滤已经删除的消息
+-表示最小值, +表示最大值~~</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">xrange</span> <span style="color:#a6e22e">stream</span><span style="color:#f92672">-</span><span style="color:#a6e22e">name</span> <span style="color:#f92672">-</span> <span style="color:#f92672">+</span>
+</span></span></code></pre></div><p>指定最小消息ID的列表</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">xrange</span> <span style="color:#a6e22e">stream</span><span style="color:#f92672">-</span><span style="color:#a6e22e">name</span> <span style="color:#ae81ff">1711530121454</span><span style="color:#f92672">-</span><span style="color:#ae81ff">0</span> <span style="color:#f92672">+</span>
+</span></span></code></pre></div><p>指定最大消息ID的列表</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">xrange</span> <span style="color:#a6e22e">stream</span><span style="color:#f92672">-</span><span style="color:#a6e22e">name</span> <span style="color:#f92672">-</span> <span style="color:#ae81ff">1711530139482</span><span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>
+</span></span></code></pre></div><h3 id="删除">删除</h3>
+<p>单条</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">xdel</span> <span style="color:#a6e22e">stream</span><span style="color:#f92672">-</span><span style="color:#a6e22e">name</span> <span style="color:#ae81ff">1711530139482</span><span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>
+</span></span></code></pre></div><p>删除整个Stream</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">del</span> <span style="color:#a6e22e">stream</span><span style="color:#f92672">-</span><span style="color:#a6e22e">name</span>
+</span></span></code></pre></div><h3 id="长度">长度</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">xlen</span> <span style="color:#a6e22e">stream</span><span style="color:#f92672">-</span><span style="color:#a6e22e">name</span>
+</span></span></code></pre></div><h2 id="独立消费">独立消费</h2>
+<p>从Stream头部读取两条消息</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">xread</span> <span style="color:#a6e22e">count</span> <span style="color:#ae81ff">2</span> <span style="color:#a6e22e">streams</span> <span style="color:#a6e22e">stream</span><span style="color:#f92672">-</span><span style="color:#a6e22e">name</span> <span style="color:#ae81ff">0</span><span style="color:#f92672">-</span><span style="color:#ae81ff">0</span>
+</span></span></code></pre></div><h2 id="消费组消费">消费组消费</h2>
+<h3 id="创建消费组">创建消费组</h3>
+<p>表示从头开始消费,<code>group-name</code>表示消费组名称</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">xgroup</span> <span style="color:#a6e22e">create</span> <span style="color:#a6e22e">stream</span><span style="color:#f92672">-</span><span style="color:#a6e22e">name</span> <span style="color:#a6e22e">group</span><span style="color:#f92672">-</span><span style="color:#a6e22e">name</span> <span style="color:#ae81ff">0</span><span style="color:#f92672">-</span><span style="color:#ae81ff">0</span>
+</span></span></code></pre></div><p>$表示从尾部开始消费，只接受新消息，当前Stream消息会全部忽略</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">xgroup</span> <span style="color:#a6e22e">create</span> <span style="color:#a6e22e">stream</span><span style="color:#f92672">-</span><span style="color:#a6e22e">name</span> <span style="color:#a6e22e">group</span><span style="color:#f92672">-</span><span style="color:#a6e22e">name2</span> <span style="color:#960050;background-color:#1e0010">$</span>
+</span></span></code></pre></div><p>获取Stream信息</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">xinfo</span> <span style="color:#a6e22e">stream</span> <span style="color:#a6e22e">stream</span><span style="color:#f92672">-</span><span style="color:#a6e22e">name</span>
+</span></span></code></pre></div><p>返回:</p>
+<pre><code>1) &quot;length&quot;
+2) 2 # 共2个消息
+3) &quot;radix-tree-keys&quot;
+4) 1
+5) &quot;last-generated-id&quot;
+6) &quot;1711530139482-1&quot;
+7) &quot;max-deleted-entry-id&quot;
+8) &quot;1711530139482-1&quot;
+9) &quot;recorded-first-entry-id&quot;
+10) &quot;1711530121454-0&quot;
+11) &quot;groups&quot;
+12) 1  # 1个消费组
+13) &quot;radix-tree-nodes&quot;
+14) 2
+15) &quot;entries-added&quot;
+16) 3
+17) &quot;first-entry&quot; # 第一个消息
+18)     1) &quot;1711530121454-0&quot;
+        2)      1) &quot;name&quot;
+        2) &quot;boy&quot;
+        3) &quot;age&quot;
+        4) &quot;20&quot;
+19) &quot;last-entry&quot; # 最后一个消息
+20)     1) &quot;1711530139482-0&quot;
+        2)      1) &quot;name&quot;
+        2) &quot;girl&quot;
+        3) &quot;age&quot;
+        4) &quot;17&quot;
+</code></pre>
+<h4 id="获取stream的消费组信息">获取Stream的消费组信息</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">xinfo</span> <span style="color:#a6e22e">groups</span> <span style="color:#a6e22e">stream</span><span style="color:#f92672">-</span><span style="color:#a6e22e">name</span>
+</span></span></code></pre></div><p>返回:</p>
+<pre><code>1) 1) &quot;entries-read&quot;
+2) 0 # 消费组已成功读取并处理了N条事件
+3) &quot;lag&quot;
+  4) 0 #消费者落后于流中最新消息N个条目
+5) &quot;name&quot;
+  6) &quot;group-name&quot; # 消费组名称
+7) &quot;consumers&quot;
+  8) 1  # 1个消费组
+9) &quot;pending&quot;
+  10) 0 # 0条正在处理的信息还有没有ack
+11) &quot;last-delivered-id&quot;
+  12) &quot;1711530139482-0&quot;
+</code></pre>
+<h4 id="获取stream的消费组中消费者信息">获取Stream的消费组中消费者信息</h4>
+<p>xinfo consumers Stream名 消费组</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">xinfo</span> <span style="color:#a6e22e">consumers</span> <span style="color:#a6e22e">stream</span><span style="color:#f92672">-</span><span style="color:#a6e22e">name</span> <span style="color:#a6e22e">group</span><span style="color:#f92672">-</span><span style="color:#a6e22e">name</span>
+</span></span></code></pre></div><h4 id="删除消费组里面的某个消费者">删除消费组里面的某个消费者</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">XGROUP</span> <span style="color:#a6e22e">DELCONSUMER</span> <span style="color:#a6e22e">stream</span><span style="color:#f92672">-</span><span style="color:#a6e22e">name</span> <span style="color:#a6e22e">group</span><span style="color:#f92672">-</span><span style="color:#a6e22e">name</span> <span style="color:#a6e22e">consumer</span><span style="color:#f92672">-</span><span style="color:#a6e22e">name</span>
+</span></span></code></pre></div><h3 id="消费组消费-1">消费组消费</h3>
+<p>Stream提供了xreadgroup指令可以进行消费组的组内消费，需要提供消费组名称、消费者名称和起始消息ID。它同xread一样，也可以阻塞等待新消息。读到新消息后，对应的消息ID就会进入消费者的PEL(正在处理的消息)结构里，客户端处理完毕后使用xack指令通知服务器，本条消息已经处理完毕，该消息ID就会从PEL中移除。
+————————————————</p>
+<p>&ldquo;&gt;&ldquo;号表示从当前消费组的last_delivered_id后面开始读
+每当消费者读取一条消息，last_delivered_id变量就会前进</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">xreadgroup</span> <span style="color:#a6e22e">GROUP</span> <span style="color:#a6e22e">stream</span><span style="color:#f92672">-</span><span style="color:#a6e22e">name</span> <span style="color:#a6e22e">group</span><span style="color:#f92672">-</span><span style="color:#a6e22e">name</span> <span style="color:#a6e22e">count</span> <span style="color:#ae81ff">1</span> <span style="color:#a6e22e">streams</span> <span style="color:#a6e22e">stream</span><span style="color:#f92672">-</span><span style="color:#a6e22e">name</span> &gt;
+</span></span></code></pre></div><p>再继续读取，就没有新消息了</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span> <span style="color:#a6e22e">xinfo</span> <span style="color:#a6e22e">groups</span> <span style="color:#a6e22e">stream</span><span style="color:#f92672">-</span><span style="color:#a6e22e">name</span>
+</span></span></code></pre></div><p>返回:</p>
+<pre><code>1) 1) &quot;entries-read&quot;
+2) 0 # 消费组已成功读取并处理了N条事件
+3) &quot;lag&quot;
+  4) #消费者落后于流中最新消息N个条目
+5) &quot;name&quot;
+  6) &quot;group-name&quot;
+7) &quot;consumers&quot;
+  8) 1 # 一个消费者
+9) &quot;pending&quot;
+  10) 2 # 共2条正在处理的信息还有没有ack
+11) &quot;last-delivered-id&quot;
+  12) &quot;1711530139482-0&quot;
+</code></pre>
+<p>ack一条消息</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">xack</span> <span style="color:#a6e22e">stream</span><span style="color:#f92672">-</span><span style="color:#a6e22e">name</span> <span style="color:#a6e22e">group</span><span style="color:#f92672">-</span><span style="color:#a6e22e">name</span> <span style="color:#ae81ff">1711530139482</span><span style="color:#f92672">-</span><span style="color:#ae81ff">0</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">xinfo</span> <span style="color:#a6e22e">groups</span> <span style="color:#a6e22e">stream</span><span style="color:#f92672">-</span><span style="color:#a6e22e">name</span>
+</span></span></code></pre></div><p>返回:</p>
+<pre><code>1) 1) &quot;pending&quot;
+2) 1 # 少了1条
+3) &quot;last-delivered-id&quot;
+  4) &quot;1711530139482-0&quot;
+5) &quot;entries-read&quot;
+  6) 
+7) &quot;lag&quot;
+  8) 
+9) &quot;name&quot;
+  10) &quot;group-name&quot;
+11) &quot;consumers&quot;
+  12) 1
+</code></pre>
+<p>查看</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">xinfo</span> <span style="color:#a6e22e">consumers</span> <span style="color:#a6e22e">stream</span><span style="color:#f92672">-</span><span style="color:#a6e22e">name</span> <span style="color:#a6e22e">group</span><span style="color:#f92672">-</span><span style="color:#a6e22e">name</span>
+</span></span></code></pre></div><p>文章参考:https://blog.csdn.net/weixin_43064185/article/details/122012628</p>
+
+		</div>
+	</article>
+</main>
+
+
+
+
+			</div>
+			
+		</div>
+		<footer class="footer">
+	<div class="container footer__container flex">
+		
+		<div class="footer__copyright">
+			&copy; 2026 臭大佬博客.
+			<span class="footer__copyright-credits">基于 <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> 引擎和 <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> 主题</span>
+		</div>
+	</div>
+</footer>
+	</div>
+<script async defer src="/js/menu.js"></script>
+</body>
+</html>

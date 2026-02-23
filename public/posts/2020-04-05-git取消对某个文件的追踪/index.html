@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>git取消对某个文件的追踪 - 臭大佬博客</title>
+	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
+	<meta name="description" content="git取消对某个文件的追踪">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link rel="dns-prefetch" href="//fonts.googleapis.com">
+	<link rel="dns-prefetch" href="//fonts.gstatic.com">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
+
+	<link rel="stylesheet" href="/css/style.css">
+	
+
+	<link rel="shortcut icon" href="/favicon.ico">
+		
+</head>
+<body class="body">
+	<div class="container container--outer">
+		<header class="header">
+	<div class="container header__container">
+		
+	<div class="logo">
+		<a class="logo__link" href="/" title="臭大佬博客" rel="home">
+			<div class="logo__item logo__text">
+					<div class="logo__title">臭大佬博客</div>
+					
+				</div>
+		</a>
+	</div>
+		
+<nav class="menu">
+	<button class="menu__btn" aria-haspopup="true" aria-expanded="false" tabindex="0">
+		<span class="menu__btn-title" tabindex="-1">菜单</span>
+	</button>
+	<ul class="menu__list">
+		<li class="menu__item">
+			<a class="menu__link" href="/">
+				
+				<span class="menu__text">首页</span>
+				
+			</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/post/">
+				
+				<span class="menu__text">归档</span>
+				
+			</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/about/">
+				
+				<span class="menu__text">关于</span>
+				
+			</a>
+		</li>
+	</ul>
+</nav>
+
+	</div>
+</header>
+		<div class="wrapper flex">
+			<div class="primary">
+			
+<main class="main" role="main">
+	<article class="post">
+		<header class="post__header">
+			<h1 class="post__title">git取消对某个文件的追踪</h1>
+			
+		</header>
+		<div class="content post__content clearfix">
+			<h1 id="取消追踪某个文件">取消追踪某个文件</h1>
+<h1 id="git取消文件跟踪">git取消文件跟踪</h1>
+<p>在使用git的时候，有些文件是不需要上传的，所以就可以修改   .gitignore
+例如：
+如果是对所有文件都取消跟踪的话，就是</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">git</span> <span style="color:#a6e22e">rm</span> <span style="color:#f92672">-</span><span style="color:#a6e22e">r</span> <span style="color:#f92672">--</span><span style="color:#a6e22e">cached</span> . 　　<span style="color:#75715e">//不删除本地文件</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">git</span> <span style="color:#a6e22e">rm</span> <span style="color:#f92672">-</span><span style="color:#a6e22e">r</span> <span style="color:#f92672">--</span><span style="color:#a6e22e">f</span> . 　　<span style="color:#75715e">//删除本地文件</span>
+</span></span></code></pre></div><h1 id="对某个文件取消跟踪">对某个文件取消跟踪</h1>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">git</span> <span style="color:#a6e22e">rm</span> <span style="color:#f92672">--</span><span style="color:#a6e22e">cached</span> <span style="color:#a6e22e">readme1</span>.<span style="color:#a6e22e">txt</span>    <span style="color:#a6e22e">删除readme1</span>.<span style="color:#a6e22e">txt的跟踪</span><span style="color:#960050;background-color:#1e0010">，</span><span style="color:#a6e22e">并保留在本地</span><span style="color:#960050;background-color:#1e0010">。</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">git</span> <span style="color:#a6e22e">rm</span> <span style="color:#f92672">--</span><span style="color:#a6e22e">f</span> <span style="color:#a6e22e">readme1</span>.<span style="color:#a6e22e">txt</span>    <span style="color:#a6e22e">删除readme1</span>.<span style="color:#a6e22e">txt的跟踪</span><span style="color:#960050;background-color:#1e0010">，</span><span style="color:#a6e22e">并且删除本地文件</span><span style="color:#960050;background-color:#1e0010">。</span>
+</span></span></code></pre></div><p>然后git commit 即可。但是git status查看状态时还是会列出来</p>
+
+		</div>
+	</article>
+</main>
+
+
+
+
+			</div>
+			
+		</div>
+		<footer class="footer">
+	<div class="container footer__container flex">
+		
+		<div class="footer__copyright">
+			&copy; 2026 臭大佬博客.
+			<span class="footer__copyright-credits">基于 <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> 引擎和 <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> 主题</span>
+		</div>
+	</div>
+</footer>
+	</div>
+<script async defer src="/js/menu.js"></script>
+</body>
+</html>

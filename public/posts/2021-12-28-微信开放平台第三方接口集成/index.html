@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>微信开放平台第三方接口集成 - 臭大佬博客</title>
+	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
+	<meta name="description" content="微信开放平台第三方接口">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link rel="dns-prefetch" href="//fonts.googleapis.com">
+	<link rel="dns-prefetch" href="//fonts.gstatic.com">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
+
+	<link rel="stylesheet" href="/css/style.css">
+	
+
+	<link rel="shortcut icon" href="/favicon.ico">
+		
+</head>
+<body class="body">
+	<div class="container container--outer">
+		<header class="header">
+	<div class="container header__container">
+		
+	<div class="logo">
+		<a class="logo__link" href="/" title="臭大佬博客" rel="home">
+			<div class="logo__item logo__text">
+					<div class="logo__title">臭大佬博客</div>
+					
+				</div>
+		</a>
+	</div>
+		
+<nav class="menu">
+	<button class="menu__btn" aria-haspopup="true" aria-expanded="false" tabindex="0">
+		<span class="menu__btn-title" tabindex="-1">菜单</span>
+	</button>
+	<ul class="menu__list">
+		<li class="menu__item">
+			<a class="menu__link" href="/">
+				
+				<span class="menu__text">首页</span>
+				
+			</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/post/">
+				
+				<span class="menu__text">归档</span>
+				
+			</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/about/">
+				
+				<span class="menu__text">关于</span>
+				
+			</a>
+		</li>
+	</ul>
+</nav>
+
+	</div>
+</header>
+		<div class="wrapper flex">
+			<div class="primary">
+			
+<main class="main" role="main">
+	<article class="post">
+		<header class="post__header">
+			<h1 class="post__title">微信开放平台第三方接口集成</h1>
+			
+		</header>
+		<div class="content post__content clearfix">
+			<h1 id="介绍">介绍</h1>
+<p>在做微信开放平台第三方应用开发的时候，每次都要登录到微信开放平台中操作，如果多了的话，很不方便，所以想到集成到自己后台操作，这样就可以同时管理n个开放平台里面的n个第三方应用了。</p>
+<p>犹豫代码涉及逻辑会比较复杂，所以只提取了相关部分。</p>
+<h1 id="步骤">步骤</h1>
+<h4 id="获取cookie和token">获取cookie和token</h4>
+<p><img src="https://www.choudalao.com/uploads/20220111/20220111120625JaaCDm.png" alt=""></p>
+<p>在操作第三方之前，需要获取token和cookie，获取方式如下代码：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#f92672">&lt;?</span><span style="color:#a6e22e">php</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">namespace</span> <span style="color:#a6e22e">App\Utils\Wx</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">use</span> <span style="color:#a6e22e">App\Models\WxOpen</span>;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">use</span> <span style="color:#a6e22e">EasyWeChat\Factory</span>;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">use</span> <span style="color:#a6e22e">Illuminate\Support\Facades\Cache</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"> * Description:
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"> * Class WxOpenUtils
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"> * User: Vijay &lt;1937832819@qq.com&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"> * Site: https://www.choudalao.com/
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"> * Date: 2022/1/11
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"> * Time: 11:43
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"> * @package App\Utils\Wx
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"> */</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">WxOpenUtils</span> <span style="color:#66d9ef">extends</span> <span style="color:#a6e22e">WxBaseUtils</span>
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">protected</span> $msg <span style="color:#f92672">=</span> <span style="color:#66d9ef">null</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> $openApp <span style="color:#f92672">=</span> <span style="color:#66d9ef">null</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">protected</span> <span style="color:#66d9ef">static</span> $instance <span style="color:#f92672">=</span> <span style="color:#66d9ef">null</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 登录前的cookie
+</span></span></span><span style="display:flex;"><span>    <span style="color:#75715e">// CACHE_BEFORE_COOKIE_KEY_openAppId
+</span></span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">const</span> <span style="color:#66d9ef">CACHE_BEFORE_COOKIE_KEY</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;CACHE_BEFORE_COOKIE_KEY_&#39;</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// CACHE_LOGIN_COOKIE_KEY_openAppId
+</span></span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">const</span> <span style="color:#66d9ef">CACHE_LOGIN_COOKIE_KEY</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;CACHE_LOGIN_COOKIE_KEY_&#39;</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// CACHE_LOGIN_TOKEN_KEY_openAppId
+</span></span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">const</span> <span style="color:#66d9ef">CACHE_LOGIN_TOKEN_KEY</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;CACHE_LOGIN_TOKEN_KEY_&#39;</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// CACHE_APPLIST_COOKIE_KEY_openAppId
+</span></span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">const</span> <span style="color:#66d9ef">CACHE_APPLIST_COOKIE_KEY</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;CACHE_APPLIST_COOKIE_KEY_&#39;</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">const</span> <span style="color:#66d9ef">OPEN_BASE_URL</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;https://open.weixin.qq.com&#39;</span>;
+</span></span><span style="display:flex;"><span>	
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">__construct</span>()
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// 首先要获取open对象
+</span></span></span><span style="display:flex;"><span>        $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">openApp</span> <span style="color:#f92672">=</span> $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">getOpenApp</span>();
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span>$this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">openApp</span>) {
+</span></span><span style="display:flex;"><span>            $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">msg</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;开放平台获取失败&#39;</span>;
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">false</span>;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     * 获取开放平台登录token
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     * User: Vijay &lt;1937832819@qq.com&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     * Date: 2021/12/26
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     * Time: 21:13
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     * @param bool $isCache
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     * @return bool|mixed
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     */</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">getLogin</span>($isCache <span style="color:#f92672">=</span> <span style="color:#66d9ef">false</span>)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        $cacheTokenName <span style="color:#f92672">=</span> <span style="color:#a6e22e">self</span><span style="color:#f92672">::</span><span style="color:#a6e22e">CACHE_LOGIN_TOKEN_KEY</span> <span style="color:#f92672">.</span> $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">openApp</span>[<span style="color:#e6db74">&#39;id&#39;</span>];
+</span></span><span style="display:flex;"><span>        $token <span style="color:#f92672">=</span> <span style="color:#a6e22e">Cache</span><span style="color:#f92672">::</span><span style="color:#a6e22e">get</span>($cacheTokenName);
+</span></span><span style="display:flex;"><span>        $cacheCookieName <span style="color:#f92672">=</span> <span style="color:#a6e22e">self</span><span style="color:#f92672">::</span><span style="color:#a6e22e">CACHE_LOGIN_COOKIE_KEY</span> <span style="color:#f92672">.</span> $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">openApp</span>[<span style="color:#e6db74">&#39;id&#39;</span>];
+</span></span><span style="display:flex;"><span>        $cookie <span style="color:#f92672">=</span> <span style="color:#a6e22e">Cache</span><span style="color:#f92672">::</span><span style="color:#a6e22e">get</span>($cacheCookieName);
+</span></span><span style="display:flex;"><span>        $list <span style="color:#f92672">=</span> [
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#39;token&#39;</span> <span style="color:#f92672">=&gt;</span> $token,
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#39;cookie&#39;</span> <span style="color:#f92672">=&gt;</span> $cookie
+</span></span><span style="display:flex;"><span>        ];
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span>$token <span style="color:#f92672">||</span> <span style="color:#f92672">!</span>$cookie <span style="color:#f92672">||</span> $isCache <span style="color:#f92672">==</span> <span style="color:#66d9ef">true</span>) {
+</span></span><span style="display:flex;"><span>            $res <span style="color:#f92672">=</span> $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">setLogin</span>($isCache);
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> ($res <span style="color:#f92672">===</span> <span style="color:#66d9ef">false</span>) {
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">false</span>;
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>            $list <span style="color:#f92672">=</span> <span style="color:#a6e22e">array_merge</span>($list, $res);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> $list;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>	
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     * 获取开放平台(根据第三方来得到开放平台信息,开放平台只有后台用到，没有做缓存处理)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     * User: Vijay &lt;1937832819@qq.com&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     * Date: 2021/12/26
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     * Time: 21:38
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     * @return array|null
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     */</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">getOpenApp</span>()
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">is_null</span>($this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">openApp</span>)) {
+</span></span><span style="display:flex;"><span>            $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">openApp</span> <span style="color:#f92672">=</span> [];
+</span></span><span style="display:flex;"><span>			<span style="color:#75715e">// 根据自己的数据库设计，查询出开放平台数据，主要是账号密码等数据
+</span></span></span><span style="display:flex;"><span>            $openApp <span style="color:#f92672">=</span> <span style="color:#a6e22e">WxOpen</span><span style="color:#f92672">::</span><span style="color:#a6e22e">query</span>()
+</span></span><span style="display:flex;"><span>                <span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">where</span>(<span style="color:#e6db74">&#39;id&#39;</span>, <span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>                <span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">first</span>();
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span><span style="color:#66d9ef">empty</span>($openApp)) {
+</span></span><span style="display:flex;"><span>                $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">openApp</span> <span style="color:#f92672">=</span> $openApp<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">toArray</span>();
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">openApp</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     * Description:获取登录token
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     * User: Vijay
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     * Date: 2022/1/10
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     * Time: 22:23
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     * @param bool $isCache
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     * @return bool|mixed
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     */</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">getLoginToken</span>($isCache <span style="color:#f92672">=</span> <span style="color:#66d9ef">false</span>)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        $cacheTokenName <span style="color:#f92672">=</span> <span style="color:#a6e22e">self</span><span style="color:#f92672">::</span><span style="color:#a6e22e">CACHE_LOGIN_TOKEN_KEY</span> <span style="color:#f92672">.</span> $$this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">openApp</span>[<span style="color:#e6db74">&#39;id&#39;</span>];
+</span></span><span style="display:flex;"><span>        $token <span style="color:#f92672">=</span> <span style="color:#a6e22e">Cache</span><span style="color:#f92672">::</span><span style="color:#a6e22e">get</span>($cacheTokenName);
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span>$token) {
+</span></span><span style="display:flex;"><span>            $loginList <span style="color:#f92672">=</span> $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">getLogin</span>($isCache);
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> ($loginList <span style="color:#f92672">==</span> <span style="color:#66d9ef">false</span>) {
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">false</span>;
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>            $token <span style="color:#f92672">=</span> $loginList[<span style="color:#e6db74">&#39;token&#39;</span>];
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> $token;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     * User: Vijay &lt;1937832819@qq.com&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     * Date: 2021/12/28
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     * Time: 21:19
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     * @param bool $isCache
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     * @return array|bool
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     */</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">setLogin</span>($isCache <span style="color:#f92672">=</span> <span style="color:#66d9ef">false</span>)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        $cookie <span style="color:#f92672">=</span> $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">getBeforeCookie</span>($isCache);
+</span></span><span style="display:flex;"><span>        $passwd <span style="color:#f92672">=</span> <span style="color:#a6e22e">md5</span>(<span style="color:#a6e22e">trim</span>($this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">openApp</span>[<span style="color:#e6db74">&#39;password&#39;</span>]));
+</span></span><span style="display:flex;"><span>        $account <span style="color:#f92672">=</span> $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">openApp</span>[<span style="color:#e6db74">&#39;account&#39;</span>];
+</span></span><span style="display:flex;"><span>        $param <span style="color:#f92672">=</span> [
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#39;account&#39;</span> <span style="color:#f92672">=&gt;</span> $account,
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#39;passwd&#39;</span> <span style="color:#f92672">=&gt;</span> $passwd,
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#39;f&#39;</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;json&#39;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#39;lang&#39;</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;zh_CN&#39;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#39;ajax&#39;</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;1&#39;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#39;key&#39;</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;1&#39;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e">// &#39;token&#39; =&gt; null,
+</span></span></span><span style="display:flex;"><span>        ];
+</span></span><span style="display:flex;"><span>        $url <span style="color:#f92672">=</span> <span style="color:#a6e22e">self</span><span style="color:#f92672">::</span><span style="color:#a6e22e">OPEN_BASE_URL</span> <span style="color:#f92672">.</span> <span style="color:#e6db74">&#39;/cgi-bin/login&#39;</span>;
+</span></span><span style="display:flex;"><span>        $response <span style="color:#f92672">=</span> $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">curlExecute</span>($url, <span style="color:#e6db74">&#39;POST&#39;</span>, $param, <span style="color:#a6e22e">self</span><span style="color:#f92672">::</span><span style="color:#a6e22e">OPEN_BASE_URL</span>, <span style="color:#a6e22e">self</span><span style="color:#f92672">::</span><span style="color:#a6e22e">OPEN_BASE_URL</span>, $cookie);
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">list</span>($header, $body) <span style="color:#f92672">=</span> <span style="color:#a6e22e">explode</span>(<span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\r\n\r\n</span><span style="color:#e6db74">&#34;</span>, $response, <span style="color:#ae81ff">2</span>);
+</span></span><span style="display:flex;"><span>        $preg_cookie <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;/Set-Cookie: (.*?);/m&#39;</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">preg_match_all</span>($preg_cookie, $header, $cookie);
+</span></span><span style="display:flex;"><span>        $cacheCookieName <span style="color:#f92672">=</span> <span style="color:#a6e22e">self</span><span style="color:#f92672">::</span><span style="color:#a6e22e">CACHE_LOGIN_COOKIE_KEY</span> <span style="color:#f92672">.</span> $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">openApp</span>[<span style="color:#e6db74">&#39;id&#39;</span>];
+</span></span><span style="display:flex;"><span>        $cookieStr <span style="color:#f92672">=</span> <span style="color:#a6e22e">implode</span>(<span style="color:#e6db74">&#39;;&#39;</span>, $cookie[<span style="color:#ae81ff">1</span>]);
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">Cache</span><span style="color:#f92672">::</span><span style="color:#a6e22e">put</span>($cacheCookieName, $cookieStr, <span style="color:#ae81ff">3600</span>);
+</span></span><span style="display:flex;"><span>        $data <span style="color:#f92672">=</span> <span style="color:#a6e22e">json_decode</span>($body, <span style="color:#66d9ef">true</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span><span style="color:#a6e22e">isset</span>($data[<span style="color:#e6db74">&#39;base_resp&#39;</span>][<span style="color:#e6db74">&#39;err_msg&#39;</span>])) {
+</span></span><span style="display:flex;"><span>            $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">msg</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;base_resp获取失败&#39;</span>;
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">false</span>;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> ($data[<span style="color:#e6db74">&#39;base_resp&#39;</span>][<span style="color:#e6db74">&#39;err_msg&#39;</span>] <span style="color:#f92672">!=</span> <span style="color:#e6db74">&#39;ok&#39;</span>) {
+</span></span><span style="display:flex;"><span>            $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">msg</span> <span style="color:#f92672">=</span> $data[<span style="color:#e6db74">&#39;base_resp&#39;</span>][<span style="color:#e6db74">&#39;err_msg&#39;</span>];
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">false</span>;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        $cacheTokenName <span style="color:#f92672">=</span> <span style="color:#a6e22e">self</span><span style="color:#f92672">::</span><span style="color:#a6e22e">CACHE_LOGIN_TOKEN_KEY</span> <span style="color:#f92672">.</span> $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">openApp</span>[<span style="color:#e6db74">&#39;id&#39;</span>];
+</span></span><span style="display:flex;"><span>        $token <span style="color:#f92672">=</span> $data[<span style="color:#e6db74">&#39;base_resp&#39;</span>][<span style="color:#e6db74">&#39;token&#39;</span>];
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">Cache</span><span style="color:#f92672">::</span><span style="color:#a6e22e">put</span>($cacheTokenName, $token, <span style="color:#ae81ff">3600</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> [
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#39;token&#39;</span> <span style="color:#f92672">=&gt;</span> $token,
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#39;cookie&#39;</span> <span style="color:#f92672">=&gt;</span> $cookieStr
+</span></span><span style="display:flex;"><span>        ];
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     * 设置cookie
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     * User: Vijay &lt;1937832819@qq.com&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     * Date: 2021/12/26
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     * Time: 19:29
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     * @return string
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     */</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">setBeforeCookie</span>()
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        $cacheName <span style="color:#f92672">=</span> <span style="color:#a6e22e">self</span><span style="color:#f92672">::</span><span style="color:#a6e22e">CACHE_BEFORE_COOKIE_KEY</span> <span style="color:#f92672">.</span> $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">openApp</span>[<span style="color:#e6db74">&#39;id&#39;</span>];
+</span></span><span style="display:flex;"><span>        $response <span style="color:#f92672">=</span> $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">curlExecute</span>(<span style="color:#a6e22e">self</span><span style="color:#f92672">::</span><span style="color:#a6e22e">OPEN_BASE_URL</span>);
+</span></span><span style="display:flex;"><span>        $preg_cookie <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;/Set-Cookie: (.*?);/m&#39;</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">preg_match_all</span>($preg_cookie, $response, $cookie);
+</span></span><span style="display:flex;"><span>        $cookieStr <span style="color:#f92672">=</span> <span style="color:#a6e22e">implode</span>(<span style="color:#e6db74">&#39;;&#39;</span>, $cookie[<span style="color:#ae81ff">1</span>]);
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">Cache</span><span style="color:#f92672">::</span><span style="color:#a6e22e">put</span>($cacheName, $cookieStr, <span style="color:#ae81ff">3600</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> $cookieStr;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     * 获取cookie
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     * User: Vijay &lt;1937832819@qq.com&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     * Date: 2021/12/26
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     * Time: 20:49
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     * @param bool $isCache true 更新缓存
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     * @return mixed|string
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     */</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">getBeforeCookie</span>($isCache <span style="color:#f92672">=</span> <span style="color:#66d9ef">false</span>)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        $cacheName <span style="color:#f92672">=</span> <span style="color:#a6e22e">self</span><span style="color:#f92672">::</span><span style="color:#a6e22e">CACHE_BEFORE_COOKIE_KEY</span> <span style="color:#f92672">.</span> $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">openApp</span>[<span style="color:#e6db74">&#39;id&#39;</span>];
+</span></span><span style="display:flex;"><span>        $cookieStr <span style="color:#f92672">=</span> <span style="color:#a6e22e">Cache</span><span style="color:#f92672">::</span><span style="color:#a6e22e">get</span>($cacheName);
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (<span style="color:#66d9ef">empty</span>($cookieStr) <span style="color:#f92672">||</span> $isCache <span style="color:#f92672">==</span> <span style="color:#66d9ef">true</span>) {
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">setBeforeCookie</span>();
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> $cookieStr;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     * Description:
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     * User: Vijay
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     * Date: 2022/1/10
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     * Time: 22:29
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     * @param bool $isCache
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     * @return array|bool
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     */</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">appList</span>($isCache <span style="color:#f92672">=</span> <span style="color:#66d9ef">false</span>)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        $loginList <span style="color:#f92672">=</span> $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">getLogin</span>($isCache);
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> ($loginList <span style="color:#f92672">==</span> <span style="color:#66d9ef">false</span>) {
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">false</span>;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        $url <span style="color:#f92672">=</span> <span style="color:#a6e22e">self</span><span style="color:#f92672">::</span><span style="color:#a6e22e">OPEN_BASE_URL</span> <span style="color:#f92672">.</span> <span style="color:#e6db74">&#39;/cgi-bin/applist?t=manage/list&amp;page=0&amp;num=20&amp;openapptype=1&amp;lang=zh_CN&amp;token=&#39;</span> <span style="color:#f92672">.</span> $loginList[<span style="color:#e6db74">&#39;token&#39;</span>];
+</span></span><span style="display:flex;"><span>        $response <span style="color:#f92672">=</span> $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">curlExecute</span>($url, <span style="color:#e6db74">&#39;GET&#39;</span>, [], <span style="color:#e6db74">&#39;&#39;</span>, <span style="color:#e6db74">&#39;&#39;</span>, $loginList[<span style="color:#e6db74">&#39;cookie&#39;</span>]);
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">list</span>($header, $body) <span style="color:#f92672">=</span> <span style="color:#a6e22e">explode</span>(<span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\r\n\r\n</span><span style="color:#e6db74">&#34;</span>, $response, <span style="color:#ae81ff">2</span>);
+</span></span><span style="display:flex;"><span>        $preg_cookie <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;/Set-Cookie: (.*?);/m&#39;</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">preg_match_all</span>($preg_cookie, $header, $cookie);
+</span></span><span style="display:flex;"><span>        $cacheCookieName <span style="color:#f92672">=</span> <span style="color:#a6e22e">self</span><span style="color:#f92672">::</span><span style="color:#a6e22e">CACHE_APPLIST_COOKIE_KEY</span> <span style="color:#f92672">.</span> $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">openApp</span>[<span style="color:#e6db74">&#39;id&#39;</span>];
+</span></span><span style="display:flex;"><span>        $cookieStr <span style="color:#f92672">=</span> <span style="color:#a6e22e">implode</span>(<span style="color:#e6db74">&#39;;&#39;</span>, $cookie[<span style="color:#ae81ff">1</span>]);
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">Cache</span><span style="color:#f92672">::</span><span style="color:#a6e22e">put</span>($cacheCookieName, $cookieStr, <span style="color:#ae81ff">3600</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> [
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#39;token&#39;</span> <span style="color:#f92672">=&gt;</span> $loginList[<span style="color:#e6db74">&#39;token&#39;</span>],
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#39;cookie&#39;</span> <span style="color:#f92672">=&gt;</span> $cookieStr <span style="color:#f92672">.</span> <span style="color:#e6db74">&#39;;&#39;</span> <span style="color:#f92672">.</span> $loginList[<span style="color:#e6db74">&#39;cookie&#39;</span>]
+</span></span><span style="display:flex;"><span>        ];
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>	
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     * curl请求
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     * User: Vijay &lt;1937832819@qq.com&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     * Date: 2021/12/28
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     * Time: 17:26
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     * @param string $url 请求地址
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     * @param string $method 请求方式 GET|POST
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     * @param array $param 请求参数
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     * @param string $origin origin
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     * @param string $referer referer
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     * @param null $cookie
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     * @return bool|string
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     */</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">curlExecute</span>($url, $method <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;GET&#39;</span>, $param <span style="color:#f92672">=</span> [], $origin <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;&#39;</span>, $referer <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;&#39;</span>, $cookie <span style="color:#f92672">=</span> <span style="color:#66d9ef">null</span>)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        $curl <span style="color:#f92672">=</span> <span style="color:#a6e22e">curl_init</span>();
+</span></span><span style="display:flex;"><span>        $header <span style="color:#f92672">=</span> [
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#39;User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.69 Safari/537.36&#39;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#39;Accept: application/json, text/javascript, */*; q=0.01&#39;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#39;Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2&#39;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#39;Accept-Encoding: gzip, deflate, br&#39;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#39;X-Requested-With: XMLHttpRequest&#39;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#39;Connection: keep-alive&#39;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#39;Sec-Fetch-Dest: empty&#39;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#39;Sec-Fetch-Mode: cors&#39;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#39;Sec-Fetch-Site: same-origin &#39;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#39;Content-Type: application/x-www-form-urlencoded; charset=UTF-8&#39;</span>,
+</span></span><span style="display:flex;"><span>        ];
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> ($origin) {
+</span></span><span style="display:flex;"><span>            $header[] <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;Origin: &#39;</span> <span style="color:#f92672">.</span> $origin;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> ($referer) {
+</span></span><span style="display:flex;"><span>            $header[] <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;Referer: &#39;</span> <span style="color:#f92672">.</span> $referer;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> ($cookie) {
+</span></span><span style="display:flex;"><span>            $header[] <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;Cookie: &#39;</span> <span style="color:#f92672">.</span> $cookie;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        $curloptArr <span style="color:#f92672">=</span> [
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">CURLOPT_SSL_VERIFYPEER</span> <span style="color:#f92672">=&gt;</span> <span style="color:#ae81ff">0</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">CURLOPT_HEADER</span> <span style="color:#f92672">=&gt;</span> <span style="color:#ae81ff">1</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">CURLOPT_URL</span> <span style="color:#f92672">=&gt;</span> $url,
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">CURLOPT_RETURNTRANSFER</span> <span style="color:#f92672">=&gt;</span> <span style="color:#66d9ef">true</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">CURLOPT_ENCODING</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;&#39;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">CURLOPT_MAXREDIRS</span> <span style="color:#f92672">=&gt;</span> <span style="color:#ae81ff">10</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">CURLOPT_TIMEOUT</span> <span style="color:#f92672">=&gt;</span> <span style="color:#ae81ff">0</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">CURLOPT_FOLLOWLOCATION</span> <span style="color:#f92672">=&gt;</span> <span style="color:#66d9ef">true</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">CURLOPT_HTTP_VERSION</span> <span style="color:#f92672">=&gt;</span> <span style="color:#a6e22e">CURL_HTTP_VERSION_1_1</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">CURLOPT_CUSTOMREQUEST</span> <span style="color:#f92672">=&gt;</span> $method,
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">CURLOPT_HTTPHEADER</span> <span style="color:#f92672">=&gt;</span> $header,
+</span></span><span style="display:flex;"><span>        ];
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> ($method <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;POST&#39;</span>) {
+</span></span><span style="display:flex;"><span>            $curloptArr[<span style="color:#a6e22e">CURLOPT_POSTFIELDS</span>] <span style="color:#f92672">=</span> <span style="color:#a6e22e">http_build_query</span>($param);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">curl_setopt_array</span>($curl, $curloptArr);
+</span></span><span style="display:flex;"><span>        $response <span style="color:#f92672">=</span> <span style="color:#a6e22e">curl_exec</span>($curl);
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">curl_close</span>($curl);
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> $response;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     * User: Vijay &lt;1937832819@qq.com&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     * Date: 2021/12/26
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     * Time: 17:38
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     * @return null|string
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     */</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">getMsg</span>()
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">msg</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="使用方式">使用方式</h3>
+<p>调用 <code>$appList = WxOpenUtils::getInstance()-&gt;appList();</code>来获取token和cookie.</p>
+<p>后面请求中要带上token和cookie，第三方操作中全部大写的代表参数，用到的几个变量分别如下，</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span>$appList <span style="color:#f92672">=</span> <span style="color:#a6e22e">WxOpenUtils</span><span style="color:#f92672">::</span><span style="color:#a6e22e">getInstance</span>()<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">appList</span>();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">COOKIE</span><span style="color:#f92672">:</span>$appList[<span style="color:#e6db74">&#39;cookie&#39;</span>] <span style="color:#f92672">.</span> <span style="color:#e6db74">&#39;;__CURRENT_TOKEN__=&#39;</span> <span style="color:#f92672">.</span> $appList[<span style="color:#e6db74">&#39;token&#39;</span>];
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">TOKEN</span><span style="color:#f92672">:</span>$appList[<span style="color:#e6db74">&#39;token&#39;</span>]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">APPID</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">POST添加应用返回该应用的APPID</span>
+</span></span></code></pre></div><h4 id="第三方操作">第三方操作</h4>
+<p>拿到token和cookie后，接下来的工作就比较简单啦，这里只提供接口和参数，自己去实现吧。</p>
+<h5 id="post添加应用">POST添加应用</h5>
+<p>地址:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span> <span style="color:#a6e22e">https</span><span style="color:#f92672">://</span><span style="color:#a6e22e">open</span><span style="color:#f92672">.</span><span style="color:#a6e22e">weixin</span><span style="color:#f92672">.</span><span style="color:#a6e22e">qq</span><span style="color:#f92672">.</span><span style="color:#a6e22e">com</span><span style="color:#f92672">/</span><span style="color:#a6e22e">cgi</span><span style="color:#f92672">-</span><span style="color:#a6e22e">bin</span><span style="color:#f92672">/</span><span style="color:#a6e22e">component_acct</span><span style="color:#f92672">?</span><span style="color:#a6e22e">action</span><span style="color:#f92672">=</span><span style="color:#a6e22e">create_component</span><span style="color:#f92672">&amp;</span><span style="color:#a6e22e">token</span><span style="color:#f92672">=</span><span style="color:#a6e22e">TOKEN</span>
+</span></span></code></pre></div><p>请求头：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#a6e22e">referer</span><span style="color:#f92672">:</span><span style="color:#a6e22e">https</span><span style="color:#f92672">://</span><span style="color:#a6e22e">open</span><span style="color:#f92672">.</span><span style="color:#a6e22e">weixin</span><span style="color:#f92672">.</span><span style="color:#a6e22e">qq</span><span style="color:#f92672">.</span><span style="color:#a6e22e">com</span><span style="color:#f92672">/</span><span style="color:#a6e22e">wxaopen</span><span style="color:#f92672">/</span><span style="color:#a6e22e">createThirdAccount</span><span style="color:#f92672">?</span><span style="color:#a6e22e">token</span><span style="color:#f92672">=</span><span style="color:#a6e22e">TOKEN</span><span style="color:#f92672">&amp;</span><span style="color:#a6e22e">lang</span><span style="color:#f92672">=</span>;
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">origin</span><span style="color:#f92672">:</span><span style="color:#a6e22e">https</span><span style="color:#f92672">://</span><span style="color:#a6e22e">open</span><span style="color:#f92672">.</span><span style="color:#a6e22e">weixin</span><span style="color:#f92672">.</span><span style="color:#a6e22e">qq</span><span style="color:#f92672">.</span><span style="color:#a6e22e">com</span>;
+</span></span></code></pre></div><p>数据包:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;name&#34;</span><span style="color:#f92672">:</span><span style="color:#e6db74">&#34;应用名称&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;desc&#34;</span><span style="color:#f92672">:</span><span style="color:#e6db74">&#34;描述&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;icon_url&#34;</span><span style="color:#f92672">:</span><span style="color:#e6db74">&#34;图片地址&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;official_site_url&#34;</span><span style="color:#f92672">:</span><span style="color:#e6db74">&#34;首页(随机编个域名吧)&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;industry_tag_id_list&#34;</span><span style="color:#f92672">:</span>[
+</span></span><span style="display:flex;"><span>        <span style="color:#ae81ff">2001</span>
+</span></span><span style="display:flex;"><span>    ],
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;type&#34;</span><span style="color:#f92672">:</span><span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>添加应用成功会返回该应用的APPID,把它取出来后面要用。</p>
+<h5 id="get获取第三方详情">GET获取第三方详情</h5>
+<p>地址:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#a6e22e">https</span><span style="color:#f92672">://</span><span style="color:#a6e22e">open</span><span style="color:#f92672">.</span><span style="color:#a6e22e">weixin</span><span style="color:#f92672">.</span><span style="color:#a6e22e">qq</span><span style="color:#f92672">.</span><span style="color:#a6e22e">com</span><span style="color:#f92672">/</span><span style="color:#a6e22e">cgi</span><span style="color:#f92672">-</span><span style="color:#a6e22e">bin</span><span style="color:#f92672">/</span><span style="color:#a6e22e">component_acct</span><span style="color:#f92672">?</span><span style="color:#a6e22e">action</span><span style="color:#f92672">=</span><span style="color:#a6e22e">detail</span><span style="color:#f92672">&amp;</span><span style="color:#a6e22e">t</span><span style="color:#f92672">=</span><span style="color:#a6e22e">manage</span><span style="color:#f92672">/</span><span style="color:#a6e22e">plugin_detail</span><span style="color:#f92672">&amp;</span><span style="color:#a6e22e">token</span><span style="color:#f92672">=</span><span style="color:#a6e22e">TOKEN</span><span style="color:#f92672">&amp;</span><span style="color:#a6e22e">appid</span><span style="color:#f92672">=</span><span style="color:#a6e22e">APPID</span><span style="color:#f92672">&amp;</span><span style="color:#a6e22e">f</span><span style="color:#f92672">=</span><span style="color:#a6e22e">json</span><span style="color:#960050;background-color:#1e0010">&#39;</span>;
+</span></span></code></pre></div><h5 id="post修改ip和公众号">POST修改ip和公众号</h5>
+<p>地址:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#a6e22e">https</span><span style="color:#f92672">://</span><span style="color:#a6e22e">open</span><span style="color:#f92672">.</span><span style="color:#a6e22e">weixin</span><span style="color:#f92672">.</span><span style="color:#a6e22e">qq</span><span style="color:#f92672">.</span><span style="color:#a6e22e">com</span><span style="color:#f92672">/</span><span style="color:#a6e22e">cgi</span><span style="color:#f92672">-</span><span style="color:#a6e22e">bin</span><span style="color:#f92672">/</span><span style="color:#a6e22e">component_acct</span><span style="color:#f92672">?</span><span style="color:#a6e22e">action</span><span style="color:#f92672">=</span><span style="color:#a6e22e">detail</span><span style="color:#f92672">&amp;</span><span style="color:#a6e22e">t</span><span style="color:#f92672">=</span><span style="color:#a6e22e">manage</span><span style="color:#f92672">/</span><span style="color:#a6e22e">plugin_detail</span><span style="color:#f92672">&amp;</span><span style="color:#a6e22e">token</span><span style="color:#f92672">=</span><span style="color:#a6e22e">TOKEN</span><span style="color:#f92672">&amp;</span><span style="color:#a6e22e">appid</span><span style="color:#f92672">=</span><span style="color:#a6e22e">APPID</span>;
+</span></span></code></pre></div><p>请求头：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#a6e22e">referer</span><span style="color:#f92672">:</span><span style="color:#a6e22e">https</span><span style="color:#f92672">://</span><span style="color:#a6e22e">open</span><span style="color:#f92672">.</span><span style="color:#a6e22e">weixin</span><span style="color:#f92672">.</span><span style="color:#a6e22e">qq</span><span style="color:#f92672">.</span><span style="color:#a6e22e">com</span><span style="color:#f92672">/</span><span style="color:#a6e22e">wxaopen</span><span style="color:#f92672">/</span><span style="color:#a6e22e">serviceprovider</span><span style="color:#f92672">/</span><span style="color:#a6e22e">APPID</span><span style="color:#f92672">?</span><span style="color:#a6e22e">token</span><span style="color:#f92672">=</span><span style="color:#a6e22e">TOKEN</span>;
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">origin</span><span style="color:#f92672">:</span><span style="color:#a6e22e">https</span><span style="color:#f92672">://</span><span style="color:#a6e22e">open</span><span style="color:#f92672">.</span><span style="color:#a6e22e">weixin</span><span style="color:#f92672">.</span><span style="color:#a6e22e">qq</span><span style="color:#f92672">.</span><span style="color:#a6e22e">com</span>;
+</span></span></code></pre></div><p>数据包:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;token&#34;</span><span style="color:#f92672">:</span><span style="color:#a6e22e">TOKEN</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;action&#34;</span><span style="color:#f92672">:</span><span style="color:#e6db74">&#34;direct_modify&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;white_acct&#34;</span><span style="color:#f92672">:</span><span style="color:#e6db74">&#34;公众号原始id&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;white_ip&#34;</span><span style="color:#f92672">:</span><span style="color:#e6db74">&#34;ip白名单&#34;</span>,
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h5 id="post修改权限集这一步就是添加公众号网页授权">POST修改权限集(这一步就是添加公众号网页授权)</h5>
+<p>地址:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#a6e22e">https</span><span style="color:#f92672">://</span><span style="color:#a6e22e">open</span><span style="color:#f92672">.</span><span style="color:#a6e22e">weixin</span><span style="color:#f92672">.</span><span style="color:#a6e22e">qq</span><span style="color:#f92672">.</span><span style="color:#a6e22e">com</span><span style="color:#f92672">/</span><span style="color:#a6e22e">cgi</span><span style="color:#f92672">-</span><span style="color:#a6e22e">bin</span><span style="color:#f92672">/</span><span style="color:#a6e22e">component_acct</span><span style="color:#f92672">?</span><span style="color:#a6e22e">action</span><span style="color:#f92672">=</span><span style="color:#a6e22e">modify_funcscopecategory</span><span style="color:#f92672">&amp;</span><span style="color:#a6e22e">category_list</span><span style="color:#f92672">=</span><span style="color:#ae81ff">4</span>
+</span></span></code></pre></div><p>请求头：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#a6e22e">referer</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">https</span><span style="color:#f92672">://</span><span style="color:#a6e22e">open</span><span style="color:#f92672">.</span><span style="color:#a6e22e">weixin</span><span style="color:#f92672">.</span><span style="color:#a6e22e">qq</span><span style="color:#f92672">.</span><span style="color:#a6e22e">com</span><span style="color:#f92672">/</span><span style="color:#a6e22e">wxaopen</span><span style="color:#f92672">/</span><span style="color:#a6e22e">authoritylist</span><span style="color:#f92672">/</span><span style="color:#a6e22e">APPID</span><span style="color:#f92672">?</span><span style="color:#a6e22e">token</span><span style="color:#f92672">=</span><span style="color:#a6e22e">TOKEN</span><span style="color:#f92672">&amp;</span><span style="color:#a6e22e">lang</span><span style="color:#f92672">=</span><span style="color:#a6e22e">zh_CN</span><span style="color:#960050;background-color:#1e0010">&#39;</span>;
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">origin</span><span style="color:#f92672">:</span><span style="color:#a6e22e">https</span><span style="color:#f92672">://</span><span style="color:#a6e22e">open</span><span style="color:#f92672">.</span><span style="color:#a6e22e">weixin</span><span style="color:#f92672">.</span><span style="color:#a6e22e">qq</span><span style="color:#f92672">.</span><span style="color:#a6e22e">com</span>;
+</span></span></code></pre></div><p>数据包:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#a6e22e">category_list</span><span style="color:#f92672">=</span><span style="color:#ae81ff">4</span><span style="color:#f92672">&amp;</span><span style="color:#a6e22e">appid</span><span style="color:#f92672">=</span><span style="color:#a6e22e">APPID</span><span style="color:#f92672">&amp;</span><span style="color:#a6e22e">token</span><span style="color:#f92672">=</span><span style="color:#a6e22e">TOKEN</span>
+</span></span></code></pre></div><h5 id="post修改开发资料">POST修改开发资料</h5>
+<p>地址:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#a6e22e">https</span><span style="color:#f92672">://</span><span style="color:#a6e22e">open</span><span style="color:#f92672">.</span><span style="color:#a6e22e">weixin</span><span style="color:#f92672">.</span><span style="color:#a6e22e">qq</span><span style="color:#f92672">.</span><span style="color:#a6e22e">com</span><span style="color:#f92672">/</span><span style="color:#a6e22e">cgi</span><span style="color:#f92672">-</span><span style="color:#a6e22e">bin</span><span style="color:#f92672">/</span><span style="color:#a6e22e">component_acct</span><span style="color:#f92672">?</span><span style="color:#a6e22e">action</span><span style="color:#f92672">=</span><span style="color:#a6e22e">modify_dev_info</span><span style="color:#f92672">&amp;</span><span style="color:#a6e22e">token</span><span style="color:#f92672">=</span><span style="color:#a6e22e">TOKEN</span><span style="color:#f92672">&amp;</span><span style="color:#a6e22e">appid</span><span style="color:#f92672">=</span><span style="color:#a6e22e">APPID</span>
+</span></span></code></pre></div><p>请求头：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#a6e22e">referer</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">https</span><span style="color:#f92672">://</span><span style="color:#a6e22e">open</span><span style="color:#f92672">.</span><span style="color:#a6e22e">weixin</span><span style="color:#f92672">.</span><span style="color:#a6e22e">qq</span><span style="color:#f92672">.</span><span style="color:#a6e22e">com</span><span style="color:#f92672">/</span><span style="color:#a6e22e">wxaopen</span><span style="color:#f92672">/</span><span style="color:#a6e22e">createThirdAccount</span><span style="color:#f92672">/</span><span style="color:#a6e22e">modifyDevInfo</span><span style="color:#f92672">?</span><span style="color:#a6e22e">appId</span><span style="color:#f92672">=</span><span style="color:#a6e22e">APPID</span><span style="color:#f92672">&amp;</span><span style="color:#a6e22e">token</span><span style="color:#f92672">=</span><span style="color:#a6e22e">TOKEN</span>;
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">origin</span><span style="color:#f92672">:</span><span style="color:#a6e22e">https</span><span style="color:#f92672">://</span><span style="color:#a6e22e">open</span><span style="color:#f92672">.</span><span style="color:#a6e22e">weixin</span><span style="color:#f92672">.</span><span style="color:#a6e22e">qq</span><span style="color:#f92672">.</span><span style="color:#a6e22e">com</span>;
+</span></span></code></pre></div><p>数据包:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;token&#34;</span><span style="color:#f92672">:</span><span style="color:#e6db74">&#34;这个token是消息加解密token&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;auth_domain&#34;</span><span style="color:#f92672">:</span><span style="color:#e6db74">&#34;授权发起域名&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;allow_container_domain&#34;</span><span style="color:#f92672">:</span><span style="color:#66d9ef">false</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;ticket_url&#34;</span><span style="color:#f92672">:</span><span style="color:#e6db74">&#34;授权事件接收URL&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;msg_url&#34;</span><span style="color:#f92672">:</span><span style="color:#e6db74">&#34;消息与事件接收URL&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;white_ip&#34;</span><span style="color:#f92672">:</span><span style="color:#e6db74">&#34;白名单IP&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;white_acct&#34;</span><span style="color:#f92672">:</span>[
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;公众号ID&#34;</span>
+</span></span><span style="display:flex;"><span>    ],
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;symmetric_key&#34;</span><span style="color:#f92672">:</span><span style="color:#e6db74">&#34;消息加解密Key&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;sns_domain&#34;</span><span style="color:#f92672">:</span><span style="color:#e6db74">&#34;我们用的分享域名;号分割&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;wxa_server_domain&#34;</span><span style="color:#f92672">:</span><span style="color:#e6db74">&#34;&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;jump_h5_domain&#34;</span><span style="color:#f92672">:</span><span style="color:#e6db74">&#34;&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;ticket_url_qbase&#34;</span><span style="color:#f92672">:</span>{
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;enable&#34;</span><span style="color:#f92672">:</span><span style="color:#66d9ef">false</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;container&#34;</span><span style="color:#f92672">:</span>{
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#34;env&#34;</span><span style="color:#f92672">:</span><span style="color:#e6db74">&#34;&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#34;path&#34;</span><span style="color:#f92672">:</span><span style="color:#e6db74">&#34;&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#34;service&#34;</span><span style="color:#f92672">:</span><span style="color:#e6db74">&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>        },
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;function&#34;</span><span style="color:#f92672">:</span>{
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#34;env&#34;</span><span style="color:#f92672">:</span><span style="color:#e6db74">&#34;&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#34;function_name&#34;</span><span style="color:#f92672">:</span><span style="color:#e6db74">&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;msg_url_qbase&#34;</span><span style="color:#f92672">:</span>{
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;enable&#34;</span><span style="color:#f92672">:</span><span style="color:#66d9ef">false</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;container&#34;</span><span style="color:#f92672">:</span>{
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#34;env&#34;</span><span style="color:#f92672">:</span><span style="color:#e6db74">&#34;&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#34;path&#34;</span><span style="color:#f92672">:</span><span style="color:#e6db74">&#34;&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#34;service&#34;</span><span style="color:#f92672">:</span><span style="color:#e6db74">&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>        },
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;function&#34;</span><span style="color:#f92672">:</span>{
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#34;env&#34;</span><span style="color:#f92672">:</span><span style="color:#e6db74">&#34;&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#34;function_name&#34;</span><span style="color:#f92672">:</span><span style="color:#e6db74">&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h5 id="post删除第三方">POST删除第三方</h5>
+<p>地址:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#a6e22e">https</span><span style="color:#f92672">://</span><span style="color:#a6e22e">open</span><span style="color:#f92672">.</span><span style="color:#a6e22e">weixin</span><span style="color:#f92672">.</span><span style="color:#a6e22e">qq</span><span style="color:#f92672">.</span><span style="color:#a6e22e">com</span><span style="color:#f92672">/</span><span style="color:#a6e22e">cgi</span><span style="color:#f92672">-</span><span style="color:#a6e22e">bin</span><span style="color:#f92672">/</span><span style="color:#a6e22e">component_acct</span><span style="color:#f92672">?</span><span style="color:#a6e22e">action</span><span style="color:#f92672">=</span><span style="color:#a6e22e">del_component</span>;
+</span></span></code></pre></div><p>请求头：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#a6e22e">referer</span><span style="color:#f92672">:</span>  <span style="color:#a6e22e">https</span><span style="color:#f92672">://</span><span style="color:#a6e22e">open</span><span style="color:#f92672">.</span><span style="color:#a6e22e">weixin</span><span style="color:#f92672">.</span><span style="color:#a6e22e">qq</span><span style="color:#f92672">.</span><span style="color:#a6e22e">com</span><span style="color:#f92672">/</span><span style="color:#a6e22e">cgi</span><span style="color:#f92672">-</span><span style="color:#a6e22e">bin</span><span style="color:#f92672">/</span><span style="color:#a6e22e">applist</span><span style="color:#f92672">?</span><span style="color:#a6e22e">t</span><span style="color:#f92672">=</span><span style="color:#a6e22e">manage</span><span style="color:#f92672">/</span><span style="color:#66d9ef">list</span><span style="color:#f92672">&amp;</span><span style="color:#a6e22e">page</span><span style="color:#f92672">=</span><span style="color:#ae81ff">0</span><span style="color:#f92672">&amp;</span><span style="color:#a6e22e">num</span><span style="color:#f92672">=</span><span style="color:#ae81ff">20</span><span style="color:#f92672">&amp;</span><span style="color:#a6e22e">openapptype</span><span style="color:#f92672">=</span><span style="color:#ae81ff">2048</span><span style="color:#f92672">&amp;</span><span style="color:#a6e22e">token</span><span style="color:#f92672">=</span><span style="color:#a6e22e">TOKEN</span>;
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">origin</span><span style="color:#f92672">:</span><span style="color:#a6e22e">https</span><span style="color:#f92672">://</span><span style="color:#a6e22e">open</span><span style="color:#f92672">.</span><span style="color:#a6e22e">weixin</span><span style="color:#f92672">.</span><span style="color:#a6e22e">qq</span><span style="color:#f92672">.</span><span style="color:#a6e22e">com</span>;
+</span></span></code></pre></div><p>数据包:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;appid&#34;</span><span style="color:#f92672">:</span><span style="color:#a6e22e">APPID</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;token&#34;</span><span style="color:#f92672">:</span><span style="color:#a6e22e">TOKEN</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;action&#34;</span><span style="color:#f92672">:</span><span style="color:#e6db74">&#34;del_component&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;lang&#34;</span><span style="color:#f92672">:</span><span style="color:#e6db74">&#34;zh_CN&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;f&#34;</span><span style="color:#f92672">:</span><span style="color:#e6db74">&#34;json&#34;</span>,
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;ajax&#34;</span><span style="color:#f92672">:</span><span style="color:#e6db74">&#34;1&#34;</span>,
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;key&#34;</span><span style="color:#f92672">:</span><span style="color:#e6db74">&#34;1&#34;</span>,
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div>
+		</div>
+	</article>
+</main>
+
+
+
+
+			</div>
+			
+		</div>
+		<footer class="footer">
+	<div class="container footer__container flex">
+		
+		<div class="footer__copyright">
+			&copy; 2026 臭大佬博客.
+			<span class="footer__copyright-credits">基于 <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> 引擎和 <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> 主题</span>
+		</div>
+	</div>
+</footer>
+	</div>
+<script async defer src="/js/menu.js"></script>
+</body>
+</html>

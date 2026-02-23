@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Python - 臭大佬博客</title>
+	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
+	<meta name="description" content="">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link rel="dns-prefetch" href="//fonts.googleapis.com">
+	<link rel="dns-prefetch" href="//fonts.gstatic.com">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
+
+	<link rel="stylesheet" href="/css/style.css">
+	
+	<link rel="alternate" type="application/rss+xml" href="/categories/python/index.xml" title="臭大佬博客">
+
+	<link rel="shortcut icon" href="/favicon.ico">
+		
+</head>
+<body class="body">
+	<div class="container container--outer">
+		<header class="header">
+	<div class="container header__container">
+		
+	<div class="logo">
+		<a class="logo__link" href="/" title="臭大佬博客" rel="home">
+			<div class="logo__item logo__text">
+					<div class="logo__title">臭大佬博客</div>
+					
+				</div>
+		</a>
+	</div>
+		
+<nav class="menu">
+	<button class="menu__btn" aria-haspopup="true" aria-expanded="false" tabindex="0">
+		<span class="menu__btn-title" tabindex="-1">菜单</span>
+	</button>
+	<ul class="menu__list">
+		<li class="menu__item">
+			<a class="menu__link" href="/">
+				
+				<span class="menu__text">首页</span>
+				
+			</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/post/">
+				
+				<span class="menu__text">归档</span>
+				
+			</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/about/">
+				
+				<span class="menu__text">关于</span>
+				
+			</a>
+		</li>
+	</ul>
+</nav>
+
+	</div>
+</header>
+		<div class="wrapper flex">
+			<div class="primary">
+			
+<main class="main list" role="main">
+	<header class="main__header">
+		<h1 class="main__title">Python</h1>
+	</header><article class="list__item post">
+	
+	<header class="list__header">
+		<h2 class="list__title post__title">
+			<a href="/posts/2020-10-07-warning-pip-is-configured-with-locations-that-require-tlsssl-however-the-ssl-mod/" rel="bookmark">
+			WARNING: pip is configured with locations that require TLS/SSL, however the ssl module in Python is not available.
+			</a>
+		</h2>
+		
+	</header>
+	<div class="content list__excerpt post__content clearfix">
+		<h1 id="问题">问题</h1>
+<p><code>win10</code>下使用<code>Anaconda</code>，在<code>vscode</code>中格式化<code>python</code>代码时，提示安装<code>yapf</code>、<code>flake8</code>等包时，报如下错误；</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">//</span> 按照提示<span style="color:#960050;background-color:#1e0010">，</span>点击安装就会在终端自动运行如下代码
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&amp;</span> <span style="color:#e6db74">&#34;D:/Program Files/Anaconda3/python.exe&#34;</span> d:\Program\ms<span style="color:#f92672">-</span>python<span style="color:#f92672">.</span>python<span style="color:#f92672">-</span><span style="color:#ae81ff">2020.9.112786</span>\pythonFiles\pyvsc<span style="color:#f92672">-</span>run<span style="color:#f92672">-</span>isolated<span style="color:#f92672">.</span>py pip install <span style="color:#f92672">-</span>U yapf
+</span></span></code></pre></div><p><img src="https://www.choudalao.com/uploads/20201007/20201007003421RmCFwN.png" alt=""></p>
+	</div>
+</article><article class="list__item post">
+	
+	<header class="list__header">
+		<h2 class="list__title post__title">
+			<a href="/posts/2020-09-30-python-%E8%8E%B7%E5%8F%96%E6%9F%90%E5%A4%A9%E6%98%AF%E6%98%9F%E6%9C%9F%E5%87%A0/" rel="bookmark">
+			Python 获取某天是星期几
+			</a>
+		</h2>
+		
+	</header>
+	<div class="content list__excerpt post__content clearfix">
+		<h1 id="代码">代码</h1>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#a6e22e">from</span> <span style="color:#a6e22e">datetime</span> <span style="color:#a6e22e">import</span> <span style="color:#a6e22e">datetime</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">import</span> <span style="color:#a6e22e">time</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">gap</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 时间戳
+</span></span></span><span style="display:flex;"><span><span style="color:#a6e22e">day</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">time</span><span style="color:#f92672">.</span><span style="color:#a6e22e">time</span>() <span style="color:#f92672">-</span> <span style="color:#ae81ff">86400</span><span style="color:#f92672">*</span>(<span style="color:#a6e22e">gap</span><span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 输出年月日
+</span></span></span><span style="display:flex;"><span><span style="color:#a6e22e">ymd</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">time</span><span style="color:#f92672">.</span><span style="color:#a6e22e">strftime</span>(<span style="color:#e6db74">&#39;%Y-%m-%d&#39;</span>, <span style="color:#a6e22e">time</span><span style="color:#f92672">.</span><span style="color:#a6e22e">localtime</span>(<span style="color:#a6e22e">day</span>))
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 获取星期几 数字1-7代表周一到周日
+</span></span></span><span style="display:flex;"><span><span style="color:#a6e22e">week</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">datetime</span><span style="color:#f92672">.</span><span style="color:#a6e22e">strptime</span>(<span style="color:#a6e22e">ymd</span>, <span style="color:#e6db74">&#39;%Y-%m-%d&#39;</span>)<span style="color:#f92672">.</span><span style="color:#a6e22e">isoweekday</span>()
+</span></span></code></pre></div>
+	</div>
+</article><article class="list__item post">
+	
+	<header class="list__header">
+		<h2 class="list__title post__title">
+			<a href="/posts/2020-09-02-python3-%E8%AF%BB%E5%8F%96%E6%96%87%E4%BB%B6%E5%A4%B9%E4%B8%8B%E6%89%80%E6%9C%89%E7%9A%84%E6%96%87%E4%BB%B6%E5%8F%8A%E7%9B%AE%E5%BD%95-%E8%87%AD%E5%A4%A7%E4%BD%AC/" rel="bookmark">
+			Python3 读取文件夹下所有的文件及目录 | 臭大佬
+			</a>
+		</h2>
+		
+	</header>
+	<div class="content list__excerpt post__content clearfix">
+		<h1 id="代码">代码</h1>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># -*- coding:utf8 -*-</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> os
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>allFileNum <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">printPath</span>(level, path):
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#39;&#39;&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     打印一个目录下的所有文件夹和文件
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    :param level: 文件夹级别
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    :param path: 路径
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    :return:
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#39;&#39;&#39;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">global</span> allFileNum
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 所有文件夹，第一个字段是次目录的级别</span>
+</span></span><span style="display:flex;"><span>    dirList <span style="color:#f92672">=</span> []
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 所有文件  </span>
+</span></span><span style="display:flex;"><span>    fileList <span style="color:#f92672">=</span> []
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 返回一个列表，其中包含在目录条目的名称(google翻译)  </span>
+</span></span><span style="display:flex;"><span>    files <span style="color:#f92672">=</span> os<span style="color:#f92672">.</span>listdir(path)
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 先添加目录级别  </span>
+</span></span><span style="display:flex;"><span>    dirList<span style="color:#f92672">.</span>append(str(level))
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> f <span style="color:#f92672">in</span> files:
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (os<span style="color:#f92672">.</span>path<span style="color:#f92672">.</span>isdir(path <span style="color:#f92672">+</span> <span style="color:#e6db74">&#39;/&#39;</span> <span style="color:#f92672">+</span> f)):
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e"># 排除隐藏文件夹。因为隐藏文件夹过多</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> (f[<span style="color:#ae81ff">0</span>] <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;.&#39;</span>):
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">pass</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">else</span>:
+</span></span><span style="display:flex;"><span>                <span style="color:#75715e"># 添加非隐藏文件夹</span>
+</span></span><span style="display:flex;"><span>                dirList<span style="color:#f92672">.</span>append(f)
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (os<span style="color:#f92672">.</span>path<span style="color:#f92672">.</span>isfile(path <span style="color:#f92672">+</span> <span style="color:#e6db74">&#39;/&#39;</span> <span style="color:#f92672">+</span> f)):
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e"># 添加文件</span>
+</span></span><span style="display:flex;"><span>            fileList<span style="color:#f92672">.</span>append(f)
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e"># 当一个标志使用，文件夹列表第一个级别不打印</span>
+</span></span><span style="display:flex;"><span>    i_dl <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> dl <span style="color:#f92672">in</span> dirList:
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (i_dl <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>):
+</span></span><span style="display:flex;"><span>            i_dl <span style="color:#f92672">=</span> i_dl <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">else</span>:
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e"># 打印至控制台，不是第一个的目录  </span>
+</span></span><span style="display:flex;"><span>            print(<span style="color:#e6db74">&#39;-&#39;</span> <span style="color:#f92672">*</span> (int(dirList[<span style="color:#ae81ff">0</span>])), dl)
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e"># 打印目录下的所有文件夹和文件，目录级别+1</span>
+</span></span><span style="display:flex;"><span>            printPath((int(dirList[<span style="color:#ae81ff">0</span>]) <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>), path <span style="color:#f92672">+</span> <span style="color:#e6db74">&#39;/&#39;</span> <span style="color:#f92672">+</span> dl)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> fl <span style="color:#f92672">in</span> fileList:
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># 打印文件  </span>
+</span></span><span style="display:flex;"><span>        print(<span style="color:#e6db74">&#39;-&#39;</span> <span style="color:#f92672">*</span> (int(dirList[<span style="color:#ae81ff">0</span>])), fl)
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># 随便计算一下有多少个文件</span>
+</span></span><span style="display:flex;"><span>        allFileNum <span style="color:#f92672">+=</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> __name__ <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;__main__&#39;</span>:
+</span></span><span style="display:flex;"><span>    printPath(<span style="color:#ae81ff">1</span>, <span style="color:#e6db74">&#39;E:/wwwroot/python/PyTest/qihuo/exel&#39;</span>)
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">&#39;总文件数 =&#39;</span>, allFileNum)
+</span></span></code></pre></div><p><img src="https://www.choudalao.com/uploads/20200902/20200902163656ccE3v8.png" alt=""></p>
+	</div>
+</article><article class="list__item post">
+	
+	<header class="list__header">
+		<h2 class="list__title post__title">
+			<a href="/posts/2020-09-01-python%E5%88%97%E8%A1%A8%E4%B8%AD%E5%88%A0%E9%99%A4%E6%89%80%E6%9C%89%E7%A9%BA%E5%85%83%E7%B4%A0-%E8%87%AD%E5%A4%A7%E4%BD%AC/" rel="bookmark">
+			python列表中删除所有空元素 | 臭大佬
+			</a>
+		</h2>
+		
+	</header>
+	<div class="content list__excerpt post__content clearfix">
+		<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span> list <span style="color:#f92672">=</span> [<span style="color:#e6db74">&#39;账户&#39;</span>, <span style="color:#e6db74">&#39;&#39;</span>, <span style="color:#e6db74">&#39;800042&#39;</span>, <span style="color:#e6db74">&#39;&#39;</span>, <span style="color:#e6db74">&#39;&#39;</span>, <span style="color:#e6db74">&#39;交易日期&#39;</span>, <span style="color:#e6db74">&#39;&#39;</span>, <span style="color:#e6db74">&#39;2020-08-28&#39;</span>, <span style="color:#e6db74">&#39;&#39;</span>, <span style="color:#e6db74">&#39;&#39;</span>]
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 第一种：</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">while</span> <span style="color:#e6db74">&#39;&#39;</span> <span style="color:#f92672">in</span> list:
+</span></span><span style="display:flex;"><span>	list<span style="color:#f92672">.</span>remove(<span style="color:#e6db74">&#39;&#39;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 第二种：</span>
+</span></span><span style="display:flex;"><span>list <span style="color:#f92672">=</span> [i <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> list <span style="color:#66d9ef">if</span> i <span style="color:#f92672">!=</span> <span style="color:#e6db74">&#39;&#39;</span>]
+</span></span></code></pre></div>
+	</div>
+</article><article class="list__item post">
+	
+	<header class="list__header">
+		<h2 class="list__title post__title">
+			<a href="/posts/2020-08-28-raise-exception_classmessage-screen-stacktrace-seleniumcommonexceptionssessionno/" rel="bookmark">
+			raise exception_class(message, screen, stacktrace) selenium.common.exceptions.SessionNotCreatedException
+			</a>
+		</h2>
+		
+	</header>
+	<div class="content list__excerpt post__content clearfix">
+		<h1 id="问题">问题</h1>
+<blockquote>
+<p>selenium中遇到这种报错
+DevTools listening on ws://127.0.0.1:56919/devtools/browser/7517880e-0888-4503-84a1-d8080d70bbe6
+Traceback (most recent call last):
+File &ldquo;qince.py&rdquo;, line 233, in <!-- raw HTML omitted -->
+login(user, pw)  # 后面会继续实现cookie保存，爬取信息，存储数据库。
+File &ldquo;qince.py&rdquo;, line 202, in login
+login_button = driver.find_element_by_name(&lsquo;imageField2&rsquo;)  # 找到登录按钮
+File &ldquo;E:\Program Files (x86)\Anaconda3\envs\tensorflow\lib\site-packages\selenium\webdriver\remote\webdriver.py&rdquo;, line 496, in find_element_by_name
+return self.find_element(by=By.NAME, value=name)
+File &ldquo;E:\Program Files (x86)\Anaconda3\envs\tensorflow\lib\site-packages\selenium\webdriver\remote\webdriver.py&rdquo;, line 978, in find_element
+&lsquo;value&rsquo;: value})[&lsquo;value&rsquo;]
+File &ldquo;E:\Program Files (x86)\Anaconda3\envs\tensorflow\lib\site-packages\selenium\webdriver\remote\webdriver.py&rdquo;, line 321, in execute
+self.error_handler.check_response(response)
+File &ldquo;E:\Program Files (x86)\Anaconda3\envs\tensorflow\lib\site-packages\selenium\webdriver\remote\errorhandler.py&rdquo;, line 242, in check_response
+raise exception_class(message, screen, stacktrace)
+selenium.common.exceptions.NoSuchElementException: Message: no such element: Unable to locate element: {&ldquo;method&rdquo;:&ldquo;css selector&rdquo;,&ldquo;selector&rdquo;:&quot;[name=&ldquo;imageField2&rdquo;]&quot;}
+(Session info: chrome=85.0.4183.83)</p>
+	</div>
+</article><article class="list__item post">
+	
+	<header class="list__header">
+		<h2 class="list__title post__title">
+			<a href="/posts/2020-08-26-python-%E5%9B%BE%E5%BD%A2%E9%AA%8C%E8%AF%81%E7%A0%81%E5%BA%93-tesserocr-%E8%87%AD%E5%A4%A7%E4%BD%AC/" rel="bookmark">
+			Python 图形验证码库 tesserocr | 臭大佬
+			</a>
+		</h2>
+		
+	</header>
+	<div class="content list__excerpt post__content clearfix">
+		<h1 id="用途">用途</h1>
+<p>对于验证码，我们可以使用OCR技术来将其转化为电子文本，然后爬虫将识别结果提交给服务器，便可以达到自动识别验证码的过程。</p>
+<h1 id="概念">概念</h1>
+<h4 id="ocr">OCR</h4>
+<p>OCR,全称叫 Optical Character Recognition，中文翻译叫光学字符识别，是指通过扫描字符，通过其形状将其翻译成电子文本的过程；</p>
+	</div>
+</article><article class="list__item post">
+	
+	<header class="list__header">
+		<h2 class="list__title post__title">
+			<a href="/posts/2020-07-22-raise-httperrorreqfull_url-code-msg-hdrs-fp-urlliberrorhttperror-http-error-403/" rel="bookmark">
+			raise HTTPError(req.full_url, code, msg, hdrs, fp) urllib.error.HTTPError: HTTP Error 403: Forbidden
+			</a>
+		</h2>
+		
+	</header>
+	<div class="content list__excerpt post__content clearfix">
+		<h1 id="问题">问题</h1>
+<p>使用 <code>urllib.request.urlretrieve</code> 下载图片时报如下错误：</p>
+<blockquote>
+<p>raise HTTPError(req.full_url, code, msg, hdrs, fp)
+urllib.error.HTTPError: HTTP Error 403: Forbidden</p>
+</blockquote>
+<p><img src="https://www.choudalao.com/uploads/20200722/20200722122034soCSAy.png" alt=""></p>
+<p>有些网站验证请求信息中的UserAgent(它的信息包括硬件平台、系统软件、应用软件和用户个人偏好),如果UserAgent存在异常或者是不存在,那么这次请求将会被拒绝(如上错误信息所示)
+所以可以尝试在请求中加入UserAgent的信息。</p>
+	</div>
+</article><article class="list__item post">
+	
+	<header class="list__header">
+		<h2 class="list__title post__title">
+			<a href="/posts/2020-07-13-%E5%AE%9A%E6%97%B6%E5%BA%93apscheduler/" rel="bookmark">
+			定时库APScheduler
+			</a>
+		</h2>
+		
+	</header>
+	<div class="content list__excerpt post__content clearfix">
+		<p>#简介
+apscheduler 使用起来十分方便。提供了基于日期、固定时间间隔以及crontab 类型的任务，我们可以在主程序的运行过程中快速增加新作业或删除旧作业，如果把作业存储在数据库中，那么作业的状态会被保存，当调度器重启时，不必重新添加作业，作业会恢复原状态继续执行。apscheduler 可以当作一个跨平台的调度工具来使用，可以做为 linux 系统crontab 工具或 windows 计划任务程序的替换。注意，apscheduler 不是一个守护进程或服务，它自身不带有任何命令行工具。它主要是要在现有的应用程序中运行，也就是说，apscheduler 为我们提供了构建专用调度器或调度服务的基础模块。</p>
+	</div>
+</article><article class="list__item post">
+	
+	<header class="list__header">
+		<h2 class="list__title post__title">
+			<a href="/posts/2020-05-12-modulenotfounderror-no-module-named-pip/" rel="bookmark">
+			ModuleNotFoundError: No module named &#39;pip&#39;
+			</a>
+		</h2>
+		
+	</header>
+	<div class="content list__excerpt post__content clearfix">
+		<h1 id="问题">问题</h1>
+<p>今天在安装python包的时候，发现如下报错信息：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>Traceback <span style="color:#f92672">(</span>most recent call last<span style="color:#f92672">)</span>:
+</span></span><span style="display:flex;"><span>  File <span style="color:#e6db74">&#34;xxx&#34;</span>, line 193, in _run_module_as_main
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;__main__&#34;</span>, mod_spec<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>  File <span style="color:#e6db74">&#34;xxx\runpy.py&#34;</span>, line 85, in _run_code
+</span></span><span style="display:flex;"><span>    exec<span style="color:#f92672">(</span>code, run_globals<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>  File <span style="color:#e6db74">&#34;xxx\__main__.py&#34;</span>, line 4, in &lt;module&gt;
+</span></span><span style="display:flex;"><span>ModuleNotFoundError: No module named <span style="color:#e6db74">&#39;pip&#39;</span>
+</span></span></code></pre></div><p><img src="https://www.choudalao.com/uploads/20200512/20200512233859kqzLD1.png" alt=""></p>
+<h1 id="解决">解决</h1>
+<p>运行如下两行命令</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>python -m ensurepip
+</span></span></code></pre></div><p><img src="https://www.choudalao.com/uploads/20200512/20200512233920wOMPXB.png" alt=""></p>
+<p><img src="https://www.choudalao.com/uploads/20200512/20200512233933Y5e3WF.png" alt=""></p>
+	</div>
+</article><article class="list__item post">
+	
+	<header class="list__header">
+		<h2 class="list__title post__title">
+			<a href="/posts/2020-05-12-python-%E7%88%AC%E5%8F%96%E5%93%94%E5%93%A9%E5%93%94%E5%93%A9%E7%9A%84-%E5%B0%8F%E8%A7%86%E9%A2%91/" rel="bookmark">
+			python 爬取哔哩哔哩的 小视频
+			</a>
+		</h2>
+		
+	</header>
+	<div class="content list__excerpt post__content clearfix">
+		<h1 id="分析">分析</h1>
+<p>哔哩哔哩的页面请求看了一下，发现小视频模块使用接口获取视频的，
+页面地址：https://vc.bilibili.com/p/eden/all#/?tab=%E5%85%A8%E9%83%A8
+<img src="https://www.choudalao.com/uploads/20200512/20200512221944CoW6A6.png" alt=""></p>
+	</div>
+</article>
+</main>
+
+<div class="pagination">
+	<a class="pagination__item pagination__item--prev btn" href="/categories/python/">«</a>
+	<span class="pagination__item pagination__item--current">2/6</span>
+	<a class="pagination__item pagination__item--next btn" href="/categories/python/page/3/">»</a>
+</div>
+
+			</div>
+			
+
+		</div>
+		<footer class="footer">
+	<div class="container footer__container flex">
+		
+		<div class="footer__copyright">
+			&copy; 2026 臭大佬博客.
+			<span class="footer__copyright-credits">基于 <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> 引擎和 <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> 主题</span>
+		</div>
+	</div>
+</footer>
+	</div>
+<script async defer src="/js/menu.js"></script>
+</body>
+</html>

@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Php - 臭大佬博客</title>
+	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
+	<meta name="description" content="">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link rel="dns-prefetch" href="//fonts.googleapis.com">
+	<link rel="dns-prefetch" href="//fonts.gstatic.com">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
+
+	<link rel="stylesheet" href="/css/style.css">
+	
+	<link rel="alternate" type="application/rss+xml" href="/categories/php/index.xml" title="臭大佬博客">
+
+	<link rel="shortcut icon" href="/favicon.ico">
+		
+</head>
+<body class="body">
+	<div class="container container--outer">
+		<header class="header">
+	<div class="container header__container">
+		
+	<div class="logo">
+		<a class="logo__link" href="/" title="臭大佬博客" rel="home">
+			<div class="logo__item logo__text">
+					<div class="logo__title">臭大佬博客</div>
+					
+				</div>
+		</a>
+	</div>
+		
+<nav class="menu">
+	<button class="menu__btn" aria-haspopup="true" aria-expanded="false" tabindex="0">
+		<span class="menu__btn-title" tabindex="-1">菜单</span>
+	</button>
+	<ul class="menu__list">
+		<li class="menu__item">
+			<a class="menu__link" href="/">
+				
+				<span class="menu__text">首页</span>
+				
+			</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/post/">
+				
+				<span class="menu__text">归档</span>
+				
+			</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/about/">
+				
+				<span class="menu__text">关于</span>
+				
+			</a>
+		</li>
+	</ul>
+</nav>
+
+	</div>
+</header>
+		<div class="wrapper flex">
+			<div class="primary">
+			
+<main class="main list" role="main">
+	<header class="main__header">
+		<h1 class="main__title">Php</h1>
+	</header><article class="list__item post">
+	
+	<header class="list__header">
+		<h2 class="list__title post__title">
+			<a href="/posts/2021-05-24-%E8%BD%ACphp-%E5%A4%9A%E7%BB%B4%E6%95%B0%E7%BB%84%E6%8C%87%E5%AE%9A%E6%9F%90%E4%B8%AA%E5%80%BC%E4%BD%9C%E4%B8%BA%E9%94%AE/" rel="bookmark">
+			【转】php 多维数组指定某个值作为键
+			</a>
+		</h2>
+		
+	</header>
+	<div class="content list__excerpt post__content clearfix">
+		<h1 id="代码">代码</h1>
+<p>二维数组,把键为’id’的值作为新数组(new_arr)的键,值为原来的值。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span>$temp_key <span style="color:#f92672">=</span> <span style="color:#a6e22e">array_column</span>($arr,<span style="color:#e6db74">&#39;id&#39;</span>);  <span style="color:#75715e">//键值
+</span></span></span><span style="display:flex;"><span>$new_arr <span style="color:#f92672">=</span> <span style="color:#a6e22e">array_combine</span>($temp_key,$arr) ;
+</span></span></code></pre></div><p>来源 ：https://blog.csdn.net/a1005398026/article/details/96443305</p>
+	</div>
+</article><article class="list__item post">
+	
+	<header class="list__header">
+		<h2 class="list__title post__title">
+			<a href="/posts/2021-02-26-php%E9%9D%A2%E8%AF%95%E9%A2%98%E4%B9%9D-%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98/" rel="bookmark">
+			php面试题九 -- 常见问题
+			</a>
+		</h2>
+		
+	</header>
+	<div class="content list__excerpt post__content clearfix">
+		<h3 id="你用什么方法检查-php-脚本的执行效率通常是脚本执行时间和数据库-sql-的效率通常是数据库-query-时间-并定位和分析脚本执行和数据库查询的瓶颈所在">你用什么方法检查 PHP 脚本的执行效率（通常是脚本执行时间）和数据库 SQL 的效率（通常是数据库 Query 时间）， 并定位和分析脚本执行和数据库查询的瓶颈所在？</h3>
+<h6 id="数据库sql的效率">数据库SQL的效率</h6>
+<p><code>sql</code>的<code>explain(sql)</code>,启用<code>slow_query_log</code>记录慢查询。通常还要看数据库设计是否合理，需求是否合理等。
+慢查询相关文章<a href="https://www.choudalao.com/article/199" title="MYSQL 慢查询 | 臭大佬">MYSQL 慢查询 | 臭大佬</a></p>
+	</div>
+</article><article class="list__item post">
+	
+	<header class="list__header">
+		<h2 class="list__title post__title">
+			<a href="/posts/2021-01-15-restful-api%E9%A3%8E%E6%A0%BC/" rel="bookmark">
+			RESTful API风格
+			</a>
+		</h2>
+		
+	</header>
+	<div class="content list__excerpt post__content clearfix">
+		<h2 id="什么是-restful-api-风格">什么是 RESTful API 风格</h2>
+<p>一种软件架构风格、设计风格，而不是标准，只是提供了一组设计原则和约束条件。它主要用于客户端和服务器交互类的软件。基于这个风格设计的软件可以更简洁，更有层次，更易于实现缓存等机制。</p>
+	</div>
+</article><article class="list__item post">
+	
+	<header class="list__header">
+		<h2 class="list__title post__title">
+			<a href="/posts/2020-11-18-php%E5%AF%B9redis%E6%93%8D%E4%BD%9C%E8%AF%A6%E8%A7%A3/" rel="bookmark">
+			PHP对redis操作详解
+			</a>
+		</h2>
+		
+	</header>
+	<div class="content list__excerpt post__content clearfix">
+		<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#75715e">/*1.Connection*/</span>
+</span></span><span style="display:flex;"><span>$redis <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">Redis</span>();
+</span></span><span style="display:flex;"><span>$redis<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">connect</span>(<span style="color:#e6db74">&#39;127.0.0.1&#39;</span>,<span style="color:#ae81ff">6379</span>,<span style="color:#ae81ff">1</span>);<span style="color:#75715e">//短链接，本地host，端口为6379，超过1秒放弃链接
+</span></span></span><span style="display:flex;"><span>$redis<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">open</span>(<span style="color:#e6db74">&#39;127.0.0.1&#39;</span>,<span style="color:#ae81ff">6379</span>,<span style="color:#ae81ff">1</span>);<span style="color:#75715e">//短链接(同上)
+</span></span></span><span style="display:flex;"><span>$redis<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">pconnect</span>(<span style="color:#e6db74">&#39;127.0.0.1&#39;</span>,<span style="color:#ae81ff">6379</span>,<span style="color:#ae81ff">1</span>);<span style="color:#75715e">//长链接，本地host，端口为6379，超过1秒放弃链接
+</span></span></span><span style="display:flex;"><span>$redis<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">popen</span>(<span style="color:#e6db74">&#39;127.0.0.1&#39;</span>,<span style="color:#ae81ff">6379</span>,<span style="color:#ae81ff">1</span>);<span style="color:#75715e">//长链接(同上)
+</span></span></span><span style="display:flex;"><span>$redis<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">auth</span>(<span style="color:#e6db74">&#39;password&#39;</span>);<span style="color:#75715e">//登录验证密码，返回【true | false】
+</span></span></span><span style="display:flex;"><span>$redis<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">select</span>(<span style="color:#ae81ff">0</span>);<span style="color:#75715e">//选择redis库,0~15 共16个库
+</span></span></span><span style="display:flex;"><span>$redis<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">close</span>();<span style="color:#75715e">//释放资源
+</span></span></span><span style="display:flex;"><span>$redis<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">ping</span>(); <span style="color:#75715e">//检查是否还再链接,[+pong]
+</span></span></span><span style="display:flex;"><span>$redis<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">ttl</span>(<span style="color:#e6db74">&#39;key&#39;</span>);<span style="color:#75715e">//查看失效时间[-1 | timestamps]
+</span></span></span><span style="display:flex;"><span>$redis<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">persist</span>(<span style="color:#e6db74">&#39;key&#39;</span>);<span style="color:#75715e">//移除失效时间[ 1 | 0]
+</span></span></span><span style="display:flex;"><span>$redis<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">sort</span>(<span style="color:#e6db74">&#39;key&#39;</span>,[$array]);<span style="color:#75715e">//返回或保存给定列表、集合、有序集合key中经过排序的元素，$array为参数limit等！【配合$array很强大】 [array|false]
+</span></span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">/*2.共性的运算归类*/</span>
+</span></span><span style="display:flex;"><span>$redis<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">expire</span>(<span style="color:#e6db74">&#39;key&#39;</span>,<span style="color:#ae81ff">10</span>);<span style="color:#75715e">//设置失效时间[true | false]
+</span></span></span><span style="display:flex;"><span>$redis<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">move</span>(<span style="color:#e6db74">&#39;key&#39;</span>,<span style="color:#ae81ff">15</span>);<span style="color:#75715e">//把当前库中的key移动到15库中[0|1]
+</span></span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//string
+</span></span></span><span style="display:flex;"><span>$redis<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">strlen</span>(<span style="color:#e6db74">&#39;key&#39;</span>);<span style="color:#75715e">//获取当前key的长度
+</span></span></span><span style="display:flex;"><span>$redis<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">append</span>(<span style="color:#e6db74">&#39;key&#39;</span>,<span style="color:#e6db74">&#39;string&#39;</span>);<span style="color:#75715e">//把string追加到key现有的value中[追加后的个数]
+</span></span></span><span style="display:flex;"><span>$redis<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">incr</span>(<span style="color:#e6db74">&#39;key&#39;</span>);<span style="color:#75715e">//自增1，如不存在key,赋值为1(只对整数有效,存储以10进制64位，redis中为str)[new_num | false]
+</span></span></span><span style="display:flex;"><span>$redis<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">incrby</span>(<span style="color:#e6db74">&#39;key&#39;</span>,$num);<span style="color:#75715e">//自增$num,不存在为赋值,值需为整数[new_num | false]
+</span></span></span><span style="display:flex;"><span>$redis<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">decr</span>(<span style="color:#e6db74">&#39;key&#39;</span>);<span style="color:#75715e">//自减1，[new_num | false]
+</span></span></span><span style="display:flex;"><span>$redis<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">decrby</span>(<span style="color:#e6db74">&#39;key&#39;</span>,$num);<span style="color:#75715e">//自减$num，[ new_num | false]
+</span></span></span><span style="display:flex;"><span>$redis<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">setex</span>(<span style="color:#e6db74">&#39;key&#39;</span>,<span style="color:#ae81ff">10</span>,<span style="color:#e6db74">&#39;value&#39;</span>);<span style="color:#75715e">//key=value，有效期为10秒[true]
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">//list
+</span></span></span><span style="display:flex;"><span>$redis<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">llen</span>(<span style="color:#e6db74">&#39;key&#39;</span>);<span style="color:#75715e">//返回列表key的长度,不存在key返回0， [ len | 0]
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">//set
+</span></span></span><span style="display:flex;"><span>$redis<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">scard</span>(<span style="color:#e6db74">&#39;key&#39;</span>);<span style="color:#75715e">//返回集合key的基数(集合中元素的数量)。[num | 0]
+</span></span></span><span style="display:flex;"><span>$redis<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">sMove</span>(<span style="color:#e6db74">&#39;key1&#39;</span>, <span style="color:#e6db74">&#39;key2&#39;</span>, <span style="color:#e6db74">&#39;member&#39;</span>);<span style="color:#75715e">//移动，将member元素从key1集合移动到key2集合。[1 | 0]
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">//Zset
+</span></span></span><span style="display:flex;"><span>$redis<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">zcard</span>(<span style="color:#e6db74">&#39;key&#39;</span>);<span style="color:#75715e">//返回集合key的基数(集合中元素的数量)。[num | 0]
+</span></span></span><span style="display:flex;"><span>$redis<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">zcount</span>(<span style="color:#e6db74">&#39;key&#39;</span>,<span style="color:#ae81ff">0</span>,<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>);<span style="color:#75715e">//返回有序集key中，score值在min和max之间(默认包括score值等于min或max)的成员。[num | 0]
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">//hash
+</span></span></span><span style="display:flex;"><span>$redis<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">hexists</span>(<span style="color:#e6db74">&#39;key&#39;</span>,<span style="color:#e6db74">&#39;field&#39;</span>);<span style="color:#75715e">//查看hash中是否存在field,[1 | 0]
+</span></span></span><span style="display:flex;"><span>$redis<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">hincrby</span>(<span style="color:#e6db74">&#39;key&#39;</span>,<span style="color:#e6db74">&#39;field&#39;</span>,$int_num);<span style="color:#75715e">//为哈希表key中的域field的值加上量(+|-)num,[new_num | false]
+</span></span></span><span style="display:flex;"><span>$redis<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">hlen</span>(<span style="color:#e6db74">&#39;key&#39;</span>);<span style="color:#75715e">//返回哈希表key中域的数量。[ num | 0]
+</span></span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> 
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">/*3.Server*/</span>
+</span></span><span style="display:flex;"><span>$redis<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">dbSize</span>();<span style="color:#75715e">//返回当前库中的key的个数
+</span></span></span><span style="display:flex;"><span>$redis<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">flushAll</span>();<span style="color:#75715e">//清空整个redis[总true]
+</span></span></span><span style="display:flex;"><span>$redis<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">flushDB</span>();<span style="color:#75715e">//清空当前redis库[总true]
+</span></span></span><span style="display:flex;"><span>$redis<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">save</span>();<span style="color:#75715e">//同步??把数据存储到磁盘-dump.rdb[true]
+</span></span></span><span style="display:flex;"><span>$redis<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">bgsave</span>();<span style="color:#75715e">//异步？？把数据存储到磁盘-dump.rdb[true]
+</span></span></span><span style="display:flex;"><span>$redis<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">info</span>();<span style="color:#75715e">//查询当前redis的状态 [verson:2.4.5....]
+</span></span></span><span style="display:flex;"><span>$redis<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">lastSave</span>();<span style="color:#75715e">//上次存储时间key的时间[timestamp]
+</span></span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>$redis<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">watch</span>(<span style="color:#e6db74">&#39;key&#39;</span>,<span style="color:#e6db74">&#39;keyn&#39;</span>);<span style="color:#75715e">//监视一个(或多个) key ，如果在事务执行之前这个(或这些) key 被其他命令所改动，那么事务将被打断 [true]
+</span></span></span><span style="display:flex;"><span>$redis<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">unwatch</span>(<span style="color:#e6db74">&#39;key&#39;</span>,<span style="color:#e6db74">&#39;keyn&#39;</span>);<span style="color:#75715e">//取消监视一个(或多个) key [true]
+</span></span></span><span style="display:flex;"><span>$redis<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">multi</span>(<span style="color:#a6e22e">Redis</span><span style="color:#f92672">::</span><span style="color:#a6e22e">MULTI</span>);<span style="color:#75715e">//开启事务，事务块内的多条命令会按照先后顺序被放进一个队列当中，最后由 EXEC 命令在一个原子时间内执行。
+</span></span></span><span style="display:flex;"><span>$redis<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">multi</span>(<span style="color:#a6e22e">Redis</span><span style="color:#f92672">::</span><span style="color:#a6e22e">PIPELINE</span>);<span style="color:#75715e">//开启管道，事务块内的多条命令会按照先后顺序被放进一个队列当中，最后由 EXEC 命令在一个原子时间内执行。
+</span></span></span><span style="display:flex;"><span>$redis<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">exec</span>();<span style="color:#75715e">//执行所有事务块内的命令，；【事务块内所有命令的返回值，按命令执行的先后顺序排列，当操作被打断时，返回空值 false】
+</span></span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> 
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">/*4.String，键值对，创建更新同操作*/</span>
+</span></span><span style="display:flex;"><span>$redis<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">setOption</span>(<span style="color:#a6e22e">Redis</span><span style="color:#f92672">::</span><span style="color:#a6e22e">OPT_PREFIX</span>,<span style="color:#e6db74">&#39;hf_&#39;</span>);<span style="color:#75715e">//设置表前缀为hf_
+</span></span></span><span style="display:flex;"><span>$redis<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">set</span>(<span style="color:#e6db74">&#39;key&#39;</span>,<span style="color:#ae81ff">1</span>);<span style="color:#75715e">//设置key=aa value=1 [true]
+</span></span></span><span style="display:flex;"><span>$redis<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">mset</span>($arr);<span style="color:#75715e">//设置一个或多个键值[true]
+</span></span></span><span style="display:flex;"><span>$redis<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">setnx</span>(<span style="color:#e6db74">&#39;key&#39;</span>,<span style="color:#e6db74">&#39;value&#39;</span>);<span style="color:#75715e">//key=value,key存在返回false[|true]
+</span></span></span><span style="display:flex;"><span>$redis<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">get</span>(<span style="color:#e6db74">&#39;key&#39;</span>);<span style="color:#75715e">//获取key [value]
+</span></span></span><span style="display:flex;"><span>$redis<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">mget</span>($arr);<span style="color:#75715e">//(string|arr),返回所查询键的值
+</span></span></span><span style="display:flex;"><span>$redis<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">del</span>($key_arr);<span style="color:#75715e">//(string|arr)删除key，支持数组批量删除【返回删除个数】
+</span></span></span><span style="display:flex;"><span>$redis<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">delete</span>($key_str,$key2,$key3);<span style="color:#75715e">//删除keys,[del_num]
+</span></span></span><span style="display:flex;"><span>$redis<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">getset</span>(<span style="color:#e6db74">&#39;old_key&#39;</span>,<span style="color:#e6db74">&#39;new_value&#39;</span>);<span style="color:#75715e">//先获得key的值，然后重新赋值,[old_value | false]
+</span></span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> 
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">/*5.List栈的结构,注意表头表尾,创建更新分开操作*/</span>
+</span></span><span style="display:flex;"><span>$redis<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">lpush</span>(<span style="color:#e6db74">&#39;key&#39;</span>,<span style="color:#e6db74">&#39;value&#39;</span>);<span style="color:#75715e">//增，只能将一个值value插入到列表key的表头，不存在就创建 [列表的长度 |false]
+</span></span></span><span style="display:flex;"><span>$redis<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">rpush</span>(<span style="color:#e6db74">&#39;key&#39;</span>,<span style="color:#e6db74">&#39;value&#39;</span>);<span style="color:#75715e">//增，只能将一个值value插入到列表key的表尾 [列表的长度 |false]
+</span></span></span><span style="display:flex;"><span>$redis<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">lInsert</span>(<span style="color:#e6db74">&#39;key&#39;</span>, <span style="color:#a6e22e">Redis</span><span style="color:#f92672">::</span><span style="color:#a6e22e">AFTER</span>, <span style="color:#e6db74">&#39;value&#39;</span>, <span style="color:#e6db74">&#39;new_value&#39;</span>);<span style="color:#75715e">//增，将值value插入到列表key当中，位于值value之前或之后。[new_len | false]
+</span></span></span><span style="display:flex;"><span>$redis<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">lpushx</span>(<span style="color:#e6db74">&#39;key&#39;</span>,<span style="color:#e6db74">&#39;value&#39;</span>);<span style="color:#75715e">//增，只能将一个值value插入到列表key的表头，不存在不创建 [列表的长度 |false]
+</span></span></span><span style="display:flex;"><span>$redis<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">rpushx</span>(<span style="color:#e6db74">&#39;key&#39;</span>,<span style="color:#e6db74">&#39;value&#39;</span>);<span style="color:#75715e">//增，只能将一个值value插入到列表key的表尾，不存在不创建 [列表的长度 |false]
+</span></span></span><span style="display:flex;"><span>$redis<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">lpop</span>(<span style="color:#e6db74">&#39;key&#39;</span>);<span style="color:#75715e">//删，移除并返回列表key的头元素,[被删元素 | false]
+</span></span></span><span style="display:flex;"><span>$redis<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">rpop</span>(<span style="color:#e6db74">&#39;key&#39;</span>);<span style="color:#75715e">//删，移除并返回列表key的尾元素,[被删元素 | false]
+</span></span></span><span style="display:flex;"><span>$redis<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">lrem</span>(<span style="color:#e6db74">&#39;key&#39;</span>,<span style="color:#e6db74">&#39;value&#39;</span>,<span style="color:#ae81ff">0</span>);<span style="color:#75715e">//删，根据参数count的值，移除列表中与参数value相等的元素count=(0|-n表头向尾|+n表尾向头移除n个value) [被移除的数量 | 0]
+</span></span></span><span style="display:flex;"><span>$redis<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">ltrim</span>(<span style="color:#e6db74">&#39;key&#39;</span>,<span style="color:#a6e22e">start</span>,<span style="color:#a6e22e">end</span>);<span style="color:#75715e">//删，列表修剪，保留(start,end)之间的值 [true|false]
+</span></span></span><span style="display:flex;"><span>$redis<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">lset</span>(<span style="color:#e6db74">&#39;key&#39;</span>,<span style="color:#a6e22e">index</span>,<span style="color:#e6db74">&#39;new_v&#39;</span>);<span style="color:#75715e">//改，从表头数，将列表key下标为第index的元素的值为new_v, [true | false]
+</span></span></span><span style="display:flex;"><span>$redis<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">lindex</span>(<span style="color:#e6db74">&#39;key&#39;</span>,<span style="color:#a6e22e">index</span>);<span style="color:#75715e">//查，返回列表key中，下标为index的元素[value|false]
+</span></span></span><span style="display:flex;"><span>$redis<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">lrange</span>(<span style="color:#e6db74">&#39;key&#39;</span>,<span style="color:#ae81ff">0</span>,<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>);<span style="color:#75715e">//查，(start,stop|0,-1)返回列表key中指定区间内的元素，区间以偏移量start和stop指定。[array|false]
+</span></span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">/*6.Set，没有重复的member，创建更新同操作*/</span>
+</span></span><span style="display:flex;"><span>$redis<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">sadd</span>(<span style="color:#e6db74">&#39;key&#39;</span>,<span style="color:#e6db74">&#39;value1&#39;</span>,<span style="color:#e6db74">&#39;value2&#39;</span>,<span style="color:#e6db74">&#39;valuen&#39;</span>);<span style="color:#75715e">//增，改，将一个或多个member元素加入到集合key当中，已经存在于集合的member元素将被忽略。[insert_num]
+</span></span></span><span style="display:flex;"><span>$redis<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">srem</span>(<span style="color:#e6db74">&#39;key&#39;</span>,<span style="color:#e6db74">&#39;value1&#39;</span>,<span style="color:#e6db74">&#39;value2&#39;</span>,<span style="color:#e6db74">&#39;valuen&#39;</span>);<span style="color:#75715e">//删，移除集合key中的一个或多个member元素，不存在的member元素会被忽略 [del_num | false]
+</span></span></span><span style="display:flex;"><span>$redis<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">smembers</span>(<span style="color:#e6db74">&#39;key&#39;</span>);<span style="color:#75715e">//查，返回集合key中的所有成员 [array | &#39;&#39;]
+</span></span></span><span style="display:flex;"><span>$redis<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">sismember</span>(<span style="color:#e6db74">&#39;key&#39;</span>,<span style="color:#e6db74">&#39;member&#39;</span>);<span style="color:#75715e">//判断member元素是否是集合key的成员 [1 | 0]
+</span></span></span><span style="display:flex;"><span>$redis<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">spop</span>(<span style="color:#e6db74">&#39;key&#39;</span>);<span style="color:#75715e">//删，移除并返回集合中的一个随机元素 [member | false]
+</span></span></span><span style="display:flex;"><span>$redis<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">srandmember</span>(<span style="color:#e6db74">&#39;key&#39;</span>);<span style="color:#75715e">//查，返回集合中的一个随机元素 [member | false]
+</span></span></span><span style="display:flex;"><span>$redis<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">sinter</span>(<span style="color:#e6db74">&#39;key1&#39;</span>,<span style="color:#e6db74">&#39;key2&#39;</span>,<span style="color:#e6db74">&#39;keyn&#39;</span>);<span style="color:#75715e">//查，返回所有给定集合的交集 [array | false]
+</span></span></span><span style="display:flex;"><span>$redis<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">sunion</span>(<span style="color:#e6db74">&#39;key1&#39;</span>,<span style="color:#e6db74">&#39;key2&#39;</span>,<span style="color:#e6db74">&#39;keyn&#39;</span>);<span style="color:#75715e">//查，返回所有给定集合的并集 [array | false]
+</span></span></span><span style="display:flex;"><span>$redis<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">sdiff</span>(<span style="color:#e6db74">&#39;key1&#39;</span>,<span style="color:#e6db74">&#39;key2&#39;</span>,<span style="color:#e6db74">&#39;keyn&#39;</span>);<span style="color:#75715e">//查，返回所有给定集合的差集 [array | false]
+</span></span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">/*7.Zset，没有重复的member，有排序顺序,创建更新同操作*/</span>
+</span></span><span style="display:flex;"><span>$redis<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">zAdd</span>(<span style="color:#e6db74">&#39;key&#39;</span>,$score1,$member1,$scoreN,$memberN);<span style="color:#75715e">//增，改，将一个或多个member元素及其score值加入到有序集key当中。[num | 0]
+</span></span></span><span style="display:flex;"><span>$redis<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">zrem</span>(<span style="color:#e6db74">&#39;key&#39;</span>,<span style="color:#e6db74">&#39;member1&#39;</span>,<span style="color:#e6db74">&#39;membern&#39;</span>);<span style="color:#75715e">//删，移除有序集key中的一个或多个成员，不存在的成员将被忽略。[del_num | 0]
+</span></span></span><span style="display:flex;"><span>$redis<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">zscore</span>(<span style="color:#e6db74">&#39;key&#39;</span>,<span style="color:#e6db74">&#39;member&#39;</span>);<span style="color:#75715e">//查,通过值反拿权 [num | null]
+</span></span></span><span style="display:flex;"><span>$redis<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">zrange</span>(<span style="color:#e6db74">&#39;key&#39;</span>,$start,$stop);<span style="color:#75715e">//查，通过(score从小到大)【排序名次范围】拿member值，返回有序集key中，【指定区间内】的成员 [array | null]
+</span></span></span><span style="display:flex;"><span>$redis<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">zrevrange</span>(<span style="color:#e6db74">&#39;key&#39;</span>,$start,$stop);<span style="color:#75715e">//查，通过(score从大到小)【排序名次范围】拿member值，返回有序集key中，【指定区间内】的成员 [array | null]
+</span></span></span><span style="display:flex;"><span>$redis<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">zrangebyscore</span>(<span style="color:#e6db74">&#39;key&#39;</span>,$min,$max[,$config]);<span style="color:#75715e">//查，通过scroe权范围拿member值，返回有序集key中，指定区间内的(从小到大排)成员[array | null]
+</span></span></span><span style="display:flex;"><span>$redis<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">zrevrangebyscore</span>(<span style="color:#e6db74">&#39;key&#39;</span>,$max,$min[,$config]);<span style="color:#75715e">//查，通过scroe权范围拿member值，返回有序集key中，指定区间内的(从大到小排)成员[array | null]
+</span></span></span><span style="display:flex;"><span>$redis<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">zrank</span>(<span style="color:#e6db74">&#39;key&#39;</span>,<span style="color:#e6db74">&#39;member&#39;</span>);<span style="color:#75715e">//查，通过member值查(score从小到大)排名结果中的【member排序名次】[order | null]
+</span></span></span><span style="display:flex;"><span>$redis<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">zrevrank</span>(<span style="color:#e6db74">&#39;key&#39;</span>,<span style="color:#e6db74">&#39;member&#39;</span>);<span style="color:#75715e">//查，通过member值查(score从大到小)排名结果中的【member排序名次】[order | null]
+</span></span></span><span style="display:flex;"><span>$redis<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">ZINTERSTORE</span>();<span style="color:#75715e">//交集
+</span></span></span><span style="display:flex;"><span>$redis<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">ZUNIONSTORE</span>();<span style="color:#75715e">//差集
+</span></span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">/*8.Hash，表结构，创建更新同操作*/</span>
+</span></span><span style="display:flex;"><span>$redis<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">hset</span>(<span style="color:#e6db74">&#39;key&#39;</span>,<span style="color:#e6db74">&#39;field&#39;</span>,<span style="color:#e6db74">&#39;value&#39;</span>);<span style="color:#75715e">//增，改，将哈希表key中的域field的值设为value,不存在创建,存在就覆盖【1 | 0】
+</span></span></span><span style="display:flex;"><span>$redis<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">hget</span>(<span style="color:#e6db74">&#39;key&#39;</span>,<span style="color:#e6db74">&#39;field&#39;</span>);<span style="color:#75715e">//查，取值【value|false】
+</span></span></span><span style="display:flex;"><span>$arr <span style="color:#f92672">=</span> <span style="color:#66d9ef">array</span>(<span style="color:#e6db74">&#39;one&#39;</span><span style="color:#f92672">=&gt;</span><span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">2</span>,<span style="color:#ae81ff">3</span>);$arr2 <span style="color:#f92672">=</span> <span style="color:#66d9ef">array</span>(<span style="color:#e6db74">&#39;one&#39;</span>,<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">1</span>);
+</span></span><span style="display:flex;"><span>$redis<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">hmset</span>(<span style="color:#e6db74">&#39;key&#39;</span>,$arr);<span style="color:#75715e">//增，改，设置多值$arr为(索引|关联)数组,$arr[key]=field, [ true ]
+</span></span></span><span style="display:flex;"><span>$redis<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">hmget</span>(<span style="color:#e6db74">&#39;key&#39;</span>,$arr2);<span style="color:#75715e">//查，获取指定下标的field，[$arr | false]
+</span></span></span><span style="display:flex;"><span>$redis<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">hgetall</span>(<span style="color:#e6db74">&#39;key&#39;</span>);<span style="color:#75715e">//查，返回哈希表key中的所有域和值。[当key不存在时，返回一个空表]
+</span></span></span><span style="display:flex;"><span>$redis<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">hkeys</span>(<span style="color:#e6db74">&#39;key&#39;</span>);<span style="color:#75715e">//查，返回哈希表key中的所有域。[当key不存在时，返回一个空表]
+</span></span></span><span style="display:flex;"><span>$redis<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">hvals</span>(<span style="color:#e6db74">&#39;key&#39;</span>);<span style="color:#75715e">//查，返回哈希表key中的所有值。[当key不存在时，返回一个空表]
+</span></span></span><span style="display:flex;"><span>$redis<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">hdel</span>(<span style="color:#e6db74">&#39;key&#39;</span>,$arr2);<span style="color:#75715e">//删，删除指定下标的field,不存在的域将被忽略,[num | false]
+</span></span></span></code></pre></div>
+	</div>
+</article><article class="list__item post">
+	
+	<header class="list__header">
+		<h2 class="list__title post__title">
+			<a href="/posts/2020-11-02-php-%E7%AE%80%E5%8D%95%E7%9A%84%E5%8A%A0%E5%AF%86%E5%92%8C%E8%A7%A3%E5%AF%86/" rel="bookmark">
+			php 简单的加密和解密
+			</a>
+		</h2>
+		
+	</header>
+	<div class="content list__excerpt post__content clearfix">
+		<h1 id="代码">代码</h1>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#e6db74">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">* Description:加密
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">* User: Vijay &lt;1937832819@qq.com&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">* Date: 2020/11/2
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">* Time: 15:52
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">* @param string $string 解析字符串
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">* @param string $key key
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">* @return string|string[]
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">*/</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">function</span> <span style="color:#a6e22e">encryption</span>($string <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;&#34;</span>, $key <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;drp&#34;</span>)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//str_split把字符串分割到数组中
+</span></span></span><span style="display:flex;"><span>$strArr <span style="color:#f92672">=</span> <span style="color:#a6e22e">str_split</span>(<span style="color:#a6e22e">base64_encode</span>($string));
+</span></span><span style="display:flex;"><span>$strcount <span style="color:#f92672">=</span> <span style="color:#a6e22e">count</span>($strArr);
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">foreach</span> (<span style="color:#a6e22e">str_split</span>($key) <span style="color:#66d9ef">as</span> $key <span style="color:#f92672">=&gt;</span> $value) {
+</span></span><span style="display:flex;"><span>$key <span style="color:#f92672">&lt;</span> $strcount <span style="color:#f92672">&amp;&amp;</span> $strArr[$key] <span style="color:#f92672">.=</span> $value;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">return</span> <span style="color:#a6e22e">str_replace</span>(<span style="color:#66d9ef">array</span>(<span style="color:#e6db74">&#39;=&#39;</span>, <span style="color:#e6db74">&#39;+&#39;</span>, <span style="color:#e6db74">&#39;1&#39;</span>), <span style="color:#66d9ef">array</span>(<span style="color:#e6db74">&#39;O0O0O&#39;</span>, <span style="color:#e6db74">&#39;o000o&#39;</span>, <span style="color:#e6db74">&#39;oo00o&#39;</span>), <span style="color:#a6e22e">join</span>($strArr));
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">* Description:解密
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">* User: Vijay &lt;1937832819@qq.com&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">* Date: 2020/11/2
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">* Time: 15:52
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">* @param string $string 解析字符串
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">* @param string $skey
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">* @return false|string
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">*/</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">function</span> <span style="color:#a6e22e">deciphering</span>($string <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;&#39;</span>, $skey <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;drp&#39;</span>)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>$strArr <span style="color:#f92672">=</span> <span style="color:#a6e22e">str_split</span>(<span style="color:#a6e22e">str_replace</span>(<span style="color:#66d9ef">array</span>(<span style="color:#e6db74">&#39;O0O0O&#39;</span>, <span style="color:#e6db74">&#39;o000o&#39;</span>, <span style="color:#e6db74">&#39;oo00o&#39;</span>), <span style="color:#66d9ef">array</span>(<span style="color:#e6db74">&#39;=&#39;</span>, <span style="color:#e6db74">&#39;+&#39;</span>, <span style="color:#e6db74">&#39;/&#39;</span>), $string), <span style="color:#ae81ff">2</span>);
+</span></span><span style="display:flex;"><span>$strCount <span style="color:#f92672">=</span> <span style="color:#a6e22e">count</span>($strArr);
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">foreach</span> (<span style="color:#a6e22e">str_split</span>($skey) <span style="color:#66d9ef">as</span> $key <span style="color:#f92672">=&gt;</span> $value)
+</span></span><span style="display:flex;"><span>$key <span style="color:#f92672">&lt;=</span> $strCount <span style="color:#f92672">&amp;&amp;</span> <span style="color:#f92672">@</span>$strArr[$key][<span style="color:#ae81ff">1</span>] <span style="color:#f92672">===</span> $value <span style="color:#f92672">&amp;&amp;</span> $strArr[$key] <span style="color:#f92672">=</span> $strArr[$key][<span style="color:#ae81ff">0</span>];
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">return</span> <span style="color:#a6e22e">base64_decode</span>(<span style="color:#a6e22e">join</span>($strArr));
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="调用及结果">调用及结果</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span>$a <span style="color:#f92672">=</span> <span style="color:#a6e22e">encryption</span>(<span style="color:#e6db74">&#39;32&#39;</span>);
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">var_dump</span>($a);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>$a <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;MczIO0O0O&#39;</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>$b <span style="color:#f92672">=</span> <span style="color:#a6e22e">deciphering</span>($a);
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">var_dump</span>($b);
+</span></span></code></pre></div><blockquote>
+<p>string(9) &ldquo;MczIO0O0O&rdquo;
+string(2) &ldquo;32&rdquo;</p>
+	</div>
+</article><article class="list__item post">
+	
+	<header class="list__header">
+		<h2 class="list__title post__title">
+			<a href="/posts/2020-10-31-php%E7%9A%84%E8%87%AA%E5%8A%A8%E5%8A%A0%E8%BD%BD%E5%92%8C%E5%91%BD%E5%90%8D%E7%A9%BA%E9%97%B4/" rel="bookmark">
+			php的自动加载和命名空间
+			</a>
+		</h2>
+		
+	</header>
+	<div class="content list__excerpt post__content clearfix">
+		<h1 id="__autoload">__autoload</h1>
+<p>魔术变量 __autoload()：当需要使用的类没有被引入时，这个函数会在PHP报错前被触发，未定义的类名会被当作参数传入。</p>
+<p><em>注意：Warning
+本特性已自 PHP 7.2.0 起废弃。强烈建议不要使用本特性。
+见官方文档- <a href="https://www.php.net/manual/zh/function.autoload.php" title="https://www.php.net/manual/zh/function.autoload.php">https://www.php.net/manual/zh/function.autoload.php</a></em></p>
+	</div>
+</article><article class="list__item post">
+	
+	<header class="list__header">
+		<h2 class="list__title post__title">
+			<a href="/posts/2020-09-28-laravel-%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6%E5%AD%98%E5%82%A8%E4%B9%8B%E5%90%8E%E5%8F%98-zip-%E6%A0%BC%E5%BC%8F/" rel="bookmark">
+			Laravel 上传文件存储之后变 zip 格式？
+			</a>
+		</h2>
+		
+	</header>
+	<div class="content list__excerpt post__content clearfix">
+		<h1 id="问题">问题</h1>
+<p>今天在做项目的时候，通过<code>laravel</code>上传 <code>excel</code> 表格文件，到服务端变成了压缩包（zip格式），之前上传图片是不会出现这样的问题的，不知道怎么回事，然后去查了一下中文社区的文档，里面有一句话是这么说的：</p>
+	</div>
+</article><article class="list__item post">
+	
+	<header class="list__header">
+		<h2 class="list__title post__title">
+			<a href="/posts/2020-09-08-linux-%E4%B8%8B%E5%AE%89%E8%A3%85python3-%E8%87%AD%E5%A4%A7%E4%BD%AC/" rel="bookmark">
+			Linux 下安装python3 | 臭大佬
+			</a>
+		</h2>
+		
+	</header>
+	<div class="content list__excerpt post__content clearfix">
+		<h1 id="问题">问题</h1>
+<p><code>Linux</code> 系统一般默认装的是 <code>Python2</code>，不过开发中大家都一般用<code>python3</code>了，但很多系统依赖的东西还是<code>Python2</code>,那怎么在不破坏原环境的情况下安装 <code>Python3</code> 呢？</p>
+	</div>
+</article><article class="list__item post">
+	
+	<header class="list__header">
+		<h2 class="list__title post__title">
+			<a href="/posts/2020-09-08-php%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%92%8C%E7%AE%97%E6%B3%95/" rel="bookmark">
+			PHP之数据结构和算法
+			</a>
+		</h2>
+		
+	</header>
+	<div class="content list__excerpt post__content clearfix">
+		<h1 id="约瑟夫环问题">约瑟夫环问题</h1>
+<p>一群猴子排成一圈，按1，2，&hellip;，n依次编号。然后从第1只开始数，数到第m只,把它踢出圈，从它后面再开始数，再数到第m只，在把它踢出去&hellip;，如此不停的进行下去，直到最后只剩下一只猴子为止，那只猴子就叫做大王。要求编程模拟此过程，输入m、n,输出最后那个大王的编号。</p>
+	</div>
+</article><article class="list__item post">
+	
+	<header class="list__header">
+		<h2 class="list__title post__title">
+			<a href="/posts/2020-07-31-%E4%B8%AD%E6%96%87%E5%88%86%E8%AF%8D%E6%90%9C%E7%B4%A2%E5%8A%9F%E8%83%BD/" rel="bookmark">
+			中文分词搜索功能
+			</a>
+		</h2>
+		
+	</header>
+	<div class="content list__excerpt post__content clearfix">
+		<h3 id="中文分词介绍">中文分词介绍</h3>
+<p>众所周知，英文是以词为单位的，词和词之间是靠空格隔开，而中文是以字为单位，句子中所有的字连起来才能描述一个意思。例如，英文句子I am a student，用中文则为：“我是一个学生”。计算机可以很简单通过空格知道student是一个单词，但是不能很容易明白“学”、“生”两个字合起来才表示一个词。把中文的汉字序列切分成有意义的词，就是中文分词，有些人也称为切词。我是一个学生，分词的结果是：我 是 一个 学生。</p>
+	</div>
+</article>
+</main>
+
+<div class="pagination">
+	<a class="pagination__item pagination__item--prev btn" href="/categories/php/">«</a>
+	<span class="pagination__item pagination__item--current">2/9</span>
+	<a class="pagination__item pagination__item--next btn" href="/categories/php/page/3/">»</a>
+</div>
+
+			</div>
+			
+
+		</div>
+		<footer class="footer">
+	<div class="container footer__container flex">
+		
+		<div class="footer__copyright">
+			&copy; 2026 臭大佬博客.
+			<span class="footer__copyright-credits">基于 <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> 引擎和 <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> 主题</span>
+		</div>
+	</div>
+</footer>
+	</div>
+<script async defer src="/js/menu.js"></script>
+</body>
+</html>

@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>B&#43;Tree - 臭大佬博客</title>
+	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
+	<meta name="description" content="B&#43;树介绍">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link rel="dns-prefetch" href="//fonts.googleapis.com">
+	<link rel="dns-prefetch" href="//fonts.gstatic.com">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
+
+	<link rel="stylesheet" href="/css/style.css">
+	
+
+	<link rel="shortcut icon" href="/favicon.ico">
+		
+</head>
+<body class="body">
+	<div class="container container--outer">
+		<header class="header">
+	<div class="container header__container">
+		
+	<div class="logo">
+		<a class="logo__link" href="/" title="臭大佬博客" rel="home">
+			<div class="logo__item logo__text">
+					<div class="logo__title">臭大佬博客</div>
+					
+				</div>
+		</a>
+	</div>
+		
+<nav class="menu">
+	<button class="menu__btn" aria-haspopup="true" aria-expanded="false" tabindex="0">
+		<span class="menu__btn-title" tabindex="-1">菜单</span>
+	</button>
+	<ul class="menu__list">
+		<li class="menu__item">
+			<a class="menu__link" href="/">
+				
+				<span class="menu__text">首页</span>
+				
+			</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/post/">
+				
+				<span class="menu__text">归档</span>
+				
+			</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/about/">
+				
+				<span class="menu__text">关于</span>
+				
+			</a>
+		</li>
+	</ul>
+</nav>
+
+	</div>
+</header>
+		<div class="wrapper flex">
+			<div class="primary">
+			
+<main class="main" role="main">
+	<article class="post">
+		<header class="post__header">
+			<h1 class="post__title">B&#43;Tree</h1>
+			
+		</header>
+		<div class="content post__content clearfix">
+			<h1 id="前言">前言</h1>
+<p>B+树中的<code>B</code>代表平衡（balance），而不是二叉（binary），因为B+树是从最早的平衡二叉树演化而来的。在讲B+树之前必须先了解二叉树（Binary Tree）、二叉查找树（Binary Search Tree）、平衡二叉树（AVLTree）和平衡多路查找树（B-Tree），B+树（B+Tree）即由这些树逐步优化而来。</p>
+<h3 id="基本概念">基本概念</h3>
+<p>本文中，提到的几个基本概念，解释如下：</p>
+<p>节点：使用树结构存储的每一个数据元素都被称为“节点”；
+叶子节点：如果节点没有任何子节点，那么此节点称为叶子节点（叶节点）；
+度（d）：每个节点至多有d个子节点，d称为度,有时候也成为阶；
+高度（h）：节点到叶子节点的最长路径（边数）；
+深度(d)：根节点到这个节点所经历的边的个数；
+层（l）：节点的深度+1；
+树的高度：根节点的高度；</p>
+<p><img src="https://www.choudalao.com/uploads/20220521/2022052101155644uofS.png" alt=""></p>
+<h1 id="二叉树-binary-tree">二叉树 （Binary Tree）</h1>
+<h3 id="性质">性质</h3>
+<p>每个节点最多有两个“叉”，也就是两个子节点，分别是左子节点和右子节点；</p>
+<p><img src="https://www.choudalao.com/uploads/20220521/20220521012252wt2Zse.png" alt=""></p>
+<h2 id="满二叉树">满二叉树</h2>
+<p>如果二叉树中除了叶子节点，每个节点的度都为 2，则此二叉树称为满二叉树。上图编号②为满二叉树。</p>
+<h2 id="完全二叉树">完全二叉树</h2>
+<p>如果二叉树中除去最后一层节点为满二叉树，且最后一层的节点依次从左到右分布，则此二叉树被称为完全二叉树。上图编号③为完全二叉树。</p>
+<h4 id="存储一棵二叉树">存储一棵二叉树</h4>
+<p>想要存储一棵二叉树，我们有两种方法一种是基于指针或者引用的二叉链式存储法，一种是基于数组的顺序存储法。</p>
+<h6 id="数组的顺序存储法">数组的顺序存储法</h6>
+<p>对于数组A，一旦给定其维数n及各维长度bi（1≤i≤n），则该数组中元素的个数是固定的，不能对数组做插入和删除操作，不涉及移动数据元素操作，因此对于数组而言，采用顺序存储方式比较合适。</p>
+<p>计算机内存器的结构是一维的，因此对于一维数组按下标顺序分配即可。</p>
+<h6 id="基于数组的顺序存储法存储完全二叉树">基于数组的顺序存储法存储完全二叉树</h6>
+<p>完全二叉树的定义，目的就是为了方便进行数组形式的存储。这样可以节省大量的存储空间。</p>
+<p>我们来看，基于数组的顺序存储法。我们把根节点存储在下标 i = 1 的位置，那左子节点存储在下标 2 * i = 2 的位置，右子节点存储在 2 * i + 1 = 3 的位置。以此类推，B 节点的左子节点存储在 2 * i = 2 * 2 = 4 的位置，右子节点存储在 2 * i + 1 = 2 * 2 + 1 = 5 的位置。</p>
+<p><img src="https://www.choudalao.com/uploads/20220521/20220521014102OiNZ4c.png" alt=""></p>
+<p>如果节点 X 存储在数组中下标为 i 的位置，下标为 2 * i 的位置存储的就是左子节点，下标为 2 * i + 1 的位置存储的就是右子节点。反过来，下标为 i/2 的位置存储就是它的父节点。通过这种方式，我们只要知道根节点存储的位置（一般情况下，为了方便计算子节点，根节点会存储在下标为 1 的位置），这样就可以通过下标计算，把整棵树都串起来。</p>
+<p>如果是非完全二叉树，其实会浪费比较多的数组存储空间。如下图：</p>
+<p><img src="https://www.choudalao.com/uploads/20220521/20220521014631ahceYw.png" alt=""></p>
+<p>堆其实就是一种完全二叉树，最常用的存储方式就是数组。</p>
+<h1 id="二叉查找树binary-search-tree">二叉查找树（Binary Search Tree）</h1>
+<h3 id="性质-1">性质</h3>
+<p>左子节点的键值小于根的键值，右子节点的键值大于根的键值；
+深度为h的节点的查找次数为h；</p>
+<p><img src="https://www.choudalao.com/uploads/20220521/20220521002839gvwL17.png" alt=""></p>
+<h3 id="缺点">缺点</h3>
+<p>这种结构会造成当数据量非常大时，二叉查找树的高度非常大，搜索算法从根节点向下搜索时，需要访问的节点数会变多，如果这些节点信息存储在外存储器（磁盘）中，每访问一个节点，就相当于进行了一次I/O操作，而频繁的I/O操作会降低查询的效率。</p>
+<p>若想二叉树的查询效率尽可能高，需要这棵二叉树是平衡的，从而引出新的定义——平衡二叉树，或称AVL树。</p>
+<h1 id="平衡二叉树avl-tree">平衡二叉树（AVL Tree）</h1>
+<h3 id="性质-2">性质</h3>
+<p>任意节点的子树的高度差都小于等于 1</p>
+<h1 id="平衡多路查找树b-tree">平衡多路查找树（B-Tree）</h1>
+<p>B-Tree是为磁盘等外存储设备设计的一种平衡查找树。因此在讲B-Tree之前先了解下磁盘的相关知识。</p>
+<p>系统从磁盘读取数据到内存时是以磁盘块（block）为基本单位的，位于同一个磁盘块中的数据会被一次性读取出来，而不是需要什么取什么。</p>
+<p>InnoDB存储引擎中有页（Page）的概念，页是其磁盘管理的最小单位。InnoDB存储引擎中默认每个页的大小为16KB，可通过参数innodb_page_size将页的大小设置为4K、8K、16K，在MySQL中可通过如下命令查看页的大小：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">mysql</span>&gt; <span style="color:#a6e22e">show</span> <span style="color:#a6e22e">variables</span> <span style="color:#a6e22e">like</span> <span style="color:#960050;background-color:#1e0010">&#39;</span><span style="color:#a6e22e">innodb_page_size</span><span style="color:#960050;background-color:#1e0010">&#39;</span>;
+</span></span></code></pre></div><p>B-Tree结构的数据可以让系统高效的找到数据所在的磁盘块。为了描述B-Tree，首先定义一条记录为一个二元组[key, data] ，key为记录的键值，对应表中的主键值，data为一行记录中除主键外的数据。对于不同的记录，key值互不相同。</p>
+<p>一棵m阶B树满足下列条件：</p>
+<ol>
+<li>每个节点至多有m棵子树；</li>
+<li>除根节点外，其他分支节点至少有ceil（m/2）棵子树；根节点至少有两棵子树（除非B树只包含一个节点）</li>
+<li>有j个孩子节点的非叶节点有j−1个关键字，关键字按非降序排列；</li>
+<li>所有叶子节点具有相同的深度，这也说明B树是平衡的，B-tree的名字也是这样来的</li>
+</ol>
+<p><img src="https://www.choudalao.com/uploads/20220521/20220521104750Aa6EFU.png" alt=""></p>
+<p>模拟查找关键字29的过程：</p>
+<ul>
+<li>
+<p>从根节点开始，读取根节点信息，根节点有2个关键字：17和35。因为17 &lt; 29 &lt; 35，所以找到指针P2指向的子树，也就是磁盘块3（第1次I/0操作）</p>
+</li>
+<li>
+<p>读取当前节点信息，当前节点有2个关键字：26和30。26 &lt; 29 &lt; 30，找到指针P2指向的子树，也就是磁盘块8（第2次I/0操作）</p>
+</li>
+<li>
+<p>读取当前节点信息，当前节点有2个关键字：28和29。找到了！（第3次I/0操作）</p>
+</li>
+</ul>
+<p>同样的操作，如果使用平衡二叉搜索树，那么需要至少4次I/O操作。这种优势会随着节点数的增加而更加明显。另外，因为B树节点中的关键字都是排序好的，在节点中的信息被读入内存之后，可以采用二分查找，更进一步减少了读入内存之后的计算时间。由此说明对于外存数据结构来说，I/O次数是其查找信息中最大的时间消耗，而我们要做的所有努力就是尽量在搜索过程中减少I/O操作的次数。</p>
+<h1 id="btree">B+Tree</h1>
+<p>B+Tree是在B-Tree基础上的一种优化，使其更适合实现外存储索引结构，InnoDB存储引擎就是用B+Tree实现其索引结构。</p>
+<p>B+Tree相对于B-Tree有几点不同：</p>
+<ul>
+<li>非叶子节点只存储键值信息。</li>
+<li>所有叶子节点之间都有一个链指针。</li>
+<li>数据记录都存放在叶子节点中。</li>
+</ul>
+<p><img src="https://www.choudalao.com/uploads/20220521/20220521223859AYENrI.png" alt=""></p>
+<p>B+树的说明：</p>
+<ul>
+<li>B+树的搜索算法和B树的区别在于B+树只有在到达叶子节点才命中（B树可以在非叶子节点命中）；</li>
+<li>B+树所有的关键字都出现在叶子节点的链表中（数据只能在叶子节点），并且链表中的关键字 （数据）恰好是有序的；</li>
+<li>B+树的非叶子节点相当于是叶子节点的索引，它更适合文件索引系统。</li>
+</ul>
+<p>问题：为什么B+树比B树更适合文件索引系统和数据库系统？</p>
+<ul>
+<li>B+树的内部节点（非叶子节点）不保存具体的数据，相比于B树的内部节点更小。故相同容量的磁盘能容纳的内部节点数目更多，磁盘I/O的读写次数也会降低；</li>
+<li>B+树查询必须查找到叶子节点，B树只要匹配到即可而不用管元素位置（B树最好情况下查找到根节点，最坏情况下查找到叶子结点，所说性能很不稳定），因此B+树查找更稳定；</li>
+<li>在数据库中基于范围的查询是非常频繁的，B+树首先通过二分查找，找到范围下限，然后遍历叶子节点链表直至找到上限；而B树首先二分查找到范围下限，在不断通过中序遍历，直到查找到范围的上限。</li>
+</ul>
+<p>问题：为什么InnoDB存储引擎索引使用B+树？下面做一个推算</p>
+<p>InnoDB存储引擎中页的大小为16KB，一般表的主键类型为INT（占用4个字节）或BIGINT（占用8个字节），指针类型也一般为4或8个字节，也就是说一个页（B+Tree中的一个节点）中大概存储16KB/(8B+8B)=1K个键值（因为是估值，为方便计算，这里的K取值为10^3）。也就是说一个深度为3的B+Tree索引可以维护10^3 * 10^3 * 10^3 = 10亿 条记录。</p>
+<p>实际情况中每个节点可能不能填充满，因此在数据库中，B+Tree的高度一般都在2<del>4层。mysql的InnoDB存储引擎在设计时是将根节点常驻内存的，也就是说查找某一键值的行记录时最多只需要1</del>3次磁盘I/O操作。</p>
+<p>数据库中的B+Tree索引可以分为聚集索引（clustered index）和辅助索引（secondary index）。上面的B+Tree示例图在数据库中的实现即为聚集索引，聚集索引的B+Tree中的叶子节点存放的是整张表的行记录数据。辅助索引与聚集索引的区别在于辅助索引的叶子节点并不包含行记录的全部数据，而是存储相应行数据的聚集索引键，即主键。当通过辅助索引来查询数据时，InnoDB存储引擎会遍历辅助索引找到主键，然后再通过主键在聚集索引中找到完整的行记录数据。</p>
+<p>文本参考
+<a href="https://baijiahao.baidu.com/s?id=1716280965468227548&amp;wfr=spider&amp;for=pc">https://baijiahao.baidu.com/s?id=1716280965468227548&amp;wfr=spider&amp;for=pc</a>
+<a href="https://blog.csdn.net/yin767833376/article/details/81511377">https://blog.csdn.net/yin767833376/article/details/81511377</a></p>
+
+		</div>
+	</article>
+</main>
+
+
+
+
+			</div>
+			
+		</div>
+		<footer class="footer">
+	<div class="container footer__container flex">
+		
+		<div class="footer__copyright">
+			&copy; 2026 臭大佬博客.
+			<span class="footer__copyright-credits">基于 <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> 引擎和 <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> 主题</span>
+		</div>
+	</div>
+</footer>
+	</div>
+<script async defer src="/js/menu.js"></script>
+</body>
+</html>

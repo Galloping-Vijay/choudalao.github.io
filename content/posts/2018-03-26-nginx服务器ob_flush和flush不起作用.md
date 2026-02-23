@@ -1,0 +1,38 @@
+---
+title: "nginx服务器ob_flush和flush不起作用"
+date: 2018-03-26T12:08:03+08:00
+updated: 2026-02-22T09:44:53+08:00
+author: "臭大佬"
+categories: [linux]
+description: "nginx服务器ob_flush和flush不起作用"
+cover: "http://www.choudalao.com/uploads/20191016/UvgmMvrkQeBDKRvoU0qFIZDcrFLzHfTjiqEVx5yT.jpeg"
+click: 3451
+---
+
+&lt;p&gt;今天想做一个即时聊天的小应用,发现在nginx环境下,ob_flush不起作用,而apache没有问题,猜测应该是nginx的配置问题,代码如下:&lt;/p&gt;&lt;pre lay-lang=&quot;PHP&quot;&gt;&lt;code class=&quot;PHP&quot;&gt;public function index()
+{
+    if (ob_get_level() == 0) {
+        //判断缓冲区等级，如果没有活动缓冲区
+        ob_start();        //打开缓冲区
+        echo str_repeat('', 4096);
+        ob_end_flush();
+        ob_flush();
+    }
+    $i = 1;
+    while ($i &amp;lt;= 20) {
+        echo $i++;
+        echo str_pad('', 1025);
+        echo &quot;
+&quot;;
+
+        ob_flush();       //发送缓冲区数据
+        flush();        //刷新缓冲区
+        sleep(1);       //暂停1秒
+    }
+}&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;strong&gt;解决方案:&lt;/strong&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;text-align: justify;&quot;&gt;检查nginx配置文件(nginx.conf)，禁用nginx的buffering：&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;text-align: justify;&quot;&gt;&lt;br&gt;&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;text-align: justify;&quot;&gt;&lt;/span&gt;&lt;/p&gt;&lt;pre lay-lang=&quot;PHP&quot;&gt;&lt;code class=&quot;PHP&quot;&gt;  #gzip  on;
+
+  proxy_buffering off;
+
+  gzip off;
+
+  fastcgi_keep_conn on;&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;span style=&quot;text-align: justify;&quot;&gt;&lt;br&gt;&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;text-align: justify;&quot;&gt;&lt;/span&gt;&lt;/p&gt;&lt;p style=&quot;text-align: justify;&quot;&gt;检查php.ini，禁用buffering：&lt;/p&gt;&lt;p style=&quot;text-align: justify;&quot;&gt;output_buffering = off&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;text-align: justify;&quot;&gt;注意这句配置不能通过ini_set()函数动态在程序中设置，这在php官方手册中有说明：&lt;/span&gt;&lt;br style=&quot;text-align: justify;&quot;&gt;&lt;span style=&quot;text-align: justify;&quot;&gt;the output_buffering setting is PHP_INI_PERDIR therefore it may not be set using ini_set()&lt;/span&gt;&lt;br style=&quot;text-align: justify;&quot;&gt;&lt;span style=&quot;text-align: justify;&quot;&gt;经过上面两步的配置(nginx.conf和php.ini)后，重启nginx就可以了，再次测试文章开头的代码，成功逐行输出&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;text-align: justify;&quot;&gt;&lt;br&gt;&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;text-align: justify;&quot;&gt;&lt;/span&gt;&lt;/p&gt;&lt;p style=&quot;text-align: justify;&quot;&gt;&lt;span&gt;补充:PHP flush()与ob_flush()的区别&lt;/span&gt;&lt;/p&gt;&lt;p style=&quot;text-align: justify;&quot;&gt;buffer ---- flush()&lt;br&gt;&amp;nbsp;&lt;br&gt;buffer是一个内存地址空间,Linux系统默认大小一般为4096(1kb),即一个内存页。主要用于存储速度不同步的设备或者优先级不同的 设备之间传办理数据的区域。通过buffer，可以使进程这间的相互等待变少。这里说一个通俗一点的例子，你打开文本编辑器编辑一个文件的时候，你每输入 一个字符，操作系统并不会立即把这个字符直接写入到磁盘，而是先写入到buffer，当写满了一个buffer的时候，才会把buffer中的数据写入磁 盘，当然当调用内核函数flush()的时候，强制要求把buffer中的脏数据写回磁盘。&lt;br&gt;同样的道理，当执行echo,print的时候，输出并没有立即通过tcp传给客户端浏览器显示, 而是将数据写入php buffer。php output_buffering机制，意味在tcp buffer之前，建立了一新的队列，数据必须经过该队列。当一个php buffer写满的时候，脚本进程会将php buffer中的输出数据交给系统内核交由tcp传给浏览器显示。所以，数据会依次写到这几个地方echo/pring -&amp;gt; php buffer -&amp;gt; tcp buffer -&amp;gt; browser&lt;/p&gt;&lt;p style=&quot;text-align: justify;&quot;&gt;&lt;span&gt;php output_buffering --- ob_flush()&lt;/span&gt;&lt;/p&gt;&lt;p style=&quot;text-align: justify;&quot;&gt;默认情况下，php buffer是开启的，而且该buffer默认值是4096，即1kb。你可以通过在php.ini配置文件中找到output_buffering配置.当echo,print等输出用户数据的时候，输出数据都会写入到php output_buffering中，直到output_buffering写满，会将这些数据通过tcp传送给浏览器显示。你也可以通过 ob_start()手动激活php output_buffering机制，使得即便输出超过了1kb数据，也不真的把数据交给tcp传给浏览器，因为ob_start()将php buffer空间设置到了足够大 。只有直到脚本结束，或者调用ob_end_flush函数，才会把数据发送给客户端浏览器。&lt;/p&gt;&lt;p style=&quot;text-align: justify;&quot;&gt;&lt;br&gt;这两个函数的使用怕是很多人最迷惑的一个问题，手册上对两个函数的解释也语焉不详，没有明确的指出它们的区别，似乎二者的功能都是刷新输出缓存。但在我们文章一开始的代码中如果讲fush()替换成ob_flush()，程序就再不能正确执行了。显然，它们是有区别的，否则也手册中直接说明其中一个是另外一个函数的别名即可了，没必要分别说明。那么它们的区别到底是什么呢？&lt;/p&gt;&lt;p style=&quot;text-align: justify;&quot;&gt;在没有开启缓存时，脚本输出的内容都在服务器端处于等待输出的状态 ，flush()可以将等待输出的内容立即发送到客户端。&lt;/p&gt;&lt;p style=&quot;text-align: justify;&quot;&gt;开启缓存后，脚本输出的内容存入了输出缓存中 ，这时没有处于等待输出状态的内容，你直接使用flush()不会向客户端发出任何内容。而 ob_flush()的作用就是将本来存在输出缓存中的内容取出来，设置为等待输出状态，但不会直接发送到客户端 ，这时你就需要先使用 ob_flush()再使用flush()，客户端才能立即获得脚本的输出。&lt;/p&gt;&lt;p style=&quot;text-align: justify;&quot;&gt;&lt;span&gt;一. flush和ob_flush的正确顺序，正确应是，先ob_flush再flush，如下：&amp;nbsp;&lt;br&gt;&lt;/span&gt;ob_flush();&lt;br&gt;flush();&lt;br&gt;如果Web服务器的操作系统是windows系统，那顺序颠倒或者不使用ob_flush()也不会出现问题。[有待求证 ] 但是在Linux系统上就无法刷新输出缓冲。&lt;/p&gt;&lt;p style=&quot;text-align: justify;&quot;&gt;&lt;span&gt;output buffering函数&lt;br&gt;&lt;/span&gt;1.bool ob_start ([ callback $output_callback [, int $chunk_size [, bool $erase ]]] )&lt;br&gt;激活output_buffering机制。一旦激活，脚本输出不再直接出给浏览器，而是先暂时写入php buffer内存区域。&lt;br&gt;php默认开启output_buffering机制，只不过，通过调用ob_start()函数据output_buffering值扩展到足够 大 。也可以指定$chunk_size来指定output_buffering的值。$chunk_size默认值是0,表示直到脚本运行结束，php buffer中的数据才会发送到浏览器。如果你设置了$chunk_size的大小 ，则表示只要buffer中数据长度达到了该值，就会将buffer中 的数据发送给浏览器。&lt;br&gt;当然，你可以通过指定$ouput_callback，来处理buffer中的数据。比如函数ob_gzhandler，将buffer中的数据压缩后再传送给浏览器。&lt;br&gt;第三个参数：是否擦除缓存，可选，默认是true，如果设置为false，则在脚本执行结束前，缓存都不会被清除。&lt;br&gt;2.ob_get_contents&lt;br&gt;获取一份php buffer中的数据拷贝。值得注意的是，你应该在ob_end_clean()函数调用前调用该函数，否则ob_get_contents()返回一个空字符中。&lt;/p&gt;&lt;p style=&quot;text-align: justify;&quot;&gt;可以使用ob_get_contents()以字符串形式获取服务端缓存的数据，&lt;br&gt;使用ob_end_flush()则会输出被缓存起来的数据，并关闭缓存。&lt;br&gt;而使用ob_end_clean()则会静默的清除服务端缓存的数据，而不会有任何数据或其他行为。&lt;br&gt;服务端的缓存是堆叠起来的，也就是说你在开启了ob_start()后，关闭之前，在其内部还 可以开启另外一个缓存ob_start()。&lt;/p&gt;&lt;p style=&quot;text-align: justify;&quot;&gt;不过你也要务必保证关闭缓存的操作和开启缓存的操作数量一样多。&amp;nbsp;&lt;br&gt;ob_start() 可以指定一个回调函数来处理缓存数据，如果一个ob_start()内部嵌套了另一个ob_start()，我们假定，外层的ob_start()，编号是A，内层的ob_start()编号是B，它们各自制定了一个回调函数分别是functionA和functionB，那么在缓存B中的数据输出时，它会先辈funcitonB回调函数处理，再交给外层的functionA回调函数处理，之后才能输出到客户端。&lt;/p&gt;&lt;p style=&quot;text-align: justify;&quot;&gt;另外，手册说，对于某些web服务器，比如apache，在使用回调函数有可能会改变程序当前的工作目录，解决方法是在回调函数中自行手动把工作目录修改回来，用chdir函数，这点似乎不常遇到，遇到的时候记得去查手册吧。&lt;/p&gt;&lt;p style=&quot;text-align: justify;&quot;&gt;&lt;span&gt;3.ob_end_flush与ob_end_clean&lt;br&gt;&lt;/span&gt;这二个函数有点相似，都会关闭ouptu_buffering机制。但不同的是，ob_end_flush只是把php buffer中的数据冲(flush/send)到客户端浏览器，而ob_clean_clean将php bufeer中的数据清空(erase)，但不发送给客户端浏览器。&lt;/p&gt;&lt;p style=&quot;text-align: justify;&quot;&gt;ob_end_flush调用之前 ，php buffer中的数据依然存在，ob_get_contents()依然可以获取php buffer中的数据拷贝。&lt;/p&gt;&lt;p style=&quot;text-align: justify;&quot;&gt;而ob_end_flush()调用之后 ob_get_contents()取到的是空字符串，同时浏览器也接收不到输出，即没有任何输出。&lt;/p&gt;&lt;p style=&quot;text-align: justify;&quot;&gt;可以使用ob_get_contents()以字符串形式获取服务端缓存的数据，使用ob_end_flush()则会输出被缓存起来的数据，并关闭缓存。&lt;br&gt;而使用ob_end_clean()则会静默的清除服务端缓存的数据，而不会有任何数据或其他行为。&lt;br&gt;服务端的缓存是堆叠起来的，也就是说你在开启了ob_start()后，关闭之前，在其内部还可以开启另外一个缓存ob_start()。不过你也要务必保证关闭缓存的操作和开启缓存的操作数量一样多。&lt;br&gt;ob_start() 可以指定一个回调函数来处理缓存数据，如果一个ob_start()内部嵌套了另一个ob_start()，我们假定，外层的ob_start()，编号是A，内层的ob_start()编号是B，它们各自制定了一个回调函数分别是functionA和functionB，那么在缓存B中的数据输出时，它会先辈funcitonB回调函数处理，再交给外层的functionA回调函数处理，之后才能输出到客户端。&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;text-align: justify;&quot;&gt;&lt;br&gt;&lt;/span&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;text-align: justify;&quot;&gt;&lt;br&gt;&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;text-align: justify;&quot;&gt;&lt;br&gt;&lt;/span&gt;&lt;/p&gt;

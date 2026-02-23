@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Go - 臭大佬博客</title>
+	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
+	<meta name="description" content="">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link rel="dns-prefetch" href="//fonts.googleapis.com">
+	<link rel="dns-prefetch" href="//fonts.gstatic.com">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
+
+	<link rel="stylesheet" href="/css/style.css">
+	
+	<link rel="alternate" type="application/rss+xml" href="/categories/go/index.xml" title="臭大佬博客">
+
+	<link rel="shortcut icon" href="/favicon.ico">
+		
+</head>
+<body class="body">
+	<div class="container container--outer">
+		<header class="header">
+	<div class="container header__container">
+		
+	<div class="logo">
+		<a class="logo__link" href="/" title="臭大佬博客" rel="home">
+			<div class="logo__item logo__text">
+					<div class="logo__title">臭大佬博客</div>
+					
+				</div>
+		</a>
+	</div>
+		
+<nav class="menu">
+	<button class="menu__btn" aria-haspopup="true" aria-expanded="false" tabindex="0">
+		<span class="menu__btn-title" tabindex="-1">菜单</span>
+	</button>
+	<ul class="menu__list">
+		<li class="menu__item">
+			<a class="menu__link" href="/">
+				
+				<span class="menu__text">首页</span>
+				
+			</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/post/">
+				
+				<span class="menu__text">归档</span>
+				
+			</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/about/">
+				
+				<span class="menu__text">关于</span>
+				
+			</a>
+		</li>
+	</ul>
+</nav>
+
+	</div>
+</header>
+		<div class="wrapper flex">
+			<div class="primary">
+			
+<main class="main list" role="main">
+	<header class="main__header">
+		<h1 class="main__title">Go</h1>
+	</header><article class="list__item post">
+	
+	<header class="list__header">
+		<h2 class="list__title post__title">
+			<a href="/posts/2020-11-06-xxx-be-unexportedgo-lint/" rel="bookmark">
+			xxx be unexportedgo-lint
+			</a>
+		</h2>
+		
+	</header>
+	<div class="content list__excerpt post__content clearfix">
+		<h1 id="问题">问题</h1>
+<p>在用 <code>vscode</code> 写 <code>go</code> 代码的时候，总是有波浪线存在，如下图：</p>
+<p><img src="https://www.choudalao.com/uploads/20201105/20201105235334RJDqjA.png" alt=""></p>
+<h1 id="解决">解决</h1>
+<p>如截图，有三处会触发<code>go-lint</code>的警告，分别是结构体上、方法上、下划线变量上</p>
+<p>1： 结构体的上一行，编写结构体注释，而且一定要用这个结构体名称开头，如下:
+<img src="https://www.choudalao.com/uploads/20201106/20201106000020ky6qiq.png" alt=""></p>
+	</div>
+</article><article class="list__item post">
+	
+	<header class="list__header">
+		<h2 class="list__title post__title">
+			<a href="/posts/2020-11-05-go-%E8%AF%AD%E8%A8%80%E4%B8%AD%E7%9A%84base64%E5%8A%A0%E5%AF%86/" rel="bookmark">
+			go 语言中的Base64加密
+			</a>
+		</h2>
+		
+	</header>
+	<div class="content list__excerpt post__content clearfix">
+		<p>Base64是一种任意二进制到文本字符串的编码方法，常用于在URL、Cookie、网页中传输少量二进制数据。</p>
+<p>首先使用Base64编码需要一个含有64个字符的表，这个表由大小写字母、数字、+和/组成。采用Base64编码处理数据时，会把每三个字节共24位作为一个处理单元，再分为四组，每组6位，查表后获得相应的字符即编码后的字符串。编码后的字符串长32位，这样，经Base64编码后，原字符串增长1/3。如果要编码的数据不是3的倍数，最后会剩下一到两个字节，Base64编码中会采用\x00在处理单元后补全，编码后的字符串最后会加上一到两个 = 表示补了几个字节。</p>
+	</div>
+</article><article class="list__item post">
+	
+	<header class="list__header">
+		<h2 class="list__title post__title">
+			<a href="/posts/2020-08-24-beego-%E8%8E%B7%E5%8F%96-axios-%E8%AF%B7%E6%B1%82%E6%95%B0%E6%8D%AE-%E8%87%AD%E5%A4%A7%E4%BD%AC/" rel="bookmark">
+			beego 获取 axios 请求数据 | 臭大佬
+			</a>
+		</h2>
+		
+	</header>
+	<div class="content list__excerpt post__content clearfix">
+		<h1 id="开发环境">开发环境</h1>
+<p>前端：Vue
+后端：Beego</p>
+<h1 id="问题">问题</h1>
+<p>发现一个很奇怪的问题，<code>Beego</code>中用<code>GetString(key string) string</code>无法获取<code>Axios</code>请求数据。</p>
+<p><code>Beego</code>中用<code>GetString(key string) string</code>获取请求参数,使用工具<code>apizza</code>(类似于postman的工具)发起请求，可以正常得到数据：</p>
+	</div>
+</article><article class="list__item post">
+	
+	<header class="list__header">
+		<h2 class="list__title post__title">
+			<a href="/posts/2020-08-22-beego-%E8%A7%A3%E5%86%B3%E8%B7%A8%E5%9F%9F%E9%97%AE%E9%A2%98-%E8%87%AD%E5%A4%A7%E4%BD%AC/" rel="bookmark">
+			beego 解决跨域问题 | 臭大佬
+			</a>
+		</h2>
+		
+	</header>
+	<div class="content list__excerpt post__content clearfix">
+		<h1 id="起因">起因</h1>
+<p>前后端分离的项目，由于<code>浏览器的同源策略</code>，很容易导致跨域问题，前端在请求接口的时候报如下错误：</p>
+<p><em>has been blocked by CORS policy: No &lsquo;Access-Control-Allow-Origin&rsquo; header is present</em></p>
+<p><img src="https://www.choudalao.com/uploads/20200822/20200822202720lrUkRZ.png" alt=""></p>
+<h1 id="解决">解决</h1>
+<p>其实跨域问题前后端两端都可以解决，这里讨论以<code>go</code>的<code>beego</code>框架的解决方法。</p>
+	</div>
+</article><article class="list__item post">
+	
+	<header class="list__header">
+		<h2 class="list__title post__title">
+			<a href="/posts/2020-08-22-go-%E4%B8%AD%E5%AE%9E%E7%8E%B0-jwt-%E7%99%BB%E5%BD%95-%E8%87%AD%E5%A4%A7%E4%BD%AC/" rel="bookmark">
+			Go 中实现 JWT 登录 | 臭大佬
+			</a>
+		</h2>
+		
+	</header>
+	<div class="content list__excerpt post__content clearfix">
+		<h1 id="什么是jwt">什么是JWT</h1>
+<blockquote>
+<p>Json web token (JWT), 是为了在网络应用环境间传递声明而执行的一种基于JSON的开放标准（(RFC 7519).该token被设计为紧凑且安全的，特别适用于分布式站点的单点登录（SSO）场景。JWT的声明一般被用来在身份提供者和服务提供者间传递被认证的用户身份信息，以便于从资源服务器获取资源，也可以增加一些额外的其它业务逻辑所必须的声明信息，该token也可直接被用于认证，也可被加密。</p>
+	</div>
+</article><article class="list__item post">
+	
+	<header class="list__header">
+		<h2 class="list__title post__title">
+			<a href="/posts/2020-08-19-go-%E8%AF%AD%E8%A8%80%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%92%8C%E6%95%B0%E5%AD%97%E8%BD%AC%E5%8C%96-%E8%87%AD%E5%A4%A7%E4%BD%AC/" rel="bookmark">
+			Go 语言字符串和数字转化 | 臭大佬
+			</a>
+		</h2>
+		
+	</header>
+	<div class="content list__excerpt post__content clearfix">
+		<h1 id="代码">代码</h1>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> (
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;fmt&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;strconv&#34;</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">str</span> <span style="color:#f92672">:=</span> <span style="color:#e6db74">&#34;17&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">int0</span>, <span style="color:#a6e22e">err0</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">strconv</span>.<span style="color:#a6e22e">Atoi</span>(<span style="color:#a6e22e">str</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;string到int,默认值: %v\n&#34;</span>, <span style="color:#a6e22e">str</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err0</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;...报错了\n&#34;</span>)
+</span></span><span style="display:flex;"><span>	} <span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;...转化前：%T\n&#34;</span>, <span style="color:#a6e22e">str</span>)
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;...转化后：%T\n&#34;</span>, <span style="color:#a6e22e">int0</span>)
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;string到int64,默认值: %v\n&#34;</span>, <span style="color:#a6e22e">str</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">int1</span>, <span style="color:#a6e22e">err1</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">strconv</span>.<span style="color:#a6e22e">ParseInt</span>(<span style="color:#a6e22e">str</span>, <span style="color:#ae81ff">10</span>, <span style="color:#ae81ff">64</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err1</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;...报错了\n&#34;</span>)
+</span></span><span style="display:flex;"><span>	} <span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;...转化前：%T\n&#34;</span>, <span style="color:#a6e22e">str</span>)
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;...转化后：%T\n&#34;</span>, <span style="color:#a6e22e">int1</span>)
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">int2</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">12</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">str2</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">strconv</span>.<span style="color:#a6e22e">Itoa</span>(<span style="color:#a6e22e">int2</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;int到string,默认值: %v\n&#34;</span>, <span style="color:#a6e22e">int2</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;...转化前：%T\n&#34;</span>, <span style="color:#a6e22e">int2</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;...转化后：%T\n&#34;</span>, <span style="color:#a6e22e">str2</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">int3</span> <span style="color:#66d9ef">int64</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">str3</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">strconv</span>.<span style="color:#a6e22e">FormatInt</span>(<span style="color:#a6e22e">int3</span>, <span style="color:#ae81ff">10</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;int64到string,默认值: %v\n&#34;</span>, <span style="color:#a6e22e">int3</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;...转化前：%T\n&#34;</span>, <span style="color:#a6e22e">int3</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;...转化后：%T\n&#34;</span>, <span style="color:#a6e22e">str3</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// 结果</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">//string到int,默认值: 17</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">//...转化前：string</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">//...转化后：int</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">//string到int64,默认值: 17</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">//...转化前：string</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">//...转化后：int64</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">//int到string,默认值: 12</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">//...转化前：int</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">//...转化后：string</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">//int64到string,默认值: 0</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">//...转化前：int64</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">//...转化后：string</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p><img src="https://www.choudalao.com/uploads/20200819/20200819234607xteXfX.png" alt=""></p>
+	</div>
+</article><article class="list__item post">
+	
+	<header class="list__header">
+		<h2 class="list__title post__title">
+			<a href="/posts/2020-08-18-go-%E6%A0%87%E5%87%86%E5%BA%93-fmt/" rel="bookmark">
+			Go 标准库-fmt
+			</a>
+		</h2>
+		
+	</header>
+	<div class="content list__excerpt post__content clearfix">
+		<h1 id="简介">简介</h1>
+<p>fmt包实现了类似C语言printf和scanf的格式化I/O。格式化动作（&lsquo;verb&rsquo;）源自C语言但更简单。</p>
+<h4 id="占位符">占位符：</h4>
+<blockquote>
+<p>// 通用verbs
+%v       　值的默认格式
+%+v      　类似%v,但输出结构体时会添加字段名
+%#v 　　 Go语法表示值
+%T  　　 Go语法表示类型
+%%     　 百分号表示
+// 浮点数
+%t     　 true或false
+// 整数
+%b  表示二进制
+%c  该值对应的unicode吗值
+%d  表示十进制
+%o  表示八进制
+%q  该值对应的单引号括起来的go语法字符字面值，必要时会采用安全的转义表示
+%x  表示为十六进制，使用a-f
+%X  表示为十六进制，使用A-F
+%U  表示为Unicode格式：U+1234，等价于&quot;U+%04X&quot;
+// 浮点数与复数
+%b  无小数部分、二进制指数的科学计数法，如-123456p-78；参见strconv.FormatFloat
+%e  科学计数法，例如 -1234.456e+78
+%E  科学计数法，例如 -1234.456E+78
+%f  有小数点而无指数，例如 123.456
+%F  等价于%f
+%g  根据实际情况采用%e或%f格式（以获得更简洁、准确的输出）
+%G  根据实际情况采用%E或%F格式（以获得更简洁、准确的输出
+// string与[]byte
+%s  输出字符串表示（string类型或[]byte)
+%q  双引号围绕的字符串，由Go语法安全地转义
+%x  十六进制，小写字母，每字节两个字符 （使用a-f）
+%X  十六进制，大写字母，每字节两个字符 （使用A-F）
+// Slice
+%p       切片第一个元素的指针
+// point
+%p       十六进制内存地址,前缀ox</p>
+	</div>
+</article><article class="list__item post">
+	
+	<header class="list__header">
+		<h2 class="list__title post__title">
+			<a href="/posts/2020-08-14-beego-%E7%9A%84-orm-%E4%BD%BF%E7%94%A8/" rel="bookmark">
+			beego 的 ORM 使用
+			</a>
+		</h2>
+		
+	</header>
+	<div class="content list__excerpt post__content clearfix">
+		<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>package main
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>import <span style="color:#f92672">(</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;fmt&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;github.com/astaxie/beego/orm&#34;</span>
+</span></span><span style="display:flex;"><span>	_ <span style="color:#e6db74">&#34;github.com/go-sql-driver/mysql&#34;</span> // import your used driver
+</span></span><span style="display:flex;"><span><span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>// Model Struct
+</span></span><span style="display:flex;"><span>type User struct <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>	Id   int
+</span></span><span style="display:flex;"><span>	Name string <span style="color:#e6db74">`</span>orm:<span style="color:#e6db74">&#34;size(100)&#34;</span><span style="color:#e6db74">`</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>func init<span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>	// set default database
+</span></span><span style="display:flex;"><span>	orm.RegisterDataBase<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;default&#34;</span>, <span style="color:#e6db74">&#34;mysql&#34;</span>, <span style="color:#e6db74">&#34;root:root@tcp(127.0.0.1:3306)/test?charset=utf8&#34;</span>, 30<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>	fmt.Println<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;创建ORM实例&#34;</span><span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>	// register model
+</span></span><span style="display:flex;"><span>	orm.RegisterModel<span style="color:#f92672">(</span>new<span style="color:#f92672">(</span>User<span style="color:#f92672">))</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	// create table
+</span></span><span style="display:flex;"><span>	fmt.Println<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;创建user表&#34;</span><span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>	orm.RunSyncdb<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;default&#34;</span>, false, true<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>func main<span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>	o :<span style="color:#f92672">=</span> orm.NewOrm<span style="color:#f92672">()</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	user :<span style="color:#f92672">=</span> User<span style="color:#f92672">{</span>Name: <span style="color:#e6db74">&#34;slene&#34;</span><span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	// insert
+</span></span><span style="display:flex;"><span>	id, err :<span style="color:#f92672">=</span> o.Insert<span style="color:#f92672">(</span>&amp;user<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>	fmt.Printf<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;ID: %d, ERR: %v\n&#34;</span>, id, err<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	// update
+</span></span><span style="display:flex;"><span>	user.Name <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;astaxie&#34;</span>
+</span></span><span style="display:flex;"><span>	num, err :<span style="color:#f92672">=</span> o.Update<span style="color:#f92672">(</span>&amp;user<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>	fmt.Printf<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;NUM: %d, ERR: %v\n&#34;</span>, num, err<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	// read one
+</span></span><span style="display:flex;"><span>	u :<span style="color:#f92672">=</span> User<span style="color:#f92672">{</span>Id: user.Id<span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>	err <span style="color:#f92672">=</span> o.Read<span style="color:#f92672">(</span>&amp;u<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>	fmt.Printf<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;ERR: %v\n&#34;</span>, err<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	// delete
+</span></span><span style="display:flex;"><span>	num, err <span style="color:#f92672">=</span> o.Delete<span style="color:#f92672">(</span>&amp;u<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>	fmt.Printf<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;NUM: %d, ERR: %v\n&#34;</span>, num, err<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span></code></pre></div>
+	</div>
+</article><article class="list__item post">
+	
+	<header class="list__header">
+		<h2 class="list__title post__title">
+			<a href="/posts/2020-08-13-vscode-%E5%AF%B9%E4%BA%8E-go-%E4%BB%A3%E7%A0%81%E5%A4%AA%E8%BF%87%E4%B8%A5%E8%8B%9B/" rel="bookmark">
+			Vscode 对于 go 代码太过严苛
+			</a>
+		</h2>
+		
+	</header>
+	<div class="content list__excerpt post__content clearfix">
+		<h1 id="问题">问题</h1>
+<p><code>Vscode</code> 对 <code>go</code> 代码要求过于严苛，可能会出现闪烁等问题。</p>
+<h1 id="解决">解决</h1>
+<p>打开 <code>settings.json</code> 文件，配置如下</p>
+<p><img src="https://www.choudalao.com/uploads/20200813/20200813121200r0yh3W.png" alt=""></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>   <span style="color:#e6db74">&#34;go.inferGopath&#34;</span>: false,
+</span></span><span style="display:flex;"><span>   <span style="color:#e6db74">&#34;go.lintFlags&#34;</span>: <span style="color:#f92672">[</span>
+</span></span><span style="display:flex;"><span>   <span style="color:#e6db74">&#34;-min_confidence=.8&#34;</span>
+</span></span><span style="display:flex;"><span>   <span style="color:#f92672">]</span>,
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span></code></pre></div><p>一份具体的配置：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>	    <span style="color:#e6db74">&#34;go.useLanguageServer&#34;</span>: true,
+</span></span><span style="display:flex;"><span>	    <span style="color:#e6db74">&#34;timeline.excludeSources&#34;</span>: <span style="color:#f92672">[]</span>,
+</span></span><span style="display:flex;"><span>	    <span style="color:#e6db74">&#34;[go]&#34;</span>: <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>	        <span style="color:#e6db74">&#34;editor.snippetSuggestions&#34;</span>: <span style="color:#e6db74">&#34;none&#34;</span>,
+</span></span><span style="display:flex;"><span>	        <span style="color:#e6db74">&#34;editor.formatOnSave&#34;</span>: true,
+</span></span><span style="display:flex;"><span>	        <span style="color:#e6db74">&#34;editor.codeActionsOnSave&#34;</span>: <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>	            <span style="color:#e6db74">&#34;source.organizeImports&#34;</span>: true
+</span></span><span style="display:flex;"><span>	        <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>	    <span style="color:#f92672">}</span>,
+</span></span><span style="display:flex;"><span>	    
+</span></span><span style="display:flex;"><span>	    <span style="color:#e6db74">&#34;gopls&#34;</span>: <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>	        <span style="color:#e6db74">&#34;completeUnimported&#34;</span>: true,
+</span></span><span style="display:flex;"><span>	        <span style="color:#e6db74">&#34;usePlaceholders&#34;</span>: true,
+</span></span><span style="display:flex;"><span>	        <span style="color:#e6db74">&#34;completionDocumentation&#34;</span>: true,
+</span></span><span style="display:flex;"><span>	        <span style="color:#e6db74">&#34;deepCompletion&#34;</span>: true, 
+</span></span><span style="display:flex;"><span>	        <span style="color:#e6db74">&#34;matcher&#34;</span>: <span style="color:#e6db74">&#34;fuzzy&#34;</span>,
+</span></span><span style="display:flex;"><span>	        <span style="color:#e6db74">&#34;hoverKind&#34;</span>: <span style="color:#e6db74">&#34;SynopsisDocumentation&#34;</span> // No/Synopsis/Full, default Synopsis
+</span></span><span style="display:flex;"><span>	    <span style="color:#f92672">}</span>,
+</span></span><span style="display:flex;"><span>	    
+</span></span><span style="display:flex;"><span>	    <span style="color:#e6db74">&#34;files.eol&#34;</span>: <span style="color:#e6db74">&#34;\n&#34;</span>, // formatting only supports LF line endings
+</span></span><span style="display:flex;"><span>	
+</span></span><span style="display:flex;"><span>	
+</span></span><span style="display:flex;"><span>	    <span style="color:#e6db74">&#34;go.languageServerExperimentalFeatures&#34;</span>: <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>	        <span style="color:#e6db74">&#34;format&#34;</span>: true,
+</span></span><span style="display:flex;"><span>	        <span style="color:#e6db74">&#34;autoComplete&#34;</span>: true,
+</span></span><span style="display:flex;"><span>	        <span style="color:#e6db74">&#34;rename&#34;</span>: true,
+</span></span><span style="display:flex;"><span>	        <span style="color:#e6db74">&#34;goToDefinition&#34;</span>: true,
+</span></span><span style="display:flex;"><span>	        <span style="color:#e6db74">&#34;hover&#34;</span>: true,
+</span></span><span style="display:flex;"><span>	        <span style="color:#e6db74">&#34;signatureHelp&#34;</span>: true,
+</span></span><span style="display:flex;"><span>	        <span style="color:#e6db74">&#34;goToTypeDefinition&#34;</span>: true,
+</span></span><span style="display:flex;"><span>	        <span style="color:#e6db74">&#34;goToImplementation&#34;</span>: true,
+</span></span><span style="display:flex;"><span>	        <span style="color:#e6db74">&#34;documentSymbols&#34;</span>: true,
+</span></span><span style="display:flex;"><span>	        <span style="color:#e6db74">&#34;workspaceSymbols&#34;</span>: true,
+</span></span><span style="display:flex;"><span>	        <span style="color:#e6db74">&#34;findReferences&#34;</span>: true,
+</span></span><span style="display:flex;"><span>	        <span style="color:#e6db74">&#34;diagnostics&#34;</span>: false
+</span></span><span style="display:flex;"><span>	    <span style="color:#f92672">}</span>,
+</span></span><span style="display:flex;"><span>	    <span style="color:#e6db74">&#34;emmet.excludeLanguages&#34;</span>: <span style="color:#f92672">[</span>
+</span></span><span style="display:flex;"><span>	    
+</span></span><span style="display:flex;"><span>	        <span style="color:#e6db74">&#34;markdown&#34;</span>
+</span></span><span style="display:flex;"><span>	    <span style="color:#f92672">]</span>,
+</span></span><span style="display:flex;"><span>	    <span style="color:#e6db74">&#34;go.addTags&#34;</span>: <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>	    
+</span></span><span style="display:flex;"><span>	<span style="color:#f92672">}</span>,
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;go.inferGopath&#34;</span>: false,
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;go.lintFlags&#34;</span>: <span style="color:#f92672">[</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#e6db74">&#34;-min_confidence=.8&#34;</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#f92672">]</span>,
+</span></span><span style="display:flex;"><span>	<span style="color:#f92672">}</span>
+</span></span></code></pre></div><h3 id="扩展">扩展</h3>
+<p>当go的项目目录不是根目录时，可能引入的包会爆红，无法跳转</p>
+	</div>
+</article><article class="list__item post">
+	
+	<header class="list__header">
+		<h2 class="list__title post__title">
+			<a href="/posts/2020-08-12-go-get-%E6%8B%89%E5%8F%96%E5%A4%AA%E6%85%A2/" rel="bookmark">
+			go get 拉取太慢
+			</a>
+		</h2>
+		
+	</header>
+	<div class="content list__excerpt post__content clearfix">
+		<h1 id="问题">问题</h1>
+<p>由于某种不可抗拒力量，go get 在国内下载特别慢，</p>
+<h1 id="解决方案">解决方案</h1>
+<h2 id="代理镜像拉取">代理镜像拉取</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#a6e22e">go</span> <span style="color:#a6e22e">env</span> <span style="color:#f92672">-</span><span style="color:#a6e22e">w</span> <span style="color:#a6e22e">GO111MODULE</span><span style="color:#f92672">=</span><span style="color:#a6e22e">on</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">go</span> <span style="color:#a6e22e">env</span> <span style="color:#f92672">-</span><span style="color:#a6e22e">w</span> <span style="color:#a6e22e">GOPROXY</span><span style="color:#f92672">=</span><span style="color:#a6e22e">https</span><span style="color:#f92672">://</span><span style="color:#a6e22e">goproxy</span><span style="color:#f92672">.</span><span style="color:#a6e22e">io</span>,<span style="color:#a6e22e">direct</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 设置不走 proxy 的私有仓库，多个用逗号相隔（可选）
+</span></span></span><span style="display:flex;"><span><span style="color:#a6e22e">go</span> <span style="color:#a6e22e">env</span> <span style="color:#f92672">-</span><span style="color:#a6e22e">w</span> <span style="color:#a6e22e">GOPRIVATE</span><span style="color:#f92672">=*.</span><span style="color:#a6e22e">corp</span><span style="color:#f92672">.</span><span style="color:#a6e22e">example</span><span style="color:#f92672">.</span><span style="color:#a6e22e">com</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 设置不走 proxy 的私有组织（可选）
+</span></span></span><span style="display:flex;"><span><span style="color:#a6e22e">go</span> <span style="color:#a6e22e">env</span> <span style="color:#f92672">-</span><span style="color:#a6e22e">w</span> <span style="color:#a6e22e">GOPRIVATE</span><span style="color:#f92672">=</span><span style="color:#a6e22e">example</span><span style="color:#f92672">.</span><span style="color:#a6e22e">com</span><span style="color:#f92672">/</span><span style="color:#a6e22e">org_name</span>
+</span></span></code></pre></div><h2 id="国内镜像">国内镜像</h2>
+<p>收集了几个代理地址：</p>
+	</div>
+</article>
+</main>
+
+<div class="pagination">
+	<a class="pagination__item pagination__item--prev btn" href="/categories/go/page/3/">«</a>
+	<span class="pagination__item pagination__item--current">4/7</span>
+	<a class="pagination__item pagination__item--next btn" href="/categories/go/page/5/">»</a>
+</div>
+
+			</div>
+			
+
+		</div>
+		<footer class="footer">
+	<div class="container footer__container flex">
+		
+		<div class="footer__copyright">
+			&copy; 2026 臭大佬博客.
+			<span class="footer__copyright-credits">基于 <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> 引擎和 <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> 主题</span>
+		</div>
+	</div>
+</footer>
+	</div>
+<script async defer src="/js/menu.js"></script>
+</body>
+</html>

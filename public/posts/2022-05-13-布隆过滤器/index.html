@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>布隆过滤器 - 臭大佬博客</title>
+	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
+	<meta name="description" content="布隆过滤器">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link rel="dns-prefetch" href="//fonts.googleapis.com">
+	<link rel="dns-prefetch" href="//fonts.gstatic.com">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
+
+	<link rel="stylesheet" href="/css/style.css">
+	
+
+	<link rel="shortcut icon" href="/favicon.ico">
+		
+</head>
+<body class="body">
+	<div class="container container--outer">
+		<header class="header">
+	<div class="container header__container">
+		
+	<div class="logo">
+		<a class="logo__link" href="/" title="臭大佬博客" rel="home">
+			<div class="logo__item logo__text">
+					<div class="logo__title">臭大佬博客</div>
+					
+				</div>
+		</a>
+	</div>
+		
+<nav class="menu">
+	<button class="menu__btn" aria-haspopup="true" aria-expanded="false" tabindex="0">
+		<span class="menu__btn-title" tabindex="-1">菜单</span>
+	</button>
+	<ul class="menu__list">
+		<li class="menu__item">
+			<a class="menu__link" href="/">
+				
+				<span class="menu__text">首页</span>
+				
+			</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/post/">
+				
+				<span class="menu__text">归档</span>
+				
+			</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/about/">
+				
+				<span class="menu__text">关于</span>
+				
+			</a>
+		</li>
+	</ul>
+</nav>
+
+	</div>
+</header>
+		<div class="wrapper flex">
+			<div class="primary">
+			
+<main class="main" role="main">
+	<article class="post">
+		<header class="post__header">
+			<h1 class="post__title">布隆过滤器</h1>
+			
+		</header>
+		<div class="content post__content clearfix">
+			<h2 id="布隆过滤器">布隆过滤器</h2>
+<p>它是一个很长的二进制向量和一系列随机映射函数。布隆过滤器可以用于检索一个元素是否在一个集合中。它的优点是空间效率和查询时间都比一般的算法要好的多，缺点是有一定的误识别率和删除困难。</p>
+<h4 id="布隆过滤器的优点">布隆过滤器的优点：</h4>
+<p>时间复杂度低，增加和查询元素的时间复杂为O(N)，（N为哈希函数的个数，通常情况比较小）
+保密性强，布隆过滤器不存储元素本身
+存储空间小，如果允许存在一定的误判，布隆过滤器是非常节省空间的</p>
+<h4 id="布隆过滤器的缺点">布隆过滤器的缺点：</h4>
+<p>有一定的误判率，但是可以通过调整参数来降低
+无法获取元素本身
+很难删除元素</p>
+<h4 id="使用场景">使用场景</h4>
+<p>如果布隆过滤器判断某个key不存在，则它在数据库中一定不存在，如果判断出某个key存在，可能出现误判。</p>
+<p>利用这个判断是否存在的特点可以做很多有趣的事情。</p>
+<ul>
+<li>解决Redis缓存穿透问题（面试重点）</li>
+<li>邮件过滤，使用布隆过滤器来做邮件黑名单过滤</li>
+<li>对爬虫网址进行过滤，爬过的不再爬</li>
+<li>解决新闻推荐过的不再推荐(类似抖音刷过的往下滑动不再刷到)</li>
+<li>HBase\RocksDB\LevelDB等数据库内置布隆过滤器，用于判断数据是否存在，可以减少数据库的IO请求</li>
+</ul>
+<h3 id="布隆过滤器的原理">布隆过滤器的原理</h3>
+<h4 id="数据结构">数据结构</h4>
+<p>布隆过滤器它实际上是一个很长的二进制向量和一系列随机映射函数。以Redis中的布隆过滤器实现为例，Redis中的布隆过滤器底层是一个大型位数组（二进制数组）+多个无偏hash函数。</p>
+<h5 id="一个大型位数组二进制数组">一个大型位数组（二进制数组）：</h5>
+<p><img src="https://www.choudalao.com/uploads/20220513/20220513221325BsC4Zt.png" alt=""></p>
+<h5 id="多个无偏hash函数">多个无偏hash函数：</h5>
+<p>无偏hash函数就是能把元素的hash值计算的比较均匀的hash函数，能使得计算后的元素下标比较均匀的映射到位数组中。</p>
+<p>如下就是一个简单的布隆过滤器示意图，其中k1、k2代表增加的元素，a、b、c即为无偏hash函数，最下层则为二进制数组。</p>
+<p><img src="https://www.choudalao.com/uploads/20220513/20220513221654unWUFz.png" alt=""></p>
+<h4 id="空间计算">空间计算</h4>
+<p>在布隆过滤器增加元素之前，首先需要初始化布隆过滤器的空间，也就是上面说的二进制数组，除此之外还需要计算无偏hash函数的个数。布隆过滤器提供了两个参数，分别是预计加入元素的大小n，运行的错误率f。布隆过滤器中有算法根据这两个参数会计算出二进制数组的大小l，以及无偏hash函数的个数k。</p>
+<p>它们之间的关系比较简单：</p>
+<ul>
+<li>错误率越低，位数组越长，控件占用较大</li>
+<li>错误率越低，无偏hash函数越多，计算耗时较长</li>
+</ul>
+<p>下面是一个免费的在线布隆过滤器在线计算的网址：
+<a href="https://krisives.github.io/bloom-calculator/" title="布隆过滤器在线网址">布隆过滤器在线网址</a></p>
+<h4 id="增加元素">增加元素</h4>
+<p>往布隆过滤器增加元素，添加的key需要根据k个无偏hash函数计算得到多个hash值，然后对数组长度进行取模得到数组下标的位置，然后将对应数组下标的位置的值置为1</p>
+<ul>
+<li>通过k个无偏hash函数计算得到k个hash值</li>
+<li>依次取模数组长度，得到数组索引</li>
+<li>将计算得到的数组索引下标位置数据修改为1</li>
+</ul>
+<p>例如，key = Liziba，无偏hash函数的个数k=3，分别为hash1、hash2、hash3。三个hash函数计算后得到三个数组下标值，并将其值修改为1.
+如图所示：</p>
+<p><img src="https://www.choudalao.com/uploads/20220513/20220513223403i2GNzc.png" alt=""></p>
+<h4 id="查询元素">查询元素</h4>
+<p>布隆过滤器最大的用处就在于判断<strong>某样东西一定不存在或者可能存在</strong>，而这个就是查询元素的结果。其查询元素的过程如下：</p>
+<ul>
+<li>通过k个无偏hash函数计算得到k个hash值</li>
+<li>依次取模数组长度，得到数组索引</li>
+<li>判断索引处的值是否全部为1，如果全部为1则存在（这种存在可能是误判），如果存在一个0则必定不存在</li>
+</ul>
+<h5 id="关于误判">关于误判</h5>
+<p>哈希（hash）函数有以下特点：</p>
+<ul>
+<li>如果根据同一个哈希函数得到的哈希值不同，那么这两个哈希值的原始输入值肯定不同。</li>
+<li>如果根据同一个哈希函数得到的两个哈希值相等，两个哈希值的原始输入值有可能相等，有可能不相等。</li>
+</ul>
+<p>由于哈希算法的第二个特点，可能会存在多个元素计算的hash值是相同的，那么它们取模数组长度后的到的数组索引也是相同的，这就是误判的原因。</p>
+<p>栗子：</p>
+<p><img src="https://www.choudalao.com/uploads/20220513/20220513230732O1WPKN.png" alt=""></p>
+<p>图中有两个key通过hash处理之后值为02，这样就出现了哈希碰撞 ，为了解决这个问题，布隆过滤器引入多个hash函数来降低碰撞的概率。</p>
+<h4 id="删除元素">删除元素</h4>
+<p>因为在数组上的同一个点有可能有多个输入值映射，如果删除了会影响布隆过滤器里其他元素的判断结果。所以，不能删除布隆过滤器里的元素。</p>
+<h3 id="布隆过滤器处理流程">布隆过滤器处理流程</h3>
+<h4 id="开辟空间">开辟空间</h4>
+<p>开辟一个长度为m的位数组（或者称二进制向量）。
+注意使用时最好不要让实际元素数量远大于初始化数量。</p>
+<h4 id="寻找hash函数">寻找hash函数</h4>
+<p>获取几个hash函数，前辈们已经发明了很多运行良好的hash函数，比如BKDRHash，JSHash，RSHash等等。这些hash函数我们直接获取就可以了。</p>
+<h4 id="写入数据">写入数据</h4>
+<p>将所需要判断的内容经过这些hash函数计算，得到几个值，比如用3个hash函数，得到值分别是1000，2000，3000。之后设置m位数组的第1000，2000，3000位的值位二进制1。</p>
+<h4 id="判断">判断</h4>
+<p>接下来就可以判断一个新的内容是不是在我们的集合中。判断的流程和写入的流程是一致的。</p>
+<h2 id="redis-集成布隆过滤器">Redis 集成布隆过滤器</h2>
+<p>下载地址：https://github.com/RedisBloom/RedisBloom/releases</p>
+<h3 id="安装编译">安装&amp;编译</h3>
+<h4 id="下载">下载</h4>
+<p>选择 自己要的版本：https://github.com/RedisBloom/RedisBloom/releases</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">wget</span> <span style="color:#a6e22e">https</span>:<span style="color:#75715e">//github.com/RedisBloom/RedisBloom/archive/refs/tags/v2.2.14.tar.gz</span>
+</span></span></code></pre></div><h4 id="解压">解压</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">tar</span> <span style="color:#f92672">-</span><span style="color:#a6e22e">zxvf</span> <span style="color:#a6e22e">v2</span><span style="color:#ae81ff">.2.14</span>.<span style="color:#a6e22e">tar</span>.<span style="color:#a6e22e">gz</span>
+</span></span></code></pre></div><h4 id="编译">编译</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">cd</span> <span style="color:#a6e22e">RedisBloom</span><span style="color:#f92672">-</span><span style="color:#ae81ff">2.2.14</span><span style="color:#f92672">/</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">make</span>
+</span></span></code></pre></div><p>查看编译结果
+<img src="https://www.choudalao.com/uploads/20220514/20220514002931s6APAS.png" alt=""></p>
+<h4 id="复制到redis目录">复制到redis目录</h4>
+<p>为了便于管理，把编译好的文件放到redis安装目录下：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#75715e">// 假设已经在 redis安装目录下</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">cp</span> <span style="color:#f92672">/</span><span style="color:#a6e22e">root</span><span style="color:#f92672">/</span><span style="color:#a6e22e">RedisBloom</span><span style="color:#f92672">-</span><span style="color:#ae81ff">2.2.14</span><span style="color:#f92672">/</span><span style="color:#a6e22e">redisbloom</span>.<span style="color:#a6e22e">so</span> <span style="color:#a6e22e">redisbloom</span>.<span style="color:#a6e22e">so</span>
+</span></span></code></pre></div><h3 id="redis集成">Redis集成</h3>
+<p>在redis.conf配置文件中加入RedisBloom的redisbloom.so文件的地址</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">loadmodule</span> <span style="color:#f92672">/</span><span style="color:#a6e22e">www</span><span style="color:#f92672">/</span><span style="color:#a6e22e">server</span><span style="color:#f92672">/</span><span style="color:#a6e22e">redis</span><span style="color:#f92672">/</span><span style="color:#a6e22e">redisbloom</span>.<span style="color:#a6e22e">so</span>
+</span></span></code></pre></div><p>重启才生效！</p>
+<h4 id="集成验证">集成验证</h4>
+<p>进入 redis 命令行</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">redis</span><span style="color:#f92672">-</span><span style="color:#a6e22e">cli</span>
+</span></span></code></pre></div><p>如果有设置密码</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">auth</span> <span style="color:#e6db74">&#34;你的redis密码&#34;</span>
+</span></span></code></pre></div><p>判断是否存在 choudalao</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">bf</span>.<span style="color:#a6e22e">exists</span> <span style="color:#a6e22e">user</span> <span style="color:#a6e22e">choudalao</span>
+</span></span></code></pre></div><p><img src="https://www.choudalao.com/uploads/20220514/20220514005706by9q8E.png" alt=""></p>
+<p>有结果出来了，说明集成是OK的。</p>
+<h2 id="php-redis-布隆过滤器">php-redis 布隆过滤器</h2>
+<p>BloomController</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>&lt;<span style="color:#960050;background-color:#1e0010">?</span><span style="color:#a6e22e">php</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> * Description:
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> * User: Vijay &lt;1937832819@qq.com&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> * Site: https://www.choudalao.com/
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> * Date: 2022/5/14
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> * Time: 1:02
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> */</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">namespace</span> <span style="color:#a6e22e">App</span><span style="color:#960050;background-color:#1e0010">\</span><span style="color:#a6e22e">Http</span><span style="color:#960050;background-color:#1e0010">\</span><span style="color:#a6e22e">Controllers</span><span style="color:#960050;background-color:#1e0010">\</span><span style="color:#a6e22e">Api</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">use</span> <span style="color:#a6e22e">App</span><span style="color:#960050;background-color:#1e0010">\</span><span style="color:#a6e22e">Libs</span><span style="color:#960050;background-color:#1e0010">\</span><span style="color:#a6e22e">BloomFilter</span>;
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">use</span> <span style="color:#a6e22e">Predis</span><span style="color:#960050;background-color:#1e0010">\</span><span style="color:#a6e22e">Client</span>;
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">use</span> <span style="color:#a6e22e">App</span><span style="color:#960050;background-color:#1e0010">\</span><span style="color:#a6e22e">Http</span><span style="color:#960050;background-color:#1e0010">\</span><span style="color:#a6e22e">Controllers</span><span style="color:#960050;background-color:#1e0010">\</span><span style="color:#a6e22e">Controller</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">class</span> <span style="color:#a6e22e">BloomController</span> <span style="color:#a6e22e">extends</span> <span style="color:#a6e22e">Controller</span>
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">protected</span> <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">redis</span> = <span style="color:#a6e22e">null</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">public</span> <span style="color:#a6e22e">function</span> <span style="color:#a6e22e">__construct</span>()
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// 这是laravel的redis连接方式，根据自己框架修改就行</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">config</span> = <span style="color:#a6e22e">config</span>(<span style="color:#960050;background-color:#1e0010">&#39;</span><span style="color:#a6e22e">database</span>.<span style="color:#a6e22e">redis</span>.<span style="color:#66d9ef">default</span><span style="color:#960050;background-color:#1e0010">&#39;</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">this</span><span style="color:#f92672">-</span>&gt;<span style="color:#a6e22e">redis</span> = <span style="color:#a6e22e">new</span> <span style="color:#a6e22e">Client</span>(<span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">config</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">this</span><span style="color:#f92672">-</span>&gt;<span style="color:#a6e22e">redis</span><span style="color:#f92672">-</span>&gt;<span style="color:#a6e22e">auth</span>(<span style="color:#a6e22e">env</span>(<span style="color:#960050;background-color:#1e0010">&#39;</span><span style="color:#a6e22e">REDIS_PASSWORD</span><span style="color:#960050;background-color:#1e0010">&#39;</span>));
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">     * 向布隆过滤器压入字符串
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">     * 这里使用了两个hash函数
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">     *
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">     * @return false|string
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">     */</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">public</span> <span style="color:#a6e22e">function</span> <span style="color:#a6e22e">put</span>()
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">redis</span> = <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">this</span><span style="color:#f92672">-</span>&gt;<span style="color:#a6e22e">redis</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">HashFunctionArr</span> = [<span style="color:#960050;background-color:#1e0010">&#39;</span><span style="color:#a6e22e">JSHash</span><span style="color:#960050;background-color:#1e0010">&#39;</span>, <span style="color:#960050;background-color:#1e0010">&#39;</span><span style="color:#a6e22e">PJWHash</span><span style="color:#960050;background-color:#1e0010">&#39;</span>];
+</span></span><span style="display:flex;"><span>        <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">RedisKey</span> = <span style="color:#960050;background-color:#1e0010">&#39;</span><span style="color:#a6e22e">test</span><span style="color:#960050;background-color:#1e0010">&#39;</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">BloomLength</span> = <span style="color:#ae81ff">8</span>;<span style="color:#75715e">//设置布隆位阵列的长度，hash后的数值对其取余</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">BloomFilter</span> = <span style="color:#a6e22e">new</span> <span style="color:#a6e22e">BloomFilter</span>(<span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">redis</span>, <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">HashFunctionArr</span>, <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">RedisKey</span>, <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">BloomLength</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">res</span> = <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">BloomFilter</span><span style="color:#f92672">-</span>&gt;<span style="color:#a6e22e">put</span>(<span style="color:#960050;background-color:#1e0010">&#39;</span><span style="color:#a6e22e">joker</span><span style="color:#960050;background-color:#1e0010">&#39;</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">json_encode</span>(<span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">res</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">     * 判断是否存在
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">     *
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">     * @return false|string
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">     */</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">public</span> <span style="color:#a6e22e">function</span> <span style="color:#a6e22e">exists</span>()
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">redis</span> = <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">this</span><span style="color:#f92672">-</span>&gt;<span style="color:#a6e22e">redis</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">HashFunctionArr</span> = [<span style="color:#960050;background-color:#1e0010">&#39;</span><span style="color:#a6e22e">JSHash</span><span style="color:#960050;background-color:#1e0010">&#39;</span>, <span style="color:#960050;background-color:#1e0010">&#39;</span><span style="color:#a6e22e">PJWHash</span><span style="color:#960050;background-color:#1e0010">&#39;</span>];
+</span></span><span style="display:flex;"><span>        <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">RedisKey</span> = <span style="color:#960050;background-color:#1e0010">&#39;</span><span style="color:#a6e22e">test</span><span style="color:#960050;background-color:#1e0010">&#39;</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">BloomLength</span> = <span style="color:#ae81ff">8</span>;<span style="color:#75715e">//设置布隆位阵列的长度，hash后的数值对其取余</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">BloomFilter</span> = <span style="color:#a6e22e">new</span> <span style="color:#a6e22e">BloomFilter</span>(<span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">redis</span>, <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">HashFunctionArr</span>, <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">RedisKey</span>,<span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">BloomLength</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">res</span> = <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">BloomFilter</span><span style="color:#f92672">-</span>&gt;<span style="color:#a6e22e">isExists</span>(<span style="color:#960050;background-color:#1e0010">&#39;</span><span style="color:#a6e22e">joker</span><span style="color:#960050;background-color:#1e0010">&#39;</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">json_encode</span>(<span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">res</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>BloomFilter</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>&lt;<span style="color:#960050;background-color:#1e0010">?</span><span style="color:#a6e22e">php</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> * Description:
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> * User: Vijay &lt;1937832819@qq.com&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> * Site: https://www.choudalao.com/
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> * Date: 2022/5/14
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> * Time: 1:15
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> */</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">namespace</span> <span style="color:#a6e22e">App</span><span style="color:#960050;background-color:#1e0010">\</span><span style="color:#a6e22e">Libs</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">use</span> <span style="color:#a6e22e">Predis</span><span style="color:#960050;background-color:#1e0010">\</span><span style="color:#a6e22e">Client</span> <span style="color:#a6e22e">as</span> <span style="color:#a6e22e">Redis</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">class</span> <span style="color:#a6e22e">BloomFilter</span>
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// hash 函数数组</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">public</span> <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">HashFunctionArr</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">public</span> <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">Redis</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">public</span> <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">RedisKey</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">public</span> <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">BloomLength</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">public</span> <span style="color:#a6e22e">function</span> <span style="color:#a6e22e">__construct</span>(<span style="color:#a6e22e">Redis</span> <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">redis</span>, <span style="color:#a6e22e">Array</span> <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">HashFunctionArr</span>, <span style="color:#66d9ef">string</span> <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">RedisKey</span>, <span style="color:#66d9ef">int</span> <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">BloomLength</span> = <span style="color:#ae81ff">0</span>)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">this</span><span style="color:#f92672">-</span>&gt;<span style="color:#a6e22e">HashFunctionArr</span> = <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">HashFunctionArr</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">this</span><span style="color:#f92672">-</span>&gt;<span style="color:#a6e22e">Redis</span> = <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">redis</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">this</span><span style="color:#f92672">-</span>&gt;<span style="color:#a6e22e">RedisKey</span> = <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">RedisKey</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">this</span><span style="color:#f92672">-</span>&gt;<span style="color:#a6e22e">BloomLength</span> = <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">BloomLength</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">     * 添加 : 将哈希函数计算后的数字，在二进制对应位置置为1
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">     * 返回 : hash处理后的数字
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">     *
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">     * @param string $string
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">     * @return mixed
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">     */</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">public</span> <span style="color:#a6e22e">function</span> <span style="color:#a6e22e">put</span>(<span style="color:#66d9ef">string</span> <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#66d9ef">string</span>)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">arr</span> = [];
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">foreach</span> (<span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">this</span><span style="color:#f92672">-</span>&gt;<span style="color:#a6e22e">HashFunctionArr</span> <span style="color:#a6e22e">as</span> <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">function</span>) {
+</span></span><span style="display:flex;"><span>            <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">arr</span>[] = <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">hash</span> = <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">this</span><span style="color:#f92672">-</span>&gt;<span style="color:#a6e22e">BloomLength</span> <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span> <span style="color:#960050;background-color:#1e0010">?</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#a6e22e">BloomFilterHash</span>::<span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">function</span>(<span style="color:#960050;background-color:#1e0010">$</span><span style="color:#66d9ef">string</span>) :
+</span></span><span style="display:flex;"><span>                <span style="color:#a6e22e">BloomFilterHash</span>::<span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">function</span>(<span style="color:#960050;background-color:#1e0010">$</span><span style="color:#66d9ef">string</span>) <span style="color:#f92672">%</span> <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">this</span><span style="color:#f92672">-</span>&gt;<span style="color:#a6e22e">BloomLength</span>;
+</span></span><span style="display:flex;"><span>            <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">this</span><span style="color:#f92672">-</span>&gt;<span style="color:#a6e22e">Redis</span><span style="color:#f92672">-</span>&gt;<span style="color:#a6e22e">setBit</span>(<span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">this</span><span style="color:#f92672">-</span>&gt;<span style="color:#a6e22e">RedisKey</span>, <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">hash</span>, <span style="color:#ae81ff">1</span>);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">arr</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">     * 查询是否存在
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">     *  1,存在的一定会存在
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">     *  2,不存在有一定几率会误判
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">     *
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">     * @param string $string
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">     * @return bool
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">     */</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">public</span> <span style="color:#a6e22e">function</span> <span style="color:#a6e22e">isExists</span>(<span style="color:#66d9ef">string</span> <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#66d9ef">string</span>)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">len</span> = <span style="color:#a6e22e">strlen</span>(<span style="color:#960050;background-color:#1e0010">$</span><span style="color:#66d9ef">string</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">res</span> = [];
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">foreach</span> (<span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">this</span><span style="color:#f92672">-</span>&gt;<span style="color:#a6e22e">HashFunctionArr</span> <span style="color:#a6e22e">as</span> <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">function</span>) {
+</span></span><span style="display:flex;"><span>            <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">hash</span> = <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">this</span><span style="color:#f92672">-</span>&gt;<span style="color:#a6e22e">BloomLength</span> <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span> <span style="color:#960050;background-color:#1e0010">?</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#a6e22e">BloomFilterHash</span>::<span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">function</span>(<span style="color:#960050;background-color:#1e0010">$</span><span style="color:#66d9ef">string</span>, <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">len</span>) :
+</span></span><span style="display:flex;"><span>                <span style="color:#a6e22e">BloomFilterHash</span>::<span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">function</span>(<span style="color:#960050;background-color:#1e0010">$</span><span style="color:#66d9ef">string</span>, <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">len</span>) <span style="color:#f92672">%</span> <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">this</span><span style="color:#f92672">-</span>&gt;<span style="color:#a6e22e">BloomLength</span>;
+</span></span><span style="display:flex;"><span>            <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">res</span>[] = <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">this</span><span style="color:#f92672">-</span>&gt;<span style="color:#a6e22e">Redis</span><span style="color:#f92672">-</span>&gt;<span style="color:#a6e22e">getBit</span>(<span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">this</span><span style="color:#f92672">-</span>&gt;<span style="color:#a6e22e">RedisKey</span>, <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">hash</span>);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">foreach</span> (<span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">res</span> <span style="color:#a6e22e">as</span> <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">bit</span>) {
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> (<span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">bit</span> <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>) {
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">false</span>;
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">true</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>BloomFilterHash</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>&lt;<span style="color:#960050;background-color:#1e0010">?</span><span style="color:#a6e22e">php</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> * Description:
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> * User: Vijay &lt;1937832819@qq.com&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> * Site: https://www.choudalao.com/
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> * Date: 2022/5/14
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> * Time: 1:20
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> */</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">namespace</span> <span style="color:#a6e22e">App</span><span style="color:#960050;background-color:#1e0010">\</span><span style="color:#a6e22e">Libs</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">class</span> <span style="color:#a6e22e">BloomFilterHash</span>
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">     * 由Justin Sobel编写的按位散列函数
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">     */</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">public</span> <span style="color:#a6e22e">static</span> <span style="color:#a6e22e">function</span> <span style="color:#a6e22e">JSHash</span>(<span style="color:#960050;background-color:#1e0010">$</span><span style="color:#66d9ef">string</span>, <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">len</span> = <span style="color:#a6e22e">null</span>)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">hash</span> = <span style="color:#ae81ff">1315423911</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">len</span> <span style="color:#f92672">||</span> <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">len</span> = <span style="color:#a6e22e">strlen</span>(<span style="color:#960050;background-color:#1e0010">$</span><span style="color:#66d9ef">string</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span>(<span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">i</span> = <span style="color:#ae81ff">0</span>; <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">i</span> &lt; <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">len</span>; <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">i</span><span style="color:#f92672">++</span>)
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">hash</span> ^= ((<span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">hash</span> <span style="color:#f92672">&lt;&lt;</span> <span style="color:#ae81ff">5</span>) <span style="color:#f92672">+</span> <span style="color:#a6e22e">ord</span>(<span style="color:#960050;background-color:#1e0010">$</span><span style="color:#66d9ef">string</span>[<span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">i</span>]) <span style="color:#f92672">+</span> (<span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">hash</span> <span style="color:#f92672">&gt;&gt;</span> <span style="color:#ae81ff">2</span>));
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> (<span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">hash</span> <span style="color:#f92672">%</span> <span style="color:#ae81ff">0xFFFFFFFF</span>) <span style="color:#f92672">&amp;</span> <span style="color:#ae81ff">0xFFFFFFFF</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">     * 该哈希算法基于AT＆T贝尔实验室的Peter J. Weinberger的工作。
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">     * Aho Sethi和Ulman编写的“编译器（原理，技术和工具）”一书建议使用采用此特定算法中的散列方法的散列函数。
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">     */</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">public</span> <span style="color:#a6e22e">static</span> <span style="color:#a6e22e">function</span> <span style="color:#a6e22e">PJWHash</span>(<span style="color:#960050;background-color:#1e0010">$</span><span style="color:#66d9ef">string</span>, <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">len</span> = <span style="color:#a6e22e">null</span>)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">bitsInUnsignedInt</span> = <span style="color:#ae81ff">4</span> <span style="color:#f92672">*</span> <span style="color:#ae81ff">8</span>; <span style="color:#75715e">//（unsigned int）（sizeof（unsigned int）* 8）;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">threeQuarters</span> = (<span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">bitsInUnsignedInt</span> <span style="color:#f92672">*</span> <span style="color:#ae81ff">3</span>) <span style="color:#f92672">/</span> <span style="color:#ae81ff">4</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">oneEighth</span> = <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">bitsInUnsignedInt</span> <span style="color:#f92672">/</span> <span style="color:#ae81ff">8</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">highBits</span> = <span style="color:#ae81ff">0xFFFFFFFF</span> <span style="color:#f92672">&lt;&lt;</span> (<span style="color:#66d9ef">int</span>)(<span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">bitsInUnsignedInt</span> <span style="color:#f92672">-</span> <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">oneEighth</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">hash</span> = <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">test</span> = <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">len</span> <span style="color:#f92672">||</span> <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">len</span> = <span style="color:#a6e22e">strlen</span>(<span style="color:#960050;background-color:#1e0010">$</span><span style="color:#66d9ef">string</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span>(<span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">i</span> = <span style="color:#ae81ff">0</span>; <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">i</span> &lt; <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">len</span>; <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">i</span><span style="color:#f92672">++</span>)
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">hash</span> = (<span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">hash</span> <span style="color:#f92672">&lt;&lt;</span> (<span style="color:#66d9ef">int</span>)(<span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">oneEighth</span>)) <span style="color:#f92672">+</span> <span style="color:#a6e22e">ord</span>(<span style="color:#960050;background-color:#1e0010">$</span><span style="color:#66d9ef">string</span>[<span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">i</span>]);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">test</span> = <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">hash</span> <span style="color:#f92672">&amp;</span> <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">highBits</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span>(<span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">test</span> <span style="color:#f92672">!=</span> <span style="color:#ae81ff">0</span>)
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">hash</span> = ((<span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">hash</span> ^ (<span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">test</span> <span style="color:#f92672">&gt;&gt;</span> (<span style="color:#66d9ef">int</span>)(<span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">threeQuarters</span>))) <span style="color:#f92672">&amp;</span> (~<span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">highBits</span>));
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> (<span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">hash</span> <span style="color:#f92672">%</span> <span style="color:#ae81ff">0xFFFFFFFF</span>) <span style="color:#f92672">&amp;</span> <span style="color:#ae81ff">0xFFFFFFFF</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">     * 类似于PJW Hash功能，但针对32位处理器进行了调整。它是基于UNIX的系统上的widley使用哈希函数。
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">     */</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">public</span> <span style="color:#a6e22e">static</span> <span style="color:#a6e22e">function</span> <span style="color:#a6e22e">ELFHash</span>(<span style="color:#960050;background-color:#1e0010">$</span><span style="color:#66d9ef">string</span>, <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">len</span> = <span style="color:#a6e22e">null</span>)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">hash</span> = <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">len</span> <span style="color:#f92672">||</span> <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">len</span> = <span style="color:#a6e22e">strlen</span>(<span style="color:#960050;background-color:#1e0010">$</span><span style="color:#66d9ef">string</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span>(<span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">i</span> = <span style="color:#ae81ff">0</span>; <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">i</span> &lt; <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">len</span>; <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">i</span><span style="color:#f92672">++</span>)
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">hash</span> = (<span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">hash</span> <span style="color:#f92672">&lt;&lt;</span> <span style="color:#ae81ff">4</span>) <span style="color:#f92672">+</span> <span style="color:#a6e22e">ord</span>(<span style="color:#960050;background-color:#1e0010">$</span><span style="color:#66d9ef">string</span>[<span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">i</span>]);
+</span></span><span style="display:flex;"><span>            <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">x</span> = <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">hash</span> <span style="color:#f92672">&amp;</span> <span style="color:#ae81ff">0xF0000000</span>;
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span>(<span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">x</span> <span style="color:#f92672">!=</span> <span style="color:#ae81ff">0</span>)
+</span></span><span style="display:flex;"><span>            {
+</span></span><span style="display:flex;"><span>                <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">hash</span> ^= (<span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">x</span> <span style="color:#f92672">&gt;&gt;</span> <span style="color:#ae81ff">24</span>);
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>            <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">hash</span> <span style="color:#f92672">&amp;=</span> ~<span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">x</span>;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> (<span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">hash</span> <span style="color:#f92672">%</span> <span style="color:#ae81ff">0xFFFFFFFF</span>) <span style="color:#f92672">&amp;</span> <span style="color:#ae81ff">0xFFFFFFFF</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">     * 这个哈希函数来自Brian Kernighan和Dennis Ritchie的书“The C Programming Language”。
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">     * 它是一个简单的哈希函数，使用一组奇怪的可能种子，它们都构成了31 .... 31 ... 31等模式，它似乎与DJB哈希函数非常相似。
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">     */</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">public</span> <span style="color:#a6e22e">static</span> <span style="color:#a6e22e">function</span> <span style="color:#a6e22e">BKDRHash</span>(<span style="color:#960050;background-color:#1e0010">$</span><span style="color:#66d9ef">string</span>, <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">len</span> = <span style="color:#a6e22e">null</span>)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">seed</span> = <span style="color:#ae81ff">131</span>;  <span style="color:#960050;background-color:#1e0010">#</span> <span style="color:#ae81ff">31</span> <span style="color:#ae81ff">131</span> <span style="color:#ae81ff">1313</span> <span style="color:#ae81ff">13131</span> <span style="color:#ae81ff">131313</span> <span style="color:#a6e22e">etc</span>..
+</span></span><span style="display:flex;"><span>        <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">hash</span> = <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">len</span> <span style="color:#f92672">||</span> <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">len</span> = <span style="color:#a6e22e">strlen</span>(<span style="color:#960050;background-color:#1e0010">$</span><span style="color:#66d9ef">string</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span>(<span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">i</span> = <span style="color:#ae81ff">0</span>; <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">i</span> &lt; <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">len</span>; <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">i</span><span style="color:#f92672">++</span>)
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">hash</span> = (<span style="color:#66d9ef">int</span>)((<span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">hash</span> <span style="color:#f92672">*</span> <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">seed</span>) <span style="color:#f92672">+</span> <span style="color:#a6e22e">ord</span>(<span style="color:#960050;background-color:#1e0010">$</span><span style="color:#66d9ef">string</span>[<span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">i</span>]));
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> (<span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">hash</span> <span style="color:#f92672">%</span> <span style="color:#ae81ff">0xFFFFFFFF</span>) <span style="color:#f92672">&amp;</span> <span style="color:#ae81ff">0xFFFFFFFF</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">     * 这是在开源SDBM项目中使用的首选算法。
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">     * 哈希函数似乎对许多不同的数据集具有良好的总体分布。它似乎适用于数据集中元素的MSB存在高差异的情况。
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">     */</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">public</span> <span style="color:#a6e22e">static</span> <span style="color:#a6e22e">function</span> <span style="color:#a6e22e">SDBMHash</span>(<span style="color:#960050;background-color:#1e0010">$</span><span style="color:#66d9ef">string</span>, <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">len</span> = <span style="color:#a6e22e">null</span>)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">hash</span> = <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">len</span> <span style="color:#f92672">||</span> <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">len</span> = <span style="color:#a6e22e">strlen</span>(<span style="color:#960050;background-color:#1e0010">$</span><span style="color:#66d9ef">string</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span>(<span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">i</span> = <span style="color:#ae81ff">0</span>; <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">i</span> &lt; <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">len</span>; <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">i</span><span style="color:#f92672">++</span>)
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">hash</span> = (<span style="color:#66d9ef">int</span>)(<span style="color:#a6e22e">ord</span>(<span style="color:#960050;background-color:#1e0010">$</span><span style="color:#66d9ef">string</span>[<span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">i</span>]) <span style="color:#f92672">+</span> (<span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">hash</span> <span style="color:#f92672">&lt;&lt;</span> <span style="color:#ae81ff">6</span>) <span style="color:#f92672">+</span> (<span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">hash</span> <span style="color:#f92672">&lt;&lt;</span> <span style="color:#ae81ff">16</span>) <span style="color:#f92672">-</span> <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">hash</span>);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> (<span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">hash</span> <span style="color:#f92672">%</span> <span style="color:#ae81ff">0xFFFFFFFF</span>) <span style="color:#f92672">&amp;</span> <span style="color:#ae81ff">0xFFFFFFFF</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">     * 由Daniel J. Bernstein教授制作的算法，首先在usenet新闻组comp.lang.c上向世界展示。
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">     * 它是有史以来发布的最有效的哈希函数之一。
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">     */</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">public</span> <span style="color:#a6e22e">static</span> <span style="color:#a6e22e">function</span> <span style="color:#a6e22e">DJBHash</span>(<span style="color:#960050;background-color:#1e0010">$</span><span style="color:#66d9ef">string</span>, <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">len</span> = <span style="color:#a6e22e">null</span>)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">hash</span> = <span style="color:#ae81ff">5381</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">len</span> <span style="color:#f92672">||</span> <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">len</span> = <span style="color:#a6e22e">strlen</span>(<span style="color:#960050;background-color:#1e0010">$</span><span style="color:#66d9ef">string</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span>(<span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">i</span> = <span style="color:#ae81ff">0</span>; <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">i</span> &lt; <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">len</span>; <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">i</span><span style="color:#f92672">++</span>)
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">hash</span> = (<span style="color:#66d9ef">int</span>)((<span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">hash</span> <span style="color:#f92672">&lt;&lt;</span> <span style="color:#ae81ff">5</span>) <span style="color:#f92672">+</span> <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">hash</span>) <span style="color:#f92672">+</span> <span style="color:#a6e22e">ord</span>(<span style="color:#960050;background-color:#1e0010">$</span><span style="color:#66d9ef">string</span>[<span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">i</span>]);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> (<span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">hash</span> <span style="color:#f92672">%</span> <span style="color:#ae81ff">0xFFFFFFFF</span>) <span style="color:#f92672">&amp;</span> <span style="color:#ae81ff">0xFFFFFFFF</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">     * Donald E. Knuth在“计算机编程艺术第3卷”中提出的算法，主题是排序和搜索第6.4章。
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">     */</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">public</span> <span style="color:#a6e22e">static</span> <span style="color:#a6e22e">function</span> <span style="color:#a6e22e">DEKHash</span>(<span style="color:#960050;background-color:#1e0010">$</span><span style="color:#66d9ef">string</span>, <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">len</span> = <span style="color:#a6e22e">null</span>)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">len</span> <span style="color:#f92672">||</span> <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">len</span> = <span style="color:#a6e22e">strlen</span>(<span style="color:#960050;background-color:#1e0010">$</span><span style="color:#66d9ef">string</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">hash</span> = <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">len</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span>(<span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">i</span> = <span style="color:#ae81ff">0</span>; <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">i</span> &lt; <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">len</span>; <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">i</span><span style="color:#f92672">++</span>)
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">hash</span> = ((<span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">hash</span> <span style="color:#f92672">&lt;&lt;</span> <span style="color:#ae81ff">5</span>) ^ (<span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">hash</span> <span style="color:#f92672">&gt;&gt;</span> <span style="color:#ae81ff">27</span>)) ^ <span style="color:#a6e22e">ord</span>(<span style="color:#960050;background-color:#1e0010">$</span><span style="color:#66d9ef">string</span>[<span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">i</span>]);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> (<span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">hash</span> <span style="color:#f92672">%</span> <span style="color:#ae81ff">0xFFFFFFFF</span>) <span style="color:#f92672">&amp;</span> <span style="color:#ae81ff">0xFFFFFFFF</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">     * 参考 http://www.isthe.com/chongo/tech/comp/fnv/
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">     */</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">public</span> <span style="color:#a6e22e">static</span> <span style="color:#a6e22e">function</span> <span style="color:#a6e22e">FNVHash</span>(<span style="color:#960050;background-color:#1e0010">$</span><span style="color:#66d9ef">string</span>, <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">len</span> = <span style="color:#a6e22e">null</span>)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">prime</span> = <span style="color:#ae81ff">16777619</span>; <span style="color:#75715e">//32位的prime 2^24 + 2^8 + 0x93 = 16777619</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">hash</span> = <span style="color:#ae81ff">2166136261</span>; <span style="color:#75715e">//32位的offset</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">len</span> <span style="color:#f92672">||</span> <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">len</span> = <span style="color:#a6e22e">strlen</span>(<span style="color:#960050;background-color:#1e0010">$</span><span style="color:#66d9ef">string</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span>(<span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">i</span> = <span style="color:#ae81ff">0</span>; <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">i</span> &lt; <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">len</span>; <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">i</span><span style="color:#f92672">++</span>)
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">hash</span> = (<span style="color:#66d9ef">int</span>)(<span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">hash</span> <span style="color:#f92672">*</span> <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">prime</span>) <span style="color:#f92672">%</span> <span style="color:#ae81ff">0xFFFFFFFF</span>;
+</span></span><span style="display:flex;"><span>            <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">hash</span> ^= <span style="color:#a6e22e">ord</span>(<span style="color:#960050;background-color:#1e0010">$</span><span style="color:#66d9ef">string</span>[<span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">i</span>]);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> (<span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">hash</span> <span style="color:#f92672">%</span> <span style="color:#ae81ff">0xFFFFFFFF</span>) <span style="color:#f92672">&amp;</span> <span style="color:#ae81ff">0xFFFFFFFF</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>本文参考：
+<a href="https://blog.csdn.net/qq_41125219/article/details/119982158">https://blog.csdn.net/qq_41125219/article/details/119982158</a>
+<a href="https://www.freesion.com/article/35951350402/">https://www.freesion.com/article/35951350402/</a></p>
+
+		</div>
+	</article>
+</main>
+
+
+
+
+			</div>
+			
+		</div>
+		<footer class="footer">
+	<div class="container footer__container flex">
+		
+		<div class="footer__copyright">
+			&copy; 2026 臭大佬博客.
+			<span class="footer__copyright-credits">基于 <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> 引擎和 <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> 主题</span>
+		</div>
+	</div>
+</footer>
+	</div>
+<script async defer src="/js/menu.js"></script>
+</body>
+</html>

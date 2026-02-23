@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Posts - 臭大佬博客</title>
+	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
+	<meta name="description" content="">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link rel="dns-prefetch" href="//fonts.googleapis.com">
+	<link rel="dns-prefetch" href="//fonts.gstatic.com">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
+
+	<link rel="stylesheet" href="/css/style.css">
+	
+	<link rel="alternate" type="application/rss+xml" href="/posts/index.xml" title="臭大佬博客">
+
+	<link rel="shortcut icon" href="/favicon.ico">
+		
+</head>
+<body class="body">
+	<div class="container container--outer">
+		<header class="header">
+	<div class="container header__container">
+		
+	<div class="logo">
+		<a class="logo__link" href="/" title="臭大佬博客" rel="home">
+			<div class="logo__item logo__text">
+					<div class="logo__title">臭大佬博客</div>
+					
+				</div>
+		</a>
+	</div>
+		
+<nav class="menu">
+	<button class="menu__btn" aria-haspopup="true" aria-expanded="false" tabindex="0">
+		<span class="menu__btn-title" tabindex="-1">菜单</span>
+	</button>
+	<ul class="menu__list">
+		<li class="menu__item">
+			<a class="menu__link" href="/">
+				
+				<span class="menu__text">首页</span>
+				
+			</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/post/">
+				
+				<span class="menu__text">归档</span>
+				
+			</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/about/">
+				
+				<span class="menu__text">关于</span>
+				
+			</a>
+		</li>
+	</ul>
+</nav>
+
+	</div>
+</header>
+		<div class="wrapper flex">
+			<div class="primary">
+			
+<main class="main list" role="main">
+	<header class="main__header">
+		<h1 class="main__title">Posts</h1>
+	</header><article class="list__item post">
+	
+	<header class="list__header">
+		<h2 class="list__title post__title">
+			<a href="/posts/2019-12-29-%E7%8E%A9%E4%B8%80%E4%B8%8Bitchat/" rel="bookmark">
+			玩一下itchat
+			</a>
+		</h2>
+		
+	</header>
+	<div class="content list__excerpt post__content clearfix">
+		<h1 id="目录">目录</h1>
+<p><img src="https://www.choudalao.com/uploads/20191229/20191229134936q1xeAN.png" alt=""></p>
+<h1 id="代码">代码</h1>
+<p>go.py</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># coding=utf8</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> sys
+</span></span><span style="display:flex;"><span>sys<span style="color:#f92672">.</span>path<span style="color:#f92672">.</span>append(<span style="color:#e6db74">&#39;D:\wwwroot\dev.py.net\itchat\lib&#39;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> wechat
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>wechat<span style="color:#f92672">.</span>loginTo()
+</span></span></code></pre></div><p>lib/wechat.py</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># coding=utf8</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> requests
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> itchat<span style="color:#f92672">,</span> time
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> itchat.content <span style="color:#f92672">import</span> <span style="color:#f92672">*</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># @itchat.msg_register(TEXT)</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># def _(msg):</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#     print(msg)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@itchat.msg_register</span>([PICTURE, RECORDING, ATTACHMENT, VIDEO])
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">download_files</span>(msg):
+</span></span><span style="display:flex;"><span>    msg<span style="color:#f92672">.</span>download(msg<span style="color:#f92672">.</span>fileName)
+</span></span><span style="display:flex;"><span>    typeSymbol <span style="color:#f92672">=</span> {
+</span></span><span style="display:flex;"><span>        PICTURE: <span style="color:#e6db74">&#39;img&#39;</span>,
+</span></span><span style="display:flex;"><span>        VIDEO: <span style="color:#e6db74">&#39;vid&#39;</span>, }<span style="color:#f92672">.</span>get(msg<span style="color:#f92672">.</span>type, <span style="color:#e6db74">&#39;fil&#39;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#e6db74">&#39;@</span><span style="color:#e6db74">%s</span><span style="color:#e6db74">@</span><span style="color:#e6db74">%s</span><span style="color:#e6db74">&#39;</span> <span style="color:#f92672">%</span> (typeSymbol, msg<span style="color:#f92672">.</span>fileName)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@itchat.msg_register</span>(FRIENDS)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">add_friend</span>(msg):
+</span></span><span style="display:flex;"><span>    msg<span style="color:#f92672">.</span>user<span style="color:#f92672">.</span>verify()
+</span></span><span style="display:flex;"><span>    msg<span style="color:#f92672">.</span>user<span style="color:#f92672">.</span>send(<span style="color:#e6db74">&#39;Nice to meet you!&#39;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 获取文本信息</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># # 获取自己的用户信息，返回自己的属性字典</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># itchat.search_friends()</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># # 获取特定UserName的用户信息</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># itchat.search_friends(userName=&#39;@abcdefg1234567&#39;)</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># # 获取任何一项等于name键值的用户</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># itchat.search_friends(name=&#39;littlecodersh&#39;)</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># # 获取分别对应相应键值的用户</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># itchat.search_friends(wechatAccount=&#39;littlecodersh&#39;)</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># # 三、四项功能可以一同使用</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># itchat.search_friends(name=&#39;LittleCoder机器人&#39;, wechatAccount=&#39;littlecodersh&#39;)</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 这里是我们在“1. 实现微信消息的获取”中已经用到过的同样的注册方法</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@itchat.msg_register</span>(itchat<span style="color:#f92672">.</span>content<span style="color:#f92672">.</span>TEXT)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">tuling_reply</span>(msg):
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 为了保证在图灵Key出现问题的时候仍旧可以回复，这里设置一个默认回复</span>
+</span></span><span style="display:flex;"><span>    defaultReply <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;I received: &#39;</span> <span style="color:#f92672">+</span> msg[<span style="color:#e6db74">&#39;Text&#39;</span>]
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 如果图灵Key出现问题，那么reply将会是None</span>
+</span></span><span style="display:flex;"><span>    reply <span style="color:#f92672">=</span> get_response(msg[<span style="color:#e6db74">&#39;Text&#39;</span>])
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># a or b的意思是，如果a有内容，那么返回a，否则返回b</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 有内容一般就是指非空或者非None，你可以用`if a: print(&#39;True&#39;)`来测试</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> reply <span style="color:#f92672">or</span> defaultReply
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 图灵机器人</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">get_response</span>(msg):
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 这里我们就像在“3. 实现最简单的与图灵机器人的交互”中做的一样</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 构造了要发送给服务器的数据</span>
+</span></span><span style="display:flex;"><span>    apiUrl <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;http://www.tuling123.com/openapi/api&#39;</span>
+</span></span><span style="display:flex;"><span>    data <span style="color:#f92672">=</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#39;key&#39;</span>: <span style="color:#e6db74">&#39;xxxxxxxxxxx&#39;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#39;info&#39;</span>: msg,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#39;userid&#39;</span>: <span style="color:#e6db74">&#39;wechat-robot&#39;</span>,
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">try</span>:
+</span></span><span style="display:flex;"><span>        r <span style="color:#f92672">=</span> requests<span style="color:#f92672">.</span>post(apiUrl, data<span style="color:#f92672">=</span>data)<span style="color:#f92672">.</span>json()
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># 字典的get方法在字典没有&#39;text&#39;值的时候会返回None而不会抛出异常</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> r<span style="color:#f92672">.</span>get(<span style="color:#e6db74">&#39;text&#39;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 为了防止服务器没有正常响应导致程序异常退出，这里用try-except捕获了异常</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 如果服务器没能正常交互（返回非json或无法连接），那么就会进入下面的return</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">except</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># 将会返回一个None</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 登录触发</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">lc</span>():
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">&#39;finish login&#39;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 退出触发</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">ec</span>():
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">&#39;exit&#39;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">test</span>():
+</span></span><span style="display:flex;"><span>    print(<span style="color:#ae81ff">111</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">&#39;&#39;&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">hotReload:一定时间内重新开启也可以不用重新扫码
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">enableCmdQR:登陆的时候使用命令行显示二维码
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">loginCallback:登录触发
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">exitCallback：退出触发
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">&#39;&#39;&#39;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">loginTo</span>(hotReload<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>, enableCmdQR<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>, loginCallback<span style="color:#f92672">=</span>lc, exitCallback<span style="color:#f92672">=</span>ec):
+</span></span><span style="display:flex;"><span>    itchat<span style="color:#f92672">.</span>auto_login(hotReload<span style="color:#f92672">=</span>hotReload, enableCmdQR<span style="color:#f92672">=</span>enableCmdQR, loginCallback<span style="color:#f92672">=</span>loginCallback,
+</span></span><span style="display:flex;"><span>                      exitCallback<span style="color:#f92672">=</span>exitCallback)
+</span></span><span style="display:flex;"><span>    itchat<span style="color:#f92672">.</span>run(<span style="color:#66d9ef">True</span>)
+</span></span></code></pre></div><h1 id="测试">测试</h1>
+<p><img src="https://www.choudalao.com/uploads/20191229/20191229135135XbtRv0.png" alt=""></p>
+	</div>
+</article><article class="list__item post">
+	
+	<header class="list__header">
+		<h2 class="list__title post__title">
+			<a href="/posts/2019-12-27-phper%E7%9A%84go%E4%B9%8B%E8%B7%AF-%E5%8D%8F%E7%A8%8Bgo%E5%8F%8A%E4%BF%A1%E9%81%93channel/" rel="bookmark">
+			PHPer的Go之路 -- 协程（go）及信道（channel）
+			</a>
+		</h2>
+		
+	</header>
+	<div class="content list__excerpt post__content clearfix">
+		<h1 id="go协程">Go协程</h1>
+<p>Go 协程是与其他函数或方法一起并发运行的函数或方法。Go 协程可以看作是轻量级线程。与线程相比，创建一个 Go 协程的成本很小。因此在 Go 应用中，常常会看到有数以千计的 Go 协程并发地运行。</p>
+	</div>
+</article><article class="list__item post">
+	
+	<header class="list__header">
+		<h2 class="list__title post__title">
+			<a href="/posts/2019-12-26-win10%E4%B8%8B%E5%AE%89%E8%A3%85tensorflow/" rel="bookmark">
+			Win10下安装tensorflow
+			</a>
+		</h2>
+		
+	</header>
+	<div class="content list__excerpt post__content clearfix">
+		<h1 id="前提">前提</h1>
+<p>win安装tensorflow是基于Python的，并且需要从Anaconda仓库中下载</p>
+<h1 id="安装anaconda">安装Anaconda</h1>
+<p>从官网下载：https://www.anaconda.com/download/</p>
+	</div>
+</article><article class="list__item post">
+	
+	<header class="list__header">
+		<h2 class="list__title post__title">
+			<a href="/posts/2019-12-26-%E5%9C%A8ubuntu%E4%B8%8A%E5%8D%87%E7%BA%A7python%E5%90%8Epip%E6%97%A0%E6%B3%95%E8%BF%90%E8%A1%8C%E9%97%AE%E9%A2%98/" rel="bookmark">
+			在Ubuntu上升级python后pip无法运行问题
+			</a>
+		</h2>
+		
+	</header>
+	<div class="content list__excerpt post__content clearfix">
+		<h1 id="起因">起因</h1>
+<p>今天把ubuntu上python3.5升级成了3.7之后，<code>pip -V</code>输出结果正常，</p>
+<p><img src="https://www.choudalao.com/uploads/20191226/20191226221023nAVBm4.png" alt=""></p>
+<p>但是执行<code>pip install xxx</code>就报错，如下一长串：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>ERROR: Exception:
+</span></span><span style="display:flex;"><span>Traceback <span style="color:#f92672">(</span>most recent call last<span style="color:#f92672">)</span>:
+</span></span><span style="display:flex;"><span>  File <span style="color:#e6db74">&#34;/usr/local/lib/python3.7/site-packages/pip/_internal/cli/base_command.py&#34;</span>, line 153, in _main
+</span></span><span style="display:flex;"><span>    status <span style="color:#f92672">=</span> self.run<span style="color:#f92672">(</span>options, args<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>  File <span style="color:#e6db74">&#34;/usr/local/lib/python3.7/site-packages/pip/_internal/commands/install.py&#34;</span>, line 328, in run
+</span></span><span style="display:flex;"><span>    session <span style="color:#f92672">=</span> self.get_default_session<span style="color:#f92672">(</span>options<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>  File <span style="color:#e6db74">&#34;/usr/local/lib/python3.7/site-packages/pip/_internal/cli/req_command.py&#34;</span>, line 72, in get_default_session
+</span></span><span style="display:flex;"><span>    self._session <span style="color:#f92672">=</span> self.enter_context<span style="color:#f92672">(</span>self._build_session<span style="color:#f92672">(</span>options<span style="color:#f92672">))</span>
+</span></span><span style="display:flex;"><span>  File <span style="color:#e6db74">&#34;/usr/local/lib/python3.7/site-packages/pip/_internal/cli/req_command.py&#34;</span>, line 84, in _build_session
+</span></span><span style="display:flex;"><span>    index_urls<span style="color:#f92672">=</span>self._get_index_urls<span style="color:#f92672">(</span>options<span style="color:#f92672">)</span>,
+</span></span><span style="display:flex;"><span>  File <span style="color:#e6db74">&#34;/usr/local/lib/python3.7/site-packages/pip/_internal/network/session.py&#34;</span>, line 240, in __init__
+</span></span><span style="display:flex;"><span>    self.headers<span style="color:#f92672">[</span><span style="color:#e6db74">&#34;User-Agent&#34;</span><span style="color:#f92672">]</span> <span style="color:#f92672">=</span> user_agent<span style="color:#f92672">()</span>
+</span></span><span style="display:flex;"><span>  File <span style="color:#e6db74">&#34;/usr/local/lib/python3.7/site-packages/pip/_internal/network/session.py&#34;</span>, line 133, in user_agent
+</span></span><span style="display:flex;"><span>    zip<span style="color:#f92672">([</span><span style="color:#e6db74">&#34;name&#34;</span>, <span style="color:#e6db74">&#34;version&#34;</span>, <span style="color:#e6db74">&#34;id&#34;</span><span style="color:#f92672">]</span>, distro.linux_distribution<span style="color:#f92672">())</span>,
+</span></span><span style="display:flex;"><span>  File <span style="color:#e6db74">&#34;/usr/local/lib/python3.7/site-packages/pip/_vendor/distro.py&#34;</span>, line 122, in linux_distribution
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> _distro.linux_distribution<span style="color:#f92672">(</span>full_distribution_name<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>  File <span style="color:#e6db74">&#34;/usr/local/lib/python3.7/site-packages/pip/_vendor/distro.py&#34;</span>, line 677, in linux_distribution
+</span></span><span style="display:flex;"><span>    self.version<span style="color:#f92672">()</span>,
+</span></span><span style="display:flex;"><span>  File <span style="color:#e6db74">&#34;/usr/local/lib/python3.7/site-packages/pip/_vendor/distro.py&#34;</span>, line 737, in version
+</span></span><span style="display:flex;"><span>    self.lsb_release_attr<span style="color:#f92672">(</span><span style="color:#e6db74">&#39;release&#39;</span><span style="color:#f92672">)</span>,
+</span></span><span style="display:flex;"><span>  File <span style="color:#e6db74">&#34;/usr/local/lib/python3.7/site-packages/pip/_vendor/distro.py&#34;</span>, line 899, in lsb_release_attr
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> self._lsb_release_info.get<span style="color:#f92672">(</span>attribute, <span style="color:#e6db74">&#39;&#39;</span><span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>  File <span style="color:#e6db74">&#34;/usr/local/lib/python3.7/site-packages/pip/_vendor/distro.py&#34;</span>, line 552, in __get__
+</span></span><span style="display:flex;"><span>    ret <span style="color:#f92672">=</span> obj.__dict__<span style="color:#f92672">[</span>self._fname<span style="color:#f92672">]</span> <span style="color:#f92672">=</span> self._f<span style="color:#f92672">(</span>obj<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>  File <span style="color:#e6db74">&#34;/usr/local/lib/python3.7/site-packages/pip/_vendor/distro.py&#34;</span>, line 1012, in _lsb_release_info
+</span></span><span style="display:flex;"><span>    stdout <span style="color:#f92672">=</span> subprocess.check_output<span style="color:#f92672">(</span>cmd, stderr<span style="color:#f92672">=</span>devnull<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>  File <span style="color:#e6db74">&#34;/usr/local/lib/python3.7/subprocess.py&#34;</span>, line 395, in check_output
+</span></span><span style="display:flex;"><span>    **kwargs<span style="color:#f92672">)</span>.stdout
+</span></span><span style="display:flex;"><span>  File <span style="color:#e6db74">&#34;/usr/local/lib/python3.7/subprocess.py&#34;</span>, line 487, in run
+</span></span><span style="display:flex;"><span>    output<span style="color:#f92672">=</span>stdout, stderr<span style="color:#f92672">=</span>stderr<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>subprocess.CalledProcessError: Command <span style="color:#e6db74">&#39;(&#39;</span>lsb_release<span style="color:#e6db74">&#39;, &#39;</span>-a<span style="color:#e6db74">&#39;)&#39;</span> returned non-zero exit status 1.
+</span></span><span style="display:flex;"><span>Traceback <span style="color:#f92672">(</span>most recent call last<span style="color:#f92672">)</span>:
+</span></span><span style="display:flex;"><span>  File <span style="color:#e6db74">&#34;/home/ubuntu/.local/bin/pip&#34;</span>, line 11, in &lt;module&gt;
+</span></span><span style="display:flex;"><span>    sys.exit<span style="color:#f92672">(</span>main<span style="color:#f92672">())</span>
+</span></span><span style="display:flex;"><span>  File <span style="color:#e6db74">&#34;/usr/local/lib/python3.7/site-packages/pip/_internal/main.py&#34;</span>, line 47, in main
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> command.main<span style="color:#f92672">(</span>cmd_args<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>  File <span style="color:#e6db74">&#34;/usr/local/lib/python3.7/site-packages/pip/_internal/cli/base_command.py&#34;</span>, line 103, in main
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> self._main<span style="color:#f92672">(</span>args<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>  File <span style="color:#e6db74">&#34;/usr/local/lib/python3.7/site-packages/pip/_internal/cli/base_command.py&#34;</span>, line 191, in _main
+</span></span><span style="display:flex;"><span>    self.handle_pip_version_check<span style="color:#f92672">(</span>options<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>  File <span style="color:#e6db74">&#34;/usr/local/lib/python3.7/site-packages/pip/_internal/cli/req_command.py&#34;</span>, line 139, in handle_pip_version_check
+</span></span><span style="display:flex;"><span>    timeout<span style="color:#f92672">=</span>min<span style="color:#f92672">(</span>5, options.timeout<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>  File <span style="color:#e6db74">&#34;/usr/local/lib/python3.7/site-packages/pip/_internal/cli/req_command.py&#34;</span>, line 84, in _build_session
+</span></span><span style="display:flex;"><span>    index_urls<span style="color:#f92672">=</span>self._get_index_urls<span style="color:#f92672">(</span>options<span style="color:#f92672">)</span>,
+</span></span><span style="display:flex;"><span>  File <span style="color:#e6db74">&#34;/usr/local/lib/python3.7/site-packages/pip/_internal/network/session.py&#34;</span>, line 240, in __init__
+</span></span><span style="display:flex;"><span>    self.headers<span style="color:#f92672">[</span><span style="color:#e6db74">&#34;User-Agent&#34;</span><span style="color:#f92672">]</span> <span style="color:#f92672">=</span> user_agent<span style="color:#f92672">()</span>
+</span></span><span style="display:flex;"><span>  File <span style="color:#e6db74">&#34;/usr/local/lib/python3.7/site-packages/pip/_internal/network/session.py&#34;</span>, line 133, in user_agent
+</span></span><span style="display:flex;"><span>    zip<span style="color:#f92672">([</span><span style="color:#e6db74">&#34;name&#34;</span>, <span style="color:#e6db74">&#34;version&#34;</span>, <span style="color:#e6db74">&#34;id&#34;</span><span style="color:#f92672">]</span>, distro.linux_distribution<span style="color:#f92672">())</span>,
+</span></span><span style="display:flex;"><span>  File <span style="color:#e6db74">&#34;/usr/local/lib/python3.7/site-packages/pip/_vendor/distro.py&#34;</span>, line 122, in linux_distribution
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> _distro.linux_distribution<span style="color:#f92672">(</span>full_distribution_name<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>  File <span style="color:#e6db74">&#34;/usr/local/lib/python3.7/site-packages/pip/_vendor/distro.py&#34;</span>, line 677, in linux_distribution
+</span></span><span style="display:flex;"><span>    self.version<span style="color:#f92672">()</span>,
+</span></span><span style="display:flex;"><span>  File <span style="color:#e6db74">&#34;/usr/local/lib/python3.7/site-packages/pip/_vendor/distro.py&#34;</span>, line 737, in version
+</span></span><span style="display:flex;"><span>    self.lsb_release_attr<span style="color:#f92672">(</span><span style="color:#e6db74">&#39;release&#39;</span><span style="color:#f92672">)</span>,
+</span></span><span style="display:flex;"><span>  File <span style="color:#e6db74">&#34;/usr/local/lib/python3.7/site-packages/pip/_vendor/distro.py&#34;</span>, line 899, in lsb_release_attr
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> self._lsb_release_info.get<span style="color:#f92672">(</span>attribute, <span style="color:#e6db74">&#39;&#39;</span><span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>  File <span style="color:#e6db74">&#34;/usr/local/lib/python3.7/site-packages/pip/_vendor/distro.py&#34;</span>, line 552, in __get__
+</span></span><span style="display:flex;"><span>    ret <span style="color:#f92672">=</span> obj.__dict__<span style="color:#f92672">[</span>self._fname<span style="color:#f92672">]</span> <span style="color:#f92672">=</span> self._f<span style="color:#f92672">(</span>obj<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>  File <span style="color:#e6db74">&#34;/usr/local/lib/python3.7/site-packages/pip/_vendor/distro.py&#34;</span>, line 1012, in _lsb_release_info
+</span></span><span style="display:flex;"><span>    stdout <span style="color:#f92672">=</span> subprocess.check_output<span style="color:#f92672">(</span>cmd, stderr<span style="color:#f92672">=</span>devnull<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>  File <span style="color:#e6db74">&#34;/usr/local/lib/python3.7/subprocess.py&#34;</span>, line 395, in check_output
+</span></span><span style="display:flex;"><span>    **kwargs<span style="color:#f92672">)</span>.stdout
+</span></span><span style="display:flex;"><span>  File <span style="color:#e6db74">&#34;/usr/local/lib/python3.7/subprocess.py&#34;</span>, line 487, in run
+</span></span><span style="display:flex;"><span>    output<span style="color:#f92672">=</span>stdout, stderr<span style="color:#f92672">=</span>stderr<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>subprocess.CalledProcessError: Command <span style="color:#e6db74">&#39;(&#39;</span>lsb_release<span style="color:#e6db74">&#39;, &#39;</span>-a<span style="color:#e6db74">&#39;)&#39;</span> returned non-zero exit status 1.
+</span></span></code></pre></div><p><img src="https://www.choudalao.com/uploads/20191226/20191226221146vW0ynh.png" alt="">
+<img src="https://www.choudalao.com/uploads/20191226/20191226221201AIhXjR.png" alt=""></p>
+	</div>
+</article><article class="list__item post">
+	
+	<header class="list__header">
+		<h2 class="list__title post__title">
+			<a href="/posts/2019-12-26-beautifulsoup4%E7%88%AC%E5%8F%96%E8%87%AD%E5%A4%A7%E4%BD%AC%E9%A6%96%E9%A1%B5%E6%96%87%E7%AB%A0/" rel="bookmark">
+			beautifulsoup4爬取臭大佬首页文章
+			</a>
+		</h2>
+		
+	</header>
+	<div class="content list__excerpt post__content clearfix">
+		<h1 id="环境">环境</h1>
+<ul>
+<li>python3</li>
+<li>win10/ubuntu 16</li>
+</ul>
+<h1 id="需要的扩展库">需要的扩展库</h1>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>pip install Requests
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>pip install beautifulsoup4
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>pip install lxml
+</span></span></code></pre></div><h1 id="目标">目标</h1>
+<p>抓取臭大佬首页的文章标题</p>
+<h1 id="通过-css--选择器获取数据">通过 css  选择器获取数据</h1>
+<p>在目标网页<a href="https://www.choudalao.com" title="臭大佬首页">臭大佬首页</a>，单击鼠标右键，选择审
+查元素，进入“网络控制台”的“Element”选项卡，在目标元素上，单击鼠标右键，在“copy”栏下，
+选择“Copy selector”，我们就可以复制当前元素的 css 选择器。</p>
+	</div>
+</article><article class="list__item post">
+	
+	<header class="list__header">
+		<h2 class="list__title post__title">
+			<a href="/posts/2019-12-25-spider%E7%88%AC%E5%8F%96%E8%87%AD%E5%A4%A7%E4%BD%AC%E9%A6%96%E9%A1%B5%E6%96%87%E7%AB%A0/" rel="bookmark">
+			Spider爬取臭大佬首页文章
+			</a>
+		</h2>
+		
+	</header>
+	<div class="content list__excerpt post__content clearfix">
+		<h1 id="创建scrapy项目">创建Scrapy项目</h1>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>scrapy startproject choudalao
+</span></span></code></pre></div><blockquote>
+<p>λ scrapy startproject choudalao
+New Scrapy project &lsquo;choudalao&rsquo;, using template directory &rsquo;d:\program files\python\lib\site-packages\scrapy\templates\project&rsquo;, created in:
+D:\wwwroot\dev.py.net\choudalao</p>
+</blockquote>
+<blockquote>
+<p>You can start your first spider with:
+cd choudalao
+scrapy genspider example example.com</p>
+</blockquote>
+<p><img src="https://www.choudalao.com/uploads/20191225/20191225204906M9bMwy.png" alt=""></p>
+<p>目录结构：</p>
+<p><img src="https://www.choudalao.com/uploads/20191225/20191225204945vrkFSJ.png" alt=""></p>
+<h1 id="创建爬虫">创建爬虫</h1>
+<p>进入spider目录下，运行命令</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>scrapy genspider choudalao <span style="color:#e6db74">&#34;choudalao.com&#34;</span>
+</span></span></code></pre></div><p><img src="https://www.choudalao.com/uploads/20191225/20191225210234zSUgiP.png" alt=""></p>
+<h1 id="分析">分析</h1>
+<p>打开臭大佬<a href="https://www.choudalao.com" title="首页">首页</a>，分析数据结构:
+<img src="https://www.choudalao.com/uploads/20191225/20191225205632lCwMqZ.png" alt=""></p>
+<p><img src="https://www.choudalao.com/uploads/20191225/20191225205833STF6pV.png" alt="">
+每一个li里面都包含标题、作者、链接、标签、浏览数、时间等等。我们就提取这几个字段。</p>
+	</div>
+</article><article class="list__item post">
+	
+	<header class="list__header">
+		<h2 class="list__title post__title">
+			<a href="/posts/2019-12-20-rror-could-not-install-packages-due-to-an-environmenterror-errno-13-permission-d/" rel="bookmark">
+			RROR: Could not install packages due to an EnvironmentError: [Errno 13] Permission denied: &#39;/usr/local/lib/python3.5/dist-packages/pymongo-3.10.0.dist-info&#39;
+			</a>
+		</h2>
+		
+	</header>
+	<div class="content list__excerpt post__content clearfix">
+		<h1 id="pip在安装包的时候提示">pip在安装包的时候提示:</h1>
+<p>如</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>pip install pymongo
+</span></span></code></pre></div><p><img src="https://www.choudalao.com/uploads/20191220/20191220124120xxTqyW.png" alt=""></p>
+<blockquote>
+<p>ERROR: Could not install packages due to an EnvironmentError: [Errno 13] Permission denied: &lsquo;/usr/local/lib/python3.5/dist-packages/pymongo-3.10.0.dist-info&rsquo;
+Consider using the <code>--user</code> option or check the permissions.</p>
+</blockquote>
+<p>#解决方案</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>pip install pymongo --user
+</span></span></code></pre></div><p>不知道为什么,先做个笔记.</p>
+<p><img src="https://www.choudalao.com/uploads/20191220/20191220124156oVlFjW.png" alt=""></p>
+	</div>
+</article><article class="list__item post">
+	
+	<header class="list__header">
+		<h2 class="list__title post__title">
+			<a href="/posts/2019-12-19-phper%E7%9A%84go%E4%B9%8B%E8%B7%AF-%E5%B9%B6%E5%8F%91%E4%B8%8E%E5%B9%B6%E8%A1%8C/" rel="bookmark">
+			PHPer的Go之路 --并发与并行
+			</a>
+		</h2>
+		
+	</header>
+	<div class="content list__excerpt post__content clearfix">
+		<p>#并发
+并发是不同的代码块交替执行，也就是交替可以做不同的事情。</p>
+<p>举个栗子:
+当你在敲代码的时候,突然女朋友回来了(程序员怎么可能有女朋友?),然后你去开门,开完门后你又继续敲代码(是的,你这样肯定没有女朋友)&hellip;..这就是并发,敲代码和开门交替进行。</p>
+	</div>
+</article><article class="list__item post">
+	
+	<header class="list__header">
+		<h2 class="list__title post__title">
+			<a href="/posts/2019-12-18-phper%E7%9A%84go%E4%B9%8B%E8%B7%AF-%E7%A8%8B%E5%BA%8F%E8%BF%9B%E7%A8%8B%E7%BA%BF%E7%A8%8B%E5%8D%8F%E7%A8%8B/" rel="bookmark">
+			PHPer的Go之路 -- 程序、进程、线程、协程
+			</a>
+		</h2>
+		
+	</header>
+	<div class="content list__excerpt post__content clearfix">
+		<p>对于拍黄片（php）程序员来说，对于进程、线程、协程这些概念可能比较模糊，因为，在php当中，很少会出现这些概念，学习go语言之前，我们先来介绍一些php接触较少的概念。</p>
+	</div>
+</article><article class="list__item post">
+	
+	<header class="list__header">
+		<h2 class="list__title post__title">
+			<a href="/posts/2019-12-18-%E6%8E%A5%E5%8F%A3%E5%92%8C%E6%8A%BD%E8%B1%A1%E7%B1%BB%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB/" rel="bookmark">
+			接口和抽象类有什么区别
+			</a>
+		</h2>
+		
+	</header>
+	<div class="content list__excerpt post__content clearfix">
+		<ul>
+<li>1、抽象类和接口都不能直接实例化，如果要实例化，抽象类变量必须指向实现所有抽象方法的子类对象，接口变量必须指向实现所有接口方法的类对象。</li>
+<li>2、抽象类要被子类继承，接口要被类实现。</li>
+<li>3、接口只能做方法申明，抽象类中可以做方法申明，也可以做方法实现</li>
+<li>4、接口里定义的变量只能是公共的静态的常量，抽象类中的变量是普通变量。</li>
+<li>5、抽象类里的抽象方法必须全部被子类所实现，如果子类不能全部实现父类抽象方法，那么该子类只能是抽象类。同样，一个实现接口的时候，如不能全部实现接口方法，那么该类也只能为抽象类。</li>
+<li>6、抽象方法只能申明，不能实现，接口是设计的结果 ，抽象类是重构的结果</li>
+<li>7、抽象类里可以没有抽象方法</li>
+<li>8、如果一个类里有抽象方法，那么这个类只能是抽象类</li>
+<li>9、抽象方法要被实现，所以不能是静态的，也不能是私有的。</li>
+<li>10、接口可继承接口，并可多继承接口，但类只能单根继承。</li>
+</ul>
+	</div>
+</article>
+</main>
+
+<div class="pagination">
+	<a class="pagination__item pagination__item--prev btn" href="/posts/page/24/">«</a>
+	<span class="pagination__item pagination__item--current">25/35</span>
+	<a class="pagination__item pagination__item--next btn" href="/posts/page/26/">»</a>
+</div>
+
+			</div>
+			
+
+		</div>
+		<footer class="footer">
+	<div class="container footer__container flex">
+		
+		<div class="footer__copyright">
+			&copy; 2026 臭大佬博客.
+			<span class="footer__copyright-credits">基于 <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> 引擎和 <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> 主题</span>
+		</div>
+	</div>
+</footer>
+	</div>
+<script async defer src="/js/menu.js"></script>
+</body>
+</html>

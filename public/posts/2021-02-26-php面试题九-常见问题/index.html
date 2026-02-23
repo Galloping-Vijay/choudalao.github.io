@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>php面试题九 -- 常见问题 - 臭大佬博客</title>
+	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
+	<meta name="description" content="php面试题九">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link rel="dns-prefetch" href="//fonts.googleapis.com">
+	<link rel="dns-prefetch" href="//fonts.gstatic.com">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
+
+	<link rel="stylesheet" href="/css/style.css">
+	
+
+	<link rel="shortcut icon" href="/favicon.ico">
+		
+</head>
+<body class="body">
+	<div class="container container--outer">
+		<header class="header">
+	<div class="container header__container">
+		
+	<div class="logo">
+		<a class="logo__link" href="/" title="臭大佬博客" rel="home">
+			<div class="logo__item logo__text">
+					<div class="logo__title">臭大佬博客</div>
+					
+				</div>
+		</a>
+	</div>
+		
+<nav class="menu">
+	<button class="menu__btn" aria-haspopup="true" aria-expanded="false" tabindex="0">
+		<span class="menu__btn-title" tabindex="-1">菜单</span>
+	</button>
+	<ul class="menu__list">
+		<li class="menu__item">
+			<a class="menu__link" href="/">
+				
+				<span class="menu__text">首页</span>
+				
+			</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/post/">
+				
+				<span class="menu__text">归档</span>
+				
+			</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/about/">
+				
+				<span class="menu__text">关于</span>
+				
+			</a>
+		</li>
+	</ul>
+</nav>
+
+	</div>
+</header>
+		<div class="wrapper flex">
+			<div class="primary">
+			
+<main class="main" role="main">
+	<article class="post">
+		<header class="post__header">
+			<h1 class="post__title">php面试题九 -- 常见问题</h1>
+			
+		</header>
+		<div class="content post__content clearfix">
+			<h3 id="你用什么方法检查-php-脚本的执行效率通常是脚本执行时间和数据库-sql-的效率通常是数据库-query-时间-并定位和分析脚本执行和数据库查询的瓶颈所在">你用什么方法检查 PHP 脚本的执行效率（通常是脚本执行时间）和数据库 SQL 的效率（通常是数据库 Query 时间）， 并定位和分析脚本执行和数据库查询的瓶颈所在？</h3>
+<h6 id="数据库sql的效率">数据库SQL的效率</h6>
+<p><code>sql</code>的<code>explain(sql)</code>,启用<code>slow_query_log</code>记录慢查询。通常还要看数据库设计是否合理，需求是否合理等。
+慢查询相关文章<a href="https://www.choudalao.com/article/199" title="MYSQL 慢查询 | 臭大佬">MYSQL 慢查询 | 臭大佬</a></p>
+<h6 id="php一般是在要检查的代码开头记录一个时间结尾记录一个时间取差值">PHP一般是在要检查的代码开头记录一个时间，结尾记录一个时间。取差值。</h6>
+<p>但这个时间一般来说都很快，在一秒以内，所以不能直接用<code>mktime()</code></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#f92672">&lt;?</span><span style="color:#a6e22e">php</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"> * 返回当前 Unix 时间戳的微秒数
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"> */</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">function</span> <span style="color:#a6e22e">microtime_float</span>()
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">list</span>($usec, $sec) <span style="color:#f92672">=</span> <span style="color:#a6e22e">explode</span>(<span style="color:#e6db74">&#34; &#34;</span>, <span style="color:#a6e22e">microtime</span>());
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> ((<span style="color:#a6e22e">float</span>)$usec <span style="color:#f92672">+</span> (<span style="color:#a6e22e">float</span>)$sec);
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>$time_start <span style="color:#f92672">=</span> <span style="color:#a6e22e">microtime_float</span>();
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 这里放你要检查的代码 --开始
+</span></span></span><span style="display:flex;"><span>$product <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">foreach</span> (<span style="color:#a6e22e">range</span>(<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">5</span>) <span style="color:#66d9ef">as</span> $val) {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">sleep</span>(<span style="color:#ae81ff">1</span>);
+</span></span><span style="display:flex;"><span>    $product <span style="color:#f92672">=</span> $product <span style="color:#f92672">*</span> $val;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 这里放你要检查的代码 -- 结束
+</span></span></span><span style="display:flex;"><span>$time_end <span style="color:#f92672">=</span> <span style="color:#a6e22e">microtime_float</span>();
+</span></span><span style="display:flex;"><span>$time <span style="color:#f92672">=</span> $time_end <span style="color:#f92672">-</span> $time_start;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">echo</span> <span style="color:#e6db74">&#34;以上代码块执行时间是： </span><span style="color:#e6db74">$time</span><span style="color:#e6db74"> 秒</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>;
+</span></span></code></pre></div><p><img src="https://www.choudalao.com/uploads/20210226/20210226222854RJS1aM.png" alt=""></p>
+<h3 id="前后端分离情况下前端在acom下向bcom请求接口后端如何解决前端跨域问题">前后端分离情况下，前端在a.com下向b.com请求接口，后端如何解决前端跨域问题</h3>
+<h6 id="跨域请求">跨域请求</h6>
+<p>当一台服务器资源从另一台服务器（不同 的域名或者端口）请求一个资源或者接口，就会发起一个跨域 HTTP 请求。举个简单的例子，从<code> http://a.com/index.html</code>， 发送一个 <code>Ajax</code> 请求，请求地址是 <code>http://b.com/</code> 下面的一个接口，这就是发起了一个跨域请求。在不做任何处理的情况下，这个跨域请求是无法被成功请求的，因为浏览器基于同源策略 会对跨域请求做一定的限制。</p>
+<h6 id="同源策略">同源策略</h6>
+<p>一个域名请求地址的组成是:协议+域名+端口号+请求资源地址 , 当协议、域名、端口号中任意一个不相同时 , 都算作不同源（必须是域名完全相同，比如说 <code>a.example.com</code> 和 <code>b.example.com</code> 这两个域名。虽然它们的顶级域名和二级域名（均为 <code>example.com</code>）都相同，但是三级域名（a 和 b）不相同，所以也不能算作域名相同）。如果不同时满足这上面三个条件，那就不符合浏览器的同源策略。</p>
+<h5 id="解决方式一php代码加header头">解决方式一：php代码加header头</h5>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#f92672">&lt;?</span><span style="color:#a6e22e">php</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">header</span>(<span style="color:#e6db74">&#39;Access-Control-Allow-Origin:http://www.a.com&#39;</span>);
+</span></span></code></pre></div><h5 id="解决方式二nginx反向代理">解决方式二：nginx反向代理</h5>
+<p>通过<code>nginx</code>配置一个代理服务器（域名与<code>a.com</code>相同，端口不同）做跳板机，反向代理访问<code>b.com</code>接口，并且可以顺便修改cookie中domain信息，方便当前域cookie写入，实现跨域登录。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#75715e">// proxy服务器
+</span></span></span><span style="display:flex;"><span><span style="color:#a6e22e">server</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">listen</span>       <span style="color:#ae81ff">81</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">server_name</span>  <span style="color:#a6e22e">www</span><span style="color:#f92672">.</span><span style="color:#a6e22e">a</span><span style="color:#f92672">.</span><span style="color:#a6e22e">com</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">location</span> <span style="color:#f92672">/</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">proxy_pass</span>   <span style="color:#a6e22e">http</span><span style="color:#f92672">://</span><span style="color:#a6e22e">www</span><span style="color:#f92672">.</span><span style="color:#a6e22e">b</span><span style="color:#f92672">.</span><span style="color:#a6e22e">com</span><span style="color:#f92672">:</span><span style="color:#ae81ff">8080</span>;  <span style="color:#75715e">#反向代理
+</span></span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">proxy_cookie_domain</span> <span style="color:#a6e22e">www</span><span style="color:#f92672">.</span><span style="color:#a6e22e">b</span><span style="color:#f92672">.</span><span style="color:#a6e22e">com</span> <span style="color:#a6e22e">www</span><span style="color:#f92672">.</span><span style="color:#a6e22e">a</span><span style="color:#f92672">.</span><span style="color:#a6e22e">com</span>; <span style="color:#75715e">#修改cookie里域名
+</span></span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">index</span>  <span style="color:#a6e22e">index</span><span style="color:#f92672">.</span><span style="color:#a6e22e">html</span> <span style="color:#a6e22e">index</span><span style="color:#f92672">.</span><span style="color:#a6e22e">htm</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># 当用webpack-dev-server等中间件代理接口访问nignx时，此时无浏览器参与，故没有同源限制，下面的跨域配置可不启用
+</span></span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">add_header</span> <span style="color:#a6e22e">Access</span><span style="color:#f92672">-</span><span style="color:#a6e22e">Control</span><span style="color:#f92672">-</span><span style="color:#a6e22e">Allow</span><span style="color:#f92672">-</span><span style="color:#a6e22e">Origin</span> <span style="color:#a6e22e">http</span><span style="color:#f92672">://</span><span style="color:#a6e22e">www</span><span style="color:#f92672">.</span><span style="color:#a6e22e">a</span><span style="color:#f92672">.</span><span style="color:#a6e22e">com</span>;  <span style="color:#75715e">#当前端只跨域不带cookie时，可为*
+</span></span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">add_header</span> <span style="color:#a6e22e">Access</span><span style="color:#f92672">-</span><span style="color:#a6e22e">Control</span><span style="color:#f92672">-</span><span style="color:#a6e22e">Allow</span><span style="color:#f92672">-</span><span style="color:#a6e22e">Credentials</span> <span style="color:#66d9ef">true</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="多个网站域名wwwacomwwwbcomwwwccom在wwwacom登录如何保证wwwbcom和wwwccom也能同时登录你的方案是什么">多个网站域名，（www.a.com,www.b.com,www.c.com）,在www.a.com登录，如何保证www.b.com和www.c.com也能同时登录，你的方案是什么</h3>
+<h4 id="方案一单点登录">方案一：单点登录</h4>
+<p>具体流程如下：</p>
+<blockquote>
+<p>用户访问app系统，app系统是需要登录的，但用户现在没有登录。
+跳转到CAS server，即SSO登录系统，以后图中的CAS Server我们统一叫做SSO系统。 SSO系统也没有登录，弹出用户登录页。
+用户填写用户名、密码，SSO系统进行认证后，将登录状态写入SSO的session，浏览器（Browser）中写入SSO域下的Cookie。
+SSO系统登录完成后会生成一个ST（Service Ticket），然后跳转到app系统，同时将ST作为参数传递给app系统。
+app系统拿到ST后，从后台向SSO发送请求，验证ST是否有效。
+验证通过后，app系统将登录状态写入session并设置app域下的Cookie。</p>
+</blockquote>
+<p>至此，跨域单点登录就完成了。以后我们再访问app系统时，app就是登录的。接下来，我们再看看访问app2系统时的流程。</p>
+<blockquote>
+<p>用户访问app2系统，app2系统没有登录，跳转到SSO。
+由于SSO已经登录了，不需要重新登录认证。
+SSO生成ST，浏览器跳转到app2系统，并将ST作为参数传递给app2。
+app2拿到ST，后台访问SSO，验证ST是否有效。
+验证成功后，app2将登录状态写入session，并在app2域下写入Cookie。</p>
+</blockquote>
+<p><img src="https://www.choudalao.com/uploads/20210227/20210227173349nrhHdr.png" alt=""></p>
+<h4 id="方案二nginx代理">方案二：nginx代理</h4>
+<p>用nginx代理，可以共用同一个cookie从而实现。
+不同的端口所保存的cookie是不能通用的，只有通过nginx代理。原理就是当三个服务端口为8080，8081，8082，而配置nginx端口为88；看配置</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#a6e22e">server</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">listen</span>       <span style="color:#ae81ff">88</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">server_name</span>  <span style="color:#a6e22e">localhost</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">location</span> <span style="color:#f92672">/</span><span style="color:#a6e22e">server2</span><span style="color:#f92672">/</span>{
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">proxy_pass</span>   <span style="color:#a6e22e">http</span><span style="color:#f92672">://</span><span style="color:#ae81ff">127.0</span><span style="color:#f92672">.</span><span style="color:#ae81ff">0.1</span><span style="color:#f92672">:</span><span style="color:#ae81ff">8082</span><span style="color:#f92672">/</span><span style="color:#a6e22e">server2</span><span style="color:#f92672">/</span>;
+</span></span><span style="display:flex;"><span>        } 
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">location</span> <span style="color:#f92672">/</span><span style="color:#a6e22e">server1</span><span style="color:#f92672">/</span> {
+</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">proxy_pass</span>   <span style="color:#a6e22e">http</span><span style="color:#f92672">://</span><span style="color:#ae81ff">127.0</span><span style="color:#f92672">.</span><span style="color:#ae81ff">0.1</span><span style="color:#f92672">:</span><span style="color:#ae81ff">8081</span><span style="color:#f92672">/</span><span style="color:#a6e22e">server1</span><span style="color:#f92672">/</span>;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span> 		<span style="color:#a6e22e">location</span> <span style="color:#f92672">/</span><span style="color:#a6e22e">server</span><span style="color:#f92672">/</span> {
+</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">proxy_pass</span>   <span style="color:#a6e22e">http</span><span style="color:#f92672">://</span><span style="color:#ae81ff">127.0</span><span style="color:#f92672">.</span><span style="color:#ae81ff">0.1</span><span style="color:#f92672">:</span><span style="color:#ae81ff">8080</span><span style="color:#f92672">/</span><span style="color:#a6e22e">server</span><span style="color:#f92672">/</span>;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span></code></pre></div><p>需要注意的是localhost后面需要固定服务的地址前缀，这样访问时可以直接访问:<code>http://127.0.0.1:88/servce1/login.html</code>, 这样就能直接访问到端口为8081的服务。
+在附上nginx解决跨域问题的配置</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#a6e22e">http</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">include</span>       <span style="color:#a6e22e">mime</span><span style="color:#f92672">.</span><span style="color:#a6e22e">types</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">default_type</span>  <span style="color:#a6e22e">application</span><span style="color:#f92672">/</span><span style="color:#a6e22e">octet</span><span style="color:#f92672">-</span><span style="color:#a6e22e">stream</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">add_header</span> <span style="color:#a6e22e">Access</span><span style="color:#f92672">-</span><span style="color:#a6e22e">Control</span><span style="color:#f92672">-</span><span style="color:#a6e22e">Allow</span><span style="color:#f92672">-</span><span style="color:#a6e22e">Origin</span> <span style="color:#f92672">*</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">add_header</span> <span style="color:#a6e22e">Access</span><span style="color:#f92672">-</span><span style="color:#a6e22e">Control</span><span style="color:#f92672">-</span><span style="color:#a6e22e">Allow</span><span style="color:#f92672">-</span><span style="color:#a6e22e">Headers</span> <span style="color:#a6e22e">X</span><span style="color:#f92672">-</span><span style="color:#a6e22e">Requested</span><span style="color:#f92672">-</span><span style="color:#a6e22e">With</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">add_header</span> <span style="color:#a6e22e">Access</span><span style="color:#f92672">-</span><span style="color:#a6e22e">Control</span><span style="color:#f92672">-</span><span style="color:#a6e22e">Allow</span><span style="color:#f92672">-</span><span style="color:#a6e22e">Methods</span> <span style="color:#a6e22e">GET</span>,<span style="color:#a6e22e">POST</span>,<span style="color:#a6e22e">OPTIONS</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    }
+</span></span></code></pre></div><h5 id="扩展-同域下的单点登录--共享session">扩展 同域下的单点登录 &ndash; 共享session</h5>
+<p>说到单点登录，还有一种是同域名下的情况，这种情况下，抓住一个点，<strong>我们在设置Cookie时，只能设置顶域和自己的域，不能设置其他的域。</strong>，可以将Cookie的域设置为顶域，Cookie的问题解决了，</p>
+<p>将用户信息，存储在redis中将key作为数据返回页面时,放到cookie中,只要cookie中有key,后续访问逻辑www.xxx.com系统时,都会携带这个key,从而可以处理获取redis的数据使用.</p>
+
+		</div>
+	</article>
+</main>
+
+
+
+
+			</div>
+			
+		</div>
+		<footer class="footer">
+	<div class="container footer__container flex">
+		
+		<div class="footer__copyright">
+			&copy; 2026 臭大佬博客.
+			<span class="footer__copyright-credits">基于 <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> 引擎和 <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> 主题</span>
+		</div>
+	</div>
+</footer>
+	</div>
+<script async defer src="/js/menu.js"></script>
+</body>
+</html>

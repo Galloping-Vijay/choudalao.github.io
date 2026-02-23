@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Burpsuite 安装及简单使用 - 臭大佬博客</title>
+	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
+	<meta name="description" content="Burpsuite 安装及简单使用">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link rel="dns-prefetch" href="//fonts.googleapis.com">
+	<link rel="dns-prefetch" href="//fonts.gstatic.com">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
+
+	<link rel="stylesheet" href="/css/style.css">
+	
+
+	<link rel="shortcut icon" href="/favicon.ico">
+		
+</head>
+<body class="body">
+	<div class="container container--outer">
+		<header class="header">
+	<div class="container header__container">
+		
+	<div class="logo">
+		<a class="logo__link" href="/" title="臭大佬博客" rel="home">
+			<div class="logo__item logo__text">
+					<div class="logo__title">臭大佬博客</div>
+					
+				</div>
+		</a>
+	</div>
+		
+<nav class="menu">
+	<button class="menu__btn" aria-haspopup="true" aria-expanded="false" tabindex="0">
+		<span class="menu__btn-title" tabindex="-1">菜单</span>
+	</button>
+	<ul class="menu__list">
+		<li class="menu__item">
+			<a class="menu__link" href="/">
+				
+				<span class="menu__text">首页</span>
+				
+			</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/post/">
+				
+				<span class="menu__text">归档</span>
+				
+			</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/about/">
+				
+				<span class="menu__text">关于</span>
+				
+			</a>
+		</li>
+	</ul>
+</nav>
+
+	</div>
+</header>
+		<div class="wrapper flex">
+			<div class="primary">
+			
+<main class="main" role="main">
+	<article class="post">
+		<header class="post__header">
+			<h1 class="post__title">Burpsuite 安装及简单使用</h1>
+			
+		</header>
+		<div class="content post__content clearfix">
+			<h1 id="概述">概述</h1>
+<p>Burp Suite 是用于攻击web 应用程序的集成平台，包含了许多工具。Burp Suite为这些工具设计了许多接口，以加快攻击应用程序的过程。所有工具都共享一个请求，并能处理对应的HTTP 消息、持久性、认证、代理、日志、警报。</p>
+<h1 id="win下安装">WIN下安装</h1>
+<h4 id="获取">获取</h4>
+<p>官网获取：https://portswigger.net/burp</p>
+<h4 id="java环境安装">java环境安装</h4>
+<p>因为burpsuite是在JAVA环境下运行的，所以首先应该配置好JAVA环境
+java安装详见我的另一篇文章<a href="https://www.choudalao.com/article/207" title="《在windows下安装 Elasticsearch》">《在windows下安装 Elasticsearch》</a></p>
+<h4 id="安装burpsuite">安装Burpsuite</h4>
+<h6 id="下载完成exe包直接点击安装就行然后双击打开会出现如下界面">下载完成exe包直接点击安装就行，然后双击打开会出现如下界面，</h6>
+<p><img src="https://www.choudalao.com/uploads/20210819/20210819152411Ac9FLh.png" alt=""></p>
+<h6 id="这些配置直接跳过点击下一步就行">这些配置直接跳过，点击下一步就行</h6>
+<p><img src="https://www.choudalao.com/uploads/20210819/20210819152625hLiG0E.png" alt=""></p>
+<h6 id="配置-burp-suite-代理-打开burp-选择-proxyoptions">配置 Burp suite 代理 ，打开burp 选择 proxy&mdash;&ndash;&gt;options</h6>
+<p><img src="https://www.choudalao.com/uploads/20210819/20210819153237gLliAb.png" alt=""></p>
+<h6 id="默认是8080端口这个端口比较常用如果冲突记得修改一下我的改成8081了">默认是8080端口，这个端口比较常用，如果冲突记得修改一下，我的改成8081了。</h6>
+<p><img src="https://www.choudalao.com/uploads/20210819/20210819153437RTi7Sc.png" alt=""></p>
+<h3 id="浏览器进行配置">浏览器进行配置</h3>
+<p>这里以谷歌浏览器为例 ,其他浏览器类似，可自行百度。设置&mdash;&ndash;&gt;高级 &mdash;&ndash;&gt;打开您计算机的代理设置，如下图
+<img src="https://www.choudalao.com/uploads/20210819/2021081915384735u6wK.png" alt=""></p>
+<p>点击打开如下如设置
+<img src="https://www.choudalao.com/uploads/20210819/20210819154227CycSWU.png" alt=""></p>
+<h3 id="设置完代理设置burp-suite">设置完代理，设置burp suite</h3>
+<p><img src="https://www.choudalao.com/uploads/20210819/20210819155017bQpPfT.png" alt=""></p>
+<h4 id="抓https数据包">抓HTTPS数据包</h4>
+<p>如果出现如下情况，解决办法就是安装burp的受信任证书。
+<img src="https://www.choudalao.com/uploads/20210819/20210819154834hH99nX.png" alt=""></p>
+<h6 id="安装ssl受信任证书打开浏览器访问-httpburp-点击ca---certificate--下载证书进行安装">安装SSL受信任证书，打开浏览器访问 http://burp ，点击CA   Certificate  下载证书进行安装</h6>
+<p>在使用Burp site对HTTPS进行拦截时他会提示,你的连接不是私密连接或此连接不信任等,这是由于通常情况下burp默认只抓HTTP的包，HTTPS因为含有证书，因而无法正常抓取，抓HTTPS数据包就需要设置可信证书。</p>
+<p><img src="https://www.choudalao.com/uploads/20210819/20210819155200YP657k.png" alt=""></p>
+<p>下载完成的文件名是：cacert.der，后缀名是.der文件（证书的编码方式不一样），这个文件不是常规的.cer的证书文件，下面就是让浏览器信任我们刚才导出的证书。</p>
+<h4 id="打开浏览器设置我这里是谷歌">打开浏览器设置（我这里是谷歌）</h4>
+<p>隐私设置和安全性-&gt;证书管理-&gt;中间证书颁发机构</p>
+<p><img src="https://www.choudalao.com/uploads/20210819/20210819165249CysZkg.png" alt="">
+选择下载的文件下一步下一步导入就可以。</p>
+<h4 id="导出证书">导出证书</h4>
+<p>导入刚才的cacert.der文件，那么在服务器中就会存在“PortSwigger CA”这样的证书（burp的内置证书）、然后选中它进行导出</p>
+<p><img src="https://www.choudalao.com/uploads/20210819/202108191654324pXYHf.png" alt=""></p>
+<p>这里选择base64
+<img src="https://www.choudalao.com/uploads/20210819/20210819165455ylZ94U.png" alt=""></p>
+<p>自己建一个xxx.cer文件，然后选择它并替换就行</p>
+<h4 id="导入cer证书">导入cer证书</h4>
+<p>切换到受信任的证书颁发机构，进行导入刚才的cer文件</p>
+<p><img src="https://www.choudalao.com/uploads/20210819/20210819165655YuKFK3.png" alt=""></p>
+<h4 id="效果">效果</h4>
+<p>导入之后开启代理，不会出现警告了，
+<img src="https://www.choudalao.com/uploads/20210819/20210819165809BrwJ23.png" alt=""></p>
+<p>开启burp suite 抓包
+<img src="https://www.choudalao.com/uploads/20210819/20210819165912fESDf0.png" alt=""></p>
+<p>ok！</p>
+<h1 id="问题">问题</h1>
+<h3 id="burp-suite-中文乱码问题">burp suite 中文乱码问题</h3>
+<p>按照如下步骤设置：</p>
+<p><img src="https://www.choudalao.com/uploads/20210819/20210819231539V9iwdJ.png" alt=""></p>
+
+		</div>
+	</article>
+</main>
+
+
+
+
+			</div>
+			
+		</div>
+		<footer class="footer">
+	<div class="container footer__container flex">
+		
+		<div class="footer__copyright">
+			&copy; 2026 臭大佬博客.
+			<span class="footer__copyright-credits">基于 <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> 引擎和 <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> 主题</span>
+		</div>
+	</div>
+</footer>
+	</div>
+<script async defer src="/js/menu.js"></script>
+</body>
+</html>

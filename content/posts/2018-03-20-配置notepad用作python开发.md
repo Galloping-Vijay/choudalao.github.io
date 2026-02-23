@@ -1,0 +1,12 @@
+---
+title: "配置notepad++用作Python开发"
+date: 2018-03-20T10:13:30+08:00
+updated: 2026-02-23T13:25:53+08:00
+author: "臭大佬"
+categories: [Python]
+description: "配置notepad++用作Python开发"
+cover: "http://www.choudalao.com/uploads/20191016/YwXcpGVoEvU6nUbUc5mznYrlNnekyVaSU48tGfIg.jpeg"
+click: 3013
+---
+
+&lt;p&gt;notepad++可谓是神器,打开快各种插件集成,开发py时,安装&lt;span&gt;PyChart&lt;/span&gt;有点麻烦,那我们来配置一个小巧的编辑器吧,用notepa++开发,&lt;/p&gt;&lt;p&gt;首先你电脑需要安装notepad++,这里不赘述了,安装和简单的.&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;ol class=&quot; list-paddingleft-2&quot;&gt;&lt;li&gt;&lt;p&gt;打开notepad++,菜单-&amp;gt;运行&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;在弹出框中输入&quot;cmd /k D:\python\python.exe &quot;$(FULL_CURRENT_PATH)&quot; &amp;amp; ECHO. &amp;amp; PAUSE &amp;amp; EXIT&quot;,&quot;D:\python\python.exe&quot;是你python.exe的实际目录所在,保存.&lt;br&gt;&lt;/p&gt;&lt;/li&gt;&lt;/ol&gt;&lt;p style=&quot;text-align: center;&quot;&gt;&lt;img src=&quot;http://www.yuemeet.com/data/upload/2018-02-01/5a7269dd70a0c.png&quot; title=&quot;5a7269dd70a0c.png&quot; alt=&quot;5a7269dd70a0c.png&quot; _src=&quot;/data/upload/2018-02-01/5a7269dd70a0c.png&quot;&gt;&lt;/p&gt;&lt;p&gt;3.你还能给这个运行添加一个快捷键,&lt;/p&gt;&lt;p style=&quot;text-align: center;&quot;&gt;&lt;img src=&quot;http://www.yuemeet.com/data/upload/2018-02-01/5a726a8df380f.png&quot; title=&quot;5a726a8df380f.png&quot; alt=&quot;5a726a8df380f.png&quot; _src=&quot;/data/upload/2018-02-01/5a726a8df380f.png&quot;&gt;&lt;/p&gt;&lt;p&gt;4.然后编辑一个1.py文件,&lt;/p&gt;&lt;p style=&quot;text-align: center;&quot;&gt;&lt;img src=&quot;http://www.yuemeet.com/data/upload/2018-02-01/5a726aa66d762.png&quot; title=&quot;5a726aa66d762.png&quot; alt=&quot;5a726aa66d762.png&quot; _src=&quot;/data/upload/2018-02-01/5a726aa66d762.png&quot;&gt;&lt;/p&gt;&lt;p&gt;5.点击运行下面的runPython&lt;/p&gt;&lt;p style=&quot;text-align: center;&quot;&gt;&lt;img src=&quot;http://www.yuemeet.com/data/upload/2018-02-01/5a726ad66c6b8.png&quot; title=&quot;5a726ad66c6b8.png&quot; alt=&quot;5a726ad66c6b8.png&quot; _src=&quot;/data/upload/2018-02-01/5a726ad66c6b8.png&quot;&gt;&lt;/p&gt;&lt;p&gt;6.好的,结果出来了&lt;/p&gt;&lt;p style=&quot;text-align: center;&quot;&gt;&lt;img src=&quot;http://www.yuemeet.com/data/upload/2018-02-01/5a726af55f407.png&quot; title=&quot;5a726af55f407.png&quot; alt=&quot;5a726af55f407.png&quot; _src=&quot;/data/upload/2018-02-01/5a726af55f407.png&quot;&gt;&lt;/p&gt;

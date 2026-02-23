@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Redirecting to https://open.wein.qq.com/... - 臭大佬博客</title>
+	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
+	<meta name="description" content="解决Easywechat授权登录页面出现：Redirecting to https://open.wein.qq.com/...">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link rel="dns-prefetch" href="//fonts.googleapis.com">
+	<link rel="dns-prefetch" href="//fonts.gstatic.com">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
+
+	<link rel="stylesheet" href="/css/style.css">
+	
+
+	<link rel="shortcut icon" href="/favicon.ico">
+		
+</head>
+<body class="body">
+	<div class="container container--outer">
+		<header class="header">
+	<div class="container header__container">
+		
+	<div class="logo">
+		<a class="logo__link" href="/" title="臭大佬博客" rel="home">
+			<div class="logo__item logo__text">
+					<div class="logo__title">臭大佬博客</div>
+					
+				</div>
+		</a>
+	</div>
+		
+<nav class="menu">
+	<button class="menu__btn" aria-haspopup="true" aria-expanded="false" tabindex="0">
+		<span class="menu__btn-title" tabindex="-1">菜单</span>
+	</button>
+	<ul class="menu__list">
+		<li class="menu__item">
+			<a class="menu__link" href="/">
+				
+				<span class="menu__text">首页</span>
+				
+			</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/post/">
+				
+				<span class="menu__text">归档</span>
+				
+			</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/about/">
+				
+				<span class="menu__text">关于</span>
+				
+			</a>
+		</li>
+	</ul>
+</nav>
+
+	</div>
+</header>
+		<div class="wrapper flex">
+			<div class="primary">
+			
+<main class="main" role="main">
+	<article class="post">
+		<header class="post__header">
+			<h1 class="post__title">Redirecting to https://open.wein.qq.com/...</h1>
+			
+		</header>
+		<div class="content post__content clearfix">
+			<h1 id="问题">问题</h1>
+<p>在用<code>Easywechat</code> 做微信授权登录的时候，发现会请求两次<code>https://open.weixin.qq.com/connect/oauth2/authorize</code>,</p>
+<p><img src="https://www.choudalao.com/uploads/20220329/20220329154542Tdvl58.png" alt=""></p>
+<p>中间会跳如下页面，</p>
+<p><img src="https://www.choudalao.com/uploads/20220329/20220329154618MN7rOH.png" alt=""></p>
+<p>网上说，在请求接口<code>https://open.weixin.qq.com/connect/oauth2/authorize</code>的时候加一个参数<code>connect_redirect=1</code>,可以解决这个问题，</p>
+<p>模拟地址如下：
+<code>https://open.weixin.qq.com/connect/oauth2/authorize?appid=xxx&amp;redirect_uri=xxx&amp;response_type=code&amp;scope=snsapi_userinfo&amp;state=STATE&amp;connect_redirect=1#wechat_redirect</code>,</p>
+<p>但是看<code>Easywechat</code>本来就带有这个参数，</p>
+<p><img src="https://www.choudalao.com/uploads/20220329/2022032915495093W64A.png" alt=""></p>
+<p>这个我们就不管他了，</p>
+<p>现在主要解决跳<code>Redirecting to https://open.wein.qq.com/...</code>页的问题，这个页面给人的体验很不好，</p>
+<h1 id="解决">解决</h1>
+<p>根据页面的title，可以定位到<code>vendor/symfony/http-foundation/RedirectResponse.php</code>,</p>
+<p><img src="https://www.choudalao.com/uploads/20220329/20220329155411V9yXpo.png" alt=""></p>
+<p>把<code>title</code>改成<code>跳转中...</code>，并且隐藏<code>body</code>，</p>
+<p><img src="https://www.choudalao.com/uploads/20220329/20220329155727MBTLqy.png" alt=""></p>
+<p>效果如下：</p>
+<p><img src="https://www.choudalao.com/uploads/20220329/20220329155636edgA8M.png" alt=""></p>
+<p>这样用户体验就会好点，至少看上去不会像bug页面。</p>
+
+		</div>
+	</article>
+</main>
+
+
+
+
+			</div>
+			
+		</div>
+		<footer class="footer">
+	<div class="container footer__container flex">
+		
+		<div class="footer__copyright">
+			&copy; 2026 臭大佬博客.
+			<span class="footer__copyright-credits">基于 <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> 引擎和 <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> 主题</span>
+		</div>
+	</div>
+</footer>
+	</div>
+<script async defer src="/js/menu.js"></script>
+</body>
+</html>

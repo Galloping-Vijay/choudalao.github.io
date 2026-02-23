@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>PHPer的Go之路 --sync包 - 臭大佬博客</title>
+	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
+	<meta name="description" content="PHPer的Go之路 --sync包">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link rel="dns-prefetch" href="//fonts.googleapis.com">
+	<link rel="dns-prefetch" href="//fonts.gstatic.com">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
+
+	<link rel="stylesheet" href="/css/style.css">
+	
+
+	<link rel="shortcut icon" href="/favicon.ico">
+		
+</head>
+<body class="body">
+	<div class="container container--outer">
+		<header class="header">
+	<div class="container header__container">
+		
+	<div class="logo">
+		<a class="logo__link" href="/" title="臭大佬博客" rel="home">
+			<div class="logo__item logo__text">
+					<div class="logo__title">臭大佬博客</div>
+					
+				</div>
+		</a>
+	</div>
+		
+<nav class="menu">
+	<button class="menu__btn" aria-haspopup="true" aria-expanded="false" tabindex="0">
+		<span class="menu__btn-title" tabindex="-1">菜单</span>
+	</button>
+	<ul class="menu__list">
+		<li class="menu__item">
+			<a class="menu__link" href="/">
+				
+				<span class="menu__text">首页</span>
+				
+			</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/post/">
+				
+				<span class="menu__text">归档</span>
+				
+			</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/about/">
+				
+				<span class="menu__text">关于</span>
+				
+			</a>
+		</li>
+	</ul>
+</nav>
+
+	</div>
+</header>
+		<div class="wrapper flex">
+			<div class="primary">
+			
+<main class="main" role="main">
+	<article class="post">
+		<header class="post__header">
+			<h1 class="post__title">PHPer的Go之路 --sync包</h1>
+			
+		</header>
+		<div class="content post__content clearfix">
+			<p>好久没有学习Go啦，都颓废了，最近看到微软放弃对拍黄片（PHP）的支持，如果要在 Windows 上运行最新的 PHP 版本，则需要使用 WSL 并在 Linux 环境中运行 PHP。</p>
+<blockquote>
+<p>我们知道，对于漏洞修复，当前的发布日期是 2 年，而对于安全修复，则是 1 年之后。这意味着 PHP 7.2 将在 11 月停止支持。PHP 7.3 仅在 11 月才进入安全修复模式。PHP 7.4 将继续进行一年的错误修复，然后再进行一年的安全修复。只要官方支持，我们致力于在 Windows 上针对 7.2、7.3 和 7.4 维护 PHP 的开发和构建。但是，我们不会以 8.0 及更高版本的任何能力支持 Windows 的 PHP。</p>
+</blockquote>
+<p>近些年来，对拍黄片（PHP）看衰的新闻层出不穷，感觉拍黄片（PHP）并不是铁饭碗，周围的同行也危机感越来越严重，学Go学Python的很多呀。招聘信息也看到很多Go代替PHP的，再不学起来就要被淘汰了。把基础语法学完，然后搞个小项目，基本入门之后，才能理直气壮的继续骗工资。</p>
+<p>进入正题，今天学习了一下 <code>sync 包</code> ，</p>
+<h1 id="什么是sync包">什么是Sync包</h1>
+<p>Sync包官方文档：http://devdocs.io/go/sync/index#Map</p>
+<blockquote>
+<p>Package sync provides basic synchronization primitives such as mutual exclusion locks. Other than the Once and WaitGroup types, most are intended for use by low-level library routines. Higher-level synchronization is better done via channels and communication.</p>
+</blockquote>
+<blockquote>
+<p>Values containing the types defined in this package should not be copied.</p>
+</blockquote>
+<p>这句话大意是说：
+包同步提供基本的同步原语，例如互斥锁。除一次和等待组类型外，大多数都供低级库例程使用。更高级别的同步最好通过渠道和通信来完成。</p>
+<p>在简书上看到一篇整理比较全面的文章，大部分引用于此：<a href="https://www.jianshu.com/p/b85018eb00c1" title="sync包介绍">sync包介绍</a></p>
+<h3 id="synccond">sync.Cond</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> (
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;fmt&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;sync&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;time&#34;</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">/*
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">* sync.Cond
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">* 条件变量的作用并不是保证在同一时刻仅有一个线程访问某一个共享数据，而是在某一个条件发生时，通知阻塞在该条件上的goroutine(线程)
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">*
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">* 条件变量+互斥量(锁)
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">* a. 互斥量为共享数据的访问提供互斥支持
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">* b. 条件变量就数据状态的变化向相关线程发出通知(goroutine)
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">*
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">* sync.Cond提供的三个相关方法:
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">* 1. wait: 阻塞当前线程(goroutine)，直到收到该条件变量发来的通知
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">* 2. signal: 单发通知，让该条件变量向至少一个正在等待它的goroutine发送通知，表示共享数据的状态已经改变
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">* 3. broadcast: 广播通知，让条件变量给正在等待它的所有goroutine发送通知，告知共享数据的状态已经改变
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">*
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">* sync.Cond struct
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">* // Each Cond has an associated Locker L (often a *Mutex or *RWMutex),
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">* // which must be held when changing the condition and
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">* // when calling the Wait method.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">* //
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">* // A Cond must not be copied after first use.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">* type Cond struct {
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">*   noCopy noCopy
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">*
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">*   // L is held while observing or changing the condition
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">*   L Locker
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">*
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">*   notify  notifyList
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">*   checker copyChecker
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">* }
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">*
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">* 通过sync.Cond的定义，我们需要注意以下几点:
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">* 1. Cond内部存在一个Locker(Mutex或RWMutex)，在Cond状态条件改变或调用Wait方法时，必须被锁住。即Locker是对
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">*    Wait, Signal，Broadcast进行保护，确保在发送信号的时候不会有新的goroutine进入wait而阻塞。
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">* 2. Cond变量在第一次创建之后不应该被copy。
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">* 3. 在调用Signal，Broadcast函数之前，应该确保目标进入wait阻塞状态。
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">*
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> */</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">wg</span> <span style="color:#a6e22e">sync</span>.<span style="color:#a6e22e">WaitGroup</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">cond</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">sync</span>.<span style="color:#a6e22e">NewCond</span>(new(<span style="color:#a6e22e">sync</span>.<span style="color:#a6e22e">Mutex</span>))
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">0</span>; <span style="color:#a6e22e">i</span> &lt; <span style="color:#ae81ff">3</span>; <span style="color:#a6e22e">i</span><span style="color:#f92672">++</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">wg</span>.<span style="color:#a6e22e">Add</span>(<span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">go</span> <span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">i</span> <span style="color:#66d9ef">int</span>) {
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">wg</span>.<span style="color:#a6e22e">Done</span>()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>			<span style="color:#75715e">// wait前先上锁</span>
+</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">cond</span>.<span style="color:#a6e22e">L</span>.<span style="color:#a6e22e">Lock</span>()
+</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;goroutine_%d start wait\n&#34;</span>, <span style="color:#a6e22e">i</span>)
+</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">cond</span>.<span style="color:#a6e22e">Wait</span>()
+</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;goroutine_%d end wait\n&#34;</span>, <span style="color:#a6e22e">i</span>)
+</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">cond</span>.<span style="color:#a6e22e">L</span>.<span style="color:#a6e22e">Unlock</span>()
+</span></span><span style="display:flex;"><span>		}(<span style="color:#a6e22e">i</span>)
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">/*
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">	   // 1. 调用signal方法，一次唤醒一个阻塞等待的goroutine
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">	   for i := 0; i &lt; 3; i++ {
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">	       time.Sleep(1 * time.Second)
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">	       //cond.L.Lock()
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">	       cond.Signal() // 1秒唤醒一个goroutine
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">	       //cond.L.Unlock()
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">	   }
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">	*/</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// 2. 调用broadcast方法，一次性唤醒所有阻塞的goroutine</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Sleep</span>(<span style="color:#ae81ff">1</span> <span style="color:#f92672">*</span> <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Second</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">//cond.L.Lock()</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">cond</span>.<span style="color:#a6e22e">Broadcast</span>()
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">//cond.L.Unlock()</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">wg</span>.<span style="color:#a6e22e">Wait</span>()
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;end test&#34;</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>利用sync.Cond条件变量进行简单阻塞的示例:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">c</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">sync</span>.<span style="color:#a6e22e">NewCond</span>(<span style="color:#f92672">&amp;</span><span style="color:#a6e22e">sync</span>.<span style="color:#a6e22e">Mutex</span>{}) <span style="color:#75715e">// 1</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">L</span>.<span style="color:#a6e22e">Lock</span>() <span style="color:#75715e">// 2</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> <span style="color:#a6e22e">conditionTrue</span>() <span style="color:#f92672">==</span> <span style="color:#66d9ef">false</span> {
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">Wait</span>() <span style="color:#75715e">// 3：该方法会使当前goroutine被阻塞（阻塞式）</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">L</span>.<span style="color:#a6e22e">Unlock</span>() <span style="color:#75715e">// 4</span>
+</span></span></code></pre></div><p>注意点:</p>
+<ul>
+<li>NewCond函数传入的参数实现了sync.Locker类型。Cond类型允许以并行安全的方式与其他goroutines协调。</li>
+<li>在执行Wait操作前，必须进行锁定。因为，Wait函数的调用会执行解锁并暂停该goroutine。</li>
+<li>进入暂停状态的goroutine会一直被阻塞住，直到接收到通知。</li>
+<li>当前goroutine被唤醒后，必须执行解锁操作，因为在Wait函数退出前，会执行加锁操作。</li>
+</ul>
+<h3 id="syncmap">sync.Map</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> (
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;fmt&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;sync&#34;</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">/*
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">* Go1.9版本之前，其自带的map并不是并发安全的，如果要对其实现安全地并发访问，则需要对其进行加锁操作，即将map和sync.Mutex或sync.RWMutex
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">* 打包成一个struct来使用。
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">* Go1.9推出了sync.Map，其原生支持并发安全，相比上述struct的map具备更好的性能。sync.Map较内置map的用法不太一样，其内部封装了更为复杂的
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">* 数据结构。
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">*
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">*   var smp sync.Map
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">*   其主要提供了以下几种方法:
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">*   1. Store(key, value interface{}) : 设置一个键值对
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">*   2. LoadOrStore(key, value interface{})(actual interface{}, loaded bool): 如果key存在，则返回其对应的值；如果key不存在，则设置
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">        相应的值。如果是读取，则loaded返回true；如果是设置，则loaded返回false。
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">*   3. Load(key interface{})(value interface{}, ok bool) : 读取map中key对应的value。如果存在，ok返回true；否则，返回false。
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">*   4. Delete(key interface{}) : 删除对应的key
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">*   5. Range(f func(key, value interface{})bool) : 依次遍历map中的k-v对，如果函数f返回false，则停止迭代。
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">*       Tips: Range does not necessarily correspond to any consistent snapshot of the Map&#39;s contents:
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">        no key will be visited more than once, but if the value for any key is stored or deleted concurrently,
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">        Range may reflect any mapping for that key from any point during the Range call.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">*   在Range函数调用的过程，遍历key的顺序同样是随机的，且range能否保证遍历key的唯一性(不存在重复)。如果，range过程中存在其它的goroutine并发
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">*   store, delete key，则range遍历的结果是反映当时时刻map的存储状态的。
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">*/</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">smp</span> <span style="color:#a6e22e">sync</span>.<span style="color:#a6e22e">Map</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// 添加kv对</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">smp</span>.<span style="color:#a6e22e">Store</span>(<span style="color:#e6db74">&#34;1&#34;</span>, <span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">smp</span>.<span style="color:#a6e22e">Store</span>(<span style="color:#e6db74">&#34;2&#34;</span>, <span style="color:#ae81ff">2</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">smp</span>.<span style="color:#a6e22e">Store</span>(<span style="color:#e6db74">&#34;3&#34;</span>, <span style="color:#ae81ff">3</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// 遍历</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;11111111111111&#34;</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">smp</span>.<span style="color:#a6e22e">Range</span>(<span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">key</span>, <span style="color:#a6e22e">value</span> <span style="color:#66d9ef">interface</span>{}) <span style="color:#66d9ef">bool</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;%v:%v\n&#34;</span>, <span style="color:#a6e22e">key</span>, <span style="color:#a6e22e">value</span>)
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">return</span> <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>	})
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// 删除</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">smp</span>.<span style="color:#a6e22e">Delete</span>(<span style="color:#e6db74">&#34;3&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// 遍历</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;222222222222222&#34;</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">smp</span>.<span style="color:#a6e22e">Range</span>(<span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">key</span>, <span style="color:#a6e22e">value</span> <span style="color:#66d9ef">interface</span>{}) <span style="color:#66d9ef">bool</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;%v:%v\n&#34;</span>, <span style="color:#a6e22e">key</span>, <span style="color:#a6e22e">value</span>)
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">return</span> <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>	})
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">v1</span>, <span style="color:#a6e22e">ok</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">smp</span>.<span style="color:#a6e22e">Load</span>(<span style="color:#e6db74">&#34;1&#34;</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">ok</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">v1</span>)
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="syncwaitgroup--实现协程并发">sync.WaitGroup  实现协程并发</h3>
+<p>sync.WaitGroup主要用于等待一组并发操作的完成。例如，使用sync.WaitGroup等待一组goroutine执行完对应的操作。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">wg</span> <span style="color:#f92672">:=&amp;</span><span style="color:#a6e22e">sync</span>.<span style="color:#a6e22e">WaitGroup</span>{}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">wg</span>.<span style="color:#a6e22e">Add</span>(<span style="color:#ae81ff">1</span>) <span style="color:#75715e">// 注册一个任务</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">go</span> <span style="color:#66d9ef">func</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">wg</span>.<span style="color:#a6e22e">Done</span>() <span style="color:#75715e">// 通知当前任务已经完成。</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;1st goroutine sleeping...&#34;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Sleep</span>(<span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>}()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">wg</span>.<span style="color:#a6e22e">Add</span>(<span style="color:#ae81ff">1</span>) <span style="color:#75715e">// 注册一个任务</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">go</span> <span style="color:#66d9ef">func</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">wg</span>.<span style="color:#a6e22e">Done</span>() <span style="color:#75715e">// 通知当前任务已经完成。</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;2nd goroutine sleeping...&#34;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Sleep</span>(<span style="color:#ae81ff">2</span>)
+</span></span><span style="display:flex;"><span>}()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">wg</span>.<span style="color:#a6e22e">Wait</span>() <span style="color:#75715e">// 阻塞在这里，直到所有任务都已完成。</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;All goroutines complete.&#34;</span>)
+</span></span></code></pre></div><p>可以将sync.WaitGroup视作一个安全的并发计数器：调用Add操作增加计数，调用Done操作减少计数，调用Wait操作会阻塞等待，直到计数器变为0。</p>
+<p>另外，一种使用sync.WaitGroup的方法：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#75715e">// 传指针的方式，函数内部使用同一sync.WaitGroup</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">hello</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">wg</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">sync</span>.<span style="color:#a6e22e">WaitGroup</span>, <span style="color:#a6e22e">id</span> <span style="color:#66d9ef">int</span>) {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">wg</span>.<span style="color:#a6e22e">Done</span>()
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;Hello from %v!\n&#34;</span>, <span style="color:#a6e22e">id</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">numGreeters</span> = <span style="color:#ae81ff">5</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">wg</span> <span style="color:#a6e22e">sync</span>.<span style="color:#a6e22e">WaitGroup</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">wg</span>.<span style="color:#a6e22e">Add</span>(<span style="color:#a6e22e">numGreeters</span>)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">0</span>; <span style="color:#a6e22e">i</span> &lt; <span style="color:#a6e22e">numGreeters</span>; <span style="color:#a6e22e">i</span><span style="color:#f92672">++</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">go</span> <span style="color:#a6e22e">hello</span>(<span style="color:#f92672">&amp;</span><span style="color:#a6e22e">wg</span>, <span style="color:#a6e22e">i</span><span style="color:#f92672">+</span><span style="color:#ae81ff">1</span>)  <span style="color:#75715e">// 传指针参数</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">wg</span>.<span style="color:#a6e22e">Wait</span>()
+</span></span></code></pre></div><h3 id="synconce">sync.Once</h3>
+<p>顾名思义，sync.Once确保了即使在不同的goroutine上，调用Do传入的函数只执行一次。一般应用于初始化的场景，sync.Once确保该初始化操作只被执行一次。</p>
+<p>注意
+sync.Once只计算Do被调用的次数，而不是调用传入Do的唯一函数的次数。例如，下面函数count的输出值为1而不是0。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">count</span> <span style="color:#66d9ef">int</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">increment</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">func</span>() { <span style="color:#a6e22e">count</span><span style="color:#f92672">++</span> }
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">decrement</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">func</span>() { <span style="color:#a6e22e">count</span><span style="color:#f92672">--</span> }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">once</span> <span style="color:#a6e22e">sync</span>.<span style="color:#a6e22e">Once</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">once</span>.<span style="color:#a6e22e">Do</span>(<span style="color:#a6e22e">increment</span>) <span style="color:#75715e">// increment函数将被调用</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">once</span>.<span style="color:#a6e22e">Do</span>(<span style="color:#a6e22e">decrement</span>) <span style="color:#75715e">// decrement函数不会被调用</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;Count: %d\n&#34;</span>, <span style="color:#a6e22e">count</span>)
+</span></span></code></pre></div><h3 id="syncmutex和syncrwmutex">sync.Mutex和sync.RWMutex</h3>
+<p>被锁定部分是程序的性能瓶颈，进入和退出锁的成本有点高，因此应该尽量减少锁定涉及的范围。sync.RWMutex相比sync.Mutex具有更高的性能，因此在逻辑正确的情况下应该尽量使用sync.RWMutex而不是sync.Mutex。</p>
+<h3 id="syncpool">sync.Pool</h3>
+<p>sync.Pool是对象池模式的并发安全实现。池模式是一种创建和提供固定数量可用对象的方式。它通常用于约束创建资源昂贵的事务(例如，数据库连接)。Go中sync.Pool可以被多个例程安全地使用。</p>
+<h3 id="getput方法">Get/Put方法</h3>
+<p>Pool的主要接口是它的Get方法。 被调用时，Get将首先检查池中是否有可用实例返回给调用者，如果没有，则创建一个新成员变量。使用完成后，调用者调用Put将正在使用的实例放回池中供其他进程使用。 这里有一个简单的例子来演示：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">myPool</span> <span style="color:#f92672">:=</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">sync</span>.<span style="color:#a6e22e">Pool</span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">New</span>: <span style="color:#66d9ef">func</span>() <span style="color:#66d9ef">interface</span>{} {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;Creating new instance.&#34;</span>)
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">struct</span>{}{}
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">instance</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">myPool</span>.<span style="color:#a6e22e">Get</span>() <span style="color:#75715e">//1: 从资源池拿取对象，否则新建一个对象</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">myPool</span>.<span style="color:#a6e22e">Put</span>(<span style="color:#a6e22e">instance</span>)     <span style="color:#75715e">//2: 将使用完的对象放回资源池</span>
+</span></span></code></pre></div><p>sync.Pool另一个用处可以预热分配对象的缓存，用于必须尽快进行的操作。在这种情况下，我们通过预先加载获取另一个对象的引用来减少消费者的时间消耗。在编写高吞吐量的网络服务器时，连接池是常见的优化技术。相关示例参考：https://www.kancloud.cn/mutouzhang/go/596830。</p>
+<p>使用sync.Pool时应该注意的要点：</p>
+<ul>
+<li>实例化sync.Pool时，给它一个新元素，该元素应该是线程安全的。</li>
+<li>当你从Get获得一个实例时，不要假设你接收到的对象状态。</li>
+<li>当你从池中取得实例时，请务必不要忘记调用Put。否则池的优越性就体现不出来了。这通常用defer来执行延迟操作。(defer Pool.Put())</li>
+<li>池中的元素必须大致上是均匀的。</li>
+</ul>
+<h2 id="errgroupgroup">errgroup.Group</h2>
+<h3 id="场景">场景</h3>
+<p>当我们有多个协程执行时，我们希望每个协程执行结果都是我们想要，即都是成功无异常的，那么我们就需要拿到所有协程的错误信息,知道所有协程的<code>error</code>都是<code>nil</code>,但是协程又是独立运行的,没有返回值.我们要怎样才能得到我们想要的结果呢?</p>
+<p>这种场景很常见,比如我们方法中有个事务,多个协程结果都是成功,我们才提交事务,这时候我们就要判断各个协程是否有error,我们可以使用<code>golang.org/x/sync/errgroup</code>包，errgroup 底层实现多个 goroutine 调度，等待的能力还是基于 sync.WaitGroup。所以可以直接用它来处理协程。
+示例：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> (
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;fmt&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;golang.org/x/sync/errgroup&#34;</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">g</span> <span style="color:#a6e22e">errgroup</span>.<span style="color:#a6e22e">Group</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// 协程一</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">g</span>.<span style="color:#a6e22e">Go</span>(<span style="color:#66d9ef">func</span>() (<span style="color:#a6e22e">err</span> <span style="color:#66d9ef">error</span>) {
+</span></span><span style="display:flex;"><span>		<span style="color:#75715e">// do something - 1</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">return</span> <span style="color:#66d9ef">nil</span>
+</span></span><span style="display:flex;"><span>	})
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// 协程二</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">g</span>.<span style="color:#a6e22e">Go</span>(<span style="color:#66d9ef">func</span>() (<span style="color:#a6e22e">err</span> <span style="color:#66d9ef">error</span>) {
+</span></span><span style="display:flex;"><span>		<span style="color:#75715e">// do something - 2</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">return</span> <span style="color:#66d9ef">nil</span>
+</span></span><span style="display:flex;"><span>	})
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// 等待协程结果，拿到错误信息</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">g</span>.<span style="color:#a6e22e">Wait</span>(); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;错误信息为:%#v\n&#34;</span>, <span style="color:#a6e22e">err</span>.<span style="color:#a6e22e">Error</span>())
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">return</span>
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;无错误&#34;</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>带函数</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>	<span style="color:#a6e22e">str</span> <span style="color:#f92672">:=</span> <span style="color:#e6db74">&#34;aaa&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">g</span> <span style="color:#a6e22e">errgroup</span>.<span style="color:#a6e22e">Group</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">g</span>.<span style="color:#a6e22e">Go</span>(<span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">parameter</span> <span style="color:#66d9ef">string</span>) <span style="color:#66d9ef">func</span>() <span style="color:#66d9ef">error</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">return</span> <span style="color:#66d9ef">func</span>() (<span style="color:#a6e22e">err</span> <span style="color:#66d9ef">error</span>) {
+</span></span><span style="display:flex;"><span>			<span style="color:#75715e">// 一些操作</span>
+</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">parameter</span>)
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">err</span>
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>	}(<span style="color:#a6e22e">str</span>))
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// 等待协程结果，拿到错误信息</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">g</span>.<span style="color:#a6e22e">Wait</span>(); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">err</span>
+</span></span><span style="display:flex;"><span>	}
+</span></span></code></pre></div><h2 id="goroutine-和-channel-实现一个控制协程数的应用">goroutine 和 channel 实现一个控制协程数的应用</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> (
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;fmt&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;sync&#34;</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">User</span> <span style="color:#66d9ef">struct</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">ID</span>   <span style="color:#66d9ef">int</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">Age</span>  <span style="color:#66d9ef">int</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">Name</span> <span style="color:#66d9ef">string</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">numOfWorkers</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">5</span>                        <span style="color:#75715e">// 限制最大协程数</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">sem</span> <span style="color:#f92672">:=</span> make(<span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">struct</span>{}, <span style="color:#a6e22e">numOfWorkers</span>) <span style="color:#75715e">// 并发控制信号量</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">lst</span> <span style="color:#f92672">:=</span> make([]<span style="color:#f92672">*</span><span style="color:#a6e22e">User</span>, <span style="color:#ae81ff">20</span>)                 <span style="color:#75715e">// 模拟数据为20条</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">wg</span> <span style="color:#a6e22e">sync</span>.<span style="color:#a6e22e">WaitGroup</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">wg</span>.<span style="color:#a6e22e">Add</span>(len(<span style="color:#a6e22e">lst</span>))
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">v</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">range</span> <span style="color:#a6e22e">lst</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">sem</span> <span style="color:#f92672">&lt;-</span> <span style="color:#66d9ef">struct</span>{}{}
+</span></span><span style="display:flex;"><span>		<span style="color:#75715e">// 数据操作</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">go</span> <span style="color:#a6e22e">userAction</span>(<span style="color:#a6e22e">v</span>, <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">wg</span>, <span style="color:#a6e22e">sem</span>)
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">wg</span>.<span style="color:#a6e22e">Wait</span>()
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 数据操作</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">userAction</span>(<span style="color:#a6e22e">user</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">User</span>, <span style="color:#a6e22e">wg</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">sync</span>.<span style="color:#a6e22e">WaitGroup</span>, <span style="color:#a6e22e">sem</span> <span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">struct</span>{}) (<span style="color:#a6e22e">err</span> <span style="color:#66d9ef">error</span>) {
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// TODO</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">defer</span> <span style="color:#66d9ef">func</span>() {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">wg</span>.<span style="color:#a6e22e">Done</span>()
+</span></span><span style="display:flex;"><span>		<span style="color:#f92672">&lt;-</span><span style="color:#a6e22e">sem</span>
+</span></span><span style="display:flex;"><span>	}()
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;操作用户&#34;</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div>
+		</div>
+	</article>
+</main>
+
+
+
+
+			</div>
+			
+		</div>
+		<footer class="footer">
+	<div class="container footer__container flex">
+		
+		<div class="footer__copyright">
+			&copy; 2026 臭大佬博客.
+			<span class="footer__copyright-credits">基于 <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> 引擎和 <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> 主题</span>
+		</div>
+	</div>
+</footer>
+	</div>
+<script async defer src="/js/menu.js"></script>
+</body>
+</html>

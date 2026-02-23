@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>PHPer的Go之路 -- 结构体 - 臭大佬博客</title>
+	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
+	<meta name="description" content="结构体是将零个或多个任意类型的变量，组合在一起的聚合数据类型，也可以看做是数据的集合。">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link rel="dns-prefetch" href="//fonts.googleapis.com">
+	<link rel="dns-prefetch" href="//fonts.gstatic.com">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
+
+	<link rel="stylesheet" href="/css/style.css">
+	
+
+	<link rel="shortcut icon" href="/favicon.ico">
+		
+</head>
+<body class="body">
+	<div class="container container--outer">
+		<header class="header">
+	<div class="container header__container">
+		
+	<div class="logo">
+		<a class="logo__link" href="/" title="臭大佬博客" rel="home">
+			<div class="logo__item logo__text">
+					<div class="logo__title">臭大佬博客</div>
+					
+				</div>
+		</a>
+	</div>
+		
+<nav class="menu">
+	<button class="menu__btn" aria-haspopup="true" aria-expanded="false" tabindex="0">
+		<span class="menu__btn-title" tabindex="-1">菜单</span>
+	</button>
+	<ul class="menu__list">
+		<li class="menu__item">
+			<a class="menu__link" href="/">
+				
+				<span class="menu__text">首页</span>
+				
+			</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/post/">
+				
+				<span class="menu__text">归档</span>
+				
+			</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/about/">
+				
+				<span class="menu__text">关于</span>
+				
+			</a>
+		</li>
+	</ul>
+</nav>
+
+	</div>
+</header>
+		<div class="wrapper flex">
+			<div class="primary">
+			
+<main class="main" role="main">
+	<article class="post">
+		<header class="post__header">
+			<h1 class="post__title">PHPer的Go之路 -- 结构体</h1>
+			
+		</header>
+		<div class="content post__content clearfix">
+			<p>Go的结构体(struct)，有点像js的对象,用&rsquo;.&lsquo;链接。结构体表示一项记录，有点类似数据库的一条记录。</p>
+<h1 id="定义结构体">定义结构体</h1>
+<p>结构体定义需要使用 type 和 struct 语句。struct 语句定义一个新的数据类型，结构体中有一个或多个成员。type 语句设定了结构体的名称。结构体的格式如下：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> (<span style="color:#e6db74">&#34;fmt&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">Books</span> <span style="color:#66d9ef">struct</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">book_id</span> <span style="color:#66d9ef">int</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">title</span>   <span style="color:#66d9ef">string</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">author</span>  <span style="color:#66d9ef">string</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">subject</span> <span style="color:#66d9ef">string</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">//定义结构体</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">structTest</span>()
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">structTest</span>() {
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// 创建一个新的结构体,去掉key的话,需要一一对应</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">Books</span>{<span style="color:#ae81ff">1</span>,<span style="color:#e6db74">&#34;Go&#34;</span>, <span style="color:#e6db74">&#34;臭大佬&#34;</span>, <span style="color:#e6db74">&#34;计算机语言&#34;</span>})
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// 也可以使用 key =&gt; value 格式</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">Books</span>{<span style="color:#a6e22e">title</span>: <span style="color:#e6db74">&#34;PHP&#34;</span>, <span style="color:#a6e22e">author</span>: <span style="color:#e6db74">&#34;Vijay&#34;</span>, <span style="color:#a6e22e">subject</span>: <span style="color:#e6db74">&#34;计算机语言&#34;</span>, <span style="color:#a6e22e">book_id</span>: <span style="color:#ae81ff">2</span>})
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// 忽略的字段为 0 或 空</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">Books</span>{<span style="color:#a6e22e">title</span>: <span style="color:#e6db74">&#34;Python&#34;</span>, <span style="color:#a6e22e">author</span>: <span style="color:#e6db74">&#34;魏花花&#34;</span>})
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p><img src="https://www.choudalao.com/uploads/20191120/201911202303277fMAcH.png" alt=""></p>
+<h1 id="访问成员">访问成员</h1>
+<p>如果要访问结构体成员，需要使用点号 . 操作符。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> (
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;fmt&#34;</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">Books</span> <span style="color:#66d9ef">struct</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">book_id</span> <span style="color:#66d9ef">int</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">title</span>   <span style="color:#66d9ef">string</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">author</span>  <span style="color:#66d9ef">string</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">subject</span> <span style="color:#66d9ef">string</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">structCall</span>()
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">structCall</span>() {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">Book1</span> <span style="color:#a6e22e">Books</span> <span style="color:#75715e">/*声明 Book1 为 Books 类型*/</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">Book1</span>.<span style="color:#a6e22e">title</span> = <span style="color:#e6db74">&#34;Go&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">Book1</span>.<span style="color:#a6e22e">author</span> = <span style="color:#e6db74">&#34;臭大佬&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">Book1</span>.<span style="color:#a6e22e">subject</span> = <span style="color:#e6db74">&#34;计算机语言&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">Book1</span>.<span style="color:#a6e22e">book_id</span> = <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;Book 1 title : %s\n&#34;</span>, <span style="color:#a6e22e">Book1</span>.<span style="color:#a6e22e">title</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;Book 1 author : %s\n&#34;</span>, <span style="color:#a6e22e">Book1</span>.<span style="color:#a6e22e">author</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;Book 1 subject : %s\n&#34;</span>, <span style="color:#a6e22e">Book1</span>.<span style="color:#a6e22e">subject</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;Book 1 book_id : %d\n&#34;</span>, <span style="color:#a6e22e">Book1</span>.<span style="color:#a6e22e">book_id</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p><img src="https://www.choudalao.com/uploads/20191120/20191120231146jyW5xe.png" alt=""></p>
+<h1 id="作为函数参数">作为函数参数</h1>
+<p>你可以像其他数据类型一样将结构体类型作为参数传递给函数。并以以上实例的方式访问结构体变量：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> (
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;fmt&#34;</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">Books</span> <span style="color:#66d9ef">struct</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">book_id</span> <span style="color:#66d9ef">int</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">title</span>   <span style="color:#66d9ef">string</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">author</span>  <span style="color:#66d9ef">string</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">subject</span> <span style="color:#66d9ef">string</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">Book1</span> <span style="color:#a6e22e">Books</span> <span style="color:#75715e">/*声明 Book1 为 Books 类型*/</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">Book1</span>.<span style="color:#a6e22e">title</span> = <span style="color:#e6db74">&#34;Go&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">Book1</span>.<span style="color:#a6e22e">author</span> = <span style="color:#e6db74">&#34;臭大佬&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">Book1</span>.<span style="color:#a6e22e">subject</span> = <span style="color:#e6db74">&#34;计算机语言&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">Book1</span>.<span style="color:#a6e22e">book_id</span> = <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">/* 打印 Book1 信息 */</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">printBook</span>(<span style="color:#a6e22e">Book1</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">printBook</span>( <span style="color:#a6e22e">book</span> <span style="color:#a6e22e">Books</span> ) {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;结构体作为参数&#34;</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>( <span style="color:#e6db74">&#34;Book title : %s\n&#34;</span>, <span style="color:#a6e22e">book</span>.<span style="color:#a6e22e">title</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>( <span style="color:#e6db74">&#34;Book author : %s\n&#34;</span>, <span style="color:#a6e22e">book</span>.<span style="color:#a6e22e">author</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>( <span style="color:#e6db74">&#34;Book subject : %s\n&#34;</span>, <span style="color:#a6e22e">book</span>.<span style="color:#a6e22e">subject</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>( <span style="color:#e6db74">&#34;Book book_id : %d\n&#34;</span>, <span style="color:#a6e22e">book</span>.<span style="color:#a6e22e">book_id</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p><img src="https://www.choudalao.com/uploads/20191120/20191120231745QfBd0M.png" alt=""></p>
+
+		</div>
+	</article>
+</main>
+
+
+
+
+			</div>
+			
+		</div>
+		<footer class="footer">
+	<div class="container footer__container flex">
+		
+		<div class="footer__copyright">
+			&copy; 2026 臭大佬博客.
+			<span class="footer__copyright-credits">基于 <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> 引擎和 <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> 主题</span>
+		</div>
+	</div>
+</footer>
+	</div>
+<script async defer src="/js/menu.js"></script>
+</body>
+</html>

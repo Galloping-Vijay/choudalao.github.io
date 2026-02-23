@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Php - 臭大佬博客</title>
+	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
+	<meta name="description" content="">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link rel="dns-prefetch" href="//fonts.googleapis.com">
+	<link rel="dns-prefetch" href="//fonts.gstatic.com">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
+
+	<link rel="stylesheet" href="/css/style.css">
+	
+	<link rel="alternate" type="application/rss+xml" href="/categories/php/index.xml" title="臭大佬博客">
+
+	<link rel="shortcut icon" href="/favicon.ico">
+		
+</head>
+<body class="body">
+	<div class="container container--outer">
+		<header class="header">
+	<div class="container header__container">
+		
+	<div class="logo">
+		<a class="logo__link" href="/" title="臭大佬博客" rel="home">
+			<div class="logo__item logo__text">
+					<div class="logo__title">臭大佬博客</div>
+					
+				</div>
+		</a>
+	</div>
+		
+<nav class="menu">
+	<button class="menu__btn" aria-haspopup="true" aria-expanded="false" tabindex="0">
+		<span class="menu__btn-title" tabindex="-1">菜单</span>
+	</button>
+	<ul class="menu__list">
+		<li class="menu__item">
+			<a class="menu__link" href="/">
+				
+				<span class="menu__text">首页</span>
+				
+			</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/post/">
+				
+				<span class="menu__text">归档</span>
+				
+			</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/about/">
+				
+				<span class="menu__text">关于</span>
+				
+			</a>
+		</li>
+	</ul>
+</nav>
+
+	</div>
+</header>
+		<div class="wrapper flex">
+			<div class="primary">
+			
+<main class="main list" role="main">
+	<header class="main__header">
+		<h1 class="main__title">Php</h1>
+	</header><article class="list__item post">
+	
+	<header class="list__header">
+		<h2 class="list__title post__title">
+			<a href="/posts/2019-09-21-laravel%E6%89%93%E5%8D%B0%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9F%A5%E8%AF%A2%E8%AF%AD%E5%8F%A5/" rel="bookmark">
+			laravel打印数据库查询语句
+			</a>
+		</h2>
+		
+	</header>
+	<div class="content list__excerpt post__content clearfix">
+		<p>&lt;p&gt;在使用laravel操作数据库的时候,想看条件是否拼接正确,以及查询耗时,可以使用一下方法&lt;/p&gt;&lt;pre lay-lang=&quot;PHP&quot;&gt;&lt;code class=&quot;PHP&quot;&gt;//Laravel 5 中需要开启QueryLog
+DB::connection()-&amp;gt;enableQueryLog();
+//这里为查询操作
+dd(DB::getQueryLog());&lt;/code&gt;&lt;/pre&gt;</p>
+	</div>
+</article><article class="list__item post">
+	
+	<header class="list__header">
+		<h2 class="list__title post__title">
+			<a href="/posts/2018-07-01-%E7%90%86%E8%A7%A3php%E4%BE%9D%E8%B5%96%E6%B3%A8%E5%85%A5%E5%AE%B9%E5%99%A8dependency-injection-container%E7%B3%BB%E5%88%97%E4%B8%80-%E4%BB%80%E4%B9%88%E6%98%AF%E4%BE%9D%E8%B5%96%E6%B3%A8%E5%85%A5/" rel="bookmark">
+			理解PHP依赖注入容器(dependency injection container)系列(一) 什么是依赖注入
+			</a>
+		</h2>
+		
+	</header>
+	<div class="content list__excerpt post__content clearfix">
+		<p>&lt;p sf=&quot;&quot; ui=&quot;&quot; pingfang=&quot;&quot; hiragino=&quot;&quot; sans=&quot;&quot; microsoft=&quot;&quot; wenquanyi=&quot;&quot; micro=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot; style=&quot;text-align: justify;&quot;&gt;本文是PHP依赖注入容器的实现这个系列的第一章。&amp;nbsp;&lt;br&gt;今天，先不谈容器(container),首先用一些具体的例子来介绍&lt;span&gt;依赖注入&lt;/span&gt;的概念，证明依赖注入这种模式可以解决哪些问题，同时能给开发人员带来哪些好处。&amp;nbsp;&lt;br&gt;如果你已经知道了依赖注入的概念，你可以跳过这篇文章。&lt;/p&gt;&lt;p sf=&quot;&quot; ui=&quot;&quot; pingfang=&quot;&quot; hiragino=&quot;&quot; sans=&quot;&quot; microsoft=&quot;&quot; wenquanyi=&quot;&quot; micro=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot; style=&quot;text-align: justify;&quot;&gt;依赖注入可能是我所知道的最简单设计模式之一，很多情况下可能你无意识中已经使用了依赖注入。不过它也是最难解释的一个。我认为有一部分原因是由于大多数介绍依赖注入的例子缺乏实际意义，让人难理解。因为PHP主要用于Web开发，那就先来看一个简单的web开发实例。&lt;/p&gt;&lt;p sf=&quot;&quot; ui=&quot;&quot; pingfang=&quot;&quot; hiragino=&quot;&quot; sans=&quot;&quot; microsoft=&quot;&quot; wenquanyi=&quot;&quot; micro=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot; style=&quot;text-align: justify;&quot;&gt;HTTP本身是一个无状态的连接协议，为了支持客户在发起WEB请求时应用程序能存储用户信息，我们就需要通过一种技术来实现存储状态交互。理所当然最简单的是使用cookie，更好的方式是PHP内置的Session机制。&lt;/p&gt;&lt;pre lay-lang=&quot;JavaScript&quot;&gt;&lt;code class=&quot;JavaScript&quot;&gt;$_SESSION[&rsquo;language&rsquo;] = &lsquo;fr&rsquo;;1&lt;/code&gt;&lt;/pre&gt;&lt;p sf=&quot;&quot; ui=&quot;&quot; pingfang=&quot;&quot; hiragino=&quot;&quot; sans=&quot;&quot; microsoft=&quot;&quot; wenquanyi=&quot;&quot; micro=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot; style=&quot;text-align: justify;&quot;&gt;上面代码将用户语言存储在了名为language的Session变量中，因此在该用户随后的请求中，可以通过全局数组$_SESSION来获取language：&lt;/p&gt;&lt;pre lay-lang=&quot;JavaScript&quot;&gt;&lt;code class=&quot;JavaScript&quot;&gt;$user_language = $_SESSION[&rsquo;language&rsquo;];1&lt;/code&gt;&lt;/pre&gt;&lt;p sf=&quot;&quot; ui=&quot;&quot; pingfang=&quot;&quot; hiragino=&quot;&quot; sans=&quot;&quot; microsoft=&quot;&quot; wenquanyi=&quot;&quot; micro=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot; style=&quot;text-align: justify;&quot;&gt;依赖注入主要用于面向对像开发，现在让我们假设我们有一个SessionStorage类，该类封装了PHP Session机制：&lt;/p&gt;&lt;pre lay-lang=&quot;JavaScript&quot;&gt;&lt;code class=&quot;JavaScript&quot;&gt;class SessionStorage
+{
+function __construct($cookieName = &lsquo;PHP_SESS_ID&rsquo;)
+{
+session_name($cookieName);
+session_start();
+}</p>
+	</div>
+</article><article class="list__item post">
+	
+	<header class="list__header">
+		<h2 class="list__title post__title">
+			<a href="/posts/2018-04-03-php%E7%BB%8F%E5%85%B8%E9%9D%A2%E8%AF%95%E9%A2%98%E4%B8%83/" rel="bookmark">
+			php经典面试题七
+			</a>
+		</h2>
+		
+	</header>
+	<div class="content list__excerpt post__content clearfix">
+		<p>&lt;h1 ms=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot;&gt;&lt;span&gt;七、微信公众平台开发&lt;/span&gt;&lt;/h1&gt;&lt;p ms=&quot;&quot; font-size:=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot;&gt;&lt;span&gt;1．&amp;nbsp;&lt;strong&gt;&lt;a class=&quot;replace_word&quot; title=&quot;微信开发知识库&quot; href=&quot;http://lib.csdn.net/base/wechat&quot; target=&quot;<em>blank&quot; <em>href=&quot;http://lib.csdn.net/base/wechat&quot;&gt;微信&lt;/a&gt;运行机制&lt;/strong&gt;&lt;/span&gt;&lt;/p&gt;&lt;p ms=&quot;&quot; font-size:=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot;&gt;&lt;span&gt;&amp;nbsp;公众号与php之间用什么语言通信:&lt;strong&gt;Xml&lt;/strong&gt;&lt;/span&gt;&lt;/p&gt;&lt;p ms=&quot;&quot; font-size:=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot;&gt;&lt;span&gt;&lt;strong&gt;&amp;nbsp;Weixin.php中是如何接收公众号数据的：&lt;/strong&gt;&lt;/span&gt;&lt;/p&gt;&lt;p ms=&quot;&quot; font-size:=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot;&gt;&lt;strong&gt;&lt;p&gt;&lt;pre lay-lang=&quot;JavaScript&quot;&gt;&lt;code class=&quot;JavaScript&quot;&gt;$postStr = $GLOBALS[&quot;HTTP_RAW_POST_DATA&quot;];//接收数据  XML数据&lt;/code&gt;&lt;/pre&gt;&lt;/p&gt;&amp;nbsp;&lt;/strong&gt;&lt;/p&gt;&lt;p ms=&quot;&quot; font-size:=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot;&gt;&lt;span&gt;&lt;strong&gt;2.&amp;nbsp;消息类型&lt;/strong&gt;&lt;/span&gt;&lt;/p&gt;&lt;p ms=&quot;&quot; font-size:=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot;&gt;&lt;span&gt;&lt;strong&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;/strong&gt;微信目前提供了7种基本消息类型，分别为：&lt;/span&gt;&lt;/p&gt;&lt;p ms=&quot;&quot; font-size:=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot;&gt;&lt;span&gt;（1）文本消息（text）；&lt;/span&gt;&lt;/p&gt;&lt;p ms=&quot;&quot; font-size:=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot;&gt;&lt;span&gt;（2）图片消息（image）；&lt;/span&gt;&lt;/p&gt;&lt;p ms=&quot;&quot; font-size:=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot;&gt;&lt;span&gt;（3）语音（voice）&lt;/span&gt;&lt;/p&gt;&lt;p ms=&quot;&quot; font-size:=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot;&gt;&lt;span&gt;（4）视频（video）&lt;/span&gt;&lt;/p&gt;&lt;p ms=&quot;&quot; font-size:=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot;&gt;&lt;span&gt;（5）地理位置（location）；&lt;/span&gt;&lt;/p&gt;&lt;p ms=&quot;&quot; font-size:=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot;&gt;&lt;span&gt;（6）链接消息（link）；&lt;/span&gt;&lt;/p&gt;&lt;p ms=&quot;&quot; font-size:=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot;&gt;&lt;span&gt;（7）事件推送（event）&lt;/span&gt;&lt;/p&gt;&lt;p ms=&quot;&quot; font-size:=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot;&gt;&lt;span&gt;类型。掌握不同的消息类型发送时的数据传递格式&lt;/span&gt;&lt;/p&gt;&lt;p ms=&quot;&quot; font-size:=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot;&gt;&lt;span&gt;&amp;nbsp;&lt;/span&gt;&lt;/p&gt;&lt;p ms=&quot;&quot; font-size:=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot;&gt;&lt;span&gt;&lt;strong&gt;4.&amp;nbsp;将整个文件读入一个字符串的函数是&lt;/strong&gt;&lt;/span&gt;&lt;/p&gt;&lt;p ms=&quot;&quot; font-size:=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot;&gt;&lt;span&gt;&amp;nbsp;&amp;nbsp;File_get_contents&lt;/span&gt;&lt;/p&gt;&lt;p ms=&quot;&quot; font-size:=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot;&gt;&lt;span&gt;&lt;strong&gt;5、常用函数&lt;/strong&gt;&lt;/span&gt;&lt;/p&gt;&lt;p ms=&quot;&quot; font-size:=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot;&gt;&lt;span&gt;把xml数据解析成对象的函数是&lt;/span&gt;&lt;/p&gt;&lt;p ms=&quot;&quot; font-size:=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot;&gt;&lt;span&gt;simplexml_load_string( )&lt;/span&gt;&lt;/p&gt;&lt;p ms=&quot;&quot; font-size:=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot;&gt;&lt;span&gt;将字符串转换为数组的函数是</em></em>_ explode_________，将数组转化为字符串的函数是____implode________.&lt;/span&gt;&lt;/p&gt;&lt;p ms=&quot;&quot; font-size:=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot;&gt;&lt;span&gt;编码&amp;nbsp;URL&amp;nbsp;字符串的字符串是____urlencode________.&lt;/span&gt;&lt;/p&gt;&lt;p ms=&quot;&quot; font-size:=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot;&gt;&lt;span&gt;6.&amp;nbsp;&lt;strong&gt;Sprintf函数的作用&lt;/strong&gt;&lt;/span&gt;&lt;/p&gt;&lt;p ms=&quot;&quot; font-size:=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot;&gt;&lt;span&gt;这个都是可以查手册的。&lt;/span&gt;&lt;/p&gt;&lt;p ms=&quot;&quot; font-size:=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot;&gt;&lt;span&gt;&lt;strong&gt;7.&amp;nbsp;微信公众号出现无法提供服务的原因？&lt;/strong&gt;&lt;/span&gt;&lt;/p&gt;&lt;p ms=&quot;&quot; font-size:=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot;&gt;&lt;span&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;1.&amp;nbsp;网络原因 ，数据接口原因&lt;/span&gt;&lt;/p&gt;&lt;p ms=&quot;&quot; font-size:=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot;&gt;&lt;span&gt;2.&amp;nbsp;代码错误，怎么推测原因&lt;/span&gt;&lt;/p&gt;&lt;p ms=&quot;&quot; font-size:=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot;&gt;&lt;span&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;修改的哪里检查一下，如果代码没错&lt;/span&gt;&lt;/p&gt;&lt;p ms=&quot;&quot; font-size:=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot;&gt;&lt;span&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;可以输出数据&amp;nbsp;看一下。用php操作文件&lt;/span&gt;&lt;/p&gt;&lt;p ms=&quot;&quot; font-size:=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot;&gt;&lt;span&gt;&lt;p&gt;&lt;pre lay-lang=&quot;JavaScript&quot;&gt;&lt;code class=&quot;JavaScript&quot;&gt;   $myfile = fopen(&quot;newfile.txt&quot;, &quot;w&quot;);</p>
+	</div>
+</article><article class="list__item post">
+	
+	<header class="list__header">
+		<h2 class="list__title post__title">
+			<a href="/posts/2018-04-03-php%E7%BB%8F%E5%85%B8%E9%9D%A2%E8%AF%95%E9%A2%98%E5%85%AD/" rel="bookmark">
+			php经典面试题六
+			</a>
+		</h2>
+		
+	</header>
+	<div class="content list__excerpt post__content clearfix">
+		<p>&lt;h1 ms=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot;&gt;&lt;span&gt;六、二次开发系统（DEDE、ecshop）：&lt;/span&gt;&lt;/h1&gt;&lt;p ms=&quot;&quot; font-size:=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot;&gt;&lt;span&gt;&lt;strong&gt;1.对二次开发的理解&lt;/strong&gt;&lt;/span&gt;&lt;/p&gt;&lt;p ms=&quot;&quot; font-size:=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot;&gt;&lt;span&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;二次开发，简单的说就是在现有的软件上进行定制修改，功能的扩展，然后达到自己想要的功能，一般来说都不会改变原有系统的内核。&lt;/span&gt;&lt;/p&gt;&lt;p ms=&quot;&quot; font-size:=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot;&gt;&lt;span&gt;&lt;strong&gt;2.&amp;nbsp;MVC &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;/strong&gt;&lt;/span&gt;&lt;/p&gt;&lt;p ms=&quot;&quot; font-size:=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot;&gt;&lt;span&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;Model（模型）数据处理。&lt;/span&gt;&lt;/p&gt;&lt;p ms=&quot;&quot; font-size:=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot;&gt;&lt;span&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;View（视图） 模板显示。&lt;/span&gt;&lt;/p&gt;&lt;p ms=&quot;&quot; font-size:=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot;&gt;&lt;span&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;Controller（控制器） 控制流程。&lt;/span&gt;&lt;/p&gt;&lt;p ms=&quot;&quot; font-size:=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot;&gt;&lt;span&gt;MVC的概念是什么？各层主要做什么工作？&lt;/span&gt;&lt;/p&gt;&lt;p ms=&quot;&quot; font-size:=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot;&gt;&lt;span&gt;MVC（即模型-视图-控制器）是一种软件设计模式或者说编程思想。&lt;/span&gt;&lt;/p&gt;&lt;p ms=&quot;&quot; font-size:=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot;&gt;&lt;span&gt;M指Model模型层，V是View视图层（显示层或者用户界面），C是Controller控制器层。&lt;/span&gt;&lt;/p&gt;&lt;p ms=&quot;&quot; font-size:=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot;&gt;&lt;span&gt;使用mvc的目的是实现M和V分离，从而使得一个程序可以轻松使用不同的用户界面。&lt;/span&gt;&lt;/p&gt;&lt;p ms=&quot;&quot; font-size:=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot;&gt;&lt;span&gt;在网站开发中，&lt;/span&gt;&lt;/p&gt;&lt;p ms=&quot;&quot; font-size:=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot;&gt;&lt;span&gt;模型层一般负责对数据库表信息进行增删改查，&lt;/span&gt;&lt;/p&gt;&lt;p ms=&quot;&quot; font-size:=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot;&gt;&lt;span&gt;视图层负责显示页面内容，&lt;/span&gt;&lt;/p&gt;&lt;p ms=&quot;&quot; font-size:=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot;&gt;&lt;span&gt;控制器层在M和V之间起到调节作用，控制器层决定调用哪个model类的哪个方法，&lt;/span&gt;&lt;/p&gt;&lt;p ms=&quot;&quot; font-size:=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot;&gt;&lt;span&gt;执行完毕后由控制器层决定将结果assign到哪个view层。&lt;/span&gt;&lt;/p&gt;&lt;p ms=&quot;&quot; font-size:=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot;&gt;&lt;span&gt;&amp;nbsp;&lt;/span&gt;&lt;/p&gt;&lt;p ms=&quot;&quot; font-size:=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot;&gt;&lt;span&gt;&lt;strong&gt;3.二次开发程序安装后访问时候出现一些警告以及错误&lt;/strong&gt;&lt;/span&gt;&lt;/p&gt;&lt;p ms=&quot;&quot; font-size:=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot;&gt;&lt;span&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;根据错误，来修改服务器配置参数以及百度&lt;/span&gt;&lt;/p&gt;&lt;p ms=&quot;&quot; font-size:=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot;&gt;&lt;span&gt;&lt;strong&gt;4.&amp;nbsp;功能，模板的更换，功能的添加修改&lt;/strong&gt;&lt;/span&gt;&lt;/p&gt;&lt;p ms=&quot;&quot; font-size:=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot;&gt;&lt;span&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;其实也就是面向对象的应用&amp;nbsp;用，以及模板的更换类似smarty的使用&lt;/span&gt;&lt;/p&gt;&lt;p ms=&quot;&quot; font-size:=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot;&gt;&lt;span&gt;&lt;strong&gt;5.&amp;nbsp;用过哪些二次开发的东西？&lt;/strong&gt;&lt;/span&gt;&lt;/p&gt;&lt;p ms=&quot;&quot; font-size:=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot;&gt;&lt;span&gt;&amp;nbsp;&amp;nbsp;Dedecms phpcms &amp;nbsp;ecshop，基本这些的东西如果基础好了 学习起来都是没问题的。&lt;/span&gt;&lt;/p&gt;&lt;p ms=&quot;&quot; font-size:=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot;&gt;&lt;span&gt;&lt;strong&gt;6.&amp;nbsp;像php做一次开发好，还是二次开发好？&lt;/strong&gt;&lt;/span&gt;&lt;/p&gt;&lt;p ms=&quot;&quot; font-size:=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot;&gt;&lt;span&gt;一般中小企业都用cms系统二次开发，都是为了效率。当然如果想一次开发也行，会用框架而且时间充足的话就可以了，大企业都是团队来开发的，杜绝版权问题。&lt;/span&gt;&lt;/p&gt;&lt;p ms=&quot;&quot; font-size:=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot;&gt;&lt;span&gt;7.&amp;nbsp;&lt;strong&gt;二次开发过程中很多类与类之间进行之间的方法访问，是通过什么方式传递的？&lt;/strong&gt;&lt;/span&gt;&lt;/p&gt;&lt;p ms=&quot;&quot; font-size:=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot;&gt;&lt;span&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;不是类继承而是&lt;strong&gt;对象组合，把实例化好的对象通过&lt;/strong&gt;global&lt;strong&gt;传递进去&lt;/strong&gt;&lt;/span&gt;&lt;/p&gt;&lt;p ms=&quot;&quot; font-size:=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot;&gt;&lt;span&gt;&lt;strong&gt;&amp;nbsp;&lt;/strong&gt;&lt;/span&gt;&lt;/p&gt;&lt;p ms=&quot;&quot; font-size:=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot;&gt;&lt;span&gt;&lt;strong&gt;&amp;nbsp;8. dedecms如果更换目录，后台某项就进不去了如何解决？&lt;/strong&gt;&lt;/span&gt;&lt;/p&gt;&lt;p ms=&quot;&quot; font-size:=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot;&gt;&lt;span&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;后台核心设置中修改成现在的&amp;nbsp;项目目录名称&lt;/span&gt;&lt;/p&gt;&lt;p ms=&quot;&quot; font-size:=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot;&gt;&lt;span&gt;&amp;nbsp;&lt;/span&gt;&lt;/p&gt;&lt;p ms=&quot;&quot; font-size:=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot;&gt;&lt;span&gt;&lt;strong&gt;&amp;nbsp;9. &amp;nbsp;dedecms中自定义模型的理解？&lt;/strong&gt;&lt;/span&gt;&lt;/p&gt;&lt;p ms=&quot;&quot; font-size:=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot;&gt;&lt;span&gt;在织梦系统中有内容模型这个概念，不同内容模型可以用来构建不同内容形式的站点，在系统中自带了以下几种模型：普通文章、图集、软件、商品、分类信息、专题。通过系统自带的模型，我们可以用来构建不同类型的站点，例如：使用图集可以做一个图片站，用软件模&lt;strong&gt;型构建一个软件下载站点。&lt;/strong&gt;&lt;/span&gt;&lt;/p&gt;&lt;p ms=&quot;&quot; font-size:=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot;&gt;&lt;span&gt;&lt;strong&gt;当然以上随系统附带的模型被称为系统模型，用户可以自己定义一些模型，比如图书、音乐专辑等，自定义了这些模型才可以构建更多内容形式的站点。&lt;/strong&gt;&lt;/span&gt;&lt;/p&gt;&lt;p ms=&quot;&quot; font-size:=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot;&gt;&lt;span&gt;&lt;strong&gt;相当于我们自动添加了表结构，适应现在当前需求的变化&lt;/strong&gt;&lt;/span&gt;&lt;/p&gt;&lt;p ms=&quot;&quot; font-size:=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot;&gt;&lt;span&gt;&lt;strong&gt;&amp;nbsp;&lt;/strong&gt;&lt;/span&gt;&lt;/p&gt;&lt;p ms=&quot;&quot; font-size:=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot;&gt;&lt;span&gt;&lt;strong&gt;10.&amp;nbsp;&amp;nbsp;dede中概念，设计和使用模板，必须要理解下面几个概念&lt;/strong&gt;&lt;/span&gt;&lt;/p&gt;&lt;p ms=&quot;&quot; font-size:=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot;&gt;&lt;span&gt;1、板块（封面）模板：&lt;/span&gt;&lt;/p&gt;&lt;p ms=&quot;&quot; font-size:=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot;&gt;&lt;span&gt;指网站主页或比较重要的栏目封面频道使用的模板，一般用“index_识别ID.htm”命名，此外，用户单独定义的单个页面或自定义标记，也可选是否支持板块模板标记，如果支持，系统会用板块模板标记引擎去解析后才输出内容或生成特定的文件。&lt;/span&gt;&lt;/p&gt;&lt;p ms=&quot;&quot; font-size:=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot;&gt;&lt;span&gt;2、列表模板：&lt;/span&gt;&lt;/p&gt;&lt;p ms=&quot;&quot; font-size:=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot;&gt;&lt;span&gt;指网站某个栏目的所有文章列表的模板，一般用&amp;nbsp;“list_识别ID.htm” 命名。&lt;/span&gt;&lt;/p&gt;&lt;p ms=&quot;&quot; font-size:=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot;&gt;&lt;span&gt;3、档案模板：&lt;/span&gt;&lt;/p&gt;&lt;p ms=&quot;&quot; font-size:=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot;&gt;&lt;span&gt;表示文档查看页的模板，如文章模板，一般用&amp;nbsp;“article_识别ID.htm” 命名。&lt;/span&gt;&lt;/p&gt;&lt;p ms=&quot;&quot; font-size:=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot;&gt;&lt;span&gt;4、其它模板：&lt;/span&gt;&lt;/p&gt;&lt;p ms=&quot;&quot; font-size:=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot;&gt;&lt;span&gt;一般系统常规包含的模板有：主页模板、搜索模板、ＲＳＳ、ＪＳ编译功能模板等，此外用户也可以自定义一个模板创建为任意文件。&lt;/span&gt;&lt;/p&gt;&lt;p ms=&quot;&quot; font-size:=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot;&gt;&lt;span&gt;&lt;strong&gt;&amp;nbsp;&lt;/strong&gt;&lt;/span&gt;&lt;/p&gt;&lt;p ms=&quot;&quot; font-size:=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot;&gt;&lt;span&gt;&lt;strong&gt;11. dede中几种标签的使用？&lt;/strong&gt;&lt;/span&gt;&lt;/p&gt;&lt;p ms=&quot;&quot; font-size:=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot;&gt;&lt;span&gt;列表&amp;nbsp;内容&amp;nbsp;等标签&amp;nbsp;只能在其本范围内使用，列表标签只能在列表中使用，内容标签只能在内容标签中使用。&lt;/span&gt;&lt;/p&gt;&lt;p ms=&quot;&quot; font-size:=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot;&gt;&lt;span&gt;全局标签能在所有页面中使用&lt;/span&gt;&lt;/p&gt;&lt;p ms=&quot;&quot; font-size:=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot;&gt;&lt;span&gt;&lt;strong&gt;&amp;nbsp;&lt;/strong&gt;&lt;/span&gt;&lt;/p&gt;&lt;p ms=&quot;&quot; font-size:=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot;&gt;&lt;span&gt;&lt;strong&gt;12．熟悉常用类库&lt;/strong&gt;&lt;/span&gt;&lt;/p&gt;&lt;p ms=&quot;&quot; font-size:=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot;&gt;&lt;span&gt;（例如：dedesql.class.php）；熟悉系统函数库（common.func.php）；熟悉自定义函数库（extend.func.php）；熟悉前台入口文件（common.inc.php）&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;</p>
+	</div>
+</article><article class="list__item post">
+	
+	<header class="list__header">
+		<h2 class="list__title post__title">
+			<a href="/posts/2018-04-02-php%E7%BB%8F%E5%85%B8%E9%9D%A2%E8%AF%95%E9%A2%98%E4%BA%94-%E6%A8%A1%E6%9D%BF%E5%BC%95%E6%93%8E/" rel="bookmark">
+			php经典面试题五 --  模板引擎
+			</a>
+		</h2>
+		
+	</header>
+	<div class="content list__excerpt post__content clearfix">
+		<!-- raw HTML omitted -->
+<p>{smarty.cookies.}</p>
+<p>{smarty.post.}</p>
+<p>{smarty.session.}</p>
+<p>{smarty.server.}<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --> <!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->4.在模板中访问php中的变量<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->在php脚本中有系统常量和自定义常量两种，同样这两种常量在Smarty模板中也可以被访问，而且不需要从php中分配，只要通过{$smarty}保留变量就可以直接输出常量的值。在模板中输出常量的示例：<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->{$smarty.const._MY_CONST_VAL}</p>
+	</div>
+</article><article class="list__item post">
+	
+	<header class="list__header">
+		<h2 class="list__title post__title">
+			<a href="/posts/2018-04-01-php%E7%BB%8F%E5%85%B8%E9%9D%A2%E8%AF%95%E9%A2%98%E4%B8%89-%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E9%83%A8%E5%88%86/" rel="bookmark">
+			php经典面试题三  -- 面向对象部分
+			</a>
+		</h2>
+		
+	</header>
+	<div class="content list__excerpt post__content clearfix">
+		<h3 id="什么是面向对象">什么是面向对象?</h3>
+<p>面向对象OO = 面向对象的分析OOA + 面向对象的设计OOD + 面向对象的编程OOP；通俗的解释就是“万物皆对象”，把所有的事物都看作一个个可以独立的对象(单元)，它们可以自己完成自己的功能，而不是像C那样分成一个个函数。</p>
+	</div>
+</article><article class="list__item post">
+	
+	<header class="list__header">
+		<h2 class="list__title post__title">
+			<a href="/posts/2018-04-01-php%E7%BB%8F%E5%85%B8%E9%9D%A2%E8%AF%95%E9%A2%98%E5%9B%9B-%E6%A1%86%E6%9E%B6%E9%83%A8%E5%88%86/" rel="bookmark">
+			php经典面试题四 -- 框架部分
+			</a>
+		</h2>
+		
+	</header>
+	<div class="content list__excerpt post__content clearfix">
+		<h3 id="常见的php框架">常见的PHP框架</h3>
+<p>答：thinkPHP、yii、ZendFramework、CakePhp</p>
+<h3 id="如何理解tp中的单一入口文件">如何理解TP中的单一入口文件？</h3>
+<p>答：ThinkPHP采用单一入口模式进行项目部署和访问，无论完成什么功能，一个项目都有一个统一（但不一定是唯一）的入口。应该说，所有项目都是从入口文件开始的，并且所有的项目的入口文件是类似的，入口文件中主要包括：</p>
+	</div>
+</article><article class="list__item post">
+	
+	<header class="list__header">
+		<h2 class="list__title post__title">
+			<a href="/posts/2018-04-01-php%E7%BB%8F%E5%85%B8%E9%9D%A2%E8%AF%95%E9%A2%98%E4%BA%8C-%E6%95%B0%E6%8D%AE%E5%BA%93%E9%83%A8%E5%88%86/" rel="bookmark">
+			php经典面试题二 -- 数据库部分
+			</a>
+		</h2>
+		
+	</header>
+	<div class="content list__excerpt post__content clearfix">
+		<h3 id="数据表类型有哪些">数据表类型有哪些</h3>
+<p>MyISAM、InnoDB、HEAP、BOB,ARCHIVE,CSV等。</p>
+<p>MyISAM：成熟、稳定、易于管理，快速读取。一些功能不支持（事务等），表级锁。</p>
+	</div>
+</article><article class="list__item post">
+	
+	<header class="list__header">
+		<h2 class="list__title post__title">
+			<a href="/posts/2018-03-31-php%E7%BB%8F%E5%85%B8%E9%9D%A2%E8%AF%95%E9%A2%98%E4%B8%80-%E5%9F%BA%E7%A1%80%E9%97%AE%E9%A2%98/" rel="bookmark">
+			php经典面试题一 -- 基础问题
+			</a>
+		</h2>
+		
+	</header>
+	<div class="content list__excerpt post__content clearfix">
+		<h3 id="php语言的一大优势是跨平台什么是跨平台一php基础">PHP语言的一大优势是跨平台，什么是跨平台？一、PHP基础</h3>
+<p>PHP的运行环境最优搭配为Apache+MySQL+PHP，此运行环境可以在不同操作系统（例如windows、Linux等）上配置，不受操作系统的限制，所以叫跨平台</p>
+	</div>
+</article><article class="list__item post">
+	
+	<header class="list__header">
+		<h2 class="list__title post__title">
+			<a href="/posts/2018-01-09-%E5%88%9B%E5%BB%BA%E8%87%AA%E5%B7%B1%E7%9A%84composer%E5%BA%93/" rel="bookmark">
+			创建自己的composer库
+			</a>
+		</h2>
+		
+	</header>
+	<div class="content list__excerpt post__content clearfix">
+		<p>&lt;p&gt;自己工作中积累了一些比较有用的工具,希望能为php社区做些贡献,如果你也有这份热心,那一定要学会自己怎么建一个composer库。&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;h4&gt;使用composer&lt;/h4&gt;&lt;p&gt;&lt;span helvetica=&quot;&quot; lucida=&quot;&quot; hiragino=&quot;&quot; sans=&quot;&quot; wenquanyi=&quot;&quot; micro=&quot;&quot; font-size:=&quot;&quot; background-color:=&quot;&quot;&gt;Composer是PHP的一个包依赖管理工具。你可以使用第三方库也可以自行开发。现在我要告诉你如何创建一个Composer包并且发送到Packagist（其他开发者可以通过它在他们项目中使用这些发布到Packagist上的包）。&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span helvetica=&quot;&quot; lucida=&quot;&quot; hiragino=&quot;&quot; sans=&quot;&quot; wenquanyi=&quot;&quot; micro=&quot;&quot; font-size:=&quot;&quot; background-color:=&quot;&quot;&gt;&lt;br&gt;&lt;/span&gt;&lt;/p&gt;&lt;h4&gt;Github创建项目&lt;/h4&gt;&lt;p&gt;&lt;span helvetica=&quot;&quot; lucida=&quot;&quot; hiragino=&quot;&quot; sans=&quot;&quot; wenquanyi=&quot;&quot; micro=&quot;&quot; font-size:=&quot;&quot; background-color:=&quot;&quot;&gt;在git上面创建一个&quot;php-tools&quot;的项目,然后克隆到本地&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;pre lay-lang=&quot;JavaScript&quot;&gt;&lt;code class=&quot;JavaScript&quot;&gt;git clone <a href="https://github.com/Galloping-Vijay/php-tools.git&amp;lt;/code&amp;gt;&amp;lt;/pre&amp;gt;&amp;lt;/p&amp;gt;&amp;lt;p&amp;gt;&amp;lt;span">https://github.com/Galloping-Vijay/php-tools.git&amp;lt;/code&amp;gt;&amp;lt;/pre&amp;gt;&amp;lt;/p&amp;gt;&amp;lt;p&amp;gt;&amp;lt;span</a> helvetica=&quot;&quot; lucida=&quot;&quot; hiragino=&quot;&quot; sans=&quot;&quot; wenquanyi=&quot;&quot; micro=&quot;&quot; font-size:=&quot;&quot; background-color:=&quot;&quot;&gt;&lt;/span&gt;&lt;span helvetica=&quot;&quot; lucida=&quot;&quot; hiragino=&quot;&quot; sans=&quot;&quot; wenquanyi=&quot;&quot; micro=&quot;&quot; font-size:=&quot;&quot; background-color:=&quot;&quot;&gt;进入项目目录,初始化composer生成&lt;span pingfang=&quot;&quot; lantinghei=&quot;&quot; microsoft=&quot;&quot;&gt;composer.json文件&lt;/span&gt;&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span helvetica=&quot;&quot; lucida=&quot;&quot; hiragino=&quot;&quot; sans=&quot;&quot; wenquanyi=&quot;&quot; micro=&quot;&quot; font-size:=&quot;&quot; background-color:=&quot;&quot;&gt;&lt;pre lay-lang=&quot;JavaScript&quot;&gt;&lt;code class=&quot;JavaScript&quot;&gt;composer init&lt;/code&gt;&lt;/pre&gt;&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;img src=&quot;http://www.meetoyou.com/data/upload/2018-01-11/5a577cc6a0388.png&quot; title=&quot;5a577cc6a0388.png&quot; alt=&quot;5a577cc6a0388.png&quot; _src=&quot;http://www.meetoyou.com/data/upload/2018-01-11/5a577cc6a0388.png&quot;&gt;&lt;/p&gt;&lt;p&gt;&lt;span helvetica=&quot;&quot; lucida=&quot;&quot; hiragino=&quot;&quot; sans=&quot;&quot; wenquanyi=&quot;&quot; micro=&quot;&quot; font-size:=&quot;&quot; background-color:=&quot;&quot;&gt;生成过程中需要填写一些信息,如上图标注所示，生成之后打开composer.json文件向里面添加一些东西&lt;/span&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;&lt;img src=&quot;http://www.meetoyou.com/data/upload/2018-01-11/5a577d4eac3b0.png&quot; title=&quot;5a577d4eac3b0.png&quot; alt=&quot;5a577d4eac3b0.png&quot; _src=&quot;http://www.meetoyou.com/data/upload/2018-01-11/5a577d4eac3b0.png&quot;&gt;&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;h4&gt;编辑包文件&lt;/h4&gt;&lt;p&gt;&lt;span helvetica=&quot;&quot; lucida=&quot;&quot; hiragino=&quot;&quot; sans=&quot;&quot; wenquanyi=&quot;&quot; micro=&quot;&quot; font-size:=&quot;&quot; background-color:=&quot;&quot;&gt;你可以把所有的文件都放在根目录下，但是我特别推荐新建另一个文件夹 “&lt;/span&gt;&lt;span helvetica=&quot;&quot; lucida=&quot;&quot; hiragino=&quot;&quot; sans=&quot;&quot; wenquanyi=&quot;&quot; micro=&quot;&quot; font-size:=&quot;&quot; background-color:=&quot;&quot;&gt;src&lt;/span&gt;&lt;span helvetica=&quot;&quot; lucida=&quot;&quot; hiragino=&quot;&quot; sans=&quot;&quot; wenquanyi=&quot;&quot; micro=&quot;&quot; font-size:=&quot;&quot; background-color:=&quot;&quot;&gt;” 以更容易理解和维护你的代码结构。项目结构如下：&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;img src=&quot;http://www.meetoyou.com/data/upload/2018-01-11/5a577dfc9557c.png&quot; title=&quot;5a577dfc9557c.png&quot; alt=&quot;5a577dfc9557c.png&quot; _src=&quot;http://www.meetoyou.com/data/upload/2018-01-11/5a577dfc9557c.png&quot;&gt;&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;h3 helvetica=&quot;&quot; lucida=&quot;&quot; hiragino=&quot;&quot; sans=&quot;&quot; wenquanyi=&quot;&quot; micro=&quot;&quot; line-height:=&quot;&quot; color:=&quot;&quot; margin-top:=&quot;&quot; margin-bottom:=&quot;&quot; font-size:=&quot;&quot; background-color:=&quot;&quot;&gt;开始Composer&lt;/h3&gt;&lt;p&gt;&lt;span helvetica=&quot;&quot; lucida=&quot;&quot; hiragino=&quot;&quot; sans=&quot;&quot; wenquanyi=&quot;&quot; micro=&quot;&quot; font-size:=&quot;&quot; background-color:=&quot;&quot;&gt;文件编辑好之后，执行&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;pre lay-lang=&quot;JavaScript&quot;&gt;&lt;code class=&quot;JavaScript&quot;&gt;composer install&lt;/code&gt;&lt;/pre&gt;&lt;/p&gt;&lt;p&gt;&lt;img src=&quot;http://www.meetoyou.com/data/upload/2018-01-11/5a577eb157dbe.png&quot; title=&quot;5a577eb157dbe.png&quot; alt=&quot;5a577eb157dbe.png&quot; _src=&quot;http://www.meetoyou.com/data/upload/2018-01-11/5a577eb157dbe.png&quot;&gt;&lt;/p&gt;&lt;p&gt;&lt;span helvetica=&quot;&quot; lucida=&quot;&quot; hiragino=&quot;&quot; sans=&quot;&quot; wenquanyi=&quot;&quot; micro=&quot;&quot; font-size:=&quot;&quot; background-color:=&quot;&quot;&gt;生成文件之后编辑.gitignore文件,然后推送到git库中.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span helvetica=&quot;&quot; lucida=&quot;&quot; hiragino=&quot;&quot; sans=&quot;&quot; wenquanyi=&quot;&quot; micro=&quot;&quot; font-size:=&quot;&quot; background-color:=&quot;&quot;&gt;&lt;img src=&quot;http://www.meetoyou.com/data/upload/2018-01-11/5a577fa4e4522.png&quot; title=&quot;5a577fa4e4522.png&quot; alt=&quot;5a577fa4e4522.png&quot; _src=&quot;http://www.meetoyou.com/data/upload/2018-01-11/5a577fa4e4522.png&quot;&gt;&lt;/span&gt;&lt;/p&gt;&lt;h4 helvetica=&quot;&quot; lucida=&quot;&quot; hiragino=&quot;&quot; sans=&quot;&quot; wenquanyi=&quot;&quot; micro=&quot;&quot; line-height:=&quot;&quot; color:=&quot;&quot; margin-top:=&quot;&quot; margin-bottom:=&quot;&quot; font-size:=&quot;&quot; background-color:=&quot;&quot;&gt;发布到Packagist.org&lt;/h4&gt;&lt;ol class=&quot; list-paddingleft-2&quot; helvetica=&quot;&quot; lucida=&quot;&quot; hiragino=&quot;&quot; sans=&quot;&quot; wenquanyi=&quot;&quot; micro=&quot;&quot; font-size:=&quot;&quot; background-color:=&quot;&quot;&gt;&lt;li&gt;&lt;p&gt;首先要在Packagist上注册账号并登录&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;点击顶部导航条中的Summit按钮&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;在输入框中输入github上的仓库地址，如：https://github.com/Galloping-Vijay/php-tools.git&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;然后点击Check按钮&lt;br&gt;Packagist会去检测此仓库地址的代码是否符合Composer的Package包的要求&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;检测正常的话，会出现Submit按钮，再点击一下Submit按钮，我们的包就提交到Packagist上了&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;以后更新代码可以先从Packagist获取token然后去github 配置下对应的GitHub Service Hook实现代码提交后Packagist自动拉取更新&lt;/p&gt;&lt;/li&gt;&lt;/ol&gt;&lt;h4 helvetica=&quot;&quot; lucida=&quot;&quot; hiragino=&quot;&quot; sans=&quot;&quot; wenquanyi=&quot;&quot; micro=&quot;&quot; line-height:=&quot;&quot; color:=&quot;&quot; margin-top:=&quot;&quot; margin-bottom:=&quot;&quot; background-color:=&quot;&quot;&gt;使用&lt;/h4&gt;&lt;p helvetica=&quot;&quot; lucida=&quot;&quot; hiragino=&quot;&quot; sans=&quot;&quot; wenquanyi=&quot;&quot; micro=&quot;&quot; font-size:=&quot;&quot; background-color:=&quot;&quot;&gt;我们就可以在其他项目引用chenjie这个包了，方法如下：&lt;br&gt;在新建的项目根目录执行命令 composer require&amp;nbsp;Galloping-Vijay/php-tools&lt;/p&gt;&lt;p helvetica=&quot;&quot; lucida=&quot;&quot; hiragino=&quot;&quot; sans=&quot;&quot; wenquanyi=&quot;&quot; micro=&quot;&quot; font-size:=&quot;&quot; background-color:=&quot;&quot;&gt;或者在新建项目根目录新建composer.json编辑：&lt;/p&gt;&lt;pre lay-lang=&quot;JavaScript&quot;&gt;&lt;code class=&quot;JavaScript&quot;&gt;{
+&quot;require&quot;:{
+&quot;Galloping-Vijay/php-tools&quot;:&quot;dev-master&quot;//根据实际需求版本填写
+} <br>
+}&lt;/code&gt;&lt;/pre&gt;&lt;p helvetica=&quot;&quot; neue&quot;,=&quot;&quot; helvetica,=&quot;&quot; arial,=&quot;&quot; &quot;lucida=&quot;&quot; grande&quot;,=&quot;&quot; &quot;hiragino=&quot;&quot; sans=&quot;&quot; gb&quot;,=&quot;&quot; 微软雅黑,=&quot;&quot; &quot;wenquanyi=&quot;&quot; micro=&quot;&quot; hei&quot;,=&quot;&quot; stheiti,=&quot;&quot; simsun,=&quot;&quot; sans-serif;=&quot;&quot; font-size:=&quot;&quot; 14px;=&quot;&quot; background-color:=&quot;&quot; rgb(255,=&quot;&quot; 255,=&quot;&quot; 255);&quot;=&quot;&quot;&gt;然后执行 &amp;nbsp;composer install 即可。&lt;/p&gt;&lt;p helvetica=&quot;&quot; neue&quot;,=&quot;&quot; helvetica,=&quot;&quot; arial,=&quot;&quot; &quot;lucida=&quot;&quot; grande&quot;,=&quot;&quot; &quot;hiragino=&quot;&quot; sans=&quot;&quot; gb&quot;,=&quot;&quot; 微软雅黑,=&quot;&quot; &quot;wenquanyi=&quot;&quot; micro=&quot;&quot; hei&quot;,=&quot;&quot; stheiti,=&quot;&quot; simsun,=&quot;&quot; sans-serif;=&quot;&quot; font-size:=&quot;&quot; 14px;=&quot;&quot; background-color:=&quot;&quot; rgb(255,=&quot;&quot; 255,=&quot;&quot; 255);&quot;=&quot;&quot;&gt;到这里我们的第一个Composer/Packagist包就完成了，但是你可以透过它做更多。&lt;/p&gt;</p>
+	</div>
+</article>
+</main>
+
+<div class="pagination">
+	<a class="pagination__item pagination__item--prev btn" href="/categories/php/page/6/">«</a>
+	<span class="pagination__item pagination__item--current">7/9</span>
+	<a class="pagination__item pagination__item--next btn" href="/categories/php/page/8/">»</a>
+</div>
+
+			</div>
+			
+
+		</div>
+		<footer class="footer">
+	<div class="container footer__container flex">
+		
+		<div class="footer__copyright">
+			&copy; 2026 臭大佬博客.
+			<span class="footer__copyright-credits">基于 <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> 引擎和 <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> 主题</span>
+		</div>
+	</div>
+</footer>
+	</div>
+<script async defer src="/js/menu.js"></script>
+</body>
+</html>

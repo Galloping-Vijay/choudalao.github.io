@@ -1,0 +1,38 @@
+baseURL = 'https://choudalao.github.io/'
+languageCode = 'zh-CN'
+title = '臭大佬博客'
+theme = 'github.com/Vimux/mainroad'
+
+# 中文支持
+hasCJKLanguage = true
+
+# 分页
+paginate = 10
+
+# 忽略警告
+ignoreLogs = ['warning-goldmark-raw-html']
+
+# 参数配置
+[params]
+author = "臭大佬"
+description = "技术博客"
+keywords = "技术, 博客, 编程"
+
+# 菜单
+[[menu.main]]
+identifier = "home"
+name = "首页"
+url = "/"
+weight = 1
+
+[[menu.main]]
+identifier = "archives"
+name = "归档"
+url = "/post/"
+weight = 2
+
+[[menu.main]]
+identifier = "about"
+name = "关于"
+url = "/about/"
+weight = 3

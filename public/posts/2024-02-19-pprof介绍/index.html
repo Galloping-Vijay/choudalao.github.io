@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>pprof介绍 - 臭大佬博客</title>
+	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
+	<meta name="description" content="pprof介绍">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link rel="dns-prefetch" href="//fonts.googleapis.com">
+	<link rel="dns-prefetch" href="//fonts.gstatic.com">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
+
+	<link rel="stylesheet" href="/css/style.css">
+	
+
+	<link rel="shortcut icon" href="/favicon.ico">
+		
+</head>
+<body class="body">
+	<div class="container container--outer">
+		<header class="header">
+	<div class="container header__container">
+		
+	<div class="logo">
+		<a class="logo__link" href="/" title="臭大佬博客" rel="home">
+			<div class="logo__item logo__text">
+					<div class="logo__title">臭大佬博客</div>
+					
+				</div>
+		</a>
+	</div>
+		
+<nav class="menu">
+	<button class="menu__btn" aria-haspopup="true" aria-expanded="false" tabindex="0">
+		<span class="menu__btn-title" tabindex="-1">菜单</span>
+	</button>
+	<ul class="menu__list">
+		<li class="menu__item">
+			<a class="menu__link" href="/">
+				
+				<span class="menu__text">首页</span>
+				
+			</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/post/">
+				
+				<span class="menu__text">归档</span>
+				
+			</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/about/">
+				
+				<span class="menu__text">关于</span>
+				
+			</a>
+		</li>
+	</ul>
+</nav>
+
+	</div>
+</header>
+		<div class="wrapper flex">
+			<div class="primary">
+			
+<main class="main" role="main">
+	<article class="post">
+		<header class="post__header">
+			<h1 class="post__title">pprof介绍</h1>
+			
+		</header>
+		<div class="content post__content clearfix">
+			<h1 id="gin中使用">Gin中使用</h1>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">import</span> (
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;net/http&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">_</span> <span style="color:#e6db74">&#34;net/http/pprof&#34;</span>
+</span></span><span style="display:flex;"><span>	)
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">r</span>.<span style="color:#a6e22e">GET</span>(<span style="color:#e6db74">&#34;/debug/pprof/*any&#34;</span>, <span style="color:#a6e22e">gin</span>.<span style="color:#a6e22e">WrapH</span>(<span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">DefaultServeMux</span>))
+</span></span></code></pre></div><h2 id="浏览器查看">浏览器查看</h2>
+<p>浏览器中输入地址localhost/debug/pprof
+profiles下分别是block(阻塞情况)、goroutine数量、heap(堆)、mutex(锁)和threadcreate(创建的物理线程)
+这里是调用Go底层的runtime.MemStats结构体获取，该结构体相关字段解释如下:</p>
+<blockquote>
+<p>Alloc uint64 //golang语言框架堆空间分配的字节数
+TotalAlloc uint64 //从服务开始运行至今分配器为分配的堆空间总 和，只有增加，释放的时候不减少
+Sys uint64 //服务现在系统使用的内存
+Lookups uint64 //被runtime监视的指针数
+Mallocs uint64 //服务malloc heap objects的次数
+Frees uint64 //服务回收的heap objects的次数
+HeapAlloc uint64 //服务分配的堆内存字节数
+HeapSys uint64 //系统分配的作为运行栈的内存
+HeapIdle uint64 //申请但是未分配的堆内存或者回收了的堆内存（空闲）字节数
+HeapInuse uint64 //正在使用的堆内存字节数
+HeapReleased uint64 //返回给OS的堆内存，类似C/C++中的free。
+HeapObjects uint64 //堆内存块申请的量
+StackInuse uint64 //正在使用的栈字节数
+StackSys uint64 //系统分配的作为运行栈的内存
+MSpanInuse uint64 //用于测试用的结构体使用的字节数
+MSpanSys uint64 //系统为测试用的结构体分配的字节数
+MCacheInuse uint64 //mcache结构体申请的字节数(不会被视为垃圾回收)
+MCacheSys uint64 //操作系统申请的堆空间用于mcache的字节数
+BuckHashSys uint64 //用于剖析桶散列表的堆空间
+GCSys uint64 //垃圾回收标记元信息使用的内存
+OtherSys uint64 //golang系统架构占用的额外空间
+NextGC uint64 //垃圾回收器检视的内存大小
+LastGC uint64 // 垃圾回收器最后一次执行时间。
+PauseTotalNs uint64 // 垃圾回收或者其他信息收集导致服务暂停的次数。
+PauseNs [256]uint64 //一个循环队列，记录最近垃圾回收系统中断的时间
+PauseEnd [256]uint64 //一个循环队列，记录最近垃圾回收系统中断的时间开始点。
+NumForcedGC uint32 //服务调用runtime.GC()强制使用垃圾回收的次数。
+GCCPUFraction float64 //垃圾回收占用服务CPU工作的时间总和。如果有100个goroutine，垃圾回收的时间为1S,那么就占用了100S。
+BySize //内存分配器使用情况</p>
+</blockquote>
+<h2 id="go-tool-pprof-命令行工具">go tool pprof 命令行工具</h2>
+<h4 id="查看内存使用情况">查看内存使用情况</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">#</span> <span style="color:#a6e22e">在bash控制台执行如下命令</span><span style="color:#960050;background-color:#1e0010">，</span><span style="color:#a6e22e">查看内存使用情况</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">go</span> <span style="color:#a6e22e">tool</span> <span style="color:#a6e22e">pprof</span>  <span style="color:#a6e22e">http</span>:<span style="color:#75715e">//localhost:80/debug/pprof/heap</span>
+</span></span></code></pre></div><h4 id="查看cpu使用情况">查看cpu使用情况</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">go</span> <span style="color:#a6e22e">tool</span> <span style="color:#a6e22e">pprof</span>  <span style="color:#a6e22e">http</span>:<span style="color:#75715e">//localhost:80/debug/pprof/profile</span>
+</span></span></code></pre></div><h2 id="下载记录">下载记录</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">wget</span> <span style="color:#a6e22e">http</span>:<span style="color:#75715e">//ip:admin_port/debug/pprof/heap?debug=1</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">wget</span> <span style="color:#a6e22e">http</span>:<span style="color:#75715e">//ip:admin_port/debug/pprof/goroutine?debug=1</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">wget</span> <span style="color:#a6e22e">http</span>:<span style="color:#75715e">//ip:admin_port/debug/pprof/goroutine?debug=2</span>
+</span></span></code></pre></div><blockquote>
+<p>debug=1就是获取服务的数目和大致信息
+debug=2获取服务详细信息，分别在本地生成了debug=1和debug=2文件</p>
+</blockquote>
+<h4 id="查看goroutinedebug1文件">查看goroutine?debug=1文件</h4>
+<p><img src="https://www.choudalao.com/uploads/20240314/20240314163825sAwKzy.png" alt=""></p>
+<p>本文整理自:https://blog.csdn.net/weixin_45565886/article/details/132090495</p>
+
+		</div>
+	</article>
+</main>
+
+
+
+
+			</div>
+			
+		</div>
+		<footer class="footer">
+	<div class="container footer__container flex">
+		
+		<div class="footer__copyright">
+			&copy; 2026 臭大佬博客.
+			<span class="footer__copyright-credits">基于 <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> 引擎和 <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> 主题</span>
+		</div>
+	</div>
+</footer>
+	</div>
+<script async defer src="/js/menu.js"></script>
+</body>
+</html>

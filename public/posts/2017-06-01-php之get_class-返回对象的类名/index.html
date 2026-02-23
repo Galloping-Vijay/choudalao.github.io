@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>PHP之get_class — 返回对象的类名 - 臭大佬博客</title>
+	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
+	<meta name="description" content="PHP之get_class — 返回对象的类名">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link rel="dns-prefetch" href="//fonts.googleapis.com">
+	<link rel="dns-prefetch" href="//fonts.gstatic.com">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
+
+	<link rel="stylesheet" href="/css/style.css">
+	
+
+	<link rel="shortcut icon" href="/favicon.ico">
+		
+</head>
+<body class="body">
+	<div class="container container--outer">
+		<header class="header">
+	<div class="container header__container">
+		
+	<div class="logo">
+		<a class="logo__link" href="/" title="臭大佬博客" rel="home">
+			<div class="logo__item logo__text">
+					<div class="logo__title">臭大佬博客</div>
+					
+				</div>
+		</a>
+	</div>
+		
+<nav class="menu">
+	<button class="menu__btn" aria-haspopup="true" aria-expanded="false" tabindex="0">
+		<span class="menu__btn-title" tabindex="-1">菜单</span>
+	</button>
+	<ul class="menu__list">
+		<li class="menu__item">
+			<a class="menu__link" href="/">
+				
+				<span class="menu__text">首页</span>
+				
+			</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/post/">
+				
+				<span class="menu__text">归档</span>
+				
+			</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/about/">
+				
+				<span class="menu__text">关于</span>
+				
+			</a>
+		</li>
+	</ul>
+</nav>
+
+	</div>
+</header>
+		<div class="wrapper flex">
+			<div class="primary">
+			
+<main class="main" role="main">
+	<article class="post">
+		<header class="post__header">
+			<h1 class="post__title">PHP之get_class — 返回对象的类名</h1>
+			
+		</header>
+		<div class="content post__content clearfix">
+			<p>&lt;p&gt;&lt;span class=&quot;type&quot; fira=&quot;&quot; source=&quot;&quot; code=&quot;&quot; letter-spacing:=&quot;&quot; word-spacing:=&quot;&quot;&gt;string&lt;/span&gt;&lt;span fira=&quot;&quot; source=&quot;&quot; code=&quot;&quot; letter-spacing:=&quot;&quot; word-spacing:=&quot;&quot; background-color:=&quot;&quot;&gt;&amp;nbsp;&lt;/span&gt;&lt;span class=&quot;methodname&quot; fira=&quot;&quot; source=&quot;&quot; code=&quot;&quot; letter-spacing:=&quot;&quot; word-spacing:=&quot;&quot;&gt;&lt;span&gt;get_class&lt;/span&gt;&lt;/span&gt;&lt;span fira=&quot;&quot; source=&quot;&quot; code=&quot;&quot; letter-spacing:=&quot;&quot; word-spacing:=&quot;&quot; background-color:=&quot;&quot;&gt;&amp;nbsp;([&amp;nbsp;&lt;/span&gt;&lt;span class=&quot;methodparam&quot; fira=&quot;&quot; source=&quot;&quot; code=&quot;&quot; letter-spacing:=&quot;&quot; word-spacing:=&quot;&quot;&gt;&lt;span class=&quot;type&quot;&gt;object&lt;/span&gt;&amp;nbsp;&lt;code class=&quot;parameter&quot; fira=&quot;&quot; source=&quot;&quot; code=&quot;&quot; word-wrap:=&quot;&quot; color:=&quot;&quot; cursor:=&quot;&quot; letter-spacing:=&quot;&quot; word-spacing:=&quot;&quot; margin:=&quot;&quot;&gt;$object&lt;/code&gt;&lt;span class=&quot;initializer&quot;&gt;&amp;nbsp;=&amp;nbsp;&lt;span&gt;&lt;code fira=&quot;&quot; source=&quot;&quot; code=&quot;&quot; word-wrap:=&quot;&quot; letter-spacing:=&quot;&quot; word-spacing:=&quot;&quot; margin:=&quot;&quot;&gt;NULL&lt;/code&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span fira=&quot;&quot; source=&quot;&quot; code=&quot;&quot; letter-spacing:=&quot;&quot; word-spacing:=&quot;&quot; background-color:=&quot;&quot;&gt;&amp;nbsp;] )&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span fira=&quot;&quot; source=&quot;&quot; code=&quot;&quot; letter-spacing:=&quot;&quot; word-spacing:=&quot;&quot; background-color:=&quot;&quot;&gt;&lt;span fira=&quot;&quot; source=&quot;&quot; sans=&quot;&quot; background-color:=&quot;&quot;&gt;返回对象实例&amp;nbsp;&lt;/span&gt;&lt;code class=&quot;parameter&quot; fira=&quot;&quot; source=&quot;&quot; code=&quot;&quot; word-wrap:=&quot;&quot; color:=&quot;&quot; cursor:=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot;&gt;object&lt;/code&gt;&lt;span fira=&quot;&quot; source=&quot;&quot; sans=&quot;&quot; background-color:=&quot;&quot;&gt;&amp;nbsp;所属类的名字。&lt;/span&gt;&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span fira=&quot;&quot; source=&quot;&quot; code=&quot;&quot; letter-spacing:=&quot;&quot; word-spacing:=&quot;&quot; background-color:=&quot;&quot;&gt;&lt;pre lay-lang=&quot;JavaScript&quot;&gt;&lt;code class=&quot;JavaScript&quot;&gt;class Car
+{
+function getName()
+{
+echo &quot;My name is &quot; . get_class() . &quot;&lt;br&gt;&quot;;
+echo &quot;My name is &quot; . get_class($this) . &quot;&lt;br&gt;&quot;;
+}
+}</p>
+<p>//类内部调用  $bar = new Car();
+$bar-&amp;gt;getName();</p>
+<p>//类外部调用  echo &quot;Its name is &quot; . get_class($bar) .&quot;&lt;br&gt;&quot;;&lt;/code&gt;&lt;/pre&gt;&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span fira=&quot;&quot; source=&quot;&quot; code=&quot;&quot; letter-spacing:=&quot;&quot; word-spacing:=&quot;&quot; background-color:=&quot;&quot;&gt;&lt;span fira=&quot;&quot; source=&quot;&quot; sans=&quot;&quot; background-color:=&quot;&quot;&gt;&lt;/span&gt;&lt;/span&gt;&lt;/p&gt;&lt;p&gt;运行结果&lt;/p&gt;&lt;p&gt;My name is Car&lt;/p&gt;&lt;p&gt;My name is Car&lt;br&gt;Its name is Car&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;</p>
+
+		</div>
+	</article>
+</main>
+
+
+
+
+			</div>
+			
+		</div>
+		<footer class="footer">
+	<div class="container footer__container flex">
+		
+		<div class="footer__copyright">
+			&copy; 2026 臭大佬博客.
+			<span class="footer__copyright-credits">基于 <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> 引擎和 <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> 主题</span>
+		</div>
+	</div>
+</footer>
+	</div>
+<script async defer src="/js/menu.js"></script>
+</body>
+</html>

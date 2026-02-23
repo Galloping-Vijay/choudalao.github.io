@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Claude Code 使用笔记 - 臭大佬博客</title>
+	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
+	<meta name="description" content="Claude Code 使用笔记">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link rel="dns-prefetch" href="//fonts.googleapis.com">
+	<link rel="dns-prefetch" href="//fonts.gstatic.com">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
+
+	<link rel="stylesheet" href="/css/style.css">
+	
+
+	<link rel="shortcut icon" href="/favicon.ico">
+		
+</head>
+<body class="body">
+	<div class="container container--outer">
+		<header class="header">
+	<div class="container header__container">
+		
+	<div class="logo">
+		<a class="logo__link" href="/" title="臭大佬博客" rel="home">
+			<div class="logo__item logo__text">
+					<div class="logo__title">臭大佬博客</div>
+					
+				</div>
+		</a>
+	</div>
+		
+<nav class="menu">
+	<button class="menu__btn" aria-haspopup="true" aria-expanded="false" tabindex="0">
+		<span class="menu__btn-title" tabindex="-1">菜单</span>
+	</button>
+	<ul class="menu__list">
+		<li class="menu__item">
+			<a class="menu__link" href="/">
+				
+				<span class="menu__text">首页</span>
+				
+			</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/post/">
+				
+				<span class="menu__text">归档</span>
+				
+			</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/about/">
+				
+				<span class="menu__text">关于</span>
+				
+			</a>
+		</li>
+	</ul>
+</nav>
+
+	</div>
+</header>
+		<div class="wrapper flex">
+			<div class="primary">
+			
+<main class="main" role="main">
+	<article class="post">
+		<header class="post__header">
+			<h1 class="post__title">Claude Code 使用笔记</h1>
+			
+		</header>
+		<div class="content post__content clearfix">
+			<h1 id="使用">使用</h1>
+<p>安装就不用说了,可以去官网看相应文档:https://code.claude.com/docs/zh-CN/overview</p>
+<p><code>claude</code>会不定期更新,第一时间获取最新功能.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>npm update -g @anthropic-ai/claude-code
+</span></span></code></pre></div><p>值得注意的是:开始使用 Claude Code 时，你会发现每执行一个操作都需要确认权限，频繁的授权提示会严重影响工作流畅度。可以启动时使用&quot;危险模式&quot;</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>claude --dangerously-skip-permissions
+</span></span></code></pre></div><h2 id="设置厂商key和url">设置厂商key和url</h2>
+<p>大模型厂商也Claude Code 进行了积极适配，最重要的是配置环境变量，记住这几个参数的配置,以WIN为例:</p>
+<h3 id="方法一">方法一</h3>
+<h5 id="设置厂商key和url-1">设置厂商key和url</h5>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>setx ANTHROPIC_AUTH_TOKEN your_zhipu_api_key
+</span></span><span style="display:flex;"><span>setx ANTHROPIC_BASE_URL https://dashscope.aliyuncs.com/apps/anthropic
+</span></span><span style="display:flex;"><span>setx CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 设置git-bash 才能运行MCP命令</span>
+</span></span><span style="display:flex;"><span>setx CLAUDE_CODE_GIT_BASH_PATH <span style="color:#e6db74">&#34;D:\Program Files\Git\bin\bash.exe&#34;</span>
+</span></span></code></pre></div><h5 id="切换模型">切换模型</h5>
+<p>查看模型</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>/model
+</span></span></code></pre></div><p>切换模型</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>/model qwen3-coder-plus
+</span></span></code></pre></div><p>在配置文件中永久设置：在项目根目录创建.claude/settings.json文件中，并写入模型配置信息</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#e6db74">&#34;env&#34;</span>: <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;ANTHROPIC_MODEL&#34;</span>: <span style="color:#e6db74">&#34;qwen3-max&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;ANTHROPIC_SMALL_FAST_MODEL&#34;</span>: <span style="color:#e6db74">&#34;qwen3-vl-flash&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span></code></pre></div><h3 id="方法二">方法二</h3>
+<h4 id="使用-cc-switch">使用 cc-switch</h4>
+<p>安装地址: <a href="https://github.com/farion1231/cc-switch/releases">https://github.com/farion1231/cc-switch/releases</a>
+安装下载就可以使用了,使用时,如果用方法一配置了环境变量,这里在cc-switch中会提示是否删除,建议删除,全都交给cc-switch来处理.</p>
+<p>处理配置厂商外,cc-switch还能管理MCP、Skills等等。</p>
+<h4 id="ccometixline">CCometixLine</h4>
+<p>基于 Rust 的高性能 Claude Code 状态栏工具，集成 Git 信息、使用量跟踪、交互式 TUI 配置和 Claude Code 补丁工具。
+项目地址: <a href="https://github.com/Haleclipse/CCometixLine/blob/master/README.zh.md" title="CCometixLine">CCometixLine</a></p>
+<h5 id="安装">安装:</h5>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">npm</span> <span style="color:#a6e22e">install</span> <span style="color:#f92672">-</span><span style="color:#a6e22e">g</span> <span style="color:#960050;background-color:#1e0010">@</span><span style="color:#a6e22e">cometix</span><span style="color:#f92672">/</span><span style="color:#a6e22e">ccline</span>
+</span></span></code></pre></div><h5 id="添加到-claude-code-settingsjson">添加到 Claude Code settings.json</h5>
+<p>Windows:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#e6db74">&#34;statusLine&#34;</span>: <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;type&#34;</span>: <span style="color:#e6db74">&#34;command&#34;</span>, 
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;command&#34;</span>: <span style="color:#e6db74">&#34;%USERPROFILE%\\.claude\\ccline\\ccline.exe&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;padding&#34;</span>: <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span></code></pre></div><h2 id="接入mcp">接入MCP</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># mysql https://github.com/executeautomation/mcp-database-server</span>
+</span></span><span style="display:flex;"><span>npm install -g @executeautomation/database-server
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>claude mcp add-json your_mcp_name <span style="color:#e6db74">&#34;{\&#34;type\&#34;:\&#34;stdio\&#34;,\&#34;command\&#34;:\&#34;npx\&#34;,\&#34;args\&#34;:[\&#34;-y\&#34;,\&#34;@executeautomation/database-server\&#34;,\&#34;--mysql\&#34;,\&#34;--host\&#34;,\&#34;your_server_ip\&#34;,\&#34;--database\&#34;,\&#34;your_database_name\&#34;,\&#34;--user\&#34;,\&#34;your_username\&#34;,\&#34;--password\&#34;,\&#34;your_password\&#34;],\&#34;env\&#34;:{}}&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Figma</span>
+</span></span><span style="display:flex;"><span>claude mcp add --transport http figma-dev-mode-mcp-server http://127.0.0.1:3845/mcp
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 读文档  https://context7.com/dashboard</span>
+</span></span><span style="display:flex;"><span>claude mcp add --transport http context7 https://mcp.context7.com/mcp <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>  --header <span style="color:#e6db74">&#34;CONTEXT7_API_KEY: YOUR_API_KEY&#34;</span>  --scope user
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 浏览器控制 playwright   https://github.com/microsoft/playwright-mcp</span>
+</span></span><span style="display:flex;"><span>claude mcp add playwright npx @playwright/mcp@latest
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># chrome-devtools  https://github.com/ChromeDevTools/chrome-devtools-mcp/</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 打开 http://dev.localhost.net</span>
+</span></span><span style="display:flex;"><span>claude mcp add chrome-devtools npx chrome-devtools-mcp@latest --scope user
+</span></span></code></pre></div><h2 id="工具">工具</h2>
+<h3 id="插件">插件</h3>
+<p>Claude Code 在Vscode和JetBrains中有对应插件,使用插件会比较友好.</p>
+<p>Chat for Claude Code 是一个Vscode插件,提供了输入框、mcp、model等配置，还能添加图片等功能.</p>
+<h3 id="随时随地用手机继续你的ai编程对话">随时随地用手机继续你的AI编程对话</h3>
+<p>happy-coder：Claude 代码 &amp; Codex 的移动端和网页客户端
+地址：https://github.com/slopus/happy</p>
+<p>第一步：手机端去应用市场搜索“happy Codex”(墙外)</p>
+<p>第二步：pc端安装</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>npm i -g happy-coder
+</span></span></code></pre></div><p>后会出现一个二维码，直接打开手机haapy应用扫描这个二维码就建立起链接了。
+如果没有二维码，输入下面的命令：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>happy auth login --force
+</span></span></code></pre></div><p>接下来第三步：进入你的项目目录，</p>
+<p>将之前是claude的命令替换成：&ldquo;happy&rdquo;</p>
+
+		</div>
+	</article>
+</main>
+
+
+
+
+			</div>
+			
+		</div>
+		<footer class="footer">
+	<div class="container footer__container flex">
+		
+		<div class="footer__copyright">
+			&copy; 2026 臭大佬博客.
+			<span class="footer__copyright-credits">基于 <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> 引擎和 <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> 主题</span>
+		</div>
+	</div>
+</footer>
+	</div>
+<script async defer src="/js/menu.js"></script>
+</body>
+</html>

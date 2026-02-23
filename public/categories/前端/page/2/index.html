@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>前端 - 臭大佬博客</title>
+	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
+	<meta name="description" content="">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link rel="dns-prefetch" href="//fonts.googleapis.com">
+	<link rel="dns-prefetch" href="//fonts.gstatic.com">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
+
+	<link rel="stylesheet" href="/css/style.css">
+	
+	<link rel="alternate" type="application/rss+xml" href="/categories/%E5%89%8D%E7%AB%AF/index.xml" title="臭大佬博客">
+
+	<link rel="shortcut icon" href="/favicon.ico">
+		
+</head>
+<body class="body">
+	<div class="container container--outer">
+		<header class="header">
+	<div class="container header__container">
+		
+	<div class="logo">
+		<a class="logo__link" href="/" title="臭大佬博客" rel="home">
+			<div class="logo__item logo__text">
+					<div class="logo__title">臭大佬博客</div>
+					
+				</div>
+		</a>
+	</div>
+		
+<nav class="menu">
+	<button class="menu__btn" aria-haspopup="true" aria-expanded="false" tabindex="0">
+		<span class="menu__btn-title" tabindex="-1">菜单</span>
+	</button>
+	<ul class="menu__list">
+		<li class="menu__item">
+			<a class="menu__link" href="/">
+				
+				<span class="menu__text">首页</span>
+				
+			</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/post/">
+				
+				<span class="menu__text">归档</span>
+				
+			</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/about/">
+				
+				<span class="menu__text">关于</span>
+				
+			</a>
+		</li>
+	</ul>
+</nav>
+
+	</div>
+</header>
+		<div class="wrapper flex">
+			<div class="primary">
+			
+<main class="main list" role="main">
+	<header class="main__header">
+		<h1 class="main__title">前端</h1>
+	</header><article class="list__item post">
+	
+	<header class="list__header">
+		<h2 class="list__title post__title">
+			<a href="/posts/2020-09-02-laydate-%E5%9C%A8%E5%BC%B9%E5%87%BA%E5%B1%82%E4%B8%80%E9%97%AA%E8%80%8C%E8%BF%87-%E8%87%AD%E5%A4%A7%E4%BD%AC/" rel="bookmark">
+			laydate 在弹出层一闪而过 | 臭大佬
+			</a>
+		</h2>
+		
+	</header>
+	<div class="content list__excerpt post__content clearfix">
+		<h1 id="问题">问题</h1>
+<p>在弹出层中使用<code>layui</code>的时间插件<code>laydate</code>，总是在一闪而过之后消失了。
+<img src="https://www.choudalao.com/uploads/20200902/20200902213034u7frMo.png" alt=""></p>
+<h1 id="解决">解决</h1>
+<p>使用自定义弹出控件的事件 <code>trigger</code>，</p>
+<blockquote>
+<p>trigger: &lsquo;click&rsquo; //采用click弹出</p>
+</blockquote>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-html" data-lang="html"><span style="display:flex;"><span>laydate.render({
+</span></span><span style="display:flex;"><span>	elem: &#39;#date_time&#39;
+</span></span><span style="display:flex;"><span>	,trigger: &#39;click&#39;
+</span></span><span style="display:flex;"><span>});
+</span></span></code></pre></div><p><img src="https://www.choudalao.com/uploads/20200902/20200902213343MgqWwl.png" alt=""></p>
+	</div>
+</article><article class="list__item post">
+	
+	<header class="list__header">
+		<h2 class="list__title post__title">
+			<a href="/posts/2020-04-28-layui-%E5%88%97%E8%A1%A8-%E6%93%8D%E4%BD%9C%E6%8C%89%E9%92%AE%E8%BF%87%E5%A4%9A%E8%87%AA%E5%8A%A8%E9%9A%90%E8%97%8F%E5%90%8E-%E6%8C%89%E9%92%AE%E7%9B%91%E5%90%AC%E4%BA%8B%E4%BB%B6%E5%A4%B1%E6%95%88%E9%97%AE%E9%A2%98/" rel="bookmark">
+			layUI 列表 操作按钮过多自动隐藏后 按钮监听事件失效问题
+			</a>
+		</h2>
+		
+	</header>
+	<div class="content list__excerpt post__content clearfix">
+		<h1 id="问题">问题</h1>
+<p>layUI列表中,操作栏按钮过多时会自动隐藏,点击弹出隐藏按钮后,按钮本身绑定得监听事件失效。
+<img src="https://www.choudalao.com/uploads/20200428/20200428224406nFCNA6.png" alt=""></p>
+<h1 id="解决方式">解决方式</h1>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#75715e">//将以下代码粘入相关页面中
+</span></span></span><span style="display:flex;"><span>            <span style="color:#960050;background-color:#1e0010">$</span>(<span style="color:#a6e22e">document</span>)<span style="color:#f92672">.</span><span style="color:#a6e22e">off</span>(<span style="color:#e6db74">&#39;mousedown&#39;</span>,<span style="color:#e6db74">&#39;.layui-table-grid-down&#39;</span>)<span style="color:#f92672">.</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">on</span>(<span style="color:#e6db74">&#39;mousedown&#39;</span>,<span style="color:#e6db74">&#39;.layui-table-grid-down&#39;</span>,<span style="color:#66d9ef">function</span> (<span style="color:#a6e22e">event</span>) {
+</span></span><span style="display:flex;"><span>                <span style="color:#a6e22e">table</span><span style="color:#f92672">.</span><span style="color:#a6e22e">_tableTrCurrr</span> <span style="color:#f92672">=</span> <span style="color:#960050;background-color:#1e0010">$</span>(<span style="color:#66d9ef">this</span>)<span style="color:#f92672">.</span><span style="color:#a6e22e">closest</span>(<span style="color:#e6db74">&#39;td&#39;</span>);
+</span></span><span style="display:flex;"><span>            });
+</span></span><span style="display:flex;"><span>            <span style="color:#960050;background-color:#1e0010">$</span>(<span style="color:#a6e22e">document</span>)<span style="color:#f92672">.</span><span style="color:#a6e22e">off</span>(<span style="color:#e6db74">&#39;click&#39;</span>,<span style="color:#e6db74">&#39;.layui-table-tips-main [lay-event]&#39;</span>)<span style="color:#f92672">.</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">on</span>(<span style="color:#e6db74">&#39;click&#39;</span>,<span style="color:#e6db74">&#39;.layui-table-tips-main [lay-event]&#39;</span>,<span style="color:#66d9ef">function</span> (<span style="color:#a6e22e">event</span>) {
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">elem</span> <span style="color:#f92672">=</span> <span style="color:#960050;background-color:#1e0010">$</span>(<span style="color:#66d9ef">this</span>);
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">tableTrCurrr</span> <span style="color:#f92672">=</span>  <span style="color:#a6e22e">table</span><span style="color:#f92672">.</span><span style="color:#a6e22e">_tableTrCurrr</span>;
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">if</span>(<span style="color:#f92672">!</span><span style="color:#a6e22e">tableTrCurrr</span>){
+</span></span><span style="display:flex;"><span>                    <span style="color:#66d9ef">return</span>;
+</span></span><span style="display:flex;"><span>                }
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">layerIndex</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">elem</span><span style="color:#f92672">.</span><span style="color:#a6e22e">closest</span>(<span style="color:#e6db74">&#39;.layui-table-tips&#39;</span>)<span style="color:#f92672">.</span><span style="color:#a6e22e">attr</span>(<span style="color:#e6db74">&#39;times&#39;</span>);
+</span></span><span style="display:flex;"><span>                <span style="color:#a6e22e">console</span><span style="color:#f92672">.</span><span style="color:#a6e22e">log</span>(<span style="color:#a6e22e">layerIndex</span>);
+</span></span><span style="display:flex;"><span>                <span style="color:#a6e22e">layer</span><span style="color:#f92672">.</span><span style="color:#a6e22e">close</span>(<span style="color:#a6e22e">layerIndex</span>);
+</span></span><span style="display:flex;"><span>                <span style="color:#a6e22e">table</span><span style="color:#f92672">.</span><span style="color:#a6e22e">_tableTrCurrr</span><span style="color:#f92672">.</span><span style="color:#a6e22e">find</span>(<span style="color:#e6db74">&#39;[lay-event=&#34;&#39;</span> <span style="color:#f92672">+</span> <span style="color:#a6e22e">elem</span><span style="color:#f92672">.</span><span style="color:#a6e22e">attr</span>(<span style="color:#e6db74">&#39;lay-event&#39;</span>) <span style="color:#f92672">+</span>           <span style="color:#e6db74">&#39;&#34;]&#39;</span>)<span style="color:#f92672">.</span><span style="color:#a6e22e">children</span>(<span style="color:#e6db74">&#34;i&#34;</span>)<span style="color:#f92672">.</span><span style="color:#a6e22e">first</span>()<span style="color:#f92672">.</span><span style="color:#a6e22e">click</span>();
+</span></span><span style="display:flex;"><span>            });
+</span></span></code></pre></div><p>原文：https://fly.layui.com/jie/45361/</p>
+	</div>
+</article><article class="list__item post">
+	
+	<header class="list__header">
+		<h2 class="list__title post__title">
+			<a href="/posts/2020-01-19-css%E9%85%8D%E7%BD%AE%E5%B1%8F%E5%B9%95%E9%AB%98%E5%BA%A6/" rel="bookmark">
+			css配置屏幕高度
+			</a>
+		</h2>
+		
+	</header>
+	<div class="content list__excerpt post__content clearfix">
+		<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-html" data-lang="html"><span style="display:flex;"><span>function H_w(){
+</span></span><span style="display:flex;"><span>  var i_height = $(window).height();  
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  if(i_height<span style="color:#960050;background-color:#1e0010">&lt;</span>=600){
+</span></span><span style="display:flex;"><span>    $(&#34;.layui-card-content&#34;).css(&#34;min-height&#34;,i_height-109);
+</span></span><span style="display:flex;"><span>  }else{
+</span></span><span style="display:flex;"><span>    $(&#34;.layui-card-content&#34;).css(&#34;min-height&#34;,i_height-109);
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div>
+	</div>
+</article><article class="list__item post">
+	
+	<header class="list__header">
+		<h2 class="list__title post__title">
+			<a href="/posts/2019-12-04-%E9%A1%B5%E9%9D%A2%E5%88%B7%E6%96%B0%E7%9A%84%E6%97%B6%E5%80%99%E8%AE%B0%E4%BD%8F%E6%BB%9A%E5%8A%A8%E6%9D%A1%E7%9A%84%E4%BD%8D%E7%BD%AE/" rel="bookmark">
+			页面刷新的时候记住滚动条的位置
+			</a>
+		</h2>
+		
+	</header>
+	<div class="content list__excerpt post__content clearfix">
+		<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span>window.<span style="color:#a6e22e">onbeforeunload</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">function</span>() {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">scrollPos</span>;
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span>(<span style="color:#66d9ef">typeof</span> window.<span style="color:#a6e22e">pageYOffset</span> <span style="color:#f92672">!=</span> <span style="color:#e6db74">&#39;undefined&#39;</span>) {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">scrollPos</span> <span style="color:#f92672">=</span> window.<span style="color:#a6e22e">pageYOffset</span>;
+</span></span><span style="display:flex;"><span>	} <span style="color:#66d9ef">else</span> <span style="color:#66d9ef">if</span>(<span style="color:#66d9ef">typeof</span> document.<span style="color:#a6e22e">compatMode</span> <span style="color:#f92672">!=</span> <span style="color:#e6db74">&#39;undefined&#39;</span> <span style="color:#f92672">&amp;&amp;</span>
+</span></span><span style="display:flex;"><span>			  document.<span style="color:#a6e22e">compatMode</span> <span style="color:#f92672">!=</span> <span style="color:#e6db74">&#39;BackCompat&#39;</span>) {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">scrollPos</span> <span style="color:#f92672">=</span> document.<span style="color:#a6e22e">documentElement</span>.<span style="color:#a6e22e">scrollTop</span>;
+</span></span><span style="display:flex;"><span>	} <span style="color:#66d9ef">else</span> <span style="color:#66d9ef">if</span>(<span style="color:#66d9ef">typeof</span> document.<span style="color:#a6e22e">body</span> <span style="color:#f92672">!=</span> <span style="color:#e6db74">&#39;undefined&#39;</span>) {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">scrollPos</span> <span style="color:#f92672">=</span> document.<span style="color:#a6e22e">body</span>.<span style="color:#a6e22e">scrollTop</span>;
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	document.<span style="color:#a6e22e">cookie</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;scrollTop=&#34;</span> <span style="color:#f92672">+</span> <span style="color:#a6e22e">scrollPos</span>; <span style="color:#75715e">//存储滚动条位置到cookies中
+</span></span></span><span style="display:flex;"><span>};
+</span></span><span style="display:flex;"><span>window.<span style="color:#a6e22e">onload</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">function</span>() {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span>(document.<span style="color:#a6e22e">cookie</span>.<span style="color:#a6e22e">match</span>(<span style="color:#e6db74">/scrollTop=([^;]+)(;|$)/</span>) <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span>) {
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">arr</span> <span style="color:#f92672">=</span> document.<span style="color:#a6e22e">cookie</span>.<span style="color:#a6e22e">match</span>(<span style="color:#e6db74">/scrollTop=([^;]+)(;|$)/</span>); <span style="color:#75715e">//cookies中不为空，则读取滚动条位置
+</span></span></span><span style="display:flex;"><span>		document.<span style="color:#a6e22e">documentElement</span>.<span style="color:#a6e22e">scrollTop</span> <span style="color:#f92672">=</span> parseInt(<span style="color:#a6e22e">arr</span>[<span style="color:#ae81ff">1</span>]);
+</span></span><span style="display:flex;"><span>		document.<span style="color:#a6e22e">body</span>.<span style="color:#a6e22e">scrollTop</span> <span style="color:#f92672">=</span> parseInt(<span style="color:#a6e22e">arr</span>[<span style="color:#ae81ff">1</span>]);
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>};
+</span></span></code></pre></div>
+	</div>
+</article><article class="list__item post">
+	
+	<header class="list__header">
+		<h2 class="list__title post__title">
+			<a href="/posts/2019-11-11-vue-warn-failed-to-mount-component-template-or-render-function-not-defined-%E9%94%99%E8%AF%AF%E8%A7%A3%E5%86%B3%E6%96%B9/" rel="bookmark">
+			[Vue warn]: Failed to mount component: template or render function not defined. 错误解决方法
+			</a>
+		</h2>
+		
+	</header>
+	<div class="content list__excerpt post__content clearfix">
+		<h3 id="vue-warn-failed-to-mount-component-template-or-render-function-not-defined-错误解决方法">[Vue warn]: Failed to mount component: template or render function not defined. 错误解决方法</h3>
+<p><img src="https://www.choudalao.com/uploads/20191111/20191111154141MpGbez.png" alt=""></p>
+<h3 id="分析">分析</h3>
+<p>原因是 ES6 中导入default模块需要使用 require default 不再兼容 require 自动导入default模块</p>
+<p><code>Vue.component('xxx',require( 'xxxx' ))</code></p>
+<p>修改成
+<code>Vue.component('xxx',require( 'xxxx' ).default)</code></p>
+<p>如:</p>
+<p><img src="https://www.choudalao.com/uploads/20191111/20191111160418ouhrGG.png" alt=""></p>
+	</div>
+</article><article class="list__item post">
+	
+	<header class="list__header">
+		<h2 class="list__title post__title">
+			<a href="/posts/2019-10-16-javascript%E8%8E%B7%E5%8F%96%E5%AE%8C%E6%95%B4%E5%BD%93%E5%89%8D%E5%9F%9F%E5%90%8D/" rel="bookmark">
+			JavaScript获取完整当前域名
+			</a>
+		</h2>
+		
+	</header>
+	<div class="content list__excerpt post__content clearfix">
+		<p>&lt;p&gt;&lt;pre lay-lang=&quot;JavaScript&quot;&gt;&lt;code class=&quot;JavaScript&quot;&gt;window.location.protocol+&quot;//&quot;+window.location.host; //   返回https://mp.csdn.net</p>
+<p>window.location.host; //返回url 的主机部分，例如：mp.csdn.net<br>
+window.location.hostname; //返回mp.csdn.net
+window.location.href; //返回整个url字符串(在浏览器中就是完整的地址栏)
+window.location.pathname; //返回/a/index.php或者/index.php<br>
+window.location.protocol; //返回url 的协议部分，例如： http:，ftp:，maito:等等。<br>
+window.location.port //url 的端口部分，如果采用默认的80端口，那么返回值并不是默认的80而是空字符&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;code class=&quot;JavaScript&quot;&gt;&lt;br&gt;&lt;/code&gt;&lt;/p&gt;&lt;p&gt;&lt;code class=&quot;JavaScript&quot;&gt;&lt;br&gt;&lt;/code&gt;&lt;/p&gt;&lt;p&gt;&lt;code class=&quot;JavaScript&quot;&gt;&lt;br&gt;&lt;/code&gt;&lt;/p&gt;&lt;p&gt;&lt;code class=&quot;JavaScript&quot;&gt;&lt;br&gt;&lt;/code&gt;&lt;/p&gt;&lt;p&gt;&lt;code class=&quot;JavaScript&quot;&gt;&lt;br&gt;&lt;/code&gt;&lt;/p&gt;&lt;/p&gt;</p>
+	</div>
+</article><article class="list__item post">
+	
+	<header class="list__header">
+		<h2 class="list__title post__title">
+			<a href="/posts/2019-09-21-input%E7%A6%81%E6%AD%A2%E8%87%AA%E5%8A%A8%E5%A1%AB%E5%85%85/" rel="bookmark">
+			input禁止自动填充
+			</a>
+		</h2>
+		
+	</header>
+	<div class="content list__excerpt post__content clearfix">
+		<p>&lt;p&gt;在表单提交的时候,如果表单中存在账号密码.谷歌浏览器会自动填充数据,有时间我们不需要填充.&lt;/p&gt;&lt;p&gt;解决方法如下:&lt;/p&gt;&lt;pre lay-lang=&quot;JavaScript&quot;&gt;&lt;code class=&quot;JavaScript&quot;&gt;1、在form表单或者input中使用autocomplete=”off”
+2、不让页面读取缓存数据
+3、对于type=“password”时禁止自动填充密码的方法有两种：
+（1）去掉input的name和id属性（不推荐）
+（2）加上autocomplete=&quot;new-password&quot;属性&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;亲测最后一种效果最好&lt;/p&gt;&lt;p style=&quot;text-align: center;&quot;&gt;&lt;img src=&quot;http://www.choudalao.com/uploads/20190921/tPRipnYnGiKtd4JiuKIsLDwKjgj3mePYZB6ICmZc.png&quot; alt=&quot;&quot; style=&quot;&quot;&gt;&lt;/p&gt;</p>
+	</div>
+</article><article class="list__item post">
+	
+	<header class="list__header">
+		<h2 class="list__title post__title">
+			<a href="/posts/2019-09-21-%E5%89%8D%E7%AB%AF%E5%B8%B8%E7%94%A8%E5%B0%8F%E4%BB%A3%E7%A0%81/" rel="bookmark">
+			前端常用小代码
+			</a>
+		</h2>
+		
+	</header>
+	<div class="content list__excerpt post__content clearfix">
+		<h1 id="jquery通过name属性取值的方法">jquery通过name属性取值的方法</h1>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#75715e">//input
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">$</span>(<span style="color:#e6db74">&#34;input[name=&#39;title&#39;]&#34;</span>)<span style="color:#f92672">.</span><span style="color:#a6e22e">val</span>();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//textarea
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">$</span>(<span style="color:#e6db74">&#34;textarea[name=&#39;remark&#39;]&#34;</span>)<span style="color:#f92672">.</span><span style="color:#a6e22e">val</span>();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//select
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">$</span>(<span style="color:#e6db74">&#34;select[name=&#39;region[province]&#39;]&#34;</span>)<span style="color:#f92672">.</span><span style="color:#a6e22e">val</span>();
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">$</span>(<span style="color:#e6db74">&#34;select[name=&#39;province&#39;]&#34;</span>)<span style="color:#f92672">.</span><span style="color:#a6e22e">val</span>();
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">$</span>(<span style="color:#e6db74">&#34;#&#34;</span><span style="color:#f92672">+</span><span style="color:#a6e22e">id</span><span style="color:#f92672">+</span><span style="color:#e6db74">&#34; select&#34;</span>)<span style="color:#f92672">.</span><span style="color:#a6e22e">find</span>(<span style="color:#e6db74">&#34;option:first&#34;</span>)<span style="color:#f92672">.</span><span style="color:#a6e22e">prop</span>(<span style="color:#e6db74">&#34;selected&#34;</span>, <span style="color:#66d9ef">true</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//checkbox
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">$</span>(<span style="color:#e6db74">&#34;input:checkbox[name=&#39;test&#39;]:checked&#34;</span>)<span style="color:#f92672">.</span><span style="color:#a6e22e">each</span>(<span style="color:#66d9ef">function</span>() { <span style="color:#75715e">// 遍历name=test的多选框
+</span></span></span><span style="display:flex;"><span>  <span style="color:#960050;background-color:#1e0010">$</span>(<span style="color:#66d9ef">this</span>)<span style="color:#f92672">.</span><span style="color:#a6e22e">val</span>();  <span style="color:#75715e">// 每一个被选中项的值
+</span></span></span><span style="display:flex;"><span>});
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//设置选中 
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">$</span>(<span style="color:#e6db74">&#39;#cb&#39;</span>)<span style="color:#f92672">.</span><span style="color:#a6e22e">prop</span>(<span style="color:#e6db74">&#39;checked&#39;</span>, <span style="color:#66d9ef">true</span>);
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">$</span>(<span style="color:#e6db74">&#34;input[name=&#39;_checkbox&#39;]:checked&#34;</span>);
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">$</span>(<span style="color:#e6db74">&#34;input[name=&#39;sfz&#39;]&#34;</span>)<span style="color:#f92672">.</span><span style="color:#a6e22e">attr</span>(<span style="color:#e6db74">&#34;checked&#34;</span>,<span style="color:#e6db74">&#34;checked&#34;</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//获取是否选中 
+</span></span></span><span style="display:flex;"><span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">isChecked</span> <span style="color:#f92672">=</span> <span style="color:#960050;background-color:#1e0010">$</span>(<span style="color:#e6db74">&#39;#cb&#39;</span>)<span style="color:#f92672">.</span><span style="color:#a6e22e">prop</span>(<span style="color:#e6db74">&#39;checked&#39;</span>);
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//或 
+</span></span></span><span style="display:flex;"><span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">isChecked</span> <span style="color:#f92672">=</span> <span style="color:#960050;background-color:#1e0010">$</span>(<span style="color:#e6db74">&#39;#cb&#39;</span>)<span style="color:#f92672">.</span><span style="color:#a6e22e">is</span>(<span style="color:#e6db74">&#34;:checked&#34;</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">$</span>(<span style="color:#e6db74">&#34;[name=&#39;https_origin_type&#39;][value=&#39;1&#39;]&#34;</span>)<span style="color:#f92672">.</span><span style="color:#a6e22e">prop</span>(<span style="color:#e6db74">&#34;checked&#34;</span>, <span style="color:#66d9ef">true</span>);<span style="color:#75715e">//设置值为1的为选中
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">//radio
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">$</span>(<span style="color:#e6db74">&#34;input[name=&#39;&#39;]:checked&#34;</span>)<span style="color:#f92672">.</span><span style="color:#a6e22e">val</span>();
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">$</span>(<span style="color:#e6db74">&#34;:radio[name=&#39;level&#39;]:checked&#34;</span>)<span style="color:#f92672">.</span><span style="color:#a6e22e">val</span>();
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">$</span>(<span style="color:#e6db74">&#39;input:radio:first&#39;</span>)<span style="color:#f92672">.</span><span style="color:#a6e22e">prop</span>(<span style="color:#e6db74">&#39;checked&#39;</span>, <span style="color:#66d9ef">true</span>);
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">$</span>(<span style="color:#e6db74">&#34;input[name=&#39;radioName&#39;][value=2]&#34;</span>)<span style="color:#f92672">.</span><span style="color:#a6e22e">prop</span>(<span style="color:#e6db74">&#34;checked&#34;</span>,<span style="color:#66d9ef">true</span>); 
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//原生方法
+</span></span></span><span style="display:flex;"><span><span style="color:#a6e22e">document</span><span style="color:#f92672">.</span><span style="color:#a6e22e">querySelector</span>(<span style="color:#e6db74">&#39;input[name=&#34;control_name&#34;]&#39;</span>)<span style="color:#f92672">.</span><span style="color:#a6e22e">getAttribute</span>(<span style="color:#e6db74">&#39;value&#39;</span>);
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">document</span><span style="color:#f92672">.</span><span style="color:#a6e22e">querySelector</span>(<span style="color:#e6db74">&#39;meta[name=&#34;csrf-token&#34;]&#39;</span>)<span style="color:#f92672">.</span><span style="color:#a6e22e">getAttribute</span>(<span style="color:#e6db74">&#39;content&#39;</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//Jquery清空（获取）当前页面所有的input和textarea的两种写法
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">$</span>(<span style="color:#e6db74">&#34;#myform input,#myform textarea&#34;</span>)<span style="color:#f92672">.</span><span style="color:#a6e22e">each</span>(<span style="color:#66d9ef">function</span>(){
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">value</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">value</span><span style="color:#f92672">.</span><span style="color:#a6e22e">replace</span>(<span style="color:#f92672">/</span><span style="color:#a6e22e">\</span><span style="color:#f92672">&amp;/</span><span style="color:#a6e22e">g</span>,<span style="color:#e6db74">&#34;%26&#34;</span>);<span style="color:#75715e">//也可以清空数据this.value =&#34;&#34;;
+</span></span></span><span style="display:flex;"><span>})
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">$</span>(<span style="color:#e6db74">&#34;#myform&#34;</span>)<span style="color:#f92672">.</span><span style="color:#a6e22e">find</span>(<span style="color:#e6db74">&#34;input,textarea&#34;</span>)<span style="color:#f92672">.</span><span style="color:#a6e22e">each</span>(<span style="color:#66d9ef">function</span>(){
+</span></span><span style="display:flex;"><span>   <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">value</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">value</span><span style="color:#f92672">.</span><span style="color:#a6e22e">replace</span>(<span style="color:#f92672">/</span><span style="color:#a6e22e">\</span><span style="color:#f92672">&amp;/</span><span style="color:#a6e22e">g</span>,<span style="color:#e6db74">&#34;%26&#34;</span>);<span style="color:#75715e">//也可以清空数据this.value =&#34;&#34;;
+</span></span></span><span style="display:flex;"><span>});
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>$body<span style="color:#f92672">.</span><span style="color:#a6e22e">off</span>(<span style="color:#e6db74">&#39;click&#39;</span>, <span style="color:#a6e22e">options</span><span style="color:#f92672">.</span><span style="color:#a6e22e">elem</span>)<span style="color:#f92672">.</span><span style="color:#a6e22e">on</span>(<span style="color:#e6db74">&#39;click&#39;</span>, <span style="color:#a6e22e">options</span><span style="color:#f92672">.</span><span style="color:#a6e22e">elem</span>, <span style="color:#66d9ef">function</span>(){}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">$</span>(<span style="color:#e6db74">&#34;.addPackage&#34;</span>)<span style="color:#f92672">.</span><span style="color:#a6e22e">unbind</span>(<span style="color:#e6db74">&#34;click&#34;</span>);
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">$</span>(<span style="color:#e6db74">&#34;.addPackage&#34;</span>)<span style="color:#f92672">.</span><span style="color:#a6e22e">click</span>(<span style="color:#66d9ef">function</span> () {})
+</span></span><span style="display:flex;"><span> 
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">$</span>(<span style="color:#a6e22e">document</span>)<span style="color:#f92672">.</span><span style="color:#a6e22e">off</span>(<span style="color:#e6db74">&#34;click&#34;</span>,<span style="color:#e6db74">&#39;.change-goods&#39;</span>);
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">$</span>(<span style="color:#a6e22e">document</span>)<span style="color:#f92672">.</span><span style="color:#a6e22e">on</span>(<span style="color:#e6db74">&#39;click&#39;</span>,<span style="color:#e6db74">&#39;.change-goods&#39;</span>,<span style="color:#66d9ef">function</span> () {})
+</span></span></code></pre></div><h1 id="事件冒泡导致栈内存溢出以及jquery的trigger触发事件的问题">事件冒泡导致栈内存溢出以及jquery的trigger触发事件的问题</h1>
+<blockquote>
+<p>$(&rsquo;#demo&rsquo;).trigger(‘click’)并不能触发a标签中内容的点击事件，只是相当于触发了a本身的onclick，而不是像用户点击一样的事件。
+如果需要a标签的点击效果,需要把事件绑定到a标签内部的元素中才可以,正好html结构里面a标签内部有个类名.des的div标签</p>
+	</div>
+</article><article class="list__item post">
+	
+	<header class="list__header">
+		<h2 class="list__title post__title">
+			<a href="/posts/2019-09-21-jquery%E6%B8%85%E7%A9%BA%E8%8E%B7%E5%8F%96%E5%BD%93%E5%89%8D%E9%A1%B5%E9%9D%A2%E6%89%80%E6%9C%89%E7%9A%84input%E5%92%8Ctextarea%E7%9A%84%E4%B8%A4%E7%A7%8D%E5%86%99%E6%B3%95/" rel="bookmark">
+			Jquery清空（获取）当前页面所有的input和textarea的两种写法
+			</a>
+		</h2>
+		
+	</header>
+	<div class="content list__excerpt post__content clearfix">
+		<p>&lt;p&gt;&lt;/p&gt;&lt;pre lay-lang=&quot;JavaScript&quot;&gt;&lt;code class=&quot;JavaScript&quot;&gt;$(&quot;#myform input,#myform textarea&quot;).each(function(){
+this.value = this.value.replace(/&amp;amp;amp;/g,&quot;%26&quot;);//也可以清空数据this.value =&quot;&quot;;
+})
+$(&quot;#myform&quot;).find(&quot;input,textarea&quot;).each(function(){
+this.value = this.value.replace(/&amp;amp;amp;/g,&quot;%26&quot;);//也可以清空数据this.value =&quot;&quot;;
+});&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;/p&gt;</p>
+	</div>
+</article><article class="list__item post">
+	
+	<header class="list__header">
+		<h2 class="list__title post__title">
+			<a href="/posts/2018-04-24-%E8%A7%A3%E5%86%B3jquery%E4%BD%BF%E7%94%A8append%E6%B7%BB%E5%8A%A0%E7%9A%84%E5%85%83%E7%B4%A0%E4%BA%8B%E4%BB%B6%E6%97%A0%E6%95%88%E7%9A%84%E6%96%B9%E6%B3%95/" rel="bookmark">
+			解决jQuery使用append添加的元素事件无效的方法
+			</a>
+		</h2>
+		
+	</header>
+	<div class="content list__excerpt post__content clearfix">
+		<p>&lt;h3 id=&quot;jquery-api官方的例子在新增的元素上添加事件&quot; sf=&quot;&quot; ui=&quot;&quot; pingfang=&quot;&quot; hiragino=&quot;&quot; sans=&quot;&quot; microsoft=&quot;&quot; wenquanyi=&quot;&quot; micro=&quot;&quot; line-height:=&quot;&quot; color:=&quot;&quot; font-size:=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot;&gt;jquery api官方的例子在新增的元素上添加事件&lt;/h3&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;pre lay-lang=&quot;JavaScript&quot;&gt;&lt;code class=&quot;JavaScript&quot;&gt;$(document).on(&quot;click&quot;,&rsquo;#lyysb a&rsquo;,function(){
+if(!$(this).hasClass(&lsquo;cur&rsquo;)){
+$(this).addClass(&lsquo;cur&rsquo;);
+} else {
+$(this).removeClass(&lsquo;cur&rsquo;);
+}
+});&lt;/code&gt;&lt;/pre&gt;&lt;p sf=&quot;&quot; ui=&quot;&quot; pingfang=&quot;&quot; hiragino=&quot;&quot; sans=&quot;&quot; microsoft=&quot;&quot; wenquanyi=&quot;&quot; micro=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot; style=&quot;text-align: justify;&quot;&gt;on() 方法在被选元素及子元素上添加一个或多个事件处理程序。&lt;/p&gt;&lt;p sf=&quot;&quot; ui=&quot;&quot; pingfang=&quot;&quot; hiragino=&quot;&quot; sans=&quot;&quot; microsoft=&quot;&quot; wenquanyi=&quot;&quot; micro=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot; style=&quot;text-align: justify;&quot;&gt;自 jQuery 版本 1.7 起，on() 方法是 bind()、live() 和 delegate() 方法的新的替代品。&amp;nbsp;&lt;br&gt;注意：使用 on() 方法添加的事件处理程序适用于当前及未来的元素（比如由脚本创建的新元素）。&lt;/p&gt;&lt;p sf=&quot;&quot; ui=&quot;&quot; pingfang=&quot;&quot; hiragino=&quot;&quot; sans=&quot;&quot; microsoft=&quot;&quot; wenquanyi=&quot;&quot; micro=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot; style=&quot;text-align: justify;&quot;&gt;提示：如需移除事件处理程序，请使用 off() 方法。&lt;/p&gt;&lt;p sf=&quot;&quot; ui=&quot;&quot; pingfang=&quot;&quot; hiragino=&quot;&quot; sans=&quot;&quot; microsoft=&quot;&quot; wenquanyi=&quot;&quot; micro=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot; style=&quot;text-align: justify;&quot;&gt;提示：如需添加只运行一次的事件然后移除，请使用 one() 方法。&lt;/p&gt;&lt;p sf=&quot;&quot; ui=&quot;&quot; pingfang=&quot;&quot; hiragino=&quot;&quot; sans=&quot;&quot; microsoft=&quot;&quot; wenquanyi=&quot;&quot; micro=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot; style=&quot;text-align: justify;&quot;&gt;*把事件绑定在docunmet就和原来的live方法没有区别了。原先的live()方法，处理函数是默认绑定在document对象上不能变的，如果DOM嵌套结构很深，事件冒泡通过大量祖先元素会导致较大的性能损失。而使用.on()方法，事件只会绑定到$()函数的选择符表达式匹配的元素上，因此可以精确地定位到页面中的一部分，而事件冒泡的开销也可以减少。&lt;/p&gt;&lt;p sf=&quot;&quot; ui=&quot;&quot; pingfang=&quot;&quot; hiragino=&quot;&quot; sans=&quot;&quot; microsoft=&quot;&quot; wenquanyi=&quot;&quot; micro=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot; style=&quot;text-align: justify;&quot;&gt;例如我会在zkdiv中动态添加多个class=”zk”的dom节点，也想对动态增加的节点绑定相同的事件则可以通过以下代码实现&lt;/p&gt;&lt;p sf=&quot;&quot; ui=&quot;&quot; pingfang=&quot;&quot; hiragino=&quot;&quot; sans=&quot;&quot; microsoft=&quot;&quot; wenquanyi=&quot;&quot; micro=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot; style=&quot;text-align: justify;&quot;&gt;&lt;br&gt;&lt;/p&gt;&lt;pre class=&quot;prettyprint&quot; name=&quot;code&quot;&gt;&lt;p&gt;&amp;nbsp;&amp;nbsp;&lt;input type=&quot;button&quot; value=&quot;展开&quot; id=&quot;zk&quot; class=&quot;zk&quot;&gt;&amp;nbsp;&lt;br&gt;&lt;/p&gt;123&lt;/pre&gt;&lt;p sf=&quot;&quot; ui=&quot;&quot; pingfang=&quot;&quot; hiragino=&quot;&quot; sans=&quot;&quot; microsoft=&quot;&quot; wenquanyi=&quot;&quot; micro=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot; style=&quot;text-align: justify;&quot;&gt;//展开按钮点击触发事件&lt;/p&gt;&lt;p sf=&quot;&quot; ui=&quot;&quot; pingfang=&quot;&quot; hiragino=&quot;&quot; sans=&quot;&quot; microsoft=&quot;&quot; wenquanyi=&quot;&quot; micro=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot; style=&quot;text-align: justify;&quot;&gt;&lt;br&gt;&lt;/p&gt;&lt;pre lay-lang=&quot;JavaScript&quot;&gt;&lt;code class=&quot;JavaScript&quot;&gt;$(&quot;#zkdiv&quot;).on(&quot;click&quot;,&quot;.zk&quot;,function(){
+console.log(&quot;on 点击一次&quot;);
+});var html2 = &quot;&quot;;
+$(&quot;#zkdiv&quot;).append(html2);&lt;/code&gt;&lt;/pre&gt;&lt;p sf=&quot;&quot; ui=&quot;&quot; pingfang=&quot;&quot; hiragino=&quot;&quot; sans=&quot;&quot; microsoft=&quot;&quot; wenquanyi=&quot;&quot; micro=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot; style=&quot;text-align: justify;&quot;&gt;*这样一来处理函数就绑定到#zkdiv的选择器上去了，事件冒泡导致的性能损失会大大降低（使用该方法时要确保.on前面的选择器能选择到对象 否则不起作用）&lt;/p&gt;&lt;h4 id=&quot;click是点击事件但是在页面加载完之后jquery事件新添加的元素用click的话是无法获取元素的这个时候要用on去获取元素事件简单的说页面加载完成时候页面显示的元素可以用on也可以用click但是页面加载完成之后后期再追加的元素只能用on&quot; sf=&quot;&quot; ui=&quot;&quot; pingfang=&quot;&quot; hiragino=&quot;&quot; sans=&quot;&quot; microsoft=&quot;&quot; wenquanyi=&quot;&quot; micro=&quot;&quot; line-height:=&quot;&quot; color:=&quot;&quot; font-size:=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot;&gt;click是点击事件，但是在页面加载完之后，jquery事件新添加的元素，用click的话是无法获取元素的，这个时候要用on去获取元素事件，简单的说页面加载完成时候页面显示的元素可以用on，也可以用click，但是页面加载完成之后后期再追加的元素只能用on。&lt;/h4&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;</p>
+	</div>
+</article>
+</main>
+
+<div class="pagination">
+	<a class="pagination__item pagination__item--prev btn" href="/categories/%E5%89%8D%E7%AB%AF/">«</a>
+	<span class="pagination__item pagination__item--current">2/3</span>
+	<a class="pagination__item pagination__item--next btn" href="/categories/%E5%89%8D%E7%AB%AF/page/3/">»</a>
+</div>
+
+			</div>
+			
+
+		</div>
+		<footer class="footer">
+	<div class="container footer__container flex">
+		
+		<div class="footer__copyright">
+			&copy; 2026 臭大佬博客.
+			<span class="footer__copyright-credits">基于 <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> 引擎和 <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> 主题</span>
+		</div>
+	</div>
+</footer>
+	</div>
+<script async defer src="/js/menu.js"></script>
+</body>
+</html>
