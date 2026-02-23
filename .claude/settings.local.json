@@ -2,7 +2,23 @@
   "permissions": {
     "allow": [
       "Bash(cd:*)",
-      "Bash(hugo version:*)"
+      "Bash(hugo version:*)",
+      "Bash(./hugo.exe server*)"
+    ]
+  },
+  "statusline": {
+    "enabled": true,
+    "items": [
+      {
+        "label": "📝 博客",
+        "value": "https://choudalao.github.io",
+        "command": "Bash(start https://choudalao.github.io)"
+      },
+      {
+        "label": "🚀 预览",
+        "value": "http://localhost:1313",
+        "command": "Bash(./hugo.exe server)"
+      }
     ]
   }
 }
