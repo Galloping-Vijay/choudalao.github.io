@@ -1,404 +1,280 @@
-<!DOCTYPE html>
-<html class="no-js" lang="en">
-<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>python数据库操作 | 臭大佬 - 臭大佬博客</title>
-	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
-	<meta name="description" content="python数据库操作">
-	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-	<link rel="dns-prefetch" href="//fonts.googleapis.com">
-	<link rel="dns-prefetch" href="//fonts.gstatic.com">
-	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
-
-	<link rel="stylesheet" href="/css/style.css">
-	
-
-	<link rel="shortcut icon" href="/favicon.ico">
-		
-</head>
-<body class="body">
-	<div class="container container--outer">
-		<header class="header">
-	<div class="container header__container">
-		
-	<div class="logo">
-		<a class="logo__link" href="/" title="臭大佬博客" rel="home">
-			<div class="logo__item logo__text">
-					<div class="logo__title">臭大佬博客</div>
-					
-				</div>
-		</a>
-	</div>
-		
-<nav class="menu">
-	<button class="menu__btn" aria-haspopup="true" aria-expanded="false" tabindex="0">
-		<span class="menu__btn-title" tabindex="-1">菜单</span>
-	</button>
-	<ul class="menu__list">
-		<li class="menu__item">
-			<a class="menu__link" href="/">
-				
-				<span class="menu__text">首页</span>
-				
-			</a>
-		</li>
-		<li class="menu__item">
-			<a class="menu__link" href="/post/">
-				
-				<span class="menu__text">归档</span>
-				
-			</a>
-		</li>
-		<li class="menu__item">
-			<a class="menu__link" href="/about/">
-				
-				<span class="menu__text">关于</span>
-				
-			</a>
-		</li>
-	</ul>
-</nav>
-
-	</div>
-</header>
-		<div class="wrapper flex">
-			<div class="primary">
-			
-<main class="main" role="main">
-	<article class="post">
-		<header class="post__header">
-			<h1 class="post__title">python数据库操作 | 臭大佬</h1>
-			
-		</header>
-		<div class="content post__content clearfix">
-			<h1 id="介绍">介绍</h1>
-<p>在 Python 中操作数据库，一般来说有两种方式：</p>
-<ul>
-<li>使用 ORM（对象关系映射）模型，例如 SQLALchemy；</li>
-<li>使用 Python 的特定数据库软件接口，例如 pymysql；</li>
-</ul>
-<h1 id="准备工作">准备工作</h1>
-<p>准备一张数据表</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>CREATE TABLE <span style="color:#960050;background-color:#1e0010">`</span>articles<span style="color:#960050;background-color:#1e0010">`</span> (
-</span></span><span style="display:flex;"><span>  <span style="color:#960050;background-color:#1e0010">`</span>id<span style="color:#960050;background-color:#1e0010">`</span> int(<span style="color:#ae81ff">10</span>) NOT NULL AUTO_INCREMENT,
-</span></span><span style="display:flex;"><span>  <span style="color:#960050;background-color:#1e0010">`</span>title<span style="color:#960050;background-color:#1e0010">`</span> varchar(<span style="color:#ae81ff">255</span>) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT <span style="color:#e6db74">&#39;&#39;</span>,
-</span></span><span style="display:flex;"><span>  <span style="color:#960050;background-color:#1e0010">`</span>url<span style="color:#960050;background-color:#1e0010">`</span> varchar(<span style="color:#ae81ff">255</span>) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT <span style="color:#e6db74">&#39;&#39;</span>,
-</span></span><span style="display:flex;"><span>  <span style="color:#960050;background-color:#1e0010">`</span>img_url<span style="color:#960050;background-color:#1e0010">`</span> varchar(<span style="color:#ae81ff">255</span>) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT <span style="color:#e6db74">&#39;&#39;</span>,
-</span></span><span style="display:flex;"><span>  PRIMARY KEY (<span style="color:#960050;background-color:#1e0010">`</span>id<span style="color:#960050;background-color:#1e0010">`</span>)
-</span></span><span style="display:flex;"><span>) ENGINE<span style="color:#f92672">=</span>MyISAM DEFAULT CHARSET<span style="color:#f92672">=</span>utf8mb4 COLLATE<span style="color:#f92672">=</span>utf8mb4_unicode_ci;
-</span></span></code></pre></div><h1 id="pymysql操作数据">pymysql操作数据</h1>
-<h3 id="安装">安装</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>pip install pymysql
-</span></span></code></pre></div><p><img src="https://www.choudalao.com/uploads/20200318/202003182114088b56pn.png" alt=""></p>
-<h3 id="爬取数据并存储">爬取数据并存储</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># coding:utf-8</span>
-</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> requests
-</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> bs4 <span style="color:#f92672">import</span> BeautifulSoup
-</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> pymysql
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">getData</span>():
-</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#39;&#39;&#39;
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    获取数据
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    :return:
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#39;&#39;&#39;</span>
-</span></span><span style="display:flex;"><span>    url <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;https://www.choudalao.com/&#34;</span>
-</span></span><span style="display:flex;"><span>    wbdata <span style="color:#f92672">=</span> requests<span style="color:#f92672">.</span>get(url)<span style="color:#f92672">.</span>text
-</span></span><span style="display:flex;"><span>    soup <span style="color:#f92672">=</span> BeautifulSoup(wbdata, <span style="color:#e6db74">&#39;lxml&#39;</span>)
-</span></span><span style="display:flex;"><span>    news <span style="color:#f92672">=</span> soup<span style="color:#f92672">.</span>select(<span style="color:#e6db74">&#34;#body_app &gt; article &gt; div.blogs &gt; ul &gt; li &gt; h3 &gt; a&#34;</span>)
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> news
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">pymysqlAction</span>():
-</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#39;&#39;&#39;
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    pymysql操作
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    :return:
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#39;&#39;&#39;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 建立一个连接</span>
-</span></span><span style="display:flex;"><span>    conn <span style="color:#f92672">=</span> pymysql<span style="color:#f92672">.</span>connect(host<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;localhost&#39;</span>, port<span style="color:#f92672">=</span><span style="color:#ae81ff">3306</span>, user<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;root&#39;</span>, password<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;root&#39;</span>, db<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;python_test&#39;</span>, charset<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;utf8&#39;</span>)
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 创建一个游标</span>
-</span></span><span style="display:flex;"><span>    cursor <span style="color:#f92672">=</span> conn<span style="color:#f92672">.</span>cursor()
-</span></span><span style="display:flex;"><span>    news <span style="color:#f92672">=</span> getData()
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> d <span style="color:#f92672">in</span> news:
-</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># 提取出标题和连接信息</span>
-</span></span><span style="display:flex;"><span>        title <span style="color:#f92672">=</span> d<span style="color:#f92672">.</span>get_text()
-</span></span><span style="display:flex;"><span>        link <span style="color:#f92672">=</span> d<span style="color:#f92672">.</span>get(<span style="color:#e6db74">&#34;href&#34;</span>)
-</span></span><span style="display:flex;"><span>        sql <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;INSERT INTO articles(title,url)VALUES(&#39;</span><span style="color:#e6db74">{0}</span><span style="color:#e6db74">&#39;,&#39;</span><span style="color:#e6db74">{1}</span><span style="color:#e6db74">&#39;);&#34;</span><span style="color:#f92672">.</span>format(title, link)
-</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># 执行 SQL 语句</span>
-</span></span><span style="display:flex;"><span>        cursor<span style="color:#f92672">.</span>execute(sql)
-</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># 提交</span>
-</span></span><span style="display:flex;"><span>        conn<span style="color:#f92672">.</span>commit()
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 关闭游标</span>
-</span></span><span style="display:flex;"><span>    cursor<span style="color:#f92672">.</span>close()
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 关闭数据库连接</span>
-</span></span><span style="display:flex;"><span>    conn<span style="color:#f92672">.</span>close()
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> __name__ <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;__main__&#39;</span>:
-</span></span><span style="display:flex;"><span>    pymysqlAction()
-</span></span></code></pre></div><p><img src="https://www.choudalao.com/uploads/20200318/20200318211609fCGvMU.png" alt=""></p>
-<h3 id="读取数据">读取数据</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># 建立一个连接</span>
-</span></span><span style="display:flex;"><span>conn <span style="color:#f92672">=</span> pymysql<span style="color:#f92672">.</span>connect(host<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;localhost&#39;</span>, port<span style="color:#f92672">=</span><span style="color:#ae81ff">3306</span>, user<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;root&#39;</span>, password<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;root&#39;</span>, db<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;python_test&#39;</span>, charset<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;utf8&#39;</span>)
-</span></span><span style="display:flex;"><span><span style="color:#75715e"># 创建一个游标</span>
-</span></span><span style="display:flex;"><span>cursor <span style="color:#f92672">=</span> conn<span style="color:#f92672">.</span>cursor()
-</span></span><span style="display:flex;"><span>sql <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;select * from articles&#34;</span>
-</span></span><span style="display:flex;"><span>cursor<span style="color:#f92672">.</span>execute(sql)
-</span></span><span style="display:flex;"><span><span style="color:#75715e"># 执行sql语句，获取所有结果</span>
-</span></span><span style="display:flex;"><span>result <span style="color:#f92672">=</span> cursor<span style="color:#f92672">.</span>fetchall()
-</span></span><span style="display:flex;"><span><span style="color:#75715e"># 执行sql语句，得到一条结果</span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e"># result = cursor.fetchone()</span>
-</span></span><span style="display:flex;"><span>print(result)
-</span></span><span style="display:flex;"><span><span style="color:#75715e"># 断开连接</span>
-</span></span><span style="display:flex;"><span>cursor<span style="color:#f92672">.</span>close()
-</span></span><span style="display:flex;"><span>conn<span style="color:#f92672">.</span>close()
-</span></span></code></pre></div><h1 id="sqlalchemy操作数据">SQLALchemy操作数据</h1>
-<p>安装</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>pip install sqlalchemy  <span style="color:#f92672">-</span>i https:<span style="color:#f92672">//</span>pypi<span style="color:#f92672">.</span>douban<span style="color:#f92672">.</span>com<span style="color:#f92672">/</span>simple
-</span></span></code></pre></div><p><img src="https://www.choudalao.com/uploads/20200318/20200318212243cCqnJi.png" alt=""></p>
-<p>直接使用会报<code>Warning: (1366, &quot;Incorrect string value: '\\xD6\\xD0\\xB9\\xFA\\xB1\\xEA...' for column 'VARIABLE_VALUE' at row 518&quot;) result = self._query(query)</code>的错误，建议安装mysql-connector-python驱动</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>pip install mysql<span style="color:#f92672">-</span>connector<span style="color:#f92672">-</span>python  <span style="color:#f92672">-</span>i https:<span style="color:#f92672">//</span>pypi<span style="color:#f92672">.</span>douban<span style="color:#f92672">.</span>com<span style="color:#f92672">/</span>simple
-</span></span></code></pre></div><p>详情<a href="https://www.choudalao.com/article/130" title="点击查看">点击查看</a></p>
-<h3 id="执行原生sql">执行原生sql</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># coding:utf-8</span>
-</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> sqlalchemy <span style="color:#f92672">import</span> create_engine
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">selectDb</span>():
-</span></span><span style="display:flex;"><span>    conn <span style="color:#f92672">=</span> engine<span style="color:#f92672">.</span>raw_connection()
-</span></span><span style="display:flex;"><span>    cursor <span style="color:#f92672">=</span> conn<span style="color:#f92672">.</span>cursor()
-</span></span><span style="display:flex;"><span>    cursor<span style="color:#f92672">.</span>execute(
-</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;select * from articles&#34;</span>
-</span></span><span style="display:flex;"><span>    )
-</span></span><span style="display:flex;"><span>    result <span style="color:#f92672">=</span> cursor<span style="color:#f92672">.</span>fetchall()
-</span></span><span style="display:flex;"><span>    print(result)
-</span></span><span style="display:flex;"><span>    cursor<span style="color:#f92672">.</span>close()
-</span></span><span style="display:flex;"><span>    conn<span style="color:#f92672">.</span>close()
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> __name__ <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;__main__&#39;</span>:
-</span></span><span style="display:flex;"><span>    engine <span style="color:#f92672">=</span> create_engine(
-</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;mysql+mysqlconnector://root:root@127.0.0.1:3306/python_test?charset=utf8&#34;</span>,
-</span></span><span style="display:flex;"><span>        max_overflow<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>,  <span style="color:#75715e"># 超过连接池大小外最多创建的连接</span>
-</span></span><span style="display:flex;"><span>        pool_size<span style="color:#f92672">=</span><span style="color:#ae81ff">5</span>,  <span style="color:#75715e"># 连接池大小</span>
-</span></span><span style="display:flex;"><span>        pool_timeout<span style="color:#f92672">=</span><span style="color:#ae81ff">30</span>,  <span style="color:#75715e"># 池中没有线程最多等待的时间，否则报错</span>
-</span></span><span style="display:flex;"><span>        pool_recycle<span style="color:#f92672">=-</span><span style="color:#ae81ff">1</span>  <span style="color:#75715e"># 多久之后对线程池中的线程进行一次连接的回收（重置）</span>
-</span></span><span style="display:flex;"><span>    )
-</span></span><span style="display:flex;"><span>    selectDb()
-</span></span></code></pre></div><h3 id="orm使用">orm使用</h3>
-<h5 id="表操作">表操作</h5>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># coding:utf-8</span>
-</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> sqlalchemy <span style="color:#f92672">import</span> create_engine
-</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> sqlalchemy.ext.declarative <span style="color:#f92672">import</span> declarative_base
-</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> sqlalchemy <span style="color:#f92672">import</span> Column, Integer, String, Text, ForeignKey, DateTime, UniqueConstraint, Index
-</span></span><span style="display:flex;"><span><span style="color:#75715e"># Base是declarative_base的实例化对象</span>
-</span></span><span style="display:flex;"><span>Base <span style="color:#f92672">=</span> declarative_base()
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e"># 定义一个常量</span>
-</span></span><span style="display:flex;"><span>ENGINE <span style="color:#f92672">=</span> create_engine(<span style="color:#e6db74">&#34;mysql+mysqlconnector://root:root@127.0.0.1:3306/python_test&#34;</span>)
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e"># 每个类都要继承Base</span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Articls</span>(Base):
-</span></span><span style="display:flex;"><span>    __tablename__ <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;articles&#39;</span>  <span style="color:#75715e"># 数据库表名称</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Column是列的意思，固定写法 Column(字段类型, 参数)</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># primary_key主键、index索引、nullable是否可以为空</span>
-</span></span><span style="display:flex;"><span>    id <span style="color:#f92672">=</span> Column(Integer, primary_key<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>)  <span style="color:#75715e"># id 主键</span>
-</span></span><span style="display:flex;"><span>    title <span style="color:#f92672">=</span> Column(String(<span style="color:#ae81ff">256</span>), nullable<span style="color:#f92672">=</span><span style="color:#66d9ef">False</span>)  <span style="color:#75715e"># title列，不可为空</span>
-</span></span><span style="display:flex;"><span>    url <span style="color:#f92672">=</span> Column(String(<span style="color:#ae81ff">256</span>), nullable<span style="color:#f92672">=</span><span style="color:#66d9ef">False</span>)  <span style="color:#75715e"># url列，不可为空</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># extra = Column(Text, nullable=True)</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 相当于Django的ORM的class Meta，是一些元信息</span>
-</span></span><span style="display:flex;"><span>    __table_args__ <span style="color:#f92672">=</span> (
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    )
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> __name__ <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;__main__&#39;</span>:
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 根据类创建数据库表</span>
-</span></span><span style="display:flex;"><span>    Base<span style="color:#f92672">.</span>metadata<span style="color:#f92672">.</span>create_all(ENGINE)
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 根据类删除数据库表</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e">#Base.metadata.drop_all(ENGINE)</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">pass</span>
-</span></span></code></pre></div><h4 id="增伤改查">增伤改查</h4>
-<p>数据表</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>CREATE TABLE <span style="color:#e6db74">`</span>users<span style="color:#e6db74">`</span> <span style="color:#f92672">(</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#e6db74">`</span>id<span style="color:#e6db74">`</span> int<span style="color:#f92672">(</span>11<span style="color:#f92672">)</span> NOT NULL AUTO_INCREMENT,
-</span></span><span style="display:flex;"><span>  <span style="color:#e6db74">`</span>name<span style="color:#e6db74">`</span> varchar<span style="color:#f92672">(</span>32<span style="color:#f92672">)</span> COLLATE utf8mb4_unicode_ci NOT NULL,
-</span></span><span style="display:flex;"><span>  PRIMARY KEY <span style="color:#f92672">(</span><span style="color:#e6db74">`</span>id<span style="color:#e6db74">`</span><span style="color:#f92672">)</span>,
-</span></span><span style="display:flex;"><span>  KEY <span style="color:#e6db74">`</span>ix_users_name<span style="color:#e6db74">`</span> <span style="color:#f92672">(</span><span style="color:#e6db74">`</span>name<span style="color:#e6db74">`</span><span style="color:#f92672">)</span>
-</span></span><span style="display:flex;"><span><span style="color:#f92672">)</span> ENGINE<span style="color:#f92672">=</span>MyISAM AUTO_INCREMENT<span style="color:#f92672">=</span><span style="color:#ae81ff">4</span> DEFAULT CHARSET<span style="color:#f92672">=</span>utf8mb4 COLLATE<span style="color:#f92672">=</span>utf8mb4_unicode_ci;
+<!doctype html><html class=no-js lang=en><head><meta charset=UTF-8><meta name=viewport content="width=device-width,initial-scale=1"><title>python数据库操作 | 臭大佬 - 臭大佬博客</title><script>(function(e,t){e[t]=e[t].replace("no-js","js")})(document.documentElement,"className")</script><meta name=description content="python数据库操作"><link rel=preconnect href=https://fonts.gstatic.com crossorigin><link rel=dns-prefetch href=//fonts.googleapis.com><link rel=dns-prefetch href=//fonts.gstatic.com><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700"><link rel=stylesheet href=/choudalao.github.io/css/style.css><link rel="shortcut icon" href=/choudalao.github.io/favicon.ico></head><body class=body><div class="container container--outer"><header class=header><div class="container header__container"><div class=logo><a class=logo__link href=/choudalao.github.io/ title=臭大佬博客 rel=home><div class="logo__item logo__text"><div class=logo__title>臭大佬博客</div></div></a></div><nav class=menu><button class=menu__btn aria-haspopup=true aria-expanded=false tabindex=0>
+<span class=menu__btn-title tabindex=-1>菜单</span></button><ul class=menu__list><li class=menu__item><a class=menu__link href=/choudalao.github.io/><span class=menu__text>首页</span></a></li><li class=menu__item><a class=menu__link href=/choudalao.github.io/post/><span class=menu__text>归档</span></a></li><li class=menu__item><a class=menu__link href=/choudalao.github.io/about/><span class=menu__text>关于</span></a></li></ul></nav></div></header><div class="wrapper flex"><div class=primary><main class=main role=main><article class=post><header class=post__header><h1 class=post__title>python数据库操作 | 臭大佬</h1></header><div class="content post__content clearfix"><h1 id=介绍>介绍</h1><p>在 Python 中操作数据库，一般来说有两种方式：</p><ul><li>使用 ORM（对象关系映射）模型，例如 SQLALchemy；</li><li>使用 Python 的特定数据库软件接口，例如 pymysql；</li></ul><h1 id=准备工作>准备工作</h1><p>准备一张数据表</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-python data-lang=python><span style=display:flex><span>CREATE TABLE <span style=color:#960050;background-color:#1e0010>`</span>articles<span style=color:#960050;background-color:#1e0010>`</span> (
+</span></span><span style=display:flex><span>  <span style=color:#960050;background-color:#1e0010>`</span>id<span style=color:#960050;background-color:#1e0010>`</span> int(<span style=color:#ae81ff>10</span>) NOT NULL AUTO_INCREMENT,
+</span></span><span style=display:flex><span>  <span style=color:#960050;background-color:#1e0010>`</span>title<span style=color:#960050;background-color:#1e0010>`</span> varchar(<span style=color:#ae81ff>255</span>) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT <span style=color:#e6db74>&#39;&#39;</span>,
+</span></span><span style=display:flex><span>  <span style=color:#960050;background-color:#1e0010>`</span>url<span style=color:#960050;background-color:#1e0010>`</span> varchar(<span style=color:#ae81ff>255</span>) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT <span style=color:#e6db74>&#39;&#39;</span>,
+</span></span><span style=display:flex><span>  <span style=color:#960050;background-color:#1e0010>`</span>img_url<span style=color:#960050;background-color:#1e0010>`</span> varchar(<span style=color:#ae81ff>255</span>) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT <span style=color:#e6db74>&#39;&#39;</span>,
+</span></span><span style=display:flex><span>  PRIMARY KEY (<span style=color:#960050;background-color:#1e0010>`</span>id<span style=color:#960050;background-color:#1e0010>`</span>)
+</span></span><span style=display:flex><span>) ENGINE<span style=color:#f92672>=</span>MyISAM DEFAULT CHARSET<span style=color:#f92672>=</span>utf8mb4 COLLATE<span style=color:#f92672>=</span>utf8mb4_unicode_ci;
+</span></span></code></pre></div><h1 id=pymysql操作数据>pymysql操作数据</h1><h3 id=安装>安装</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-python data-lang=python><span style=display:flex><span>pip install pymysql
+</span></span></code></pre></div><p><img src=https://www.choudalao.com/uploads/20200318/202003182114088b56pn.png alt></p><h3 id=爬取数据并存储>爬取数据并存储</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-python data-lang=python><span style=display:flex><span><span style=color:#75715e># coding:utf-8</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>import</span> requests
+</span></span><span style=display:flex><span><span style=color:#f92672>from</span> bs4 <span style=color:#f92672>import</span> BeautifulSoup
+</span></span><span style=display:flex><span><span style=color:#f92672>import</span> pymysql
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>def</span> <span style=color:#a6e22e>getData</span>():
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#39;&#39;&#39;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>    获取数据
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>    :return:
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>    &#39;&#39;&#39;</span>
+</span></span><span style=display:flex><span>    url <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;https://www.choudalao.com/&#34;</span>
+</span></span><span style=display:flex><span>    wbdata <span style=color:#f92672>=</span> requests<span style=color:#f92672>.</span>get(url)<span style=color:#f92672>.</span>text
+</span></span><span style=display:flex><span>    soup <span style=color:#f92672>=</span> BeautifulSoup(wbdata, <span style=color:#e6db74>&#39;lxml&#39;</span>)
+</span></span><span style=display:flex><span>    news <span style=color:#f92672>=</span> soup<span style=color:#f92672>.</span>select(<span style=color:#e6db74>&#34;#body_app &gt; article &gt; div.blogs &gt; ul &gt; li &gt; h3 &gt; a&#34;</span>)
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span> news
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>def</span> <span style=color:#a6e22e>pymysqlAction</span>():
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#39;&#39;&#39;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>    pymysql操作
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>    :return:
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>    &#39;&#39;&#39;</span>
+</span></span><span style=display:flex><span>    <span style=color:#75715e># 建立一个连接</span>
+</span></span><span style=display:flex><span>    conn <span style=color:#f92672>=</span> pymysql<span style=color:#f92672>.</span>connect(host<span style=color:#f92672>=</span><span style=color:#e6db74>&#39;localhost&#39;</span>, port<span style=color:#f92672>=</span><span style=color:#ae81ff>3306</span>, user<span style=color:#f92672>=</span><span style=color:#e6db74>&#39;root&#39;</span>, password<span style=color:#f92672>=</span><span style=color:#e6db74>&#39;root&#39;</span>, db<span style=color:#f92672>=</span><span style=color:#e6db74>&#39;python_test&#39;</span>, charset<span style=color:#f92672>=</span><span style=color:#e6db74>&#39;utf8&#39;</span>)
+</span></span><span style=display:flex><span>    <span style=color:#75715e># 创建一个游标</span>
+</span></span><span style=display:flex><span>    cursor <span style=color:#f92672>=</span> conn<span style=color:#f92672>.</span>cursor()
+</span></span><span style=display:flex><span>    news <span style=color:#f92672>=</span> getData()
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>for</span> d <span style=color:#f92672>in</span> news:
+</span></span><span style=display:flex><span>        <span style=color:#75715e># 提取出标题和连接信息</span>
+</span></span><span style=display:flex><span>        title <span style=color:#f92672>=</span> d<span style=color:#f92672>.</span>get_text()
+</span></span><span style=display:flex><span>        link <span style=color:#f92672>=</span> d<span style=color:#f92672>.</span>get(<span style=color:#e6db74>&#34;href&#34;</span>)
+</span></span><span style=display:flex><span>        sql <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;INSERT INTO articles(title,url)VALUES(&#39;</span><span style=color:#e6db74>{0}</span><span style=color:#e6db74>&#39;,&#39;</span><span style=color:#e6db74>{1}</span><span style=color:#e6db74>&#39;);&#34;</span><span style=color:#f92672>.</span>format(title, link)
+</span></span><span style=display:flex><span>        <span style=color:#75715e># 执行 SQL 语句</span>
+</span></span><span style=display:flex><span>        cursor<span style=color:#f92672>.</span>execute(sql)
+</span></span><span style=display:flex><span>        <span style=color:#75715e># 提交</span>
+</span></span><span style=display:flex><span>        conn<span style=color:#f92672>.</span>commit()
+</span></span><span style=display:flex><span>    <span style=color:#75715e># 关闭游标</span>
+</span></span><span style=display:flex><span>    cursor<span style=color:#f92672>.</span>close()
+</span></span><span style=display:flex><span>    <span style=color:#75715e># 关闭数据库连接</span>
+</span></span><span style=display:flex><span>    conn<span style=color:#f92672>.</span>close()
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>if</span> __name__ <span style=color:#f92672>==</span> <span style=color:#e6db74>&#39;__main__&#39;</span>:
+</span></span><span style=display:flex><span>    pymysqlAction()
+</span></span></code></pre></div><p><img src=https://www.choudalao.com/uploads/20200318/20200318211609fCGvMU.png alt></p><h3 id=读取数据>读取数据</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-python data-lang=python><span style=display:flex><span><span style=color:#75715e># 建立一个连接</span>
+</span></span><span style=display:flex><span>conn <span style=color:#f92672>=</span> pymysql<span style=color:#f92672>.</span>connect(host<span style=color:#f92672>=</span><span style=color:#e6db74>&#39;localhost&#39;</span>, port<span style=color:#f92672>=</span><span style=color:#ae81ff>3306</span>, user<span style=color:#f92672>=</span><span style=color:#e6db74>&#39;root&#39;</span>, password<span style=color:#f92672>=</span><span style=color:#e6db74>&#39;root&#39;</span>, db<span style=color:#f92672>=</span><span style=color:#e6db74>&#39;python_test&#39;</span>, charset<span style=color:#f92672>=</span><span style=color:#e6db74>&#39;utf8&#39;</span>)
+</span></span><span style=display:flex><span><span style=color:#75715e># 创建一个游标</span>
+</span></span><span style=display:flex><span>cursor <span style=color:#f92672>=</span> conn<span style=color:#f92672>.</span>cursor()
+</span></span><span style=display:flex><span>sql <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;select * from articles&#34;</span>
+</span></span><span style=display:flex><span>cursor<span style=color:#f92672>.</span>execute(sql)
+</span></span><span style=display:flex><span><span style=color:#75715e># 执行sql语句，获取所有结果</span>
+</span></span><span style=display:flex><span>result <span style=color:#f92672>=</span> cursor<span style=color:#f92672>.</span>fetchall()
+</span></span><span style=display:flex><span><span style=color:#75715e># 执行sql语句，得到一条结果</span>
+</span></span><span style=display:flex><span><span style=color:#75715e># result = cursor.fetchone()</span>
+</span></span><span style=display:flex><span>print(result)
+</span></span><span style=display:flex><span><span style=color:#75715e># 断开连接</span>
+</span></span><span style=display:flex><span>cursor<span style=color:#f92672>.</span>close()
+</span></span><span style=display:flex><span>conn<span style=color:#f92672>.</span>close()
+</span></span></code></pre></div><h1 id=sqlalchemy操作数据>SQLALchemy操作数据</h1><p>安装</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-python data-lang=python><span style=display:flex><span>pip install sqlalchemy  <span style=color:#f92672>-</span>i https:<span style=color:#f92672>//</span>pypi<span style=color:#f92672>.</span>douban<span style=color:#f92672>.</span>com<span style=color:#f92672>/</span>simple
+</span></span></code></pre></div><p><img src=https://www.choudalao.com/uploads/20200318/20200318212243cCqnJi.png alt></p><p>直接使用会报<code>Warning: (1366, "Incorrect string value: '\\xD6\\xD0\\xB9\\xFA\\xB1\\xEA...' for column 'VARIABLE_VALUE' at row 518") result = self._query(query)</code>的错误，建议安装mysql-connector-python驱动</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-python data-lang=python><span style=display:flex><span>pip install mysql<span style=color:#f92672>-</span>connector<span style=color:#f92672>-</span>python  <span style=color:#f92672>-</span>i https:<span style=color:#f92672>//</span>pypi<span style=color:#f92672>.</span>douban<span style=color:#f92672>.</span>com<span style=color:#f92672>/</span>simple
+</span></span></code></pre></div><p>详情<a href=https://www.choudalao.com/article/130 title=点击查看>点击查看</a></p><h3 id=执行原生sql>执行原生sql</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-python data-lang=python><span style=display:flex><span><span style=color:#75715e># coding:utf-8</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>from</span> sqlalchemy <span style=color:#f92672>import</span> create_engine
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>def</span> <span style=color:#a6e22e>selectDb</span>():
+</span></span><span style=display:flex><span>    conn <span style=color:#f92672>=</span> engine<span style=color:#f92672>.</span>raw_connection()
+</span></span><span style=display:flex><span>    cursor <span style=color:#f92672>=</span> conn<span style=color:#f92672>.</span>cursor()
+</span></span><span style=display:flex><span>    cursor<span style=color:#f92672>.</span>execute(
+</span></span><span style=display:flex><span>        <span style=color:#e6db74>&#34;select * from articles&#34;</span>
+</span></span><span style=display:flex><span>    )
+</span></span><span style=display:flex><span>    result <span style=color:#f92672>=</span> cursor<span style=color:#f92672>.</span>fetchall()
+</span></span><span style=display:flex><span>    print(result)
+</span></span><span style=display:flex><span>    cursor<span style=color:#f92672>.</span>close()
+</span></span><span style=display:flex><span>    conn<span style=color:#f92672>.</span>close()
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>if</span> __name__ <span style=color:#f92672>==</span> <span style=color:#e6db74>&#39;__main__&#39;</span>:
+</span></span><span style=display:flex><span>    engine <span style=color:#f92672>=</span> create_engine(
+</span></span><span style=display:flex><span>        <span style=color:#e6db74>&#34;mysql+mysqlconnector://root:root@127.0.0.1:3306/python_test?charset=utf8&#34;</span>,
+</span></span><span style=display:flex><span>        max_overflow<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span>,  <span style=color:#75715e># 超过连接池大小外最多创建的连接</span>
+</span></span><span style=display:flex><span>        pool_size<span style=color:#f92672>=</span><span style=color:#ae81ff>5</span>,  <span style=color:#75715e># 连接池大小</span>
+</span></span><span style=display:flex><span>        pool_timeout<span style=color:#f92672>=</span><span style=color:#ae81ff>30</span>,  <span style=color:#75715e># 池中没有线程最多等待的时间，否则报错</span>
+</span></span><span style=display:flex><span>        pool_recycle<span style=color:#f92672>=-</span><span style=color:#ae81ff>1</span>  <span style=color:#75715e># 多久之后对线程池中的线程进行一次连接的回收（重置）</span>
+</span></span><span style=display:flex><span>    )
+</span></span><span style=display:flex><span>    selectDb()
+</span></span></code></pre></div><h3 id=orm使用>orm使用</h3><h5 id=表操作>表操作</h5><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-python data-lang=python><span style=display:flex><span><span style=color:#75715e># coding:utf-8</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>from</span> sqlalchemy <span style=color:#f92672>import</span> create_engine
+</span></span><span style=display:flex><span><span style=color:#f92672>from</span> sqlalchemy.ext.declarative <span style=color:#f92672>import</span> declarative_base
+</span></span><span style=display:flex><span><span style=color:#f92672>from</span> sqlalchemy <span style=color:#f92672>import</span> Column, Integer, String, Text, ForeignKey, DateTime, UniqueConstraint, Index
+</span></span><span style=display:flex><span><span style=color:#75715e># Base是declarative_base的实例化对象</span>
+</span></span><span style=display:flex><span>Base <span style=color:#f92672>=</span> declarative_base()
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 定义一个常量</span>
+</span></span><span style=display:flex><span>ENGINE <span style=color:#f92672>=</span> create_engine(<span style=color:#e6db74>&#34;mysql+mysqlconnector://root:root@127.0.0.1:3306/python_test&#34;</span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 每个类都要继承Base</span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>class</span> <span style=color:#a6e22e>Articls</span>(Base):
+</span></span><span style=display:flex><span>    __tablename__ <span style=color:#f92672>=</span> <span style=color:#e6db74>&#39;articles&#39;</span>  <span style=color:#75715e># 数据库表名称</span>
+</span></span><span style=display:flex><span>    <span style=color:#75715e># Column是列的意思，固定写法 Column(字段类型, 参数)</span>
+</span></span><span style=display:flex><span>    <span style=color:#75715e># primary_key主键、index索引、nullable是否可以为空</span>
+</span></span><span style=display:flex><span>    id <span style=color:#f92672>=</span> Column(Integer, primary_key<span style=color:#f92672>=</span><span style=color:#66d9ef>True</span>)  <span style=color:#75715e># id 主键</span>
+</span></span><span style=display:flex><span>    title <span style=color:#f92672>=</span> Column(String(<span style=color:#ae81ff>256</span>), nullable<span style=color:#f92672>=</span><span style=color:#66d9ef>False</span>)  <span style=color:#75715e># title列，不可为空</span>
+</span></span><span style=display:flex><span>    url <span style=color:#f92672>=</span> Column(String(<span style=color:#ae81ff>256</span>), nullable<span style=color:#f92672>=</span><span style=color:#66d9ef>False</span>)  <span style=color:#75715e># url列，不可为空</span>
+</span></span><span style=display:flex><span>    <span style=color:#75715e># extra = Column(Text, nullable=True)</span>
+</span></span><span style=display:flex><span>    <span style=color:#75715e># 相当于Django的ORM的class Meta，是一些元信息</span>
+</span></span><span style=display:flex><span>    __table_args__ <span style=color:#f92672>=</span> (
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    )
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>if</span> __name__ <span style=color:#f92672>==</span> <span style=color:#e6db74>&#39;__main__&#39;</span>:
+</span></span><span style=display:flex><span>    <span style=color:#75715e># 根据类创建数据库表</span>
+</span></span><span style=display:flex><span>    Base<span style=color:#f92672>.</span>metadata<span style=color:#f92672>.</span>create_all(ENGINE)
+</span></span><span style=display:flex><span>    <span style=color:#75715e># 根据类删除数据库表</span>
+</span></span><span style=display:flex><span>    <span style=color:#75715e>#Base.metadata.drop_all(ENGINE)</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>pass</span>
+</span></span></code></pre></div><h4 id=增伤改查>增伤改查</h4><p>数据表</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-shell data-lang=shell><span style=display:flex><span>CREATE TABLE <span style=color:#e6db74>`</span>users<span style=color:#e6db74>`</span> <span style=color:#f92672>(</span>
+</span></span><span style=display:flex><span>  <span style=color:#e6db74>`</span>id<span style=color:#e6db74>`</span> int<span style=color:#f92672>(</span>11<span style=color:#f92672>)</span> NOT NULL AUTO_INCREMENT,
+</span></span><span style=display:flex><span>  <span style=color:#e6db74>`</span>name<span style=color:#e6db74>`</span> varchar<span style=color:#f92672>(</span>32<span style=color:#f92672>)</span> COLLATE utf8mb4_unicode_ci NOT NULL,
+</span></span><span style=display:flex><span>  PRIMARY KEY <span style=color:#f92672>(</span><span style=color:#e6db74>`</span>id<span style=color:#e6db74>`</span><span style=color:#f92672>)</span>,
+</span></span><span style=display:flex><span>  KEY <span style=color:#e6db74>`</span>ix_users_name<span style=color:#e6db74>`</span> <span style=color:#f92672>(</span><span style=color:#e6db74>`</span>name<span style=color:#e6db74>`</span><span style=color:#f92672>)</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>)</span> ENGINE<span style=color:#f92672>=</span>MyISAM AUTO_INCREMENT<span style=color:#f92672>=</span><span style=color:#ae81ff>4</span> DEFAULT CHARSET<span style=color:#f92672>=</span>utf8mb4 COLLATE<span style=color:#f92672>=</span>utf8mb4_unicode_ci;
 </span></span></code></pre></div><p>目录结构
-<img src="https://www.choudalao.com/uploads/20200319/20200319175948Papxgk.png" alt=""></p>
-<p>run.py</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#e6db74">&#39;&#39;&#39;
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">-*- coding: utf-8 -*-
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">&#39;&#39;&#39;</span>
-</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> sqlalchemy <span style="color:#f92672">import</span> create_engine
-</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> sqlalchemy.orm <span style="color:#f92672">import</span> sessionmaker, scoped_session
-</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> models.Users <span style="color:#f92672">import</span> Users
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>ENGINE <span style="color:#f92672">=</span> create_engine(<span style="color:#e6db74">&#34;mysql+mysqlconnector://root:root@127.0.0.1:3306/python_test&#34;</span>)
-</span></span><span style="display:flex;"><span><span style="color:#75715e"># 每次执行数据库操作的时候，都需要创建一个session,相当于管理器(相当于Django的ORM的objects)</span>
-</span></span><span style="display:flex;"><span>Session <span style="color:#f92672">=</span> sessionmaker(bind<span style="color:#f92672">=</span>ENGINE)
-</span></span><span style="display:flex;"><span><span style="color:#75715e"># 线程安全，基于本地线程实现每个线程用同一个session</span>
-</span></span><span style="display:flex;"><span>session <span style="color:#f92672">=</span> scoped_session(Session)
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e"># =======执行ORM操作==========</span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">select</span>():
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># res = session.query(Users).all()</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># res = session.query(Users).get(1)  # 查询id=1的记录</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># res = session.query(Users).filter(Users.name == &#34;wjf&#34;).all()</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># res = session.query(Users).filter_by(name=&#34;wjf&#34;).all()</span>
-</span></span><span style="display:flex;"><span>    res <span style="color:#f92672">=</span> session<span style="color:#f92672">.</span>query(Users)<span style="color:#f92672">.</span>filter_by(name<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;wjf&#34;</span>)<span style="color:#f92672">.</span>first()
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> res
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">add</span>(name<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;&#39;</span>):
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> name <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;&#39;</span>:
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">False</span>
-</span></span><span style="display:flex;"><span>    obj <span style="color:#f92672">=</span> Users(name<span style="color:#f92672">=</span>name)
-</span></span><span style="display:flex;"><span>    session<span style="color:#f92672">.</span>add(obj)
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># # 批量</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># session.add_all([</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e">#     Users(name=&#34;aaa&#34;),</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e">#     Users(name=&#34;bbb&#34;),</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e">#     Hosts(name=&#34;ccc&#34;),</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># ])</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 提交</span>
-</span></span><span style="display:flex;"><span>    session<span style="color:#f92672">.</span>commit()
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 关闭session</span>
-</span></span><span style="display:flex;"><span>    session<span style="color:#f92672">.</span>close()
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">update</span>(name<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;&#39;</span>):
-</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#39;&#39;&#39;
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    更新
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    :return:
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#39;&#39;&#39;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> name <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;&#39;</span>:
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">False</span>
-</span></span><span style="display:flex;"><span>    session<span style="color:#f92672">.</span>query(Users)<span style="color:#f92672">.</span>filter(Users<span style="color:#f92672">.</span>id <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">0</span>)<span style="color:#f92672">.</span>update({<span style="color:#e6db74">&#34;name&#34;</span> :name})
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e">#session.query(Users).filter(Users.id &gt; 0).update({Users.name: Users.name + &#34;099&#34;}, synchronize_session=False)</span>
-</span></span><span style="display:flex;"><span>    session<span style="color:#f92672">.</span>commit()
-</span></span><span style="display:flex;"><span>    session<span style="color:#f92672">.</span>close()
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">delete</span>():
-</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#39;&#39;&#39;
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    删除
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    :return:
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#39;&#39;&#39;</span>
-</span></span><span style="display:flex;"><span>    session<span style="color:#f92672">.</span>query(Users)<span style="color:#f92672">.</span>filter(Users<span style="color:#f92672">.</span>id <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">2</span>)<span style="color:#f92672">.</span>delete()
-</span></span><span style="display:flex;"><span>    session<span style="color:#f92672">.</span>commit()
-</span></span><span style="display:flex;"><span>    session<span style="color:#f92672">.</span>close()
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> __name__ <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;__main__&#39;</span>:
-</span></span><span style="display:flex;"><span>    add(<span style="color:#e6db74">&#39;德玛西亚&#39;</span>)
-</span></span></code></pre></div><p>Users.py</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># coding:utf-8</span>
-</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> sqlalchemy <span style="color:#f92672">import</span> create_engine
-</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> sqlalchemy.ext.declarative <span style="color:#f92672">import</span> declarative_base
-</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> sqlalchemy.orm <span style="color:#f92672">import</span> sessionmaker, scoped_session
-</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> sqlalchemy <span style="color:#f92672">import</span> Column, Integer, String, Text, ForeignKey, DateTime, UniqueConstraint, Index
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e"># Base是declarative_base的实例化对象</span>
-</span></span><span style="display:flex;"><span>Base <span style="color:#f92672">=</span> declarative_base()
-</span></span><span style="display:flex;"><span><span style="color:#75715e"># 定义一个常量</span>
-</span></span><span style="display:flex;"><span>ENGINE <span style="color:#f92672">=</span> create_engine(<span style="color:#e6db74">&#34;mysql+mysqlconnector://root:root@127.0.0.1:3306/python_test&#34;</span>)
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e"># 每个类都要继承Base</span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Users</span>(Base):
-</span></span><span style="display:flex;"><span>    __tablename__ <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;users&#39;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Column是列的意思，固定写法 Column(字段类型, 参数)</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># primary_key主键、index索引、nullable是否可以为空</span>
-</span></span><span style="display:flex;"><span>    id <span style="color:#f92672">=</span> Column(Integer, primary_key<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>)
-</span></span><span style="display:flex;"><span>    name <span style="color:#f92672">=</span> Column(String(<span style="color:#ae81ff">32</span>), index<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>, nullable<span style="color:#f92672">=</span><span style="color:#66d9ef">False</span>)
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 相当于Django的ORM的class Meta，是一些元信息</span>
-</span></span><span style="display:flex;"><span>    __table_args__ <span style="color:#f92672">=</span> (
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    )
-</span></span></code></pre></div><h4 id="常规操作">常规操作</h4>
-<p>以下操作并没有全部验证，使用前请自行验证</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># 条件查询</span>
-</span></span><span style="display:flex;"><span>ret1 <span style="color:#f92672">=</span> session<span style="color:#f92672">.</span>query(Users)<span style="color:#f92672">.</span>filter_by(id<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>)<span style="color:#f92672">.</span>first()
-</span></span><span style="display:flex;"><span>res2 <span style="color:#f92672">=</span> session<span style="color:#f92672">.</span>query(Users)<span style="color:#f92672">.</span>filter(Users<span style="color:#f92672">.</span>id <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">1</span>, Users<span style="color:#f92672">.</span>name <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;wjf&#34;</span>)<span style="color:#f92672">.</span>all()
-</span></span><span style="display:flex;"><span>res3 <span style="color:#f92672">=</span> session<span style="color:#f92672">.</span>query(Users)<span style="color:#f92672">.</span>filter(Users<span style="color:#f92672">.</span>id<span style="color:#f92672">.</span>between(<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">10</span>))<span style="color:#f92672">.</span>all()
-</span></span><span style="display:flex;"><span>res4 <span style="color:#f92672">=</span> session<span style="color:#f92672">.</span>query(Users)<span style="color:#f92672">.</span>filter(<span style="color:#f92672">~</span>Users<span style="color:#f92672">.</span>id<span style="color:#f92672">.</span>in_([<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">10</span>]))<span style="color:#f92672">.</span>first()
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> sqlalchemy <span style="color:#f92672">import</span> and_, or_
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>res5 <span style="color:#f92672">=</span> session<span style="color:#f92672">.</span>query(Users)<span style="color:#f92672">.</span>filter(and_(Users<span style="color:#f92672">.</span>id <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">1</span>, Users<span style="color:#f92672">.</span>name <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;wjf&#34;</span>))<span style="color:#f92672">.</span>first()
-</span></span><span style="display:flex;"><span>res6 <span style="color:#f92672">=</span> session<span style="color:#f92672">.</span>query(Users)<span style="color:#f92672">.</span>filter(or_(Users<span style="color:#f92672">.</span>id <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">1</span>, Users<span style="color:#f92672">.</span>name <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;wjf&#34;</span>))<span style="color:#f92672">.</span>first()
-</span></span><span style="display:flex;"><span>res7 <span style="color:#f92672">=</span> session<span style="color:#f92672">.</span>query(Users)<span style="color:#f92672">.</span>filter(or_(
-</span></span><span style="display:flex;"><span>    Users<span style="color:#f92672">.</span>id <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">1</span>,
-</span></span><span style="display:flex;"><span>    and_(Users<span style="color:#f92672">.</span>id <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">3</span>, Users<span style="color:#f92672">.</span>name <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;wjf&#34;</span>)
-</span></span><span style="display:flex;"><span>))<span style="color:#f92672">.</span>all()
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e"># 通配符</span>
-</span></span><span style="display:flex;"><span>res8 <span style="color:#f92672">=</span> session<span style="color:#f92672">.</span>query(Users)<span style="color:#f92672">.</span>filter(Users<span style="color:#f92672">.</span>name<span style="color:#f92672">.</span>like(<span style="color:#e6db74">&#34;L%&#34;</span>))<span style="color:#f92672">.</span>all()
-</span></span><span style="display:flex;"><span>res9 <span style="color:#f92672">=</span> session<span style="color:#f92672">.</span>query(Users)<span style="color:#f92672">.</span>filter(<span style="color:#f92672">~</span>Users<span style="color:#f92672">.</span>name<span style="color:#f92672">.</span>like(<span style="color:#e6db74">&#34;L%&#34;</span>))<span style="color:#f92672">.</span>all()
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e"># 限制</span>
-</span></span><span style="display:flex;"><span>res10 <span style="color:#f92672">=</span> session<span style="color:#f92672">.</span>query(Users)<span style="color:#f92672">.</span>filter(<span style="color:#f92672">~</span>Users<span style="color:#f92672">.</span>name<span style="color:#f92672">.</span>like(<span style="color:#e6db74">&#34;L%&#34;</span>))<span style="color:#f92672">.</span>all()[<span style="color:#ae81ff">1</span>:<span style="color:#ae81ff">2</span>]
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e"># 排序</span>
-</span></span><span style="display:flex;"><span>res11 <span style="color:#f92672">=</span> session<span style="color:#f92672">.</span>query(Users)<span style="color:#f92672">.</span>order_by(Users<span style="color:#f92672">.</span>id<span style="color:#f92672">.</span>desc())<span style="color:#f92672">.</span>all()  <span style="color:#75715e"># 倒序</span>
-</span></span><span style="display:flex;"><span>res12 <span style="color:#f92672">=</span> session<span style="color:#f92672">.</span>query(Users)<span style="color:#f92672">.</span>order_by(Users<span style="color:#f92672">.</span>id<span style="color:#f92672">.</span>asc())<span style="color:#f92672">.</span>all()  <span style="color:#75715e"># 正序</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e"># 分组</span>
-</span></span><span style="display:flex;"><span>res13 <span style="color:#f92672">=</span> session<span style="color:#f92672">.</span>query(Users<span style="color:#f92672">.</span>name)<span style="color:#f92672">.</span>group_by(Users<span style="color:#f92672">.</span>name)<span style="color:#f92672">.</span>all()
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e"># 聚合函数</span>
-</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> sqlalchemy.sql <span style="color:#f92672">import</span> func
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>res14 <span style="color:#f92672">=</span> session<span style="color:#f92672">.</span>query(
-</span></span><span style="display:flex;"><span>    func<span style="color:#f92672">.</span>max(Users<span style="color:#f92672">.</span>id),
-</span></span><span style="display:flex;"><span>    func<span style="color:#f92672">.</span>sum(Users<span style="color:#f92672">.</span>name),
-</span></span><span style="display:flex;"><span>    func<span style="color:#f92672">.</span>min(Users<span style="color:#f92672">.</span>id)
-</span></span><span style="display:flex;"><span>)<span style="color:#f92672">.</span>group_by(Users<span style="color:#f92672">.</span>name)<span style="color:#f92672">.</span>having(func<span style="color:#f92672">.</span>max(Users<span style="color:#f92672">.</span>id <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">22</span>))<span style="color:#f92672">.</span>all()
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e"># 连表</span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e"># print(res15) 得到一个列表套元组 元组里是两个对象</span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e"># [(user_obj1, hobby_obj1), (user_obj2, hobby_obj2), ]</span>
-</span></span><span style="display:flex;"><span>res15 <span style="color:#f92672">=</span> session<span style="color:#f92672">.</span>query(UserInfo, Hobby)<span style="color:#f92672">.</span>filter(UserInfo<span style="color:#f92672">.</span>hobby_id <span style="color:#f92672">==</span> Hobby<span style="color:#f92672">.</span>id)<span style="color:#f92672">.</span>all()
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e"># print(res16) 得到列表里面是前一个对象，join相当于inner join</span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e"># [user_obj1, user_obj2, ]</span>
-</span></span><span style="display:flex;"><span>res16 <span style="color:#f92672">=</span> session<span style="color:#f92672">.</span>query(UserInfo)<span style="color:#f92672">.</span>join(Hobby)<span style="color:#f92672">.</span>all()
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e"># 相当于inner join</span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e"># for i in res16:</span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e">#     # print(i[0].name, i[1].name)</span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e">#     print(i.hobby.name)</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e"># 指定isouter=True相当于left join</span>
-</span></span><span style="display:flex;"><span>res17 <span style="color:#f92672">=</span> session<span style="color:#f92672">.</span>query(Hobby)<span style="color:#f92672">.</span>join(UserInfo, isouter<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>)<span style="color:#f92672">.</span>all()
-</span></span><span style="display:flex;"><span>res17_1 <span style="color:#f92672">=</span> session<span style="color:#f92672">.</span>query(UserInfo)<span style="color:#f92672">.</span>join(Hobby, isouter<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>)<span style="color:#f92672">.</span>all()
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e"># 或者直接用outerjoin也是相当于left join</span>
-</span></span><span style="display:flex;"><span>res18 <span style="color:#f92672">=</span> session<span style="color:#f92672">.</span>query(Hobby)<span style="color:#f92672">.</span>outerjoin(UserInfo)<span style="color:#f92672">.</span>all()
-</span></span><span style="display:flex;"><span>res18_1 <span style="color:#f92672">=</span> session<span style="color:#f92672">.</span>query(UserInfo)<span style="color:#f92672">.</span>outerjoin(Hobby)<span style="color:#f92672">.</span>all()
-</span></span><span style="display:flex;"><span>print(res17)
-</span></span><span style="display:flex;"><span>print(res17_1)
-</span></span><span style="display:flex;"><span>print(res18)
-</span></span><span style="display:flex;"><span>print(res18_1)
-</span></span></code></pre></div>
-		</div>
-	</article>
-</main>
-
-
-
-
-			</div>
-			
-		</div>
-		<footer class="footer">
-	<div class="container footer__container flex">
-		
-		<div class="footer__copyright">
-			&copy; 2026 臭大佬博客.
-			<span class="footer__copyright-credits">基于 <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> 引擎和 <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> 主题</span>
-		</div>
-	</div>
-</footer>
-	</div>
-<script async defer src="/js/menu.js"></script>
-</body>
-</html>
+<img src=https://www.choudalao.com/uploads/20200319/20200319175948Papxgk.png alt></p><p>run.py</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-python data-lang=python><span style=display:flex><span><span style=color:#e6db74>&#39;&#39;&#39;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>-*- coding: utf-8 -*-
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>&#39;&#39;&#39;</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>from</span> sqlalchemy <span style=color:#f92672>import</span> create_engine
+</span></span><span style=display:flex><span><span style=color:#f92672>from</span> sqlalchemy.orm <span style=color:#f92672>import</span> sessionmaker, scoped_session
+</span></span><span style=display:flex><span><span style=color:#f92672>from</span> models.Users <span style=color:#f92672>import</span> Users
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>ENGINE <span style=color:#f92672>=</span> create_engine(<span style=color:#e6db74>&#34;mysql+mysqlconnector://root:root@127.0.0.1:3306/python_test&#34;</span>)
+</span></span><span style=display:flex><span><span style=color:#75715e># 每次执行数据库操作的时候，都需要创建一个session,相当于管理器(相当于Django的ORM的objects)</span>
+</span></span><span style=display:flex><span>Session <span style=color:#f92672>=</span> sessionmaker(bind<span style=color:#f92672>=</span>ENGINE)
+</span></span><span style=display:flex><span><span style=color:#75715e># 线程安全，基于本地线程实现每个线程用同一个session</span>
+</span></span><span style=display:flex><span>session <span style=color:#f92672>=</span> scoped_session(Session)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># =======执行ORM操作==========</span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>def</span> <span style=color:#a6e22e>select</span>():
+</span></span><span style=display:flex><span>    <span style=color:#75715e># res = session.query(Users).all()</span>
+</span></span><span style=display:flex><span>    <span style=color:#75715e># res = session.query(Users).get(1)  # 查询id=1的记录</span>
+</span></span><span style=display:flex><span>    <span style=color:#75715e># res = session.query(Users).filter(Users.name == &#34;wjf&#34;).all()</span>
+</span></span><span style=display:flex><span>    <span style=color:#75715e># res = session.query(Users).filter_by(name=&#34;wjf&#34;).all()</span>
+</span></span><span style=display:flex><span>    res <span style=color:#f92672>=</span> session<span style=color:#f92672>.</span>query(Users)<span style=color:#f92672>.</span>filter_by(name<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;wjf&#34;</span>)<span style=color:#f92672>.</span>first()
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span> res
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>def</span> <span style=color:#a6e22e>add</span>(name<span style=color:#f92672>=</span><span style=color:#e6db74>&#39;&#39;</span>):
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>if</span> name <span style=color:#f92672>==</span> <span style=color:#e6db74>&#39;&#39;</span>:
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>return</span> <span style=color:#66d9ef>False</span>
+</span></span><span style=display:flex><span>    obj <span style=color:#f92672>=</span> Users(name<span style=color:#f92672>=</span>name)
+</span></span><span style=display:flex><span>    session<span style=color:#f92672>.</span>add(obj)
+</span></span><span style=display:flex><span>    <span style=color:#75715e># # 批量</span>
+</span></span><span style=display:flex><span>    <span style=color:#75715e># session.add_all([</span>
+</span></span><span style=display:flex><span>    <span style=color:#75715e>#     Users(name=&#34;aaa&#34;),</span>
+</span></span><span style=display:flex><span>    <span style=color:#75715e>#     Users(name=&#34;bbb&#34;),</span>
+</span></span><span style=display:flex><span>    <span style=color:#75715e>#     Hosts(name=&#34;ccc&#34;),</span>
+</span></span><span style=display:flex><span>    <span style=color:#75715e># ])</span>
+</span></span><span style=display:flex><span>    <span style=color:#75715e># 提交</span>
+</span></span><span style=display:flex><span>    session<span style=color:#f92672>.</span>commit()
+</span></span><span style=display:flex><span>    <span style=color:#75715e># 关闭session</span>
+</span></span><span style=display:flex><span>    session<span style=color:#f92672>.</span>close()
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>def</span> <span style=color:#a6e22e>update</span>(name<span style=color:#f92672>=</span><span style=color:#e6db74>&#39;&#39;</span>):
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#39;&#39;&#39;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>    更新
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>    :return:
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>    &#39;&#39;&#39;</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>if</span> name <span style=color:#f92672>==</span> <span style=color:#e6db74>&#39;&#39;</span>:
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>return</span> <span style=color:#66d9ef>False</span>
+</span></span><span style=display:flex><span>    session<span style=color:#f92672>.</span>query(Users)<span style=color:#f92672>.</span>filter(Users<span style=color:#f92672>.</span>id <span style=color:#f92672>&gt;</span> <span style=color:#ae81ff>0</span>)<span style=color:#f92672>.</span>update({<span style=color:#e6db74>&#34;name&#34;</span> :name})
+</span></span><span style=display:flex><span>    <span style=color:#75715e>#session.query(Users).filter(Users.id &gt; 0).update({Users.name: Users.name + &#34;099&#34;}, synchronize_session=False)</span>
+</span></span><span style=display:flex><span>    session<span style=color:#f92672>.</span>commit()
+</span></span><span style=display:flex><span>    session<span style=color:#f92672>.</span>close()
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>def</span> <span style=color:#a6e22e>delete</span>():
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#39;&#39;&#39;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>    删除
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>    :return:
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>    &#39;&#39;&#39;</span>
+</span></span><span style=display:flex><span>    session<span style=color:#f92672>.</span>query(Users)<span style=color:#f92672>.</span>filter(Users<span style=color:#f92672>.</span>id <span style=color:#f92672>&gt;</span> <span style=color:#ae81ff>2</span>)<span style=color:#f92672>.</span>delete()
+</span></span><span style=display:flex><span>    session<span style=color:#f92672>.</span>commit()
+</span></span><span style=display:flex><span>    session<span style=color:#f92672>.</span>close()
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>if</span> __name__ <span style=color:#f92672>==</span> <span style=color:#e6db74>&#39;__main__&#39;</span>:
+</span></span><span style=display:flex><span>    add(<span style=color:#e6db74>&#39;德玛西亚&#39;</span>)
+</span></span></code></pre></div><p>Users.py</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-python data-lang=python><span style=display:flex><span><span style=color:#75715e># coding:utf-8</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>from</span> sqlalchemy <span style=color:#f92672>import</span> create_engine
+</span></span><span style=display:flex><span><span style=color:#f92672>from</span> sqlalchemy.ext.declarative <span style=color:#f92672>import</span> declarative_base
+</span></span><span style=display:flex><span><span style=color:#f92672>from</span> sqlalchemy.orm <span style=color:#f92672>import</span> sessionmaker, scoped_session
+</span></span><span style=display:flex><span><span style=color:#f92672>from</span> sqlalchemy <span style=color:#f92672>import</span> Column, Integer, String, Text, ForeignKey, DateTime, UniqueConstraint, Index
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># Base是declarative_base的实例化对象</span>
+</span></span><span style=display:flex><span>Base <span style=color:#f92672>=</span> declarative_base()
+</span></span><span style=display:flex><span><span style=color:#75715e># 定义一个常量</span>
+</span></span><span style=display:flex><span>ENGINE <span style=color:#f92672>=</span> create_engine(<span style=color:#e6db74>&#34;mysql+mysqlconnector://root:root@127.0.0.1:3306/python_test&#34;</span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 每个类都要继承Base</span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>class</span> <span style=color:#a6e22e>Users</span>(Base):
+</span></span><span style=display:flex><span>    __tablename__ <span style=color:#f92672>=</span> <span style=color:#e6db74>&#39;users&#39;</span>
+</span></span><span style=display:flex><span>    <span style=color:#75715e># Column是列的意思，固定写法 Column(字段类型, 参数)</span>
+</span></span><span style=display:flex><span>    <span style=color:#75715e># primary_key主键、index索引、nullable是否可以为空</span>
+</span></span><span style=display:flex><span>    id <span style=color:#f92672>=</span> Column(Integer, primary_key<span style=color:#f92672>=</span><span style=color:#66d9ef>True</span>)
+</span></span><span style=display:flex><span>    name <span style=color:#f92672>=</span> Column(String(<span style=color:#ae81ff>32</span>), index<span style=color:#f92672>=</span><span style=color:#66d9ef>True</span>, nullable<span style=color:#f92672>=</span><span style=color:#66d9ef>False</span>)
+</span></span><span style=display:flex><span>    <span style=color:#75715e># 相当于Django的ORM的class Meta，是一些元信息</span>
+</span></span><span style=display:flex><span>    __table_args__ <span style=color:#f92672>=</span> (
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    )
+</span></span></code></pre></div><h4 id=常规操作>常规操作</h4><p>以下操作并没有全部验证，使用前请自行验证</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-python data-lang=python><span style=display:flex><span><span style=color:#75715e># 条件查询</span>
+</span></span><span style=display:flex><span>ret1 <span style=color:#f92672>=</span> session<span style=color:#f92672>.</span>query(Users)<span style=color:#f92672>.</span>filter_by(id<span style=color:#f92672>=</span><span style=color:#ae81ff>1</span>)<span style=color:#f92672>.</span>first()
+</span></span><span style=display:flex><span>res2 <span style=color:#f92672>=</span> session<span style=color:#f92672>.</span>query(Users)<span style=color:#f92672>.</span>filter(Users<span style=color:#f92672>.</span>id <span style=color:#f92672>&gt;</span> <span style=color:#ae81ff>1</span>, Users<span style=color:#f92672>.</span>name <span style=color:#f92672>==</span> <span style=color:#e6db74>&#34;wjf&#34;</span>)<span style=color:#f92672>.</span>all()
+</span></span><span style=display:flex><span>res3 <span style=color:#f92672>=</span> session<span style=color:#f92672>.</span>query(Users)<span style=color:#f92672>.</span>filter(Users<span style=color:#f92672>.</span>id<span style=color:#f92672>.</span>between(<span style=color:#ae81ff>1</span>, <span style=color:#ae81ff>10</span>))<span style=color:#f92672>.</span>all()
+</span></span><span style=display:flex><span>res4 <span style=color:#f92672>=</span> session<span style=color:#f92672>.</span>query(Users)<span style=color:#f92672>.</span>filter(<span style=color:#f92672>~</span>Users<span style=color:#f92672>.</span>id<span style=color:#f92672>.</span>in_([<span style=color:#ae81ff>1</span>, <span style=color:#ae81ff>10</span>]))<span style=color:#f92672>.</span>first()
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#f92672>from</span> sqlalchemy <span style=color:#f92672>import</span> and_, or_
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>res5 <span style=color:#f92672>=</span> session<span style=color:#f92672>.</span>query(Users)<span style=color:#f92672>.</span>filter(and_(Users<span style=color:#f92672>.</span>id <span style=color:#f92672>&gt;</span> <span style=color:#ae81ff>1</span>, Users<span style=color:#f92672>.</span>name <span style=color:#f92672>==</span> <span style=color:#e6db74>&#34;wjf&#34;</span>))<span style=color:#f92672>.</span>first()
+</span></span><span style=display:flex><span>res6 <span style=color:#f92672>=</span> session<span style=color:#f92672>.</span>query(Users)<span style=color:#f92672>.</span>filter(or_(Users<span style=color:#f92672>.</span>id <span style=color:#f92672>&gt;</span> <span style=color:#ae81ff>1</span>, Users<span style=color:#f92672>.</span>name <span style=color:#f92672>==</span> <span style=color:#e6db74>&#34;wjf&#34;</span>))<span style=color:#f92672>.</span>first()
+</span></span><span style=display:flex><span>res7 <span style=color:#f92672>=</span> session<span style=color:#f92672>.</span>query(Users)<span style=color:#f92672>.</span>filter(or_(
+</span></span><span style=display:flex><span>    Users<span style=color:#f92672>.</span>id <span style=color:#f92672>&gt;</span> <span style=color:#ae81ff>1</span>,
+</span></span><span style=display:flex><span>    and_(Users<span style=color:#f92672>.</span>id <span style=color:#f92672>&gt;</span> <span style=color:#ae81ff>3</span>, Users<span style=color:#f92672>.</span>name <span style=color:#f92672>==</span> <span style=color:#e6db74>&#34;wjf&#34;</span>)
+</span></span><span style=display:flex><span>))<span style=color:#f92672>.</span>all()
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 通配符</span>
+</span></span><span style=display:flex><span>res8 <span style=color:#f92672>=</span> session<span style=color:#f92672>.</span>query(Users)<span style=color:#f92672>.</span>filter(Users<span style=color:#f92672>.</span>name<span style=color:#f92672>.</span>like(<span style=color:#e6db74>&#34;L%&#34;</span>))<span style=color:#f92672>.</span>all()
+</span></span><span style=display:flex><span>res9 <span style=color:#f92672>=</span> session<span style=color:#f92672>.</span>query(Users)<span style=color:#f92672>.</span>filter(<span style=color:#f92672>~</span>Users<span style=color:#f92672>.</span>name<span style=color:#f92672>.</span>like(<span style=color:#e6db74>&#34;L%&#34;</span>))<span style=color:#f92672>.</span>all()
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 限制</span>
+</span></span><span style=display:flex><span>res10 <span style=color:#f92672>=</span> session<span style=color:#f92672>.</span>query(Users)<span style=color:#f92672>.</span>filter(<span style=color:#f92672>~</span>Users<span style=color:#f92672>.</span>name<span style=color:#f92672>.</span>like(<span style=color:#e6db74>&#34;L%&#34;</span>))<span style=color:#f92672>.</span>all()[<span style=color:#ae81ff>1</span>:<span style=color:#ae81ff>2</span>]
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 排序</span>
+</span></span><span style=display:flex><span>res11 <span style=color:#f92672>=</span> session<span style=color:#f92672>.</span>query(Users)<span style=color:#f92672>.</span>order_by(Users<span style=color:#f92672>.</span>id<span style=color:#f92672>.</span>desc())<span style=color:#f92672>.</span>all()  <span style=color:#75715e># 倒序</span>
+</span></span><span style=display:flex><span>res12 <span style=color:#f92672>=</span> session<span style=color:#f92672>.</span>query(Users)<span style=color:#f92672>.</span>order_by(Users<span style=color:#f92672>.</span>id<span style=color:#f92672>.</span>asc())<span style=color:#f92672>.</span>all()  <span style=color:#75715e># 正序</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 分组</span>
+</span></span><span style=display:flex><span>res13 <span style=color:#f92672>=</span> session<span style=color:#f92672>.</span>query(Users<span style=color:#f92672>.</span>name)<span style=color:#f92672>.</span>group_by(Users<span style=color:#f92672>.</span>name)<span style=color:#f92672>.</span>all()
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 聚合函数</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>from</span> sqlalchemy.sql <span style=color:#f92672>import</span> func
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>res14 <span style=color:#f92672>=</span> session<span style=color:#f92672>.</span>query(
+</span></span><span style=display:flex><span>    func<span style=color:#f92672>.</span>max(Users<span style=color:#f92672>.</span>id),
+</span></span><span style=display:flex><span>    func<span style=color:#f92672>.</span>sum(Users<span style=color:#f92672>.</span>name),
+</span></span><span style=display:flex><span>    func<span style=color:#f92672>.</span>min(Users<span style=color:#f92672>.</span>id)
+</span></span><span style=display:flex><span>)<span style=color:#f92672>.</span>group_by(Users<span style=color:#f92672>.</span>name)<span style=color:#f92672>.</span>having(func<span style=color:#f92672>.</span>max(Users<span style=color:#f92672>.</span>id <span style=color:#f92672>&gt;</span> <span style=color:#ae81ff>22</span>))<span style=color:#f92672>.</span>all()
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 连表</span>
+</span></span><span style=display:flex><span><span style=color:#75715e># print(res15) 得到一个列表套元组 元组里是两个对象</span>
+</span></span><span style=display:flex><span><span style=color:#75715e># [(user_obj1, hobby_obj1), (user_obj2, hobby_obj2), ]</span>
+</span></span><span style=display:flex><span>res15 <span style=color:#f92672>=</span> session<span style=color:#f92672>.</span>query(UserInfo, Hobby)<span style=color:#f92672>.</span>filter(UserInfo<span style=color:#f92672>.</span>hobby_id <span style=color:#f92672>==</span> Hobby<span style=color:#f92672>.</span>id)<span style=color:#f92672>.</span>all()
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># print(res16) 得到列表里面是前一个对象，join相当于inner join</span>
+</span></span><span style=display:flex><span><span style=color:#75715e># [user_obj1, user_obj2, ]</span>
+</span></span><span style=display:flex><span>res16 <span style=color:#f92672>=</span> session<span style=color:#f92672>.</span>query(UserInfo)<span style=color:#f92672>.</span>join(Hobby)<span style=color:#f92672>.</span>all()
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 相当于inner join</span>
+</span></span><span style=display:flex><span><span style=color:#75715e># for i in res16:</span>
+</span></span><span style=display:flex><span><span style=color:#75715e>#     # print(i[0].name, i[1].name)</span>
+</span></span><span style=display:flex><span><span style=color:#75715e>#     print(i.hobby.name)</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 指定isouter=True相当于left join</span>
+</span></span><span style=display:flex><span>res17 <span style=color:#f92672>=</span> session<span style=color:#f92672>.</span>query(Hobby)<span style=color:#f92672>.</span>join(UserInfo, isouter<span style=color:#f92672>=</span><span style=color:#66d9ef>True</span>)<span style=color:#f92672>.</span>all()
+</span></span><span style=display:flex><span>res17_1 <span style=color:#f92672>=</span> session<span style=color:#f92672>.</span>query(UserInfo)<span style=color:#f92672>.</span>join(Hobby, isouter<span style=color:#f92672>=</span><span style=color:#66d9ef>True</span>)<span style=color:#f92672>.</span>all()
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 或者直接用outerjoin也是相当于left join</span>
+</span></span><span style=display:flex><span>res18 <span style=color:#f92672>=</span> session<span style=color:#f92672>.</span>query(Hobby)<span style=color:#f92672>.</span>outerjoin(UserInfo)<span style=color:#f92672>.</span>all()
+</span></span><span style=display:flex><span>res18_1 <span style=color:#f92672>=</span> session<span style=color:#f92672>.</span>query(UserInfo)<span style=color:#f92672>.</span>outerjoin(Hobby)<span style=color:#f92672>.</span>all()
+</span></span><span style=display:flex><span>print(res17)
+</span></span><span style=display:flex><span>print(res17_1)
+</span></span><span style=display:flex><span>print(res18)
+</span></span><span style=display:flex><span>print(res18_1)
+</span></span></code></pre></div></div></article></main></div></div><footer class=footer><div class="container footer__container flex"><div class=footer__copyright>&copy; 2026 臭大佬博客.
+<span class=footer__copyright-credits>基于 <a href=https://gohugo.io/ rel="nofollow noopener" target=_blank>Hugo</a> 引擎和 <a href=https://github.com/Vimux/Mainroad/ rel="nofollow noopener" target=_blank>Mainroad</a> 主题</span></div></div></footer></div><script async defer src=/choudalao.github.io/js/menu.js></script></body></html>

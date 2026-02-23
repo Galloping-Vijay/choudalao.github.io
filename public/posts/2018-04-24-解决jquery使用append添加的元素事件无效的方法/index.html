@@ -1,108 +1,12 @@
-<!DOCTYPE html>
-<html class="no-js" lang="en">
-<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>解决jQuery使用append添加的元素事件无效的方法 - 臭大佬博客</title>
-	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
-	<meta name="description" content="解决jQuery使用append添加的元素事件无效的方法">
-	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-	<link rel="dns-prefetch" href="//fonts.googleapis.com">
-	<link rel="dns-prefetch" href="//fonts.gstatic.com">
-	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
-
-	<link rel="stylesheet" href="/css/style.css">
-	
-
-	<link rel="shortcut icon" href="/favicon.ico">
-		
-</head>
-<body class="body">
-	<div class="container container--outer">
-		<header class="header">
-	<div class="container header__container">
-		
-	<div class="logo">
-		<a class="logo__link" href="/" title="臭大佬博客" rel="home">
-			<div class="logo__item logo__text">
-					<div class="logo__title">臭大佬博客</div>
-					
-				</div>
-		</a>
-	</div>
-		
-<nav class="menu">
-	<button class="menu__btn" aria-haspopup="true" aria-expanded="false" tabindex="0">
-		<span class="menu__btn-title" tabindex="-1">菜单</span>
-	</button>
-	<ul class="menu__list">
-		<li class="menu__item">
-			<a class="menu__link" href="/">
-				
-				<span class="menu__text">首页</span>
-				
-			</a>
-		</li>
-		<li class="menu__item">
-			<a class="menu__link" href="/post/">
-				
-				<span class="menu__text">归档</span>
-				
-			</a>
-		</li>
-		<li class="menu__item">
-			<a class="menu__link" href="/about/">
-				
-				<span class="menu__text">关于</span>
-				
-			</a>
-		</li>
-	</ul>
-</nav>
-
-	</div>
-</header>
-		<div class="wrapper flex">
-			<div class="primary">
-			
-<main class="main" role="main">
-	<article class="post">
-		<header class="post__header">
-			<h1 class="post__title">解决jQuery使用append添加的元素事件无效的方法</h1>
-			
-		</header>
-		<div class="content post__content clearfix">
-			<p>&lt;h3 id=&quot;jquery-api官方的例子在新增的元素上添加事件&quot; sf=&quot;&quot; ui=&quot;&quot; pingfang=&quot;&quot; hiragino=&quot;&quot; sans=&quot;&quot; microsoft=&quot;&quot; wenquanyi=&quot;&quot; micro=&quot;&quot; line-height:=&quot;&quot; color:=&quot;&quot; font-size:=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot;&gt;jquery api官方的例子在新增的元素上添加事件&lt;/h3&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;pre lay-lang=&quot;JavaScript&quot;&gt;&lt;code class=&quot;JavaScript&quot;&gt;$(document).on(&quot;click&quot;,&rsquo;#lyysb a&rsquo;,function(){
+<!doctype html><html class=no-js lang=en><head><meta charset=UTF-8><meta name=viewport content="width=device-width,initial-scale=1"><title>解决jQuery使用append添加的元素事件无效的方法 - 臭大佬博客</title><script>(function(e,t){e[t]=e[t].replace("no-js","js")})(document.documentElement,"className")</script><meta name=description content="解决jQuery使用append添加的元素事件无效的方法"><link rel=preconnect href=https://fonts.gstatic.com crossorigin><link rel=dns-prefetch href=//fonts.googleapis.com><link rel=dns-prefetch href=//fonts.gstatic.com><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700"><link rel=stylesheet href=/choudalao.github.io/css/style.css><link rel="shortcut icon" href=/choudalao.github.io/favicon.ico></head><body class=body><div class="container container--outer"><header class=header><div class="container header__container"><div class=logo><a class=logo__link href=/choudalao.github.io/ title=臭大佬博客 rel=home><div class="logo__item logo__text"><div class=logo__title>臭大佬博客</div></div></a></div><nav class=menu><button class=menu__btn aria-haspopup=true aria-expanded=false tabindex=0>
+<span class=menu__btn-title tabindex=-1>菜单</span></button><ul class=menu__list><li class=menu__item><a class=menu__link href=/choudalao.github.io/><span class=menu__text>首页</span></a></li><li class=menu__item><a class=menu__link href=/choudalao.github.io/post/><span class=menu__text>归档</span></a></li><li class=menu__item><a class=menu__link href=/choudalao.github.io/about/><span class=menu__text>关于</span></a></li></ul></nav></div></header><div class="wrapper flex"><div class=primary><main class=main role=main><article class=post><header class=post__header><h1 class=post__title>解决jQuery使用append添加的元素事件无效的方法</h1></header><div class="content post__content clearfix"><p>&lt;h3 id="jquery-api官方的例子在新增的元素上添加事件" sf="" ui="" pingfang="" hiragino="" sans="" microsoft="" wenquanyi="" micro="" line-height:="" color:="" font-size:="" white-space:="" background-color:="">jquery api官方的例子在新增的元素上添加事件&lt;/h3>&lt;p>&lt;br>&lt;/p>&lt;pre lay-lang="JavaScript">&lt;code class="JavaScript">$(document).on("click",&rsquo;#lyysb a&rsquo;,function(){
 if(!$(this).hasClass(&lsquo;cur&rsquo;)){
 $(this).addClass(&lsquo;cur&rsquo;);
 } else {
 $(this).removeClass(&lsquo;cur&rsquo;);
 }
-});&lt;/code&gt;&lt;/pre&gt;&lt;p sf=&quot;&quot; ui=&quot;&quot; pingfang=&quot;&quot; hiragino=&quot;&quot; sans=&quot;&quot; microsoft=&quot;&quot; wenquanyi=&quot;&quot; micro=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot; style=&quot;text-align: justify;&quot;&gt;on() 方法在被选元素及子元素上添加一个或多个事件处理程序。&lt;/p&gt;&lt;p sf=&quot;&quot; ui=&quot;&quot; pingfang=&quot;&quot; hiragino=&quot;&quot; sans=&quot;&quot; microsoft=&quot;&quot; wenquanyi=&quot;&quot; micro=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot; style=&quot;text-align: justify;&quot;&gt;自 jQuery 版本 1.7 起，on() 方法是 bind()、live() 和 delegate() 方法的新的替代品。&amp;nbsp;&lt;br&gt;注意：使用 on() 方法添加的事件处理程序适用于当前及未来的元素（比如由脚本创建的新元素）。&lt;/p&gt;&lt;p sf=&quot;&quot; ui=&quot;&quot; pingfang=&quot;&quot; hiragino=&quot;&quot; sans=&quot;&quot; microsoft=&quot;&quot; wenquanyi=&quot;&quot; micro=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot; style=&quot;text-align: justify;&quot;&gt;提示：如需移除事件处理程序，请使用 off() 方法。&lt;/p&gt;&lt;p sf=&quot;&quot; ui=&quot;&quot; pingfang=&quot;&quot; hiragino=&quot;&quot; sans=&quot;&quot; microsoft=&quot;&quot; wenquanyi=&quot;&quot; micro=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot; style=&quot;text-align: justify;&quot;&gt;提示：如需添加只运行一次的事件然后移除，请使用 one() 方法。&lt;/p&gt;&lt;p sf=&quot;&quot; ui=&quot;&quot; pingfang=&quot;&quot; hiragino=&quot;&quot; sans=&quot;&quot; microsoft=&quot;&quot; wenquanyi=&quot;&quot; micro=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot; style=&quot;text-align: justify;&quot;&gt;*把事件绑定在docunmet就和原来的live方法没有区别了。原先的live()方法，处理函数是默认绑定在document对象上不能变的，如果DOM嵌套结构很深，事件冒泡通过大量祖先元素会导致较大的性能损失。而使用.on()方法，事件只会绑定到$()函数的选择符表达式匹配的元素上，因此可以精确地定位到页面中的一部分，而事件冒泡的开销也可以减少。&lt;/p&gt;&lt;p sf=&quot;&quot; ui=&quot;&quot; pingfang=&quot;&quot; hiragino=&quot;&quot; sans=&quot;&quot; microsoft=&quot;&quot; wenquanyi=&quot;&quot; micro=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot; style=&quot;text-align: justify;&quot;&gt;例如我会在zkdiv中动态添加多个class=”zk”的dom节点，也想对动态增加的节点绑定相同的事件则可以通过以下代码实现&lt;/p&gt;&lt;p sf=&quot;&quot; ui=&quot;&quot; pingfang=&quot;&quot; hiragino=&quot;&quot; sans=&quot;&quot; microsoft=&quot;&quot; wenquanyi=&quot;&quot; micro=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot; style=&quot;text-align: justify;&quot;&gt;&lt;br&gt;&lt;/p&gt;&lt;pre class=&quot;prettyprint&quot; name=&quot;code&quot;&gt;&lt;p&gt;&amp;nbsp;&amp;nbsp;&lt;input type=&quot;button&quot; value=&quot;展开&quot; id=&quot;zk&quot; class=&quot;zk&quot;&gt;&amp;nbsp;&lt;br&gt;&lt;/p&gt;123&lt;/pre&gt;&lt;p sf=&quot;&quot; ui=&quot;&quot; pingfang=&quot;&quot; hiragino=&quot;&quot; sans=&quot;&quot; microsoft=&quot;&quot; wenquanyi=&quot;&quot; micro=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot; style=&quot;text-align: justify;&quot;&gt;//展开按钮点击触发事件&lt;/p&gt;&lt;p sf=&quot;&quot; ui=&quot;&quot; pingfang=&quot;&quot; hiragino=&quot;&quot; sans=&quot;&quot; microsoft=&quot;&quot; wenquanyi=&quot;&quot; micro=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot; style=&quot;text-align: justify;&quot;&gt;&lt;br&gt;&lt;/p&gt;&lt;pre lay-lang=&quot;JavaScript&quot;&gt;&lt;code class=&quot;JavaScript&quot;&gt;$(&quot;#zkdiv&quot;).on(&quot;click&quot;,&quot;.zk&quot;,function(){
-console.log(&quot;on 点击一次&quot;);
-});var html2 = &quot;&quot;;
-$(&quot;#zkdiv&quot;).append(html2);&lt;/code&gt;&lt;/pre&gt;&lt;p sf=&quot;&quot; ui=&quot;&quot; pingfang=&quot;&quot; hiragino=&quot;&quot; sans=&quot;&quot; microsoft=&quot;&quot; wenquanyi=&quot;&quot; micro=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot; style=&quot;text-align: justify;&quot;&gt;*这样一来处理函数就绑定到#zkdiv的选择器上去了，事件冒泡导致的性能损失会大大降低（使用该方法时要确保.on前面的选择器能选择到对象 否则不起作用）&lt;/p&gt;&lt;h4 id=&quot;click是点击事件但是在页面加载完之后jquery事件新添加的元素用click的话是无法获取元素的这个时候要用on去获取元素事件简单的说页面加载完成时候页面显示的元素可以用on也可以用click但是页面加载完成之后后期再追加的元素只能用on&quot; sf=&quot;&quot; ui=&quot;&quot; pingfang=&quot;&quot; hiragino=&quot;&quot; sans=&quot;&quot; microsoft=&quot;&quot; wenquanyi=&quot;&quot; micro=&quot;&quot; line-height:=&quot;&quot; color:=&quot;&quot; font-size:=&quot;&quot; white-space:=&quot;&quot; background-color:=&quot;&quot;&gt;click是点击事件，但是在页面加载完之后，jquery事件新添加的元素，用click的话是无法获取元素的，这个时候要用on去获取元素事件，简单的说页面加载完成时候页面显示的元素可以用on，也可以用click，但是页面加载完成之后后期再追加的元素只能用on。&lt;/h4&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;</p>
-
-		</div>
-	</article>
-</main>
-
-
-
-
-			</div>
-			
-		</div>
-		<footer class="footer">
-	<div class="container footer__container flex">
-		
-		<div class="footer__copyright">
-			&copy; 2026 臭大佬博客.
-			<span class="footer__copyright-credits">基于 <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> 引擎和 <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> 主题</span>
-		</div>
-	</div>
-</footer>
-	</div>
-<script async defer src="/js/menu.js"></script>
-</body>
-</html>
+});&lt;/code>&lt;/pre>&lt;p sf="" ui="" pingfang="" hiragino="" sans="" microsoft="" wenquanyi="" micro="" white-space:="" background-color:="" style="text-align: justify;">on() 方法在被选元素及子元素上添加一个或多个事件处理程序。&lt;/p>&lt;p sf="" ui="" pingfang="" hiragino="" sans="" microsoft="" wenquanyi="" micro="" white-space:="" background-color:="" style="text-align: justify;">自 jQuery 版本 1.7 起，on() 方法是 bind()、live() 和 delegate() 方法的新的替代品。&amp;nbsp;&lt;br>注意：使用 on() 方法添加的事件处理程序适用于当前及未来的元素（比如由脚本创建的新元素）。&lt;/p>&lt;p sf="" ui="" pingfang="" hiragino="" sans="" microsoft="" wenquanyi="" micro="" white-space:="" background-color:="" style="text-align: justify;">提示：如需移除事件处理程序，请使用 off() 方法。&lt;/p>&lt;p sf="" ui="" pingfang="" hiragino="" sans="" microsoft="" wenquanyi="" micro="" white-space:="" background-color:="" style="text-align: justify;">提示：如需添加只运行一次的事件然后移除，请使用 one() 方法。&lt;/p>&lt;p sf="" ui="" pingfang="" hiragino="" sans="" microsoft="" wenquanyi="" micro="" white-space:="" background-color:="" style="text-align: justify;">*把事件绑定在docunmet就和原来的live方法没有区别了。原先的live()方法，处理函数是默认绑定在document对象上不能变的，如果DOM嵌套结构很深，事件冒泡通过大量祖先元素会导致较大的性能损失。而使用.on()方法，事件只会绑定到$()函数的选择符表达式匹配的元素上，因此可以精确地定位到页面中的一部分，而事件冒泡的开销也可以减少。&lt;/p>&lt;p sf="" ui="" pingfang="" hiragino="" sans="" microsoft="" wenquanyi="" micro="" white-space:="" background-color:="" style="text-align: justify;">例如我会在zkdiv中动态添加多个class=”zk”的dom节点，也想对动态增加的节点绑定相同的事件则可以通过以下代码实现&lt;/p>&lt;p sf="" ui="" pingfang="" hiragino="" sans="" microsoft="" wenquanyi="" micro="" white-space:="" background-color:="" style="text-align: justify;">&lt;br>&lt;/p>&lt;pre class="prettyprint" name="code">&lt;p>&amp;nbsp;&amp;nbsp;&lt;input type="button" value="展开" id="zk" class="zk">&amp;nbsp;&lt;br>&lt;/p>123&lt;/pre>&lt;p sf="" ui="" pingfang="" hiragino="" sans="" microsoft="" wenquanyi="" micro="" white-space:="" background-color:="" style="text-align: justify;">//展开按钮点击触发事件&lt;/p>&lt;p sf="" ui="" pingfang="" hiragino="" sans="" microsoft="" wenquanyi="" micro="" white-space:="" background-color:="" style="text-align: justify;">&lt;br>&lt;/p>&lt;pre lay-lang="JavaScript">&lt;code class="JavaScript">$("#zkdiv").on("click",".zk",function(){
+console.log("on 点击一次");
+});var html2 = "";
+$("#zkdiv").append(html2);&lt;/code>&lt;/pre>&lt;p sf="" ui="" pingfang="" hiragino="" sans="" microsoft="" wenquanyi="" micro="" white-space:="" background-color:="" style="text-align: justify;">*这样一来处理函数就绑定到#zkdiv的选择器上去了，事件冒泡导致的性能损失会大大降低（使用该方法时要确保.on前面的选择器能选择到对象 否则不起作用）&lt;/p>&lt;h4 id="click是点击事件但是在页面加载完之后jquery事件新添加的元素用click的话是无法获取元素的这个时候要用on去获取元素事件简单的说页面加载完成时候页面显示的元素可以用on也可以用click但是页面加载完成之后后期再追加的元素只能用on" sf="" ui="" pingfang="" hiragino="" sans="" microsoft="" wenquanyi="" micro="" line-height:="" color:="" font-size:="" white-space:="" background-color:="">click是点击事件，但是在页面加载完之后，jquery事件新添加的元素，用click的话是无法获取元素的，这个时候要用on去获取元素事件，简单的说页面加载完成时候页面显示的元素可以用on，也可以用click，但是页面加载完成之后后期再追加的元素只能用on。&lt;/h4>&lt;p>&lt;br>&lt;/p></p></div></article></main></div></div><footer class=footer><div class="container footer__container flex"><div class=footer__copyright>&copy; 2026 臭大佬博客.
+<span class=footer__copyright-credits>基于 <a href=https://gohugo.io/ rel="nofollow noopener" target=_blank>Hugo</a> 引擎和 <a href=https://github.com/Vimux/Mainroad/ rel="nofollow noopener" target=_blank>Mainroad</a> 主题</span></div></div></footer></div><script async defer src=/choudalao.github.io/js/menu.js></script></body></html>

@@ -1,281 +1,117 @@
-<!DOCTYPE html>
-<html class="no-js" lang="en">
-<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>laravel 的 redis 队列 - 臭大佬博客</title>
-	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
-	<meta name="description" content="laravel 的 redis 队列">
-	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-	<link rel="dns-prefetch" href="//fonts.googleapis.com">
-	<link rel="dns-prefetch" href="//fonts.gstatic.com">
-	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
-
-	<link rel="stylesheet" href="/css/style.css">
-	
-
-	<link rel="shortcut icon" href="/favicon.ico">
-		
-</head>
-<body class="body">
-	<div class="container container--outer">
-		<header class="header">
-	<div class="container header__container">
-		
-	<div class="logo">
-		<a class="logo__link" href="/" title="臭大佬博客" rel="home">
-			<div class="logo__item logo__text">
-					<div class="logo__title">臭大佬博客</div>
-					
-				</div>
-		</a>
-	</div>
-		
-<nav class="menu">
-	<button class="menu__btn" aria-haspopup="true" aria-expanded="false" tabindex="0">
-		<span class="menu__btn-title" tabindex="-1">菜单</span>
-	</button>
-	<ul class="menu__list">
-		<li class="menu__item">
-			<a class="menu__link" href="/">
-				
-				<span class="menu__text">首页</span>
-				
-			</a>
-		</li>
-		<li class="menu__item">
-			<a class="menu__link" href="/post/">
-				
-				<span class="menu__text">归档</span>
-				
-			</a>
-		</li>
-		<li class="menu__item">
-			<a class="menu__link" href="/about/">
-				
-				<span class="menu__text">关于</span>
-				
-			</a>
-		</li>
-	</ul>
-</nav>
-
-	</div>
-</header>
-		<div class="wrapper flex">
-			<div class="primary">
-			
-<main class="main" role="main">
-	<article class="post">
-		<header class="post__header">
-			<h1 class="post__title">laravel 的 redis 队列</h1>
-			
-		</header>
-		<div class="content post__content clearfix">
-			<h1 id="概述">概述</h1>
-<p>在Web开发中，我们经常会遇到需要批量处理任务的场景，比如群发邮件、秒杀资格获取等，我们将这些耗时或者高并发的操作放到队列中异步执行可以有效缓解系统压力、提高系统响应速度和负载能力。</p>
-<h1 id="配置文件">配置文件</h1>
-<p>.evn文件修改部分<code>QUEUE_CONNECTION=redis</code>
-<img src="https://www.choudalao.com/uploads/20200506/20200506112759iQHQPl.png" alt=""></p>
-<p>config/database.php 配置文件中配置一个 redis 数据库连接。</p>
-<h1 id="数据库">数据库</h1>
-<p>要使用 database 队列驱动，你需要数据表保存任务信息）。要生成创建这些表的迁移，可以在项目目录下运行 Artisan 命令 queue:table，迁移被创建之后，可以使用 migrate 命令生成这些表：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>php artisan queue:table
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>php artisan migrate
-</span></span></code></pre></div><p><img src="https://www.choudalao.com/uploads/20200506/20200506113441nejjxg.png" alt="">
-<img src="https://www.choudalao.com/uploads/20200506/20200506113458Wo5amu.png" alt=""></p>
-<h1 id="创建任务">创建任务</h1>
-<p>运行<code>php artisan make:job TestJob</code>，生成一个测试任务，我们以操作友情链接作为演示。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>php artisan make:job TestJob
-</span></span></code></pre></div><p><img src="https://www.choudalao.com/uploads/20200506/20200506113543MtNDRr.png" alt=""></p>
-<p>TestJob.php代码如下：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>&lt;?php
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>namespace App<span style="color:#ae81ff">\J</span>obs;
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>use App<span style="color:#ae81ff">\M</span>odels<span style="color:#ae81ff">\F</span>riendLink;
-</span></span><span style="display:flex;"><span>use Illuminate<span style="color:#ae81ff">\B</span>us<span style="color:#ae81ff">\Q</span>ueueable;
-</span></span><span style="display:flex;"><span>use Illuminate<span style="color:#ae81ff">\Q</span>ueue<span style="color:#ae81ff">\S</span>erializesModels;
-</span></span><span style="display:flex;"><span>use Illuminate<span style="color:#ae81ff">\Q</span>ueue<span style="color:#ae81ff">\I</span>nteractsWithQueue;
-</span></span><span style="display:flex;"><span>use Illuminate<span style="color:#ae81ff">\C</span>ontracts<span style="color:#ae81ff">\Q</span>ueue<span style="color:#ae81ff">\S</span>houldQueue;
-</span></span><span style="display:flex;"><span>use Illuminate<span style="color:#ae81ff">\F</span>oundation<span style="color:#ae81ff">\B</span>us<span style="color:#ae81ff">\D</span>ispatchable;
-</span></span><span style="display:flex;"><span>use Illuminate<span style="color:#ae81ff">\S</span>upport<span style="color:#ae81ff">\F</span>acades<span style="color:#ae81ff">\L</span>og;
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>class TestJob implements ShouldQueue
-</span></span><span style="display:flex;"><span><span style="color:#f92672">{</span>
-</span></span><span style="display:flex;"><span>    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    protected $friendLink <span style="color:#f92672">=</span> null;
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    /**
-</span></span><span style="display:flex;"><span>     * Create a new job instance.
-</span></span><span style="display:flex;"><span>     *
-</span></span><span style="display:flex;"><span>     * @return void
-</span></span><span style="display:flex;"><span>     */
-</span></span><span style="display:flex;"><span>    public <span style="color:#66d9ef">function</span> __construct<span style="color:#f92672">(</span>FriendLink $friendLink<span style="color:#f92672">)</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">{</span>
-</span></span><span style="display:flex;"><span>        //
-</span></span><span style="display:flex;"><span>        $this-&gt;friendLink <span style="color:#f92672">=</span> $friendLink;
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">}</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    /**
-</span></span><span style="display:flex;"><span>     * Execute the job.
-</span></span><span style="display:flex;"><span>     *
-</span></span><span style="display:flex;"><span>     * @return void
-</span></span><span style="display:flex;"><span>     */
-</span></span><span style="display:flex;"><span>    public <span style="color:#66d9ef">function</span> handle<span style="color:#f92672">()</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>$this-&gt;friendLink-&gt;id <span style="color:#f92672">=</span> 4<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-</span></span><span style="display:flex;"><span>            $this-&gt;friendLink-&gt;name <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;悦&#39;</span>;
-</span></span><span style="display:flex;"><span>            $this-&gt;friendLink-&gt;save<span style="color:#f92672">()</span>;
-</span></span><span style="display:flex;"><span>            Log::info<span style="color:#f92672">(</span><span style="color:#e6db74">&#39;执行队列成功&#39;</span><span style="color:#f92672">)</span>;
-</span></span><span style="display:flex;"><span>        <span style="color:#f92672">}</span><span style="color:#66d9ef">else</span><span style="color:#f92672">{</span>
-</span></span><span style="display:flex;"><span>            Log::info<span style="color:#f92672">(</span><span style="color:#e6db74">&#39;执行队列失败&#39;</span><span style="color:#f92672">)</span>;
-</span></span><span style="display:flex;"><span>        <span style="color:#f92672">}</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
-</span></span></code></pre></div><p>再写一个入队列的功能，因为是演示，这里直接在routes/web.php里面写一个，通过url访问就可以实现入列，</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>Route::get<span style="color:#f92672">(</span><span style="color:#e6db74">&#39;test&#39;</span>, <span style="color:#66d9ef">function</span> <span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
-</span></span><span style="display:flex;"><span>    $link <span style="color:#f92672">=</span> <span style="color:#ae81ff">\A</span>pp<span style="color:#ae81ff">\M</span>odels<span style="color:#ae81ff">\F</span>riendLink::query<span style="color:#f92672">()</span>-&gt;find<span style="color:#f92672">(</span>4<span style="color:#f92672">)</span>;
-</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">\A</span>pp<span style="color:#ae81ff">\J</span>obs<span style="color:#ae81ff">\T</span>estJob::dispatch<span style="color:#f92672">(</span>$link<span style="color:#f92672">)</span>;
-</span></span><span style="display:flex;"><span><span style="color:#f92672">})</span>;
-</span></span></code></pre></div><h1 id="运行队列">运行队列</h1>
-<p>在本地先测试一下</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>php artisan queue:work
-</span></span></code></pre></div><p><img src="https://www.choudalao.com/uploads/20200506/20200506114237mXZs2I.png" alt="">
+<!doctype html><html class=no-js lang=en><head><meta charset=UTF-8><meta name=viewport content="width=device-width,initial-scale=1"><title>laravel 的 redis 队列 - 臭大佬博客</title><script>(function(e,t){e[t]=e[t].replace("no-js","js")})(document.documentElement,"className")</script><meta name=description content="laravel 的 redis 队列"><link rel=preconnect href=https://fonts.gstatic.com crossorigin><link rel=dns-prefetch href=//fonts.googleapis.com><link rel=dns-prefetch href=//fonts.gstatic.com><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700"><link rel=stylesheet href=/choudalao.github.io/css/style.css><link rel="shortcut icon" href=/choudalao.github.io/favicon.ico></head><body class=body><div class="container container--outer"><header class=header><div class="container header__container"><div class=logo><a class=logo__link href=/choudalao.github.io/ title=臭大佬博客 rel=home><div class="logo__item logo__text"><div class=logo__title>臭大佬博客</div></div></a></div><nav class=menu><button class=menu__btn aria-haspopup=true aria-expanded=false tabindex=0>
+<span class=menu__btn-title tabindex=-1>菜单</span></button><ul class=menu__list><li class=menu__item><a class=menu__link href=/choudalao.github.io/><span class=menu__text>首页</span></a></li><li class=menu__item><a class=menu__link href=/choudalao.github.io/post/><span class=menu__text>归档</span></a></li><li class=menu__item><a class=menu__link href=/choudalao.github.io/about/><span class=menu__text>关于</span></a></li></ul></nav></div></header><div class="wrapper flex"><div class=primary><main class=main role=main><article class=post><header class=post__header><h1 class=post__title>laravel 的 redis 队列</h1></header><div class="content post__content clearfix"><h1 id=概述>概述</h1><p>在Web开发中，我们经常会遇到需要批量处理任务的场景，比如群发邮件、秒杀资格获取等，我们将这些耗时或者高并发的操作放到队列中异步执行可以有效缓解系统压力、提高系统响应速度和负载能力。</p><h1 id=配置文件>配置文件</h1><p>.evn文件修改部分<code>QUEUE_CONNECTION=redis</code>
+<img src=https://www.choudalao.com/uploads/20200506/20200506112759iQHQPl.png alt></p><p>config/database.php 配置文件中配置一个 redis 数据库连接。</p><h1 id=数据库>数据库</h1><p>要使用 database 队列驱动，你需要数据表保存任务信息）。要生成创建这些表的迁移，可以在项目目录下运行 Artisan 命令 queue:table，迁移被创建之后，可以使用 migrate 命令生成这些表：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-shell data-lang=shell><span style=display:flex><span>php artisan queue:table
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>php artisan migrate
+</span></span></code></pre></div><p><img src=https://www.choudalao.com/uploads/20200506/20200506113441nejjxg.png alt>
+<img src=https://www.choudalao.com/uploads/20200506/20200506113458Wo5amu.png alt></p><h1 id=创建任务>创建任务</h1><p>运行<code>php artisan make:job TestJob</code>，生成一个测试任务，我们以操作友情链接作为演示。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-shell data-lang=shell><span style=display:flex><span>php artisan make:job TestJob
+</span></span></code></pre></div><p><img src=https://www.choudalao.com/uploads/20200506/20200506113543MtNDRr.png alt></p><p>TestJob.php代码如下：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-shell data-lang=shell><span style=display:flex><span>&lt;?php
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>namespace App<span style=color:#ae81ff>\J</span>obs;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>use App<span style=color:#ae81ff>\M</span>odels<span style=color:#ae81ff>\F</span>riendLink;
+</span></span><span style=display:flex><span>use Illuminate<span style=color:#ae81ff>\B</span>us<span style=color:#ae81ff>\Q</span>ueueable;
+</span></span><span style=display:flex><span>use Illuminate<span style=color:#ae81ff>\Q</span>ueue<span style=color:#ae81ff>\S</span>erializesModels;
+</span></span><span style=display:flex><span>use Illuminate<span style=color:#ae81ff>\Q</span>ueue<span style=color:#ae81ff>\I</span>nteractsWithQueue;
+</span></span><span style=display:flex><span>use Illuminate<span style=color:#ae81ff>\C</span>ontracts<span style=color:#ae81ff>\Q</span>ueue<span style=color:#ae81ff>\S</span>houldQueue;
+</span></span><span style=display:flex><span>use Illuminate<span style=color:#ae81ff>\F</span>oundation<span style=color:#ae81ff>\B</span>us<span style=color:#ae81ff>\D</span>ispatchable;
+</span></span><span style=display:flex><span>use Illuminate<span style=color:#ae81ff>\S</span>upport<span style=color:#ae81ff>\F</span>acades<span style=color:#ae81ff>\L</span>og;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>class TestJob implements ShouldQueue
+</span></span><span style=display:flex><span><span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    protected $friendLink <span style=color:#f92672>=</span> null;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    /**
+</span></span><span style=display:flex><span>     * Create a new job instance.
+</span></span><span style=display:flex><span>     *
+</span></span><span style=display:flex><span>     * @return void
+</span></span><span style=display:flex><span>     */
+</span></span><span style=display:flex><span>    public <span style=color:#66d9ef>function</span> __construct<span style=color:#f92672>(</span>FriendLink $friendLink<span style=color:#f92672>)</span>
+</span></span><span style=display:flex><span>    <span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>        //
+</span></span><span style=display:flex><span>        $this-&gt;friendLink <span style=color:#f92672>=</span> $friendLink;
+</span></span><span style=display:flex><span>    <span style=color:#f92672>}</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    /**
+</span></span><span style=display:flex><span>     * Execute the job.
+</span></span><span style=display:flex><span>     *
+</span></span><span style=display:flex><span>     * @return void
+</span></span><span style=display:flex><span>     */
+</span></span><span style=display:flex><span>    public <span style=color:#66d9ef>function</span> handle<span style=color:#f92672>()</span>
+</span></span><span style=display:flex><span>    <span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>if</span> <span style=color:#f92672>(</span>$this-&gt;friendLink-&gt;id <span style=color:#f92672>=</span> 4<span style=color:#f92672>)</span> <span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>            $this-&gt;friendLink-&gt;name <span style=color:#f92672>=</span> <span style=color:#e6db74>&#39;悦&#39;</span>;
+</span></span><span style=display:flex><span>            $this-&gt;friendLink-&gt;save<span style=color:#f92672>()</span>;
+</span></span><span style=display:flex><span>            Log::info<span style=color:#f92672>(</span><span style=color:#e6db74>&#39;执行队列成功&#39;</span><span style=color:#f92672>)</span>;
+</span></span><span style=display:flex><span>        <span style=color:#f92672>}</span><span style=color:#66d9ef>else</span><span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>            Log::info<span style=color:#f92672>(</span><span style=color:#e6db74>&#39;执行队列失败&#39;</span><span style=color:#f92672>)</span>;
+</span></span><span style=display:flex><span>        <span style=color:#f92672>}</span>
+</span></span><span style=display:flex><span>    <span style=color:#f92672>}</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>}</span>
+</span></span></code></pre></div><p>再写一个入队列的功能，因为是演示，这里直接在routes/web.php里面写一个，通过url访问就可以实现入列，</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-shell data-lang=shell><span style=display:flex><span>Route::get<span style=color:#f92672>(</span><span style=color:#e6db74>&#39;test&#39;</span>, <span style=color:#66d9ef>function</span> <span style=color:#f92672>()</span> <span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>    $link <span style=color:#f92672>=</span> <span style=color:#ae81ff>\A</span>pp<span style=color:#ae81ff>\M</span>odels<span style=color:#ae81ff>\F</span>riendLink::query<span style=color:#f92672>()</span>-&gt;find<span style=color:#f92672>(</span>4<span style=color:#f92672>)</span>;
+</span></span><span style=display:flex><span>    <span style=color:#ae81ff>\A</span>pp<span style=color:#ae81ff>\J</span>obs<span style=color:#ae81ff>\T</span>estJob::dispatch<span style=color:#f92672>(</span>$link<span style=color:#f92672>)</span>;
+</span></span><span style=display:flex><span><span style=color:#f92672>})</span>;
+</span></span></code></pre></div><h1 id=运行队列>运行队列</h1><p>在本地先测试一下</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-shell data-lang=shell><span style=display:flex><span>php artisan queue:work
+</span></span></code></pre></div><p><img src=https://www.choudalao.com/uploads/20200506/20200506114237mXZs2I.png alt>
 先查看数据库原数据的状态，
-<img src="https://www.choudalao.com/uploads/20200506/20200506114316GfsrSc.png" alt="">
-原数据name字段的值为“悦遇”，我们访问test路由查看是否有改变。</p>
-<h3 id="结果">结果</h3>
-<p><img src="https://www.choudalao.com/uploads/20200506/20200506114557cUPmJe.png" alt="">
-<img src="https://www.choudalao.com/uploads/20200506/20200506114604WwjurP.png" alt="">
-<img src="https://www.choudalao.com/uploads/20200506/20200506114614O4s2Wc.png" alt=""></p>
-<h1 id="配置-supervisor">配置 Supervisor</h1>
-<p>Supervisor 是 Linux 系统中常用的进程守护程序。如果队列进程 queue:work 意外关闭，它会自动重启启动队列进程。在 Ubuntu 安装Supervisor 非常简单：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>sudo apt-get install supervisor
-</span></span></code></pre></div><p><img src="https://www.choudalao.com/uploads/20200506/20200506133110gBdy6L.png" alt=""></p>
-<h3 id="supervisor-操作">Supervisor 操作</h3>
-<p>当成功创建配置文件后，需要刷新 Supervisor 的配置信息并使用如下命令启动进程:</p>
-<h4 id="启动">启动</h4>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>sudo supervisord -c /etc/supervisor/supervisord.conf
+<img src=https://www.choudalao.com/uploads/20200506/20200506114316GfsrSc.png alt>
+原数据name字段的值为“悦遇”，我们访问test路由查看是否有改变。</p><h3 id=结果>结果</h3><p><img src=https://www.choudalao.com/uploads/20200506/20200506114557cUPmJe.png alt>
+<img src=https://www.choudalao.com/uploads/20200506/20200506114604WwjurP.png alt>
+<img src=https://www.choudalao.com/uploads/20200506/20200506114614O4s2Wc.png alt></p><h1 id=配置-supervisor>配置 Supervisor</h1><p>Supervisor 是 Linux 系统中常用的进程守护程序。如果队列进程 queue:work 意外关闭，它会自动重启启动队列进程。在 Ubuntu 安装Supervisor 非常简单：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-shell data-lang=shell><span style=display:flex><span>sudo apt-get install supervisor
+</span></span></code></pre></div><p><img src=https://www.choudalao.com/uploads/20200506/20200506133110gBdy6L.png alt></p><h3 id=supervisor-操作>Supervisor 操作</h3><p>当成功创建配置文件后，需要刷新 Supervisor 的配置信息并使用如下命令启动进程:</p><h4 id=启动>启动</h4><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-shell data-lang=shell><span style=display:flex><span>sudo supervisord -c /etc/supervisor/supervisord.conf
 </span></span></code></pre></div><p>如果出现如下错误：
-<img src="https://www.choudalao.com/uploads/20200706/20200706001441rxLQS3.png" alt="">
-这是python版本引起的，编辑/usr/bin/supervisord将#!/usr/bin/python修改为#!/usr/bin/python2即可。</p>
-<p><img src="https://www.choudalao.com/uploads/20200706/20200706001907vYQkGJ.png" alt=""></p>
-<h4 id="查看是否已启动">查看是否已启动</h4>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>ps -ef|grep supervisord
-</span></span></code></pre></div><p><img src="https://www.choudalao.com/uploads/20200506/20200506142117mliUCh.png" alt=""></p>
-<h3 id="配置-laravel-worker">配置 laravel-worker</h3>
-<p>Supervisor 配置文件通常存放在 /etc/supervisor/conf.d 目录，在该目录下，可以创建多个配置文件指示 Supervisor 如何监视进程，例如，让我们创建一个开启并监视 queue:work 进程的 laravel-worker.conf 文件：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#f92672">[</span>program:laravel-worker<span style="color:#f92672">]</span>
-</span></span><span style="display:flex;"><span>process_name<span style="color:#f92672">=</span>%<span style="color:#f92672">(</span>program_name<span style="color:#f92672">)</span>s_%<span style="color:#f92672">(</span>process_num<span style="color:#f92672">)</span>02d ;
-</span></span><span style="display:flex;"><span>command <span style="color:#f92672">=</span> php /www/wwwroot/xxx/artisan queue:work --daemon;启动命令
-</span></span><span style="display:flex;"><span>autostart <span style="color:#f92672">=</span> true ; 在 supervisord 启动的时候也自动启动
-</span></span><span style="display:flex;"><span>startsecs <span style="color:#f92672">=</span> <span style="color:#ae81ff">5</span> ; 启动 <span style="color:#ae81ff">5</span> 秒后没有异常退出，就当作已经正常启动了
-</span></span><span style="display:flex;"><span>autorestart <span style="color:#f92672">=</span> true ; 程序异常退出后自动重启
-</span></span><span style="display:flex;"><span>startretries <span style="color:#f92672">=</span> <span style="color:#ae81ff">3</span> ; 启动失败自动重试次数，默认是 <span style="color:#ae81ff">3</span>
-</span></span><span style="display:flex;"><span>user <span style="color:#f92672">=</span> ubuntu ; 用哪个用户启动
-</span></span><span style="display:flex;"><span>redirect_stderr <span style="color:#f92672">=</span> true ; 把 stderr 重定向到 stdout，默认 false
-</span></span><span style="display:flex;"><span>stdout_logfile_maxbytes <span style="color:#f92672">=</span> 20MB ; stdout 日志文件大小，默认 50MB
-</span></span><span style="display:flex;"><span>stdout_logfile_backups <span style="color:#f92672">=</span> <span style="color:#ae81ff">20</span> ; stdout 日志文件备份数
-</span></span><span style="display:flex;"><span>; stdout 日志文件，需要注意当指定目录不存在时无法正常启动，所以需要手动创建目录（supervisord 会自动创建日志文件）
-</span></span><span style="display:flex;"><span>stdout_logfile <span style="color:#f92672">=</span> /www/wwwroot/xxx/storage/app/public/worker.log
+<img src=https://www.choudalao.com/uploads/20200706/20200706001441rxLQS3.png alt>
+这是python版本引起的，编辑/usr/bin/supervisord将#!/usr/bin/python修改为#!/usr/bin/python2即可。</p><p><img src=https://www.choudalao.com/uploads/20200706/20200706001907vYQkGJ.png alt></p><h4 id=查看是否已启动>查看是否已启动</h4><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-shell data-lang=shell><span style=display:flex><span>ps -ef|grep supervisord
+</span></span></code></pre></div><p><img src=https://www.choudalao.com/uploads/20200506/20200506142117mliUCh.png alt></p><h3 id=配置-laravel-worker>配置 laravel-worker</h3><p>Supervisor 配置文件通常存放在 /etc/supervisor/conf.d 目录，在该目录下，可以创建多个配置文件指示 Supervisor 如何监视进程，例如，让我们创建一个开启并监视 queue:work 进程的 laravel-worker.conf 文件：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-shell data-lang=shell><span style=display:flex><span><span style=color:#f92672>[</span>program:laravel-worker<span style=color:#f92672>]</span>
+</span></span><span style=display:flex><span>process_name<span style=color:#f92672>=</span>%<span style=color:#f92672>(</span>program_name<span style=color:#f92672>)</span>s_%<span style=color:#f92672>(</span>process_num<span style=color:#f92672>)</span>02d ;
+</span></span><span style=display:flex><span>command <span style=color:#f92672>=</span> php /www/wwwroot/xxx/artisan queue:work --daemon;启动命令
+</span></span><span style=display:flex><span>autostart <span style=color:#f92672>=</span> true ; 在 supervisord 启动的时候也自动启动
+</span></span><span style=display:flex><span>startsecs <span style=color:#f92672>=</span> <span style=color:#ae81ff>5</span> ; 启动 <span style=color:#ae81ff>5</span> 秒后没有异常退出，就当作已经正常启动了
+</span></span><span style=display:flex><span>autorestart <span style=color:#f92672>=</span> true ; 程序异常退出后自动重启
+</span></span><span style=display:flex><span>startretries <span style=color:#f92672>=</span> <span style=color:#ae81ff>3</span> ; 启动失败自动重试次数，默认是 <span style=color:#ae81ff>3</span>
+</span></span><span style=display:flex><span>user <span style=color:#f92672>=</span> ubuntu ; 用哪个用户启动
+</span></span><span style=display:flex><span>redirect_stderr <span style=color:#f92672>=</span> true ; 把 stderr 重定向到 stdout，默认 false
+</span></span><span style=display:flex><span>stdout_logfile_maxbytes <span style=color:#f92672>=</span> 20MB ; stdout 日志文件大小，默认 50MB
+</span></span><span style=display:flex><span>stdout_logfile_backups <span style=color:#f92672>=</span> <span style=color:#ae81ff>20</span> ; stdout 日志文件备份数
+</span></span><span style=display:flex><span>; stdout 日志文件，需要注意当指定目录不存在时无法正常启动，所以需要手动创建目录（supervisord 会自动创建日志文件）
+</span></span><span style=display:flex><span>stdout_logfile <span style=color:#f92672>=</span> /www/wwwroot/xxx/storage/app/public/worker.log
 </span></span></code></pre></div><p>简化版，复制下面的代码，修改代码中三个xxx的地方就可以用了，
 <code>command= php /xxx/artisan queue:work redis --sleep=3 --tries=3 --daemon``和stdout_logfile=/xxx/storage/app/public/worker.log</code>中的<code>xxx</code>代表网站根目录
-<code>user=xxx</code>的<code>xxx</code>代表运行用户</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span>[<span style="color:#a6e22e">program</span><span style="color:#f92672">:</span><span style="color:#a6e22e">laravel</span><span style="color:#f92672">-</span><span style="color:#a6e22e">worker</span>]
-</span></span><span style="display:flex;"><span><span style="color:#a6e22e">process_name</span><span style="color:#f92672">=%</span>(<span style="color:#a6e22e">program_name</span>)<span style="color:#a6e22e">s_</span><span style="color:#f92672">%</span>(<span style="color:#a6e22e">process_num</span>)<span style="color:#ae81ff">02</span><span style="color:#a6e22e">d</span> 
-</span></span><span style="display:flex;"><span><span style="color:#a6e22e">command</span><span style="color:#f92672">=</span> <span style="color:#a6e22e">php</span> <span style="color:#f92672">/</span><span style="color:#a6e22e">xxx</span><span style="color:#f92672">/</span><span style="color:#a6e22e">artisan</span> <span style="color:#a6e22e">queue</span><span style="color:#f92672">:</span><span style="color:#a6e22e">work</span> <span style="color:#a6e22e">redis</span> <span style="color:#f92672">--</span><span style="color:#a6e22e">sleep</span><span style="color:#f92672">=</span><span style="color:#ae81ff">3</span> <span style="color:#f92672">--</span><span style="color:#a6e22e">tries</span><span style="color:#f92672">=</span><span style="color:#ae81ff">3</span> <span style="color:#f92672">--</span><span style="color:#a6e22e">daemon</span>
-</span></span><span style="display:flex;"><span><span style="color:#a6e22e">autostart</span><span style="color:#f92672">=</span><span style="color:#66d9ef">true</span>
-</span></span><span style="display:flex;"><span><span style="color:#a6e22e">autorestart</span><span style="color:#f92672">=</span><span style="color:#66d9ef">true</span>
-</span></span><span style="display:flex;"><span><span style="color:#a6e22e">user</span><span style="color:#f92672">=</span><span style="color:#a6e22e">xxx</span>
-</span></span><span style="display:flex;"><span><span style="color:#a6e22e">numprocs</span><span style="color:#f92672">=</span><span style="color:#ae81ff">8</span>
-</span></span><span style="display:flex;"><span><span style="color:#a6e22e">redirect_stderr</span><span style="color:#f92672">=</span><span style="color:#66d9ef">true</span>
-</span></span><span style="display:flex;"><span><span style="color:#a6e22e">stdout_logfile</span><span style="color:#f92672">=/</span><span style="color:#a6e22e">xxx</span><span style="color:#f92672">/</span><span style="color:#a6e22e">storage</span><span style="color:#f92672">/</span><span style="color:#a6e22e">app</span><span style="color:#f92672">/</span><span style="color:#66d9ef">public</span><span style="color:#f92672">/</span><span style="color:#a6e22e">worker</span><span style="color:#f92672">.</span><span style="color:#a6e22e">log</span>
-</span></span></code></pre></div><p><img src="https://www.choudalao.com/uploads/20200506/202005061459304askkD.png" alt=""></p>
-<p>在本例中，numprocs 指令让 Supervisor 运行 8 个 queue:work 进程并监视它们，如果失败的话自动重启。当然，你需要修改 queue:work sqs 的 command 指令来映射你的队列连接。</p>
-<h3 id="命令">命令</h3>
-<p>更新 Supervisor 配置并启动进程</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>sudo supervisorctl reread
-</span></span><span style="display:flex;"><span>sudo supervisorctl update
-</span></span><span style="display:flex;"><span>sudo supervisorctl start laravel-worker:*
-</span></span></code></pre></div><p><img src="https://www.choudalao.com/uploads/20200506/20200506144719m7ebyU.png" alt=""></p>
-<p>以下是常用命令</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#75715e">#读取有更新（增加）的配置文件，不会启动新添加的程序</span>
-</span></span><span style="display:flex;"><span>supervisorctl reread
-</span></span><span style="display:flex;"><span><span style="color:#75715e">#重启配置文件修改过的程序</span>
-</span></span><span style="display:flex;"><span>supervisorctl update
-</span></span><span style="display:flex;"><span><span style="color:#75715e">#查看程序状态</span>
-</span></span><span style="display:flex;"><span>supervisorctl status
-</span></span><span style="display:flex;"><span><span style="color:#75715e">#启动程序 App_name</span>
-</span></span><span style="display:flex;"><span>supervisorctl start App_name
-</span></span><span style="display:flex;"><span><span style="color:#75715e">#关闭程序 App_name</span>
-</span></span><span style="display:flex;"><span>supervisorctl stop App_name
-</span></span><span style="display:flex;"><span><span style="color:#75715e">#重启程序 App_name</span>
-</span></span><span style="display:flex;"><span>supervisorctl restart App_name
+<code>user=xxx</code>的<code>xxx</code>代表运行用户</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-php data-lang=php><span style=display:flex><span>[<span style=color:#a6e22e>program</span><span style=color:#f92672>:</span><span style=color:#a6e22e>laravel</span><span style=color:#f92672>-</span><span style=color:#a6e22e>worker</span>]
+</span></span><span style=display:flex><span><span style=color:#a6e22e>process_name</span><span style=color:#f92672>=%</span>(<span style=color:#a6e22e>program_name</span>)<span style=color:#a6e22e>s_</span><span style=color:#f92672>%</span>(<span style=color:#a6e22e>process_num</span>)<span style=color:#ae81ff>02</span><span style=color:#a6e22e>d</span> 
+</span></span><span style=display:flex><span><span style=color:#a6e22e>command</span><span style=color:#f92672>=</span> <span style=color:#a6e22e>php</span> <span style=color:#f92672>/</span><span style=color:#a6e22e>xxx</span><span style=color:#f92672>/</span><span style=color:#a6e22e>artisan</span> <span style=color:#a6e22e>queue</span><span style=color:#f92672>:</span><span style=color:#a6e22e>work</span> <span style=color:#a6e22e>redis</span> <span style=color:#f92672>--</span><span style=color:#a6e22e>sleep</span><span style=color:#f92672>=</span><span style=color:#ae81ff>3</span> <span style=color:#f92672>--</span><span style=color:#a6e22e>tries</span><span style=color:#f92672>=</span><span style=color:#ae81ff>3</span> <span style=color:#f92672>--</span><span style=color:#a6e22e>daemon</span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>autostart</span><span style=color:#f92672>=</span><span style=color:#66d9ef>true</span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>autorestart</span><span style=color:#f92672>=</span><span style=color:#66d9ef>true</span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>user</span><span style=color:#f92672>=</span><span style=color:#a6e22e>xxx</span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>numprocs</span><span style=color:#f92672>=</span><span style=color:#ae81ff>8</span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>redirect_stderr</span><span style=color:#f92672>=</span><span style=color:#66d9ef>true</span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>stdout_logfile</span><span style=color:#f92672>=/</span><span style=color:#a6e22e>xxx</span><span style=color:#f92672>/</span><span style=color:#a6e22e>storage</span><span style=color:#f92672>/</span><span style=color:#a6e22e>app</span><span style=color:#f92672>/</span><span style=color:#66d9ef>public</span><span style=color:#f92672>/</span><span style=color:#a6e22e>worker</span><span style=color:#f92672>.</span><span style=color:#a6e22e>log</span>
+</span></span></code></pre></div><p><img src=https://www.choudalao.com/uploads/20200506/202005061459304askkD.png alt></p><p>在本例中，numprocs 指令让 Supervisor 运行 8 个 queue:work 进程并监视它们，如果失败的话自动重启。当然，你需要修改 queue:work sqs 的 command 指令来映射你的队列连接。</p><h3 id=命令>命令</h3><p>更新 Supervisor 配置并启动进程</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-shell data-lang=shell><span style=display:flex><span>sudo supervisorctl reread
+</span></span><span style=display:flex><span>sudo supervisorctl update
+</span></span><span style=display:flex><span>sudo supervisorctl start laravel-worker:*
+</span></span></code></pre></div><p><img src=https://www.choudalao.com/uploads/20200506/20200506144719m7ebyU.png alt></p><p>以下是常用命令</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-shell data-lang=shell><span style=display:flex><span><span style=color:#75715e>#读取有更新（增加）的配置文件，不会启动新添加的程序</span>
+</span></span><span style=display:flex><span>supervisorctl reread
+</span></span><span style=display:flex><span><span style=color:#75715e>#重启配置文件修改过的程序</span>
+</span></span><span style=display:flex><span>supervisorctl update
+</span></span><span style=display:flex><span><span style=color:#75715e>#查看程序状态</span>
+</span></span><span style=display:flex><span>supervisorctl status
+</span></span><span style=display:flex><span><span style=color:#75715e>#启动程序 App_name</span>
+</span></span><span style=display:flex><span>supervisorctl start App_name
+</span></span><span style=display:flex><span><span style=color:#75715e>#关闭程序 App_name</span>
+</span></span><span style=display:flex><span>supervisorctl stop App_name
+</span></span><span style=display:flex><span><span style=color:#75715e>#重启程序 App_name</span>
+</span></span><span style=display:flex><span>supervisorctl restart App_name
 </span></span></code></pre></div><p>使用top 或者ps aux | grep php 命令可以看到启动的php进程。
-你可以通过 <a href="http://supervisord.org/index.html" title="Supervisor">Supervisor</a> 官方文档获取更多信息。</p>
-<h1 id="测试">测试</h1>
-<h4 id="查看数据库数据状态">查看数据库数据状态</h4>
-<p><img src="https://www.choudalao.com/uploads/20200506/20200506145046PyRih5.png" alt=""></p>
-<h4 id="运行">运行</h4>
-<p><img src="https://www.choudalao.com/uploads/20200506/20200506145520iLDxUN.png" alt=""></p>
-<h4 id="查看数据库">查看数据库</h4>
-<p><img src="https://www.choudalao.com/uploads/20200506/20200506145540p8IZWB.png" alt=""></p>
-<p>大功告成！</p>
-<h1 id="horizon-队列管理工具">Horizon 队列管理工具</h1>
-<p>Horizon 提供了一个漂亮的仪表盘，并且可以通过代码配置你的 Laravel Redis 队列，同时它允许你轻易的监控你的队列系统中诸如任务吞吐量，运行时间和失败任务等关键指标。</p>
-<h4 id="安装">安装</h4>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#a6e22e">composer</span> <span style="color:#66d9ef">require</span> <span style="color:#a6e22e">laravel</span><span style="color:#f92672">/</span><span style="color:#a6e22e">horizon</span>
-</span></span></code></pre></div><h3 id="使用">使用</h3>
-<p>安装完成后，可以在浏览器中这样访问：http://xxx/horizon/</p>
-<h1 id="centos-下配置">CentOS 下配置</h1>
-<p>在centOS下，发现我的Supervisor配置在etc目录下</p>
-<p><img src="https://www.choudalao.com/uploads/20200506/20200506151059ornptT.png" alt=""></p>
-<h4 id="查看配置文件">查看配置文件</h4>
-<p><img src="https://www.choudalao.com/uploads/20200506/20200506151141XwB1Uh.png" alt=""></p>
-<p><img src="https://www.choudalao.com/uploads/20200506/20200506151209d0AyPf.png" alt=""></p>
-<h4 id="发现它的配置是引入ini的我们修改一下">发现它的配置是引入.ini的，我们修改一下</h4>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#f92672">[</span>include<span style="color:#f92672">]</span>
-</span></span><span style="display:flex;"><span>files <span style="color:#f92672">=</span> supervisord.d/*.conf
-</span></span></code></pre></div><h4 id="然后修改-laravel-work-配置">然后修改 laravel-work 配置</h4>
-<p><img src="https://www.choudalao.com/uploads/20200506/20200506151510GvKY0U.png" alt=""></p>
-<h4 id="运行-1">运行</h4>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>supervisorctl reread
-</span></span><span style="display:flex;"><span>supervisorctl update
-</span></span><span style="display:flex;"><span>supervisorctl start laravel-worker:*
-</span></span></code></pre></div><h4 id="运行发现报错">运行发现报错</h4>
-<p><img src="https://www.choudalao.com/uploads/20200506/20200506151822zLZt1k.png" alt=""></p>
-<h4 id="运行以下命令">运行以下命令</h4>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>/usr/bin/python2 /usr/bin/supervisord -c /etc/supervisord.conf
-</span></span></code></pre></div><h4 id="再次运行以上三条命令">再次运行以上三条命令</h4>
-<p><img src="https://www.choudalao.com/uploads/20200506/20200506152727RcnO0j.png" alt=""></p>
-<h4 id="监听状态">监听状态</h4>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>supervisorctl status
-</span></span></code></pre></div><p><img src="https://www.choudalao.com/uploads/20200506/20200506152838aLWSQZ.png" alt=""></p>
-<p>OK!</p>
-
-		</div>
-	</article>
-</main>
-
-
-
-
-			</div>
-			
-		</div>
-		<footer class="footer">
-	<div class="container footer__container flex">
-		
-		<div class="footer__copyright">
-			&copy; 2026 臭大佬博客.
-			<span class="footer__copyright-credits">基于 <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> 引擎和 <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> 主题</span>
-		</div>
-	</div>
-</footer>
-	</div>
-<script async defer src="/js/menu.js"></script>
-</body>
-</html>
+你可以通过 <a href=http://supervisord.org/index.html title=Supervisor>Supervisor</a> 官方文档获取更多信息。</p><h1 id=测试>测试</h1><h4 id=查看数据库数据状态>查看数据库数据状态</h4><p><img src=https://www.choudalao.com/uploads/20200506/20200506145046PyRih5.png alt></p><h4 id=运行>运行</h4><p><img src=https://www.choudalao.com/uploads/20200506/20200506145520iLDxUN.png alt></p><h4 id=查看数据库>查看数据库</h4><p><img src=https://www.choudalao.com/uploads/20200506/20200506145540p8IZWB.png alt></p><p>大功告成！</p><h1 id=horizon-队列管理工具>Horizon 队列管理工具</h1><p>Horizon 提供了一个漂亮的仪表盘，并且可以通过代码配置你的 Laravel Redis 队列，同时它允许你轻易的监控你的队列系统中诸如任务吞吐量，运行时间和失败任务等关键指标。</p><h4 id=安装>安装</h4><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-php data-lang=php><span style=display:flex><span><span style=color:#a6e22e>composer</span> <span style=color:#66d9ef>require</span> <span style=color:#a6e22e>laravel</span><span style=color:#f92672>/</span><span style=color:#a6e22e>horizon</span>
+</span></span></code></pre></div><h3 id=使用>使用</h3><p>安装完成后，可以在浏览器中这样访问：http://xxx/horizon/</p><h1 id=centos-下配置>CentOS 下配置</h1><p>在centOS下，发现我的Supervisor配置在etc目录下</p><p><img src=https://www.choudalao.com/uploads/20200506/20200506151059ornptT.png alt></p><h4 id=查看配置文件>查看配置文件</h4><p><img src=https://www.choudalao.com/uploads/20200506/20200506151141XwB1Uh.png alt></p><p><img src=https://www.choudalao.com/uploads/20200506/20200506151209d0AyPf.png alt></p><h4 id=发现它的配置是引入ini的我们修改一下>发现它的配置是引入.ini的，我们修改一下</h4><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-shell data-lang=shell><span style=display:flex><span><span style=color:#f92672>[</span>include<span style=color:#f92672>]</span>
+</span></span><span style=display:flex><span>files <span style=color:#f92672>=</span> supervisord.d/*.conf
+</span></span></code></pre></div><h4 id=然后修改-laravel-work-配置>然后修改 laravel-work 配置</h4><p><img src=https://www.choudalao.com/uploads/20200506/20200506151510GvKY0U.png alt></p><h4 id=运行-1>运行</h4><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-shell data-lang=shell><span style=display:flex><span>supervisorctl reread
+</span></span><span style=display:flex><span>supervisorctl update
+</span></span><span style=display:flex><span>supervisorctl start laravel-worker:*
+</span></span></code></pre></div><h4 id=运行发现报错>运行发现报错</h4><p><img src=https://www.choudalao.com/uploads/20200506/20200506151822zLZt1k.png alt></p><h4 id=运行以下命令>运行以下命令</h4><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-shell data-lang=shell><span style=display:flex><span>/usr/bin/python2 /usr/bin/supervisord -c /etc/supervisord.conf
+</span></span></code></pre></div><h4 id=再次运行以上三条命令>再次运行以上三条命令</h4><p><img src=https://www.choudalao.com/uploads/20200506/20200506152727RcnO0j.png alt></p><h4 id=监听状态>监听状态</h4><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-shell data-lang=shell><span style=display:flex><span>supervisorctl status
+</span></span></code></pre></div><p><img src=https://www.choudalao.com/uploads/20200506/20200506152838aLWSQZ.png alt></p><p>OK!</p></div></article></main></div></div><footer class=footer><div class="container footer__container flex"><div class=footer__copyright>&copy; 2026 臭大佬博客.
+<span class=footer__copyright-credits>基于 <a href=https://gohugo.io/ rel="nofollow noopener" target=_blank>Hugo</a> 引擎和 <a href=https://github.com/Vimux/Mainroad/ rel="nofollow noopener" target=_blank>Mainroad</a> 主题</span></div></div></footer></div><script async defer src=/choudalao.github.io/js/menu.js></script></body></html>

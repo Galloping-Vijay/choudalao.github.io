@@ -1,227 +1,123 @@
-<!DOCTYPE html>
-<html class="no-js" lang="en">
-<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>Vue 子组件向父组件传值 - 臭大佬博客</title>
-	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
-	<meta name="description" content="Vue 子组件向父组件传值">
-	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-	<link rel="dns-prefetch" href="//fonts.googleapis.com">
-	<link rel="dns-prefetch" href="//fonts.gstatic.com">
-	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
-
-	<link rel="stylesheet" href="/css/style.css">
-	
-
-	<link rel="shortcut icon" href="/favicon.ico">
-		
-</head>
-<body class="body">
-	<div class="container container--outer">
-		<header class="header">
-	<div class="container header__container">
-		
-	<div class="logo">
-		<a class="logo__link" href="/" title="臭大佬博客" rel="home">
-			<div class="logo__item logo__text">
-					<div class="logo__title">臭大佬博客</div>
-					
-				</div>
-		</a>
-	</div>
-		
-<nav class="menu">
-	<button class="menu__btn" aria-haspopup="true" aria-expanded="false" tabindex="0">
-		<span class="menu__btn-title" tabindex="-1">菜单</span>
-	</button>
-	<ul class="menu__list">
-		<li class="menu__item">
-			<a class="menu__link" href="/">
-				
-				<span class="menu__text">首页</span>
-				
-			</a>
-		</li>
-		<li class="menu__item">
-			<a class="menu__link" href="/post/">
-				
-				<span class="menu__text">归档</span>
-				
-			</a>
-		</li>
-		<li class="menu__item">
-			<a class="menu__link" href="/about/">
-				
-				<span class="menu__text">关于</span>
-				
-			</a>
-		</li>
-	</ul>
-</nav>
-
-	</div>
-</header>
-		<div class="wrapper flex">
-			<div class="primary">
-			
-<main class="main" role="main">
-	<article class="post">
-		<header class="post__header">
-			<h1 class="post__title">Vue 子组件向父组件传值</h1>
-			
-		</header>
-		<div class="content post__content clearfix">
-			<h1 id="问题">问题</h1>
-<p>开发中，会发现很多公共部分，可以独立封装起来，让更多的地方统一调用，这就是组件的作用，今天简单封装了一个图片上传的组件，当子组件中图片上传成功后，怎么传到父级组件呢？</p>
-<h1 id="代码">代码</h1>
-<p>直接上代码</p>
-<h4 id="父组件">父组件</h4>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#f92672">&lt;</span><span style="color:#a6e22e">upload</span><span style="color:#f92672">-</span><span style="color:#a6e22e">image</span>
-</span></span><span style="display:flex;"><span><span style="color:#a6e22e">label</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;网站LOGO&#34;</span>
-</span></span><span style="display:flex;"><span><span style="color:#a6e22e">prop</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;site_logo&#34;</span>
-</span></span><span style="display:flex;"><span><span style="color:#f92672">:</span><span style="color:#a6e22e">value</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;basicForm.site_logo&#34;</span>
-</span></span><span style="display:flex;"><span><span style="color:#f92672">@</span><span style="color:#a6e22e">func</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;getImg&#34;</span>
-</span></span><span style="display:flex;"><span><span style="color:#f92672">/&gt;</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#f92672">&lt;</span><span style="color:#a6e22e">script</span><span style="color:#f92672">&gt;</span>
-</span></span><span style="display:flex;"><span><span style="color:#a6e22e">import</span> <span style="color:#a6e22e">uploadImage</span> <span style="color:#a6e22e">from</span> <span style="color:#e6db74">&#39;../../components/uploadImage.vue&#39;</span>
-</span></span><span style="display:flex;"><span><span style="color:#a6e22e">export</span> <span style="color:#66d9ef">default</span> {
-</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">components</span><span style="color:#f92672">:</span> { <span style="color:#a6e22e">uploadImage</span> },
-</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// 其他代码
-</span></span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><h4 id="子组件">子组件</h4>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#f92672">&lt;!--</span>
-</span></span><span style="display:flex;"><span> <span style="color:#f92672">*</span> <span style="color:#f92672">@</span><span style="color:#a6e22e">Description</span><span style="color:#f92672">:</span><span style="color:#a6e22e">单图上传</span>
-</span></span><span style="display:flex;"><span> <span style="color:#f92672">*</span> <span style="color:#f92672">@</span><span style="color:#a6e22e">User</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">Vijay</span> <span style="color:#f92672">&lt;</span><span style="color:#ae81ff">1937832819</span><span style="color:#f92672">@</span><span style="color:#a6e22e">qq</span><span style="color:#f92672">.</span><span style="color:#a6e22e">com</span><span style="color:#f92672">&gt;</span>
-</span></span><span style="display:flex;"><span> <span style="color:#f92672">*</span> <span style="color:#f92672">@</span><span style="color:#a6e22e">Date</span><span style="color:#f92672">:</span> <span style="color:#ae81ff">2020</span><span style="color:#f92672">-</span><span style="color:#ae81ff">11</span><span style="color:#f92672">-</span><span style="color:#ae81ff">21</span> <span style="color:#ae81ff">20</span><span style="color:#f92672">:</span><span style="color:#ae81ff">42</span><span style="color:#f92672">:</span><span style="color:#ae81ff">50</span>
-</span></span><span style="display:flex;"><span><span style="color:#f92672">--&gt;</span>
-</span></span><span style="display:flex;"><span><span style="color:#f92672">&lt;</span><span style="color:#a6e22e">template</span><span style="color:#f92672">&gt;</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&lt;</span><span style="color:#a6e22e">div</span><span style="color:#f92672">&gt;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&lt;</span><span style="color:#a6e22e">el</span><span style="color:#f92672">-</span><span style="color:#a6e22e">form</span><span style="color:#f92672">-</span><span style="color:#a6e22e">item</span> <span style="color:#f92672">:</span><span style="color:#a6e22e">label</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;label&#34;</span> <span style="color:#f92672">:</span><span style="color:#a6e22e">prop</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;fieldName&#34;</span><span style="color:#f92672">&gt;</span>
-</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&lt;</span><span style="color:#a6e22e">el</span><span style="color:#f92672">-</span><span style="color:#a6e22e">upload</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;avatar-uploader&#34;</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#f92672">:</span><span style="color:#a6e22e">action</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;uploadUrl&#34;</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#f92672">:</span><span style="color:#a6e22e">headers</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;{ Authorization: &#39;Bearer &#39; + this.token }&#34;</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#f92672">:</span><span style="color:#a6e22e">show</span><span style="color:#f92672">-</span><span style="color:#a6e22e">file</span><span style="color:#f92672">-</span><span style="color:#66d9ef">list</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;false&#34;</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#f92672">:</span><span style="color:#a6e22e">on</span><span style="color:#f92672">-</span><span style="color:#a6e22e">success</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;handleAvatarSuccess&#34;</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#f92672">:</span><span style="color:#a6e22e">before</span><span style="color:#f92672">-</span><span style="color:#a6e22e">upload</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;beforeAvatarUpload&#34;</span>
-</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&gt;</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&lt;</span><span style="color:#a6e22e">img</span> <span style="color:#a6e22e">v</span><span style="color:#f92672">-</span><span style="color:#66d9ef">if</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;img&#34;</span> <span style="color:#f92672">:</span><span style="color:#a6e22e">src</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;img&#34;</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;avatar&#34;</span> <span style="color:#f92672">/&gt;</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&lt;</span><span style="color:#a6e22e">i</span> <span style="color:#a6e22e">v</span><span style="color:#f92672">-</span><span style="color:#66d9ef">else</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;el-icon-plus avatar-uploader-icon&#34;</span><span style="color:#f92672">&gt;&lt;/</span><span style="color:#a6e22e">i</span><span style="color:#f92672">&gt;</span>
-</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&lt;/</span><span style="color:#a6e22e">el</span><span style="color:#f92672">-</span><span style="color:#a6e22e">upload</span><span style="color:#f92672">&gt;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&lt;/</span><span style="color:#a6e22e">el</span><span style="color:#f92672">-</span><span style="color:#a6e22e">form</span><span style="color:#f92672">-</span><span style="color:#a6e22e">item</span><span style="color:#f92672">&gt;</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&lt;/</span><span style="color:#a6e22e">div</span><span style="color:#f92672">&gt;</span>
-</span></span><span style="display:flex;"><span><span style="color:#f92672">&lt;/</span><span style="color:#a6e22e">template</span><span style="color:#f92672">&gt;</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#f92672">&lt;</span><span style="color:#a6e22e">script</span><span style="color:#f92672">&gt;</span>
-</span></span><span style="display:flex;"><span><span style="color:#a6e22e">import</span> <span style="color:#a6e22e">util</span> <span style="color:#a6e22e">from</span> <span style="color:#e6db74">&#39;@/libs/util&#39;</span>
-</span></span><span style="display:flex;"><span><span style="color:#a6e22e">import</span> <span style="color:#a6e22e">axios</span> <span style="color:#a6e22e">from</span> <span style="color:#e6db74">&#39;axios&#39;</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#a6e22e">export</span> <span style="color:#66d9ef">default</span> {
-</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">props</span><span style="color:#f92672">:</span> {
-</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">label</span><span style="color:#f92672">:</span> {
-</span></span><span style="display:flex;"><span>      <span style="color:#a6e22e">type</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">String</span>,
-</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">default</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;&#39;</span>
-</span></span><span style="display:flex;"><span>    },
-</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">value</span><span style="color:#f92672">:</span> {
-</span></span><span style="display:flex;"><span>      <span style="color:#a6e22e">type</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">String</span>,
-</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">default</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;&#39;</span>
-</span></span><span style="display:flex;"><span>    },
-</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">fieldName</span><span style="color:#f92672">:</span> {
-</span></span><span style="display:flex;"><span>      <span style="color:#a6e22e">type</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">String</span>,
-</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">default</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;&#39;</span>
-</span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>  },
-</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">data</span>() {
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> {
-</span></span><span style="display:flex;"><span>      <span style="color:#a6e22e">img_file</span><span style="color:#f92672">:</span> {},
-</span></span><span style="display:flex;"><span>      <span style="color:#a6e22e">token</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">util</span><span style="color:#f92672">.</span><span style="color:#a6e22e">cookies</span><span style="color:#f92672">.</span><span style="color:#a6e22e">get</span>(<span style="color:#e6db74">&#39;token&#39;</span>),
-</span></span><span style="display:flex;"><span>      <span style="color:#a6e22e">uploadUrl</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">process</span><span style="color:#f92672">.</span><span style="color:#a6e22e">env</span><span style="color:#f92672">.</span><span style="color:#a6e22e">VUE_APP_API</span> <span style="color:#f92672">+</span> <span style="color:#e6db74">&#39;admin/article/upload&#39;</span>,
-</span></span><span style="display:flex;"><span>      <span style="color:#a6e22e">img</span><span style="color:#f92672">:</span> <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">value</span>
-</span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>  },
-</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">methods</span><span style="color:#f92672">:</span> {
-</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">beforeAvatarUpload</span>(<span style="color:#a6e22e">file</span>) {
-</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">const</span> <span style="color:#66d9ef">isJPG</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">file</span><span style="color:#f92672">.</span><span style="color:#a6e22e">type</span> <span style="color:#f92672">===</span> <span style="color:#e6db74">&#39;image/jpeg&#39;</span>
-</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">const</span> <span style="color:#66d9ef">isLt2M</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">file</span><span style="color:#f92672">.</span><span style="color:#a6e22e">size</span> <span style="color:#f92672">/</span> <span style="color:#ae81ff">1024</span> <span style="color:#f92672">/</span> <span style="color:#ae81ff">1024</span> <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">2</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span><span style="color:#a6e22e">isJPG</span>) {
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span>$message<span style="color:#f92672">.</span><span style="color:#a6e22e">error</span>(<span style="color:#e6db74">&#39;上传头像图片只能是 JPG 格式!&#39;</span>)
-</span></span><span style="display:flex;"><span>      }
-</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span><span style="color:#a6e22e">isLt2M</span>) {
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span>$message<span style="color:#f92672">.</span><span style="color:#a6e22e">error</span>(<span style="color:#e6db74">&#39;上传头像图片大小不能超过 2MB!&#39;</span>)
-</span></span><span style="display:flex;"><span>      }
-</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">isJPG</span> <span style="color:#f92672">&amp;&amp;</span> <span style="color:#a6e22e">isLt2M</span>
-</span></span><span style="display:flex;"><span>    },
-</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">handleAvatarSuccess</span>(<span style="color:#a6e22e">res</span>, <span style="color:#a6e22e">file</span>) {
-</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">img</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">URL</span><span style="color:#f92672">.</span><span style="color:#a6e22e">createObjectURL</span>(<span style="color:#a6e22e">file</span><span style="color:#f92672">.</span><span style="color:#a6e22e">raw</span>)
-</span></span><span style="display:flex;"><span>      <span style="color:#75715e">// func: 是父组件指定的传数据绑定的函数，this.img:子组件给父组件传递的数据
-</span></span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span>$emit(<span style="color:#e6db74">&#39;func&#39;</span>, <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">img</span>)
-</span></span><span style="display:flex;"><span>    },
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 绑定@imgAdd event
-</span></span></span><span style="display:flex;"><span>    $imgAdd(<span style="color:#a6e22e">pos</span>, $file) {
-</span></span><span style="display:flex;"><span>      <span style="color:#75715e">// 第一步.将图片上传到服务器.
-</span></span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">formdata</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">FormData</span>()
-</span></span><span style="display:flex;"><span>      <span style="color:#a6e22e">formdata</span><span style="color:#f92672">.</span><span style="color:#a6e22e">append</span>(<span style="color:#e6db74">&#39;file&#39;</span>, $file)
-</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">img_file</span>[<span style="color:#a6e22e">pos</span>] <span style="color:#f92672">=</span> $file
-</span></span><span style="display:flex;"><span>      <span style="color:#a6e22e">axios</span>({
-</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">url</span><span style="color:#f92672">:</span> <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">uploadUrl</span>,
-</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">method</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;post&#39;</span>,
-</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">data</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">formdata</span>,
-</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">headers</span><span style="color:#f92672">:</span> {
-</span></span><span style="display:flex;"><span>          <span style="color:#a6e22e">Authorization</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;Bearer &#39;</span> <span style="color:#f92672">+</span> <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">token</span>,
-</span></span><span style="display:flex;"><span>          <span style="color:#e6db74">&#39;Content-Type&#39;</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;multipart/form-data&#39;</span>
-</span></span><span style="display:flex;"><span>        }
-</span></span><span style="display:flex;"><span>      })
-</span></span><span style="display:flex;"><span>        <span style="color:#f92672">.</span><span style="color:#a6e22e">then</span>((<span style="color:#a6e22e">res</span>) <span style="color:#f92672">=&gt;</span> {
-</span></span><span style="display:flex;"><span>          <span style="color:#75715e">// let _res = res.data
-</span></span></span><span style="display:flex;"><span>          <span style="color:#75715e">// 第二步.将返回的url替换到文本原位置![...](0) -&gt; ![...](url)
-</span></span></span><span style="display:flex;"><span>          <span style="color:#75715e">// this.$refs.md.$img2Url(pos, _res.url)
-</span></span></span><span style="display:flex;"><span>        })
-</span></span><span style="display:flex;"><span>        <span style="color:#f92672">.</span><span style="color:#66d9ef">catch</span>((<span style="color:#a6e22e">err</span>) <span style="color:#f92672">=&gt;</span> {
-</span></span><span style="display:flex;"><span>          <span style="color:#a6e22e">console</span><span style="color:#f92672">.</span><span style="color:#a6e22e">log</span>(<span style="color:#e6db74">&#39;err&#39;</span>, <span style="color:#a6e22e">err</span>)
-</span></span><span style="display:flex;"><span>        })
-</span></span><span style="display:flex;"><span>    },
-</span></span><span style="display:flex;"><span>    $imgDel(<span style="color:#a6e22e">pos</span>) {
-</span></span><span style="display:flex;"><span>      <span style="color:#a6e22e">delete</span> <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">img_file</span>[<span style="color:#a6e22e">pos</span>]
-</span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>  }
-</span></span><span style="display:flex;"><span>}
-</span></span><span style="display:flex;"><span><span style="color:#f92672">&lt;/</span><span style="color:#a6e22e">script</span><span style="color:#f92672">&gt;</span>
-</span></span></code></pre></div><h3 id="解释">解释</h3>
-<p>子组件通过this.$emit()的方式将值传递给父组件</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#75715e">// func: 是父组件指定的传数据绑定的函数，this.img:子组件给父组件传递的数据
-</span></span></span><span style="display:flex;"><span><span style="color:#66d9ef">this</span><span style="color:#f92672">.</span>$emit(<span style="color:#e6db74">&#39;func&#39;</span>, <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">img</span>)
+<!doctype html><html class=no-js lang=en><head><meta charset=UTF-8><meta name=viewport content="width=device-width,initial-scale=1"><title>Vue 子组件向父组件传值 - 臭大佬博客</title><script>(function(e,t){e[t]=e[t].replace("no-js","js")})(document.documentElement,"className")</script><meta name=description content="Vue 子组件向父组件传值"><link rel=preconnect href=https://fonts.gstatic.com crossorigin><link rel=dns-prefetch href=//fonts.googleapis.com><link rel=dns-prefetch href=//fonts.gstatic.com><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700"><link rel=stylesheet href=/choudalao.github.io/css/style.css><link rel="shortcut icon" href=/choudalao.github.io/favicon.ico></head><body class=body><div class="container container--outer"><header class=header><div class="container header__container"><div class=logo><a class=logo__link href=/choudalao.github.io/ title=臭大佬博客 rel=home><div class="logo__item logo__text"><div class=logo__title>臭大佬博客</div></div></a></div><nav class=menu><button class=menu__btn aria-haspopup=true aria-expanded=false tabindex=0>
+<span class=menu__btn-title tabindex=-1>菜单</span></button><ul class=menu__list><li class=menu__item><a class=menu__link href=/choudalao.github.io/><span class=menu__text>首页</span></a></li><li class=menu__item><a class=menu__link href=/choudalao.github.io/post/><span class=menu__text>归档</span></a></li><li class=menu__item><a class=menu__link href=/choudalao.github.io/about/><span class=menu__text>关于</span></a></li></ul></nav></div></header><div class="wrapper flex"><div class=primary><main class=main role=main><article class=post><header class=post__header><h1 class=post__title>Vue 子组件向父组件传值</h1></header><div class="content post__content clearfix"><h1 id=问题>问题</h1><p>开发中，会发现很多公共部分，可以独立封装起来，让更多的地方统一调用，这就是组件的作用，今天简单封装了一个图片上传的组件，当子组件中图片上传成功后，怎么传到父级组件呢？</p><h1 id=代码>代码</h1><p>直接上代码</p><h4 id=父组件>父组件</h4><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-php data-lang=php><span style=display:flex><span><span style=color:#f92672>&lt;</span><span style=color:#a6e22e>upload</span><span style=color:#f92672>-</span><span style=color:#a6e22e>image</span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>label</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;网站LOGO&#34;</span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>prop</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;site_logo&#34;</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>:</span><span style=color:#a6e22e>value</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;basicForm.site_logo&#34;</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>@</span><span style=color:#a6e22e>func</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;getImg&#34;</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>/&gt;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#f92672>&lt;</span><span style=color:#a6e22e>script</span><span style=color:#f92672>&gt;</span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>import</span> <span style=color:#a6e22e>uploadImage</span> <span style=color:#a6e22e>from</span> <span style=color:#e6db74>&#39;../../components/uploadImage.vue&#39;</span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>export</span> <span style=color:#66d9ef>default</span> {
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>components</span><span style=color:#f92672>:</span> { <span style=color:#a6e22e>uploadImage</span> },
+</span></span><span style=display:flex><span>	<span style=color:#75715e>// 其他代码
+</span></span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h4 id=子组件>子组件</h4><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-php data-lang=php><span style=display:flex><span><span style=color:#f92672>&lt;!--</span>
+</span></span><span style=display:flex><span> <span style=color:#f92672>*</span> <span style=color:#f92672>@</span><span style=color:#a6e22e>Description</span><span style=color:#f92672>:</span><span style=color:#a6e22e>单图上传</span>
+</span></span><span style=display:flex><span> <span style=color:#f92672>*</span> <span style=color:#f92672>@</span><span style=color:#a6e22e>User</span><span style=color:#f92672>:</span> <span style=color:#a6e22e>Vijay</span> <span style=color:#f92672>&lt;</span><span style=color:#ae81ff>1937832819</span><span style=color:#f92672>@</span><span style=color:#a6e22e>qq</span><span style=color:#f92672>.</span><span style=color:#a6e22e>com</span><span style=color:#f92672>&gt;</span>
+</span></span><span style=display:flex><span> <span style=color:#f92672>*</span> <span style=color:#f92672>@</span><span style=color:#a6e22e>Date</span><span style=color:#f92672>:</span> <span style=color:#ae81ff>2020</span><span style=color:#f92672>-</span><span style=color:#ae81ff>11</span><span style=color:#f92672>-</span><span style=color:#ae81ff>21</span> <span style=color:#ae81ff>20</span><span style=color:#f92672>:</span><span style=color:#ae81ff>42</span><span style=color:#f92672>:</span><span style=color:#ae81ff>50</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>--&gt;</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>&lt;</span><span style=color:#a6e22e>template</span><span style=color:#f92672>&gt;</span>
+</span></span><span style=display:flex><span>  <span style=color:#f92672>&lt;</span><span style=color:#a6e22e>div</span><span style=color:#f92672>&gt;</span>
+</span></span><span style=display:flex><span>    <span style=color:#f92672>&lt;</span><span style=color:#a6e22e>el</span><span style=color:#f92672>-</span><span style=color:#a6e22e>form</span><span style=color:#f92672>-</span><span style=color:#a6e22e>item</span> <span style=color:#f92672>:</span><span style=color:#a6e22e>label</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;label&#34;</span> <span style=color:#f92672>:</span><span style=color:#a6e22e>prop</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;fieldName&#34;</span><span style=color:#f92672>&gt;</span>
+</span></span><span style=display:flex><span>      <span style=color:#f92672>&lt;</span><span style=color:#a6e22e>el</span><span style=color:#f92672>-</span><span style=color:#a6e22e>upload</span>
+</span></span><span style=display:flex><span>        <span style=color:#a6e22e>class</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;avatar-uploader&#34;</span>
+</span></span><span style=display:flex><span>        <span style=color:#f92672>:</span><span style=color:#a6e22e>action</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;uploadUrl&#34;</span>
+</span></span><span style=display:flex><span>        <span style=color:#f92672>:</span><span style=color:#a6e22e>headers</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;{ Authorization: &#39;Bearer &#39; + this.token }&#34;</span>
+</span></span><span style=display:flex><span>        <span style=color:#f92672>:</span><span style=color:#a6e22e>show</span><span style=color:#f92672>-</span><span style=color:#a6e22e>file</span><span style=color:#f92672>-</span><span style=color:#66d9ef>list</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;false&#34;</span>
+</span></span><span style=display:flex><span>        <span style=color:#f92672>:</span><span style=color:#a6e22e>on</span><span style=color:#f92672>-</span><span style=color:#a6e22e>success</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;handleAvatarSuccess&#34;</span>
+</span></span><span style=display:flex><span>        <span style=color:#f92672>:</span><span style=color:#a6e22e>before</span><span style=color:#f92672>-</span><span style=color:#a6e22e>upload</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;beforeAvatarUpload&#34;</span>
+</span></span><span style=display:flex><span>      <span style=color:#f92672>&gt;</span>
+</span></span><span style=display:flex><span>        <span style=color:#f92672>&lt;</span><span style=color:#a6e22e>img</span> <span style=color:#a6e22e>v</span><span style=color:#f92672>-</span><span style=color:#66d9ef>if</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;img&#34;</span> <span style=color:#f92672>:</span><span style=color:#a6e22e>src</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;img&#34;</span> <span style=color:#a6e22e>class</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;avatar&#34;</span> <span style=color:#f92672>/&gt;</span>
+</span></span><span style=display:flex><span>        <span style=color:#f92672>&lt;</span><span style=color:#a6e22e>i</span> <span style=color:#a6e22e>v</span><span style=color:#f92672>-</span><span style=color:#66d9ef>else</span> <span style=color:#a6e22e>class</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;el-icon-plus avatar-uploader-icon&#34;</span><span style=color:#f92672>&gt;&lt;/</span><span style=color:#a6e22e>i</span><span style=color:#f92672>&gt;</span>
+</span></span><span style=display:flex><span>      <span style=color:#f92672>&lt;/</span><span style=color:#a6e22e>el</span><span style=color:#f92672>-</span><span style=color:#a6e22e>upload</span><span style=color:#f92672>&gt;</span>
+</span></span><span style=display:flex><span>    <span style=color:#f92672>&lt;/</span><span style=color:#a6e22e>el</span><span style=color:#f92672>-</span><span style=color:#a6e22e>form</span><span style=color:#f92672>-</span><span style=color:#a6e22e>item</span><span style=color:#f92672>&gt;</span>
+</span></span><span style=display:flex><span>  <span style=color:#f92672>&lt;/</span><span style=color:#a6e22e>div</span><span style=color:#f92672>&gt;</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>&lt;/</span><span style=color:#a6e22e>template</span><span style=color:#f92672>&gt;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#f92672>&lt;</span><span style=color:#a6e22e>script</span><span style=color:#f92672>&gt;</span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>import</span> <span style=color:#a6e22e>util</span> <span style=color:#a6e22e>from</span> <span style=color:#e6db74>&#39;@/libs/util&#39;</span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>import</span> <span style=color:#a6e22e>axios</span> <span style=color:#a6e22e>from</span> <span style=color:#e6db74>&#39;axios&#39;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>export</span> <span style=color:#66d9ef>default</span> {
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>props</span><span style=color:#f92672>:</span> {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>label</span><span style=color:#f92672>:</span> {
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>type</span><span style=color:#f92672>:</span> <span style=color:#a6e22e>String</span>,
+</span></span><span style=display:flex><span>      <span style=color:#66d9ef>default</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;&#39;</span>
+</span></span><span style=display:flex><span>    },
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>value</span><span style=color:#f92672>:</span> {
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>type</span><span style=color:#f92672>:</span> <span style=color:#a6e22e>String</span>,
+</span></span><span style=display:flex><span>      <span style=color:#66d9ef>default</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;&#39;</span>
+</span></span><span style=display:flex><span>    },
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>fieldName</span><span style=color:#f92672>:</span> {
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>type</span><span style=color:#f92672>:</span> <span style=color:#a6e22e>String</span>,
+</span></span><span style=display:flex><span>      <span style=color:#66d9ef>default</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;&#39;</span>
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>  },
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>data</span>() {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span> {
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>img_file</span><span style=color:#f92672>:</span> {},
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>token</span><span style=color:#f92672>:</span> <span style=color:#a6e22e>util</span><span style=color:#f92672>.</span><span style=color:#a6e22e>cookies</span><span style=color:#f92672>.</span><span style=color:#a6e22e>get</span>(<span style=color:#e6db74>&#39;token&#39;</span>),
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>uploadUrl</span><span style=color:#f92672>:</span> <span style=color:#a6e22e>process</span><span style=color:#f92672>.</span><span style=color:#a6e22e>env</span><span style=color:#f92672>.</span><span style=color:#a6e22e>VUE_APP_API</span> <span style=color:#f92672>+</span> <span style=color:#e6db74>&#39;admin/article/upload&#39;</span>,
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>img</span><span style=color:#f92672>:</span> <span style=color:#66d9ef>this</span><span style=color:#f92672>.</span><span style=color:#a6e22e>value</span>
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>  },
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>methods</span><span style=color:#f92672>:</span> {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>beforeAvatarUpload</span>(<span style=color:#a6e22e>file</span>) {
+</span></span><span style=display:flex><span>      <span style=color:#66d9ef>const</span> <span style=color:#66d9ef>isJPG</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>file</span><span style=color:#f92672>.</span><span style=color:#a6e22e>type</span> <span style=color:#f92672>===</span> <span style=color:#e6db74>&#39;image/jpeg&#39;</span>
+</span></span><span style=display:flex><span>      <span style=color:#66d9ef>const</span> <span style=color:#66d9ef>isLt2M</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>file</span><span style=color:#f92672>.</span><span style=color:#a6e22e>size</span> <span style=color:#f92672>/</span> <span style=color:#ae81ff>1024</span> <span style=color:#f92672>/</span> <span style=color:#ae81ff>1024</span> <span style=color:#f92672>&lt;</span> <span style=color:#ae81ff>2</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>      <span style=color:#66d9ef>if</span> (<span style=color:#f92672>!</span><span style=color:#a6e22e>isJPG</span>) {
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>this</span><span style=color:#f92672>.</span>$message<span style=color:#f92672>.</span><span style=color:#a6e22e>error</span>(<span style=color:#e6db74>&#39;上传头像图片只能是 JPG 格式!&#39;</span>)
+</span></span><span style=display:flex><span>      }
+</span></span><span style=display:flex><span>      <span style=color:#66d9ef>if</span> (<span style=color:#f92672>!</span><span style=color:#a6e22e>isLt2M</span>) {
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>this</span><span style=color:#f92672>.</span>$message<span style=color:#f92672>.</span><span style=color:#a6e22e>error</span>(<span style=color:#e6db74>&#39;上传头像图片大小不能超过 2MB!&#39;</span>)
+</span></span><span style=display:flex><span>      }
+</span></span><span style=display:flex><span>      <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>isJPG</span> <span style=color:#f92672>&amp;&amp;</span> <span style=color:#a6e22e>isLt2M</span>
+</span></span><span style=display:flex><span>    },
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>handleAvatarSuccess</span>(<span style=color:#a6e22e>res</span>, <span style=color:#a6e22e>file</span>) {
+</span></span><span style=display:flex><span>      <span style=color:#66d9ef>this</span><span style=color:#f92672>.</span><span style=color:#a6e22e>img</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>URL</span><span style=color:#f92672>.</span><span style=color:#a6e22e>createObjectURL</span>(<span style=color:#a6e22e>file</span><span style=color:#f92672>.</span><span style=color:#a6e22e>raw</span>)
+</span></span><span style=display:flex><span>      <span style=color:#75715e>// func: 是父组件指定的传数据绑定的函数，this.img:子组件给父组件传递的数据
+</span></span></span><span style=display:flex><span>      <span style=color:#66d9ef>this</span><span style=color:#f92672>.</span>$emit(<span style=color:#e6db74>&#39;func&#39;</span>, <span style=color:#66d9ef>this</span><span style=color:#f92672>.</span><span style=color:#a6e22e>img</span>)
+</span></span><span style=display:flex><span>    },
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// 绑定@imgAdd event
+</span></span></span><span style=display:flex><span>    $imgAdd(<span style=color:#a6e22e>pos</span>, $file) {
+</span></span><span style=display:flex><span>      <span style=color:#75715e>// 第一步.将图片上传到服务器.
+</span></span></span><span style=display:flex><span>      <span style=color:#66d9ef>var</span> <span style=color:#a6e22e>formdata</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>new</span> <span style=color:#a6e22e>FormData</span>()
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>formdata</span><span style=color:#f92672>.</span><span style=color:#a6e22e>append</span>(<span style=color:#e6db74>&#39;file&#39;</span>, $file)
+</span></span><span style=display:flex><span>      <span style=color:#66d9ef>this</span><span style=color:#f92672>.</span><span style=color:#a6e22e>img_file</span>[<span style=color:#a6e22e>pos</span>] <span style=color:#f92672>=</span> $file
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>axios</span>({
+</span></span><span style=display:flex><span>        <span style=color:#a6e22e>url</span><span style=color:#f92672>:</span> <span style=color:#66d9ef>this</span><span style=color:#f92672>.</span><span style=color:#a6e22e>uploadUrl</span>,
+</span></span><span style=display:flex><span>        <span style=color:#a6e22e>method</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;post&#39;</span>,
+</span></span><span style=display:flex><span>        <span style=color:#a6e22e>data</span><span style=color:#f92672>:</span> <span style=color:#a6e22e>formdata</span>,
+</span></span><span style=display:flex><span>        <span style=color:#a6e22e>headers</span><span style=color:#f92672>:</span> {
+</span></span><span style=display:flex><span>          <span style=color:#a6e22e>Authorization</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;Bearer &#39;</span> <span style=color:#f92672>+</span> <span style=color:#66d9ef>this</span><span style=color:#f92672>.</span><span style=color:#a6e22e>token</span>,
+</span></span><span style=display:flex><span>          <span style=color:#e6db74>&#39;Content-Type&#39;</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;multipart/form-data&#39;</span>
+</span></span><span style=display:flex><span>        }
+</span></span><span style=display:flex><span>      })
+</span></span><span style=display:flex><span>        <span style=color:#f92672>.</span><span style=color:#a6e22e>then</span>((<span style=color:#a6e22e>res</span>) <span style=color:#f92672>=&gt;</span> {
+</span></span><span style=display:flex><span>          <span style=color:#75715e>// let _res = res.data
+</span></span></span><span style=display:flex><span>          <span style=color:#75715e>// 第二步.将返回的url替换到文本原位置![...](0) -&gt; ![...](url)
+</span></span></span><span style=display:flex><span>          <span style=color:#75715e>// this.$refs.md.$img2Url(pos, _res.url)
+</span></span></span><span style=display:flex><span>        })
+</span></span><span style=display:flex><span>        <span style=color:#f92672>.</span><span style=color:#66d9ef>catch</span>((<span style=color:#a6e22e>err</span>) <span style=color:#f92672>=&gt;</span> {
+</span></span><span style=display:flex><span>          <span style=color:#a6e22e>console</span><span style=color:#f92672>.</span><span style=color:#a6e22e>log</span>(<span style=color:#e6db74>&#39;err&#39;</span>, <span style=color:#a6e22e>err</span>)
+</span></span><span style=display:flex><span>        })
+</span></span><span style=display:flex><span>    },
+</span></span><span style=display:flex><span>    $imgDel(<span style=color:#a6e22e>pos</span>) {
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>delete</span> <span style=color:#66d9ef>this</span><span style=color:#f92672>.</span><span style=color:#a6e22e>img_file</span>[<span style=color:#a6e22e>pos</span>]
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span><span style=color:#f92672>&lt;/</span><span style=color:#a6e22e>script</span><span style=color:#f92672>&gt;</span>
+</span></span></code></pre></div><h3 id=解释>解释</h3><p>子组件通过this.$emit()的方式将值传递给父组件</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-php data-lang=php><span style=display:flex><span><span style=color:#75715e>// func: 是父组件指定的传数据绑定的函数，this.img:子组件给父组件传递的数据
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>this</span><span style=color:#f92672>.</span>$emit(<span style=color:#e6db74>&#39;func&#39;</span>, <span style=color:#66d9ef>this</span><span style=color:#f92672>.</span><span style=color:#a6e22e>img</span>)
 </span></span></code></pre></div><p>注意：这里的func是父组件中绑定的函数名
-父组件中接收传递值</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#f92672">@</span><span style="color:#a6e22e">func</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;getImg&#34;</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span> <span style="color:#a6e22e">getImg</span>(<span style="color:#a6e22e">data</span>) {
-</span></span><span style="display:flex;"><span> <span style="color:#75715e">// 这里可以拿到传过来的值
-</span></span></span><span style="display:flex;"><span> <span style="color:#a6e22e">console</span><span style="color:#f92672">.</span><span style="color:#a6e22e">log</span>(<span style="color:#a6e22e">data</span>)
-</span></span><span style="display:flex;"><span> }
-</span></span></code></pre></div>
-		</div>
-	</article>
-</main>
-
-
-
-
-			</div>
-			
-		</div>
-		<footer class="footer">
-	<div class="container footer__container flex">
-		
-		<div class="footer__copyright">
-			&copy; 2026 臭大佬博客.
-			<span class="footer__copyright-credits">基于 <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> 引擎和 <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> 主题</span>
-		</div>
-	</div>
-</footer>
-	</div>
-<script async defer src="/js/menu.js"></script>
-</body>
-</html>
+父组件中接收传递值</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-php data-lang=php><span style=display:flex><span><span style=color:#f92672>@</span><span style=color:#a6e22e>func</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;getImg&#34;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span> <span style=color:#a6e22e>getImg</span>(<span style=color:#a6e22e>data</span>) {
+</span></span><span style=display:flex><span> <span style=color:#75715e>// 这里可以拿到传过来的值
+</span></span></span><span style=display:flex><span> <span style=color:#a6e22e>console</span><span style=color:#f92672>.</span><span style=color:#a6e22e>log</span>(<span style=color:#a6e22e>data</span>)
+</span></span><span style=display:flex><span> }
+</span></span></code></pre></div></div></article></main></div></div><footer class=footer><div class="container footer__container flex"><div class=footer__copyright>&copy; 2026 臭大佬博客.
+<span class=footer__copyright-credits>基于 <a href=https://gohugo.io/ rel="nofollow noopener" target=_blank>Hugo</a> 引擎和 <a href=https://github.com/Vimux/Mainroad/ rel="nofollow noopener" target=_blank>Mainroad</a> 主题</span></div></div></footer></div><script async defer src=/choudalao.github.io/js/menu.js></script></body></html>

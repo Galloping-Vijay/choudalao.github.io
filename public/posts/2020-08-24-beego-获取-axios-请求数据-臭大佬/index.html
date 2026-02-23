@@ -1,216 +1,97 @@
-<!DOCTYPE html>
-<html class="no-js" lang="en">
-<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>beego 获取 axios 请求数据 | 臭大佬 - 臭大佬博客</title>
-	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
-	<meta name="description" content="发现一个很奇怪的问题，`Beego`中用`GetString(key string) string`无法获取`Axios`请求数据。">
-	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-	<link rel="dns-prefetch" href="//fonts.googleapis.com">
-	<link rel="dns-prefetch" href="//fonts.gstatic.com">
-	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
-
-	<link rel="stylesheet" href="/css/style.css">
-	
-
-	<link rel="shortcut icon" href="/favicon.ico">
-		
-</head>
-<body class="body">
-	<div class="container container--outer">
-		<header class="header">
-	<div class="container header__container">
-		
-	<div class="logo">
-		<a class="logo__link" href="/" title="臭大佬博客" rel="home">
-			<div class="logo__item logo__text">
-					<div class="logo__title">臭大佬博客</div>
-					
-				</div>
-		</a>
-	</div>
-		
-<nav class="menu">
-	<button class="menu__btn" aria-haspopup="true" aria-expanded="false" tabindex="0">
-		<span class="menu__btn-title" tabindex="-1">菜单</span>
-	</button>
-	<ul class="menu__list">
-		<li class="menu__item">
-			<a class="menu__link" href="/">
-				
-				<span class="menu__text">首页</span>
-				
-			</a>
-		</li>
-		<li class="menu__item">
-			<a class="menu__link" href="/post/">
-				
-				<span class="menu__text">归档</span>
-				
-			</a>
-		</li>
-		<li class="menu__item">
-			<a class="menu__link" href="/about/">
-				
-				<span class="menu__text">关于</span>
-				
-			</a>
-		</li>
-	</ul>
-</nav>
-
-	</div>
-</header>
-		<div class="wrapper flex">
-			<div class="primary">
-			
-<main class="main" role="main">
-	<article class="post">
-		<header class="post__header">
-			<h1 class="post__title">beego 获取 axios 请求数据 | 臭大佬</h1>
-			
-		</header>
-		<div class="content post__content clearfix">
-			<h1 id="开发环境">开发环境</h1>
-<p>前端：Vue
-后端：Beego</p>
-<h1 id="问题">问题</h1>
-<p>发现一个很奇怪的问题，<code>Beego</code>中用<code>GetString(key string) string</code>无法获取<code>Axios</code>请求数据。</p>
-<p><code>Beego</code>中用<code>GetString(key string) string</code>获取请求参数,使用工具<code>apizza</code>(类似于postman的工具)发起请求，可以正常得到数据：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">#</span> <span style="color:#a6e22e">admin</span>.<span style="color:#66d9ef">go</span> <span style="color:#a6e22e">中接收数据的代码</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">self</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">AdminController</span>) <span style="color:#a6e22e">Login</span>() {
-</span></span><span style="display:flex;"><span>	<span style="color:#f92672">...</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">inputData</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">map</span>[<span style="color:#66d9ef">string</span>]<span style="color:#66d9ef">string</span>{}
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">inputData</span>[<span style="color:#e6db74">&#34;username&#34;</span>] = <span style="color:#a6e22e">username</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">inputData</span>[<span style="color:#e6db74">&#34;password&#34;</span>] = <span style="color:#a6e22e">password</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// 返回参数</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">self</span>.<span style="color:#a6e22e">ResJson</span>(<span style="color:#ae81ff">1</span>, <span style="color:#e6db74">&#34;获取数据&#34;</span>, <span style="color:#a6e22e">inputData</span>, <span style="color:#66d9ef">nil</span>)
-</span></span><span style="display:flex;"><span>	
-</span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><p><img src="https://www.choudalao.com/uploads/20200824/20200824004214Le8vxC.png" alt=""></p>
-<p>返回结果：</p>
-<p><img src="https://www.choudalao.com/uploads/20200824/20200824003846gAZWrF.png" alt=""></p>
-<p>而当在前端使用<code>axios </code>传递参数时，发现无法获取：</p>
-<p><img src="https://www.choudalao.com/uploads/20200824/20200824004448Rk1wdW.png" alt="">
-<img src="https://www.choudalao.com/uploads/20200824/20200824004453sH1xHu.png" alt=""></p>
-<p>前端代码之前是请求<code>php</code>获取数据，之前在<code>php</code>接口端是可以获取到请求参数的。这就很奇怪了，网上找了一圈都没有找到比较好的答案。在一个帖子里面看到，<code>ajax</code>和<code>axios</code>请求数据的格式是不同的,然后特意写了个页面研究一下。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>&lt;!<span style="color:#a6e22e">DOCTYPE</span> <span style="color:#a6e22e">html</span>&gt;
-</span></span><span style="display:flex;"><span>&lt;<span style="color:#a6e22e">html</span>&gt;
-</span></span><span style="display:flex;"><span>&lt;<span style="color:#a6e22e">head</span>&gt;
-</span></span><span style="display:flex;"><span>&lt;<span style="color:#a6e22e">meta</span> <span style="color:#a6e22e">charset</span>=<span style="color:#e6db74">&#34;utf-8&#34;</span>&gt; 
-</span></span><span style="display:flex;"><span>&lt;<span style="color:#a6e22e">title</span>&gt;<span style="color:#a6e22e">请求方式对比</span>&lt;<span style="color:#f92672">/</span><span style="color:#a6e22e">title</span>&gt; 
-</span></span><span style="display:flex;"><span>&lt;<span style="color:#a6e22e">script</span> <span style="color:#a6e22e">src</span>=<span style="color:#e6db74">&#34;https://unpkg.com/axios/dist/axios.min.js&#34;</span>&gt;&lt;<span style="color:#f92672">/</span><span style="color:#a6e22e">script</span>&gt;
-</span></span><span style="display:flex;"><span>&lt;<span style="color:#a6e22e">script</span> <span style="color:#a6e22e">src</span>=<span style="color:#e6db74">&#34;https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js&#34;</span>&gt;&lt;<span style="color:#f92672">/</span><span style="color:#a6e22e">script</span>&gt;
-</span></span><span style="display:flex;"><span>&lt;<span style="color:#a6e22e">script</span>&gt;
-</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">$</span>(<span style="color:#a6e22e">document</span>).<span style="color:#a6e22e">ready</span>(<span style="color:#a6e22e">function</span>(){
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">data</span> =  {
-</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">username</span>: <span style="color:#960050;background-color:#1e0010">&#39;</span><span style="color:#a6e22e">Fred</span><span style="color:#960050;background-color:#1e0010">&#39;</span>,
-</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">password</span>: <span style="color:#960050;background-color:#1e0010">&#39;</span><span style="color:#a6e22e">Flintstone</span><span style="color:#960050;background-color:#1e0010">&#39;</span>
-</span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>  <span style="color:#960050;background-color:#1e0010">$</span>(<span style="color:#e6db74">&#34;#p1&#34;</span>).<span style="color:#a6e22e">click</span>(<span style="color:#a6e22e">function</span>(){
-</span></span><span style="display:flex;"><span>    <span style="color:#960050;background-color:#1e0010">$</span>.<span style="color:#a6e22e">post</span>(<span style="color:#e6db74">&#34;http://localhost:8181/api/admin/login&#34;</span>,<span style="color:#a6e22e">data</span>,
-</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">function</span>(<span style="color:#a6e22e">data</span>,<span style="color:#a6e22e">status</span>){
-</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">log</span>(<span style="color:#a6e22e">data</span>);
-</span></span><span style="display:flex;"><span>    });
-</span></span><span style="display:flex;"><span>  });
-</span></span><span style="display:flex;"><span> 
-</span></span><span style="display:flex;"><span>  <span style="color:#960050;background-color:#1e0010">$</span>(<span style="color:#e6db74">&#34;#p2&#34;</span>).<span style="color:#a6e22e">click</span>(<span style="color:#a6e22e">function</span>(){
-</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">axios</span>.<span style="color:#a6e22e">post</span>(<span style="color:#960050;background-color:#1e0010">&#39;</span><span style="color:#a6e22e">http</span>:<span style="color:#75715e">//localhost:8181/api/admin/login&#39;,data</span>
-</span></span><span style="display:flex;"><span>    )
-</span></span><span style="display:flex;"><span>    .<span style="color:#a6e22e">then</span>(<span style="color:#a6e22e">function</span> (<span style="color:#a6e22e">response</span>) {
-</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">log</span>(<span style="color:#a6e22e">response</span>);
-</span></span><span style="display:flex;"><span>    })
-</span></span><span style="display:flex;"><span>    .<span style="color:#a6e22e">catch</span>(<span style="color:#a6e22e">function</span> (<span style="color:#66d9ef">error</span>) {
-</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">log</span>(<span style="color:#66d9ef">error</span>);
-</span></span><span style="display:flex;"><span>    });
-</span></span><span style="display:flex;"><span>  })
-</span></span><span style="display:flex;"><span>});
-</span></span><span style="display:flex;"><span>&lt;<span style="color:#f92672">/</span><span style="color:#a6e22e">script</span>&gt;
-</span></span><span style="display:flex;"><span>&lt;<span style="color:#f92672">/</span><span style="color:#a6e22e">head</span>&gt;
-</span></span><span style="display:flex;"><span>&lt;<span style="color:#a6e22e">body</span>&gt;
-</span></span><span style="display:flex;"><span>&lt;<span style="color:#a6e22e">p</span> <span style="color:#a6e22e">id</span>=<span style="color:#e6db74">&#34;p1&#34;</span>&gt;<span style="color:#a6e22e">ajax</span> <span style="color:#a6e22e">请求</span>&lt;<span style="color:#f92672">/</span><span style="color:#a6e22e">p</span>&gt;
-</span></span><span style="display:flex;"><span>&lt;<span style="color:#a6e22e">p</span> <span style="color:#a6e22e">id</span>=<span style="color:#e6db74">&#34;p2&#34;</span>&gt;<span style="color:#a6e22e">axios</span> <span style="color:#a6e22e">请求</span>&lt;<span style="color:#f92672">/</span><span style="color:#a6e22e">p</span>&gt;
-</span></span><span style="display:flex;"><span>&lt;<span style="color:#f92672">/</span><span style="color:#a6e22e">body</span>&gt;
-</span></span><span style="display:flex;"><span>&lt;<span style="color:#f92672">/</span><span style="color:#a6e22e">html</span>&gt;
-</span></span></code></pre></div><p>上面的两个请求方式，发现<code>ajax</code>请求可以返回结果，而<code>axios</code>请求无法得到参数。</p>
-<h1 id="解决">解决</h1>
-<p>默认情况下，<code>jquery</code>的<code>ajax</code>，<code>Content-Type</code>是<code>application/x-www-form-urlencoded</code>，</p>
-<p><code>axios</code>的话会做判断，如果<code>data</code>是字符串，<code>Content-Type</code>是<code>application/x-www-form-urlencoded</code>，如果<code>data</code>是对象，<code>Content-Type是application/json</code>，</p>
-<p>所以<code>axios</code>要和默认<code>ajax</code>请求一样，需要把<code>data</code>以<code>key=value&amp;key1=value1</code>形式传递，同时，<code>headers</code>的<code>content-type</code>参数修改为<code>application/x-www-form-urlencoded</code></p>
-<p>解决方案有两种，一种是在前端把<code>axios</code>参数修改为后端能够用<code>GetString(key string) string</code>获取得到的形式（ajax比较通用），二是后端做个兼容，既能接收<code>ajax</code>的参数，又能获取到<code>axios</code>请求的参数。</p>
-<h3 id="前端解决方案">前端解决方案</h3>
-<p>需要修改的地方有两处，
+<!doctype html><html class=no-js lang=en><head><meta charset=UTF-8><meta name=viewport content="width=device-width,initial-scale=1"><title>beego 获取 axios 请求数据 | 臭大佬 - 臭大佬博客</title><script>(function(e,t){e[t]=e[t].replace("no-js","js")})(document.documentElement,"className")</script><meta name=description content="发现一个很奇怪的问题，`Beego`中用`GetString(key string) string`无法获取`Axios`请求数据。"><link rel=preconnect href=https://fonts.gstatic.com crossorigin><link rel=dns-prefetch href=//fonts.googleapis.com><link rel=dns-prefetch href=//fonts.gstatic.com><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700"><link rel=stylesheet href=/choudalao.github.io/css/style.css><link rel="shortcut icon" href=/choudalao.github.io/favicon.ico></head><body class=body><div class="container container--outer"><header class=header><div class="container header__container"><div class=logo><a class=logo__link href=/choudalao.github.io/ title=臭大佬博客 rel=home><div class="logo__item logo__text"><div class=logo__title>臭大佬博客</div></div></a></div><nav class=menu><button class=menu__btn aria-haspopup=true aria-expanded=false tabindex=0>
+<span class=menu__btn-title tabindex=-1>菜单</span></button><ul class=menu__list><li class=menu__item><a class=menu__link href=/choudalao.github.io/><span class=menu__text>首页</span></a></li><li class=menu__item><a class=menu__link href=/choudalao.github.io/post/><span class=menu__text>归档</span></a></li><li class=menu__item><a class=menu__link href=/choudalao.github.io/about/><span class=menu__text>关于</span></a></li></ul></nav></div></header><div class="wrapper flex"><div class=primary><main class=main role=main><article class=post><header class=post__header><h1 class=post__title>beego 获取 axios 请求数据 | 臭大佬</h1></header><div class="content post__content clearfix"><h1 id=开发环境>开发环境</h1><p>前端：Vue
+后端：Beego</p><h1 id=问题>问题</h1><p>发现一个很奇怪的问题，<code>Beego</code>中用<code>GetString(key string) string</code>无法获取<code>Axios</code>请求数据。</p><p><code>Beego</code>中用<code>GetString(key string) string</code>获取请求参数,使用工具<code>apizza</code>(类似于postman的工具)发起请求，可以正常得到数据：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#960050;background-color:#1e0010>#</span> <span style=color:#a6e22e>admin</span>.<span style=color:#66d9ef>go</span> <span style=color:#a6e22e>中接收数据的代码</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>self</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>AdminController</span>) <span style=color:#a6e22e>Login</span>() {
+</span></span><span style=display:flex><span>	<span style=color:#f92672>...</span>
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>inputData</span> <span style=color:#f92672>:=</span> <span style=color:#66d9ef>map</span>[<span style=color:#66d9ef>string</span>]<span style=color:#66d9ef>string</span>{}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>inputData</span>[<span style=color:#e6db74>&#34;username&#34;</span>] = <span style=color:#a6e22e>username</span>
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>inputData</span>[<span style=color:#e6db74>&#34;password&#34;</span>] = <span style=color:#a6e22e>password</span>
+</span></span><span style=display:flex><span>	<span style=color:#75715e>// 返回参数</span>
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>self</span>.<span style=color:#a6e22e>ResJson</span>(<span style=color:#ae81ff>1</span>, <span style=color:#e6db74>&#34;获取数据&#34;</span>, <span style=color:#a6e22e>inputData</span>, <span style=color:#66d9ef>nil</span>)
+</span></span><span style=display:flex><span>	
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p><img src=https://www.choudalao.com/uploads/20200824/20200824004214Le8vxC.png alt></p><p>返回结果：</p><p><img src=https://www.choudalao.com/uploads/20200824/20200824003846gAZWrF.png alt></p><p>而当在前端使用<code>axios </code>传递参数时，发现无法获取：</p><p><img src=https://www.choudalao.com/uploads/20200824/20200824004448Rk1wdW.png alt>
+<img src=https://www.choudalao.com/uploads/20200824/20200824004453sH1xHu.png alt></p><p>前端代码之前是请求<code>php</code>获取数据，之前在<code>php</code>接口端是可以获取到请求参数的。这就很奇怪了，网上找了一圈都没有找到比较好的答案。在一个帖子里面看到，<code>ajax</code>和<code>axios</code>请求数据的格式是不同的,然后特意写了个页面研究一下。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-go data-lang=go><span style=display:flex><span>&lt;!<span style=color:#a6e22e>DOCTYPE</span> <span style=color:#a6e22e>html</span>&gt;
+</span></span><span style=display:flex><span>&lt;<span style=color:#a6e22e>html</span>&gt;
+</span></span><span style=display:flex><span>&lt;<span style=color:#a6e22e>head</span>&gt;
+</span></span><span style=display:flex><span>&lt;<span style=color:#a6e22e>meta</span> <span style=color:#a6e22e>charset</span>=<span style=color:#e6db74>&#34;utf-8&#34;</span>&gt; 
+</span></span><span style=display:flex><span>&lt;<span style=color:#a6e22e>title</span>&gt;<span style=color:#a6e22e>请求方式对比</span>&lt;<span style=color:#f92672>/</span><span style=color:#a6e22e>title</span>&gt; 
+</span></span><span style=display:flex><span>&lt;<span style=color:#a6e22e>script</span> <span style=color:#a6e22e>src</span>=<span style=color:#e6db74>&#34;https://unpkg.com/axios/dist/axios.min.js&#34;</span>&gt;&lt;<span style=color:#f92672>/</span><span style=color:#a6e22e>script</span>&gt;
+</span></span><span style=display:flex><span>&lt;<span style=color:#a6e22e>script</span> <span style=color:#a6e22e>src</span>=<span style=color:#e6db74>&#34;https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js&#34;</span>&gt;&lt;<span style=color:#f92672>/</span><span style=color:#a6e22e>script</span>&gt;
+</span></span><span style=display:flex><span>&lt;<span style=color:#a6e22e>script</span>&gt;
+</span></span><span style=display:flex><span><span style=color:#960050;background-color:#1e0010>$</span>(<span style=color:#a6e22e>document</span>).<span style=color:#a6e22e>ready</span>(<span style=color:#a6e22e>function</span>(){
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>var</span> <span style=color:#a6e22e>data</span> =  {
+</span></span><span style=display:flex><span>        <span style=color:#a6e22e>username</span>: <span style=color:#960050;background-color:#1e0010>&#39;</span><span style=color:#a6e22e>Fred</span><span style=color:#960050;background-color:#1e0010>&#39;</span>,
+</span></span><span style=display:flex><span>        <span style=color:#a6e22e>password</span>: <span style=color:#960050;background-color:#1e0010>&#39;</span><span style=color:#a6e22e>Flintstone</span><span style=color:#960050;background-color:#1e0010>&#39;</span>
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>  <span style=color:#960050;background-color:#1e0010>$</span>(<span style=color:#e6db74>&#34;#p1&#34;</span>).<span style=color:#a6e22e>click</span>(<span style=color:#a6e22e>function</span>(){
+</span></span><span style=display:flex><span>    <span style=color:#960050;background-color:#1e0010>$</span>.<span style=color:#a6e22e>post</span>(<span style=color:#e6db74>&#34;http://localhost:8181/api/admin/login&#34;</span>,<span style=color:#a6e22e>data</span>,
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>function</span>(<span style=color:#a6e22e>data</span>,<span style=color:#a6e22e>status</span>){
+</span></span><span style=display:flex><span>        <span style=color:#a6e22e>console</span>.<span style=color:#a6e22e>log</span>(<span style=color:#a6e22e>data</span>);
+</span></span><span style=display:flex><span>    });
+</span></span><span style=display:flex><span>  });
+</span></span><span style=display:flex><span> 
+</span></span><span style=display:flex><span>  <span style=color:#960050;background-color:#1e0010>$</span>(<span style=color:#e6db74>&#34;#p2&#34;</span>).<span style=color:#a6e22e>click</span>(<span style=color:#a6e22e>function</span>(){
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>axios</span>.<span style=color:#a6e22e>post</span>(<span style=color:#960050;background-color:#1e0010>&#39;</span><span style=color:#a6e22e>http</span>:<span style=color:#75715e>//localhost:8181/api/admin/login&#39;,data</span>
+</span></span><span style=display:flex><span>    )
+</span></span><span style=display:flex><span>    .<span style=color:#a6e22e>then</span>(<span style=color:#a6e22e>function</span> (<span style=color:#a6e22e>response</span>) {
+</span></span><span style=display:flex><span>        <span style=color:#a6e22e>console</span>.<span style=color:#a6e22e>log</span>(<span style=color:#a6e22e>response</span>);
+</span></span><span style=display:flex><span>    })
+</span></span><span style=display:flex><span>    .<span style=color:#a6e22e>catch</span>(<span style=color:#a6e22e>function</span> (<span style=color:#66d9ef>error</span>) {
+</span></span><span style=display:flex><span>        <span style=color:#a6e22e>console</span>.<span style=color:#a6e22e>log</span>(<span style=color:#66d9ef>error</span>);
+</span></span><span style=display:flex><span>    });
+</span></span><span style=display:flex><span>  })
+</span></span><span style=display:flex><span>});
+</span></span><span style=display:flex><span>&lt;<span style=color:#f92672>/</span><span style=color:#a6e22e>script</span>&gt;
+</span></span><span style=display:flex><span>&lt;<span style=color:#f92672>/</span><span style=color:#a6e22e>head</span>&gt;
+</span></span><span style=display:flex><span>&lt;<span style=color:#a6e22e>body</span>&gt;
+</span></span><span style=display:flex><span>&lt;<span style=color:#a6e22e>p</span> <span style=color:#a6e22e>id</span>=<span style=color:#e6db74>&#34;p1&#34;</span>&gt;<span style=color:#a6e22e>ajax</span> <span style=color:#a6e22e>请求</span>&lt;<span style=color:#f92672>/</span><span style=color:#a6e22e>p</span>&gt;
+</span></span><span style=display:flex><span>&lt;<span style=color:#a6e22e>p</span> <span style=color:#a6e22e>id</span>=<span style=color:#e6db74>&#34;p2&#34;</span>&gt;<span style=color:#a6e22e>axios</span> <span style=color:#a6e22e>请求</span>&lt;<span style=color:#f92672>/</span><span style=color:#a6e22e>p</span>&gt;
+</span></span><span style=display:flex><span>&lt;<span style=color:#f92672>/</span><span style=color:#a6e22e>body</span>&gt;
+</span></span><span style=display:flex><span>&lt;<span style=color:#f92672>/</span><span style=color:#a6e22e>html</span>&gt;
+</span></span></code></pre></div><p>上面的两个请求方式，发现<code>ajax</code>请求可以返回结果，而<code>axios</code>请求无法得到参数。</p><h1 id=解决>解决</h1><p>默认情况下，<code>jquery</code>的<code>ajax</code>，<code>Content-Type</code>是<code>application/x-www-form-urlencoded</code>，</p><p><code>axios</code>的话会做判断，如果<code>data</code>是字符串，<code>Content-Type</code>是<code>application/x-www-form-urlencoded</code>，如果<code>data</code>是对象，<code>Content-Type是application/json</code>，</p><p>所以<code>axios</code>要和默认<code>ajax</code>请求一样，需要把<code>data</code>以<code>key=value&amp;key1=value1</code>形式传递，同时，<code>headers</code>的<code>content-type</code>参数修改为<code>application/x-www-form-urlencoded</code></p><p>解决方案有两种，一种是在前端把<code>axios</code>参数修改为后端能够用<code>GetString(key string) string</code>获取得到的形式（ajax比较通用），二是后端做个兼容，既能接收<code>ajax</code>的参数，又能获取到<code>axios</code>请求的参数。</p><h3 id=前端解决方案>前端解决方案</h3><p>需要修改的地方有两处，
 1：参数以<code>key=value&amp;key1=value1</code>形式传递；
-2：<code>headers</code>的<code>content-type</code>参数修改为<code>application/x-www-form-urlencoded</code></p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">axios</span>.<span style="color:#a6e22e">post</span>(<span style="color:#960050;background-color:#1e0010">&#39;</span><span style="color:#a6e22e">http</span>:<span style="color:#75715e">//localhost:8181/api/admin/login&#39;,</span>
-</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">&#39;</span><span style="color:#a6e22e">username</span>=<span style="color:#a6e22e">ssss</span><span style="color:#f92672">&amp;</span><span style="color:#a6e22e">password</span>=<span style="color:#ae81ff">12345</span><span style="color:#960050;background-color:#1e0010">&#39;</span>, {
-</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">headers</span>: {<span style="color:#960050;background-color:#1e0010">&#39;</span><span style="color:#a6e22e">content</span><span style="color:#f92672">-</span><span style="color:#66d9ef">type</span><span style="color:#e6db74">&#39;:&#39;</span><span style="color:#a6e22e">application</span><span style="color:#f92672">/</span><span style="color:#a6e22e">x</span><span style="color:#f92672">-</span><span style="color:#a6e22e">www</span><span style="color:#f92672">-</span><span style="color:#a6e22e">form</span><span style="color:#f92672">-</span><span style="color:#a6e22e">urlencoded</span><span style="color:#960050;background-color:#1e0010">&#39;</span>}
-</span></span><span style="display:flex;"><span>    })
-</span></span><span style="display:flex;"><span>    .<span style="color:#a6e22e">then</span>(<span style="color:#a6e22e">function</span> (<span style="color:#a6e22e">response</span>) {
-</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">log</span>(<span style="color:#a6e22e">response</span>);
-</span></span><span style="display:flex;"><span>    })
-</span></span><span style="display:flex;"><span>    .<span style="color:#a6e22e">catch</span>(<span style="color:#a6e22e">function</span> (<span style="color:#66d9ef">error</span>) {
-</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">log</span>(<span style="color:#66d9ef">error</span>);
-</span></span><span style="display:flex;"><span>    });
-</span></span></code></pre></div><p><img src="https://www.choudalao.com/uploads/20200824/20200824010437mfaXXx.png" alt=""></p>
-<h3 id="后端解决方案">后端解决方案</h3>
-<p>在配置文件<code>app.conf</code>中加上如下代码：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">#</span> <span style="color:#a6e22e">获取ajax提交的json数据</span><span style="color:#960050;background-color:#1e0010">，</span><span style="color:#a6e22e">不然全是空的</span>
-</span></span><span style="display:flex;"><span><span style="color:#a6e22e">copyrequestbody</span> = <span style="color:#66d9ef">true</span>
-</span></span></code></pre></div><p>用<code>GetString</code>接收常规参数，用<code>json</code>接收<code>axios</code>传递的参数，获取参数代码如下：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e">// 如果参数名和模型中的字段相同，可以用模型 struct 代替</span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">InputData</span> <span style="color:#66d9ef">struct</span> {
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">Username</span> <span style="color:#66d9ef">string</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">Password</span> <span style="color:#66d9ef">string</span>
-</span></span><span style="display:flex;"><span>}
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e">//用户登录</span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">self</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">AdminController</span>) <span style="color:#a6e22e">Login</span>() {
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">Input</span> <span style="color:#a6e22e">InputData</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// 获取字符串形式的参数，用于ajax</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">username</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">self</span>.<span style="color:#a6e22e">GetString</span>(<span style="color:#e6db74">&#34;username&#34;</span>)
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">password</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">self</span>.<span style="color:#a6e22e">GetString</span>(<span style="color:#e6db74">&#34;password&#34;</span>)
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">username</span> <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;&#34;</span> <span style="color:#f92672">&amp;&amp;</span> <span style="color:#a6e22e">password</span> <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;&#34;</span> {
-</span></span><span style="display:flex;"><span>		<span style="color:#75715e">// 获取 axios 传递的参数</span>
-</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">data</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">self</span>.<span style="color:#a6e22e">Ctx</span>.<span style="color:#a6e22e">Input</span>.<span style="color:#a6e22e">RequestBody</span>
-</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">json</span>.<span style="color:#a6e22e">Unmarshal</span>(<span style="color:#a6e22e">data</span>, <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">Input</span>)
-</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
-</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">self</span>.<span style="color:#a6e22e">ResJson</span>(<span style="color:#ae81ff">1</span>, <span style="color:#e6db74">&#34;存入失败&#34;</span>, <span style="color:#a6e22e">err</span>.<span style="color:#a6e22e">Error</span>(), <span style="color:#66d9ef">nil</span>)
-</span></span><span style="display:flex;"><span>		}
-</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">username</span> = <span style="color:#a6e22e">Input</span>.<span style="color:#a6e22e">Username</span>
-</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">password</span> = <span style="color:#a6e22e">Input</span>.<span style="color:#a6e22e">Password</span>
-</span></span><span style="display:flex;"><span>	}
-</span></span><span style="display:flex;"><span>	<span style="color:#75715e">//...</span>
-</span></span><span style="display:flex;"><span>	
-</span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><h5 id="注意前后端方案只需要改其中一个不需要两边都进行修改">注意，前后端方案只需要改其中一个，不需要两边都进行修改。</h5>
-
-		</div>
-	</article>
-</main>
-
-
-
-
-			</div>
-			
-		</div>
-		<footer class="footer">
-	<div class="container footer__container flex">
-		
-		<div class="footer__copyright">
-			&copy; 2026 臭大佬博客.
-			<span class="footer__copyright-credits">基于 <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> 引擎和 <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> 主题</span>
-		</div>
-	</div>
-</footer>
-	</div>
-<script async defer src="/js/menu.js"></script>
-</body>
-</html>
+2：<code>headers</code>的<code>content-type</code>参数修改为<code>application/x-www-form-urlencoded</code></p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#a6e22e>axios</span>.<span style=color:#a6e22e>post</span>(<span style=color:#960050;background-color:#1e0010>&#39;</span><span style=color:#a6e22e>http</span>:<span style=color:#75715e>//localhost:8181/api/admin/login&#39;,</span>
+</span></span><span style=display:flex><span><span style=color:#960050;background-color:#1e0010>&#39;</span><span style=color:#a6e22e>username</span>=<span style=color:#a6e22e>ssss</span><span style=color:#f92672>&amp;</span><span style=color:#a6e22e>password</span>=<span style=color:#ae81ff>12345</span><span style=color:#960050;background-color:#1e0010>&#39;</span>, {
+</span></span><span style=display:flex><span>        <span style=color:#a6e22e>headers</span>: {<span style=color:#960050;background-color:#1e0010>&#39;</span><span style=color:#a6e22e>content</span><span style=color:#f92672>-</span><span style=color:#66d9ef>type</span><span style=color:#e6db74>&#39;:&#39;</span><span style=color:#a6e22e>application</span><span style=color:#f92672>/</span><span style=color:#a6e22e>x</span><span style=color:#f92672>-</span><span style=color:#a6e22e>www</span><span style=color:#f92672>-</span><span style=color:#a6e22e>form</span><span style=color:#f92672>-</span><span style=color:#a6e22e>urlencoded</span><span style=color:#960050;background-color:#1e0010>&#39;</span>}
+</span></span><span style=display:flex><span>    })
+</span></span><span style=display:flex><span>    .<span style=color:#a6e22e>then</span>(<span style=color:#a6e22e>function</span> (<span style=color:#a6e22e>response</span>) {
+</span></span><span style=display:flex><span>        <span style=color:#a6e22e>console</span>.<span style=color:#a6e22e>log</span>(<span style=color:#a6e22e>response</span>);
+</span></span><span style=display:flex><span>    })
+</span></span><span style=display:flex><span>    .<span style=color:#a6e22e>catch</span>(<span style=color:#a6e22e>function</span> (<span style=color:#66d9ef>error</span>) {
+</span></span><span style=display:flex><span>        <span style=color:#a6e22e>console</span>.<span style=color:#a6e22e>log</span>(<span style=color:#66d9ef>error</span>);
+</span></span><span style=display:flex><span>    });
+</span></span></code></pre></div><p><img src=https://www.choudalao.com/uploads/20200824/20200824010437mfaXXx.png alt></p><h3 id=后端解决方案>后端解决方案</h3><p>在配置文件<code>app.conf</code>中加上如下代码：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#960050;background-color:#1e0010>#</span> <span style=color:#a6e22e>获取ajax提交的json数据</span><span style=color:#960050;background-color:#1e0010>，</span><span style=color:#a6e22e>不然全是空的</span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>copyrequestbody</span> = <span style=color:#66d9ef>true</span>
+</span></span></code></pre></div><p>用<code>GetString</code>接收常规参数，用<code>json</code>接收<code>axios</code>传递的参数，获取参数代码如下：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-go data-lang=go><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>// 如果参数名和模型中的字段相同，可以用模型 struct 代替</span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>type</span> <span style=color:#a6e22e>InputData</span> <span style=color:#66d9ef>struct</span> {
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>Username</span> <span style=color:#66d9ef>string</span>
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>Password</span> <span style=color:#66d9ef>string</span>
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>//用户登录</span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>self</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>AdminController</span>) <span style=color:#a6e22e>Login</span>() {
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>var</span> <span style=color:#a6e22e>Input</span> <span style=color:#a6e22e>InputData</span>
+</span></span><span style=display:flex><span>	<span style=color:#75715e>// 获取字符串形式的参数，用于ajax</span>
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>username</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>self</span>.<span style=color:#a6e22e>GetString</span>(<span style=color:#e6db74>&#34;username&#34;</span>)
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>password</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>self</span>.<span style=color:#a6e22e>GetString</span>(<span style=color:#e6db74>&#34;password&#34;</span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>if</span> <span style=color:#a6e22e>username</span> <span style=color:#f92672>==</span> <span style=color:#e6db74>&#34;&#34;</span> <span style=color:#f92672>&amp;&amp;</span> <span style=color:#a6e22e>password</span> <span style=color:#f92672>==</span> <span style=color:#e6db74>&#34;&#34;</span> {
+</span></span><span style=display:flex><span>		<span style=color:#75715e>// 获取 axios 传递的参数</span>
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>data</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>self</span>.<span style=color:#a6e22e>Ctx</span>.<span style=color:#a6e22e>Input</span>.<span style=color:#a6e22e>RequestBody</span>
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>err</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>json</span>.<span style=color:#a6e22e>Unmarshal</span>(<span style=color:#a6e22e>data</span>, <span style=color:#f92672>&amp;</span><span style=color:#a6e22e>Input</span>)
+</span></span><span style=display:flex><span>		<span style=color:#66d9ef>if</span> <span style=color:#a6e22e>err</span> <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nil</span> {
+</span></span><span style=display:flex><span>			<span style=color:#a6e22e>self</span>.<span style=color:#a6e22e>ResJson</span>(<span style=color:#ae81ff>1</span>, <span style=color:#e6db74>&#34;存入失败&#34;</span>, <span style=color:#a6e22e>err</span>.<span style=color:#a6e22e>Error</span>(), <span style=color:#66d9ef>nil</span>)
+</span></span><span style=display:flex><span>		}
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>username</span> = <span style=color:#a6e22e>Input</span>.<span style=color:#a6e22e>Username</span>
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>password</span> = <span style=color:#a6e22e>Input</span>.<span style=color:#a6e22e>Password</span>
+</span></span><span style=display:flex><span>	}
+</span></span><span style=display:flex><span>	<span style=color:#75715e>//...</span>
+</span></span><span style=display:flex><span>	
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h5 id=注意前后端方案只需要改其中一个不需要两边都进行修改>注意，前后端方案只需要改其中一个，不需要两边都进行修改。</h5></div></article></main></div></div><footer class=footer><div class="container footer__container flex"><div class=footer__copyright>&copy; 2026 臭大佬博客.
+<span class=footer__copyright-credits>基于 <a href=https://gohugo.io/ rel="nofollow noopener" target=_blank>Hugo</a> 引擎和 <a href=https://github.com/Vimux/Mainroad/ rel="nofollow noopener" target=_blank>Mainroad</a> 主题</span></div></div></footer></div><script async defer src=/choudalao.github.io/js/menu.js></script></body></html>

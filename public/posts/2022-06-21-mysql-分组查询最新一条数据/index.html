@@ -1,157 +1,43 @@
-<!DOCTYPE html>
-<html class="no-js" lang="en">
-<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>mysql 分组查询最新一条数据 - 臭大佬博客</title>
-	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
-	<meta name="description" content="mysql 分组查询最新一条数据">
-	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-	<link rel="dns-prefetch" href="//fonts.googleapis.com">
-	<link rel="dns-prefetch" href="//fonts.gstatic.com">
-	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
-
-	<link rel="stylesheet" href="/css/style.css">
-	
-
-	<link rel="shortcut icon" href="/favicon.ico">
-		
-</head>
-<body class="body">
-	<div class="container container--outer">
-		<header class="header">
-	<div class="container header__container">
-		
-	<div class="logo">
-		<a class="logo__link" href="/" title="臭大佬博客" rel="home">
-			<div class="logo__item logo__text">
-					<div class="logo__title">臭大佬博客</div>
-					
-				</div>
-		</a>
-	</div>
-		
-<nav class="menu">
-	<button class="menu__btn" aria-haspopup="true" aria-expanded="false" tabindex="0">
-		<span class="menu__btn-title" tabindex="-1">菜单</span>
-	</button>
-	<ul class="menu__list">
-		<li class="menu__item">
-			<a class="menu__link" href="/">
-				
-				<span class="menu__text">首页</span>
-				
-			</a>
-		</li>
-		<li class="menu__item">
-			<a class="menu__link" href="/post/">
-				
-				<span class="menu__text">归档</span>
-				
-			</a>
-		</li>
-		<li class="menu__item">
-			<a class="menu__link" href="/about/">
-				
-				<span class="menu__text">关于</span>
-				
-			</a>
-		</li>
-	</ul>
-</nav>
-
-	</div>
-</header>
-		<div class="wrapper flex">
-			<div class="primary">
-			
-<main class="main" role="main">
-	<article class="post">
-		<header class="post__header">
-			<h1 class="post__title">mysql 分组查询最新一条数据</h1>
-			
-		</header>
-		<div class="content post__content clearfix">
-			<h1 id="需求">需求</h1>
-<p>下面是一张日志表</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#a6e22e">CREATE</span> <span style="color:#a6e22e">TABLE</span> <span style="color:#e6db74">`user_audit_log`</span> (
-</span></span><span style="display:flex;"><span>  <span style="color:#e6db74">`id`</span> <span style="color:#a6e22e">int</span>(<span style="color:#ae81ff">10</span>) <span style="color:#a6e22e">unsigned</span> <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">NULL</span> <span style="color:#a6e22e">AUTO_INCREMENT</span>,
-</span></span><span style="display:flex;"><span>  <span style="color:#e6db74">`user_id`</span> <span style="color:#a6e22e">int</span>(<span style="color:#ae81ff">10</span>) <span style="color:#a6e22e">unsigned</span> <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">NULL</span> <span style="color:#66d9ef">DEFAULT</span> <span style="color:#e6db74">&#39;0&#39;</span> <span style="color:#a6e22e">COMMENT</span> <span style="color:#e6db74">&#39;user表主键&#39;</span>,
-</span></span><span style="display:flex;"><span>  <span style="color:#e6db74">`status`</span> <span style="color:#a6e22e">tinyint</span>(<span style="color:#ae81ff">2</span>) <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">NULL</span> <span style="color:#a6e22e">COMMENT</span> <span style="color:#e6db74">&#39;审核状态1: 通过 2:不通过&#39;</span>,
-</span></span><span style="display:flex;"><span>  <span style="color:#e6db74">`reason`</span> <span style="color:#a6e22e">varchar</span>(<span style="color:#ae81ff">2048</span>) <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">NULL</span> <span style="color:#66d9ef">DEFAULT</span> <span style="color:#e6db74">&#39;&#39;</span> <span style="color:#a6e22e">COMMENT</span> <span style="color:#e6db74">&#39;审核不通过原因&#39;</span>,
-</span></span><span style="display:flex;"><span>  <span style="color:#e6db74">`auditor_id`</span> <span style="color:#a6e22e">int</span>(<span style="color:#ae81ff">10</span>) <span style="color:#a6e22e">unsigned</span> <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">NULL</span> <span style="color:#a6e22e">COMMENT</span> <span style="color:#e6db74">&#39;sys_users表主键&#39;</span>,
-</span></span><span style="display:flex;"><span>  <span style="color:#e6db74">`updated_at`</span> <span style="color:#a6e22e">datetime</span> <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">NULL</span> <span style="color:#66d9ef">DEFAULT</span> <span style="color:#a6e22e">CURRENT_TIMESTAMP</span> <span style="color:#a6e22e">ON</span> <span style="color:#a6e22e">UPDATE</span> <span style="color:#a6e22e">CURRENT_TIMESTAMP</span>,
-</span></span><span style="display:flex;"><span>  <span style="color:#e6db74">`created_at`</span> <span style="color:#a6e22e">datetime</span> <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">NULL</span> <span style="color:#66d9ef">DEFAULT</span> <span style="color:#a6e22e">CURRENT_TIMESTAMP</span>,
-</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">PRIMARY</span> <span style="color:#a6e22e">KEY</span> (<span style="color:#e6db74">`id`</span>),
-</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">KEY</span> <span style="color:#e6db74">`idx_uid`</span> (<span style="color:#e6db74">`user_id`</span>)
-</span></span><span style="display:flex;"><span>) <span style="color:#a6e22e">ENGINE</span><span style="color:#f92672">=</span><span style="color:#a6e22e">InnoDB</span> <span style="color:#a6e22e">AUTO_INCREMENT</span><span style="color:#f92672">=</span><span style="color:#ae81ff">235</span> <span style="color:#66d9ef">DEFAULT</span> <span style="color:#a6e22e">CHARSET</span><span style="color:#f92672">=</span><span style="color:#a6e22e">utf8mb4</span> <span style="color:#a6e22e">COMMENT</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#39;用户入驻审核记录表&#39;</span>;
-</span></span></code></pre></div><p>现在要查询每个用户状态为3的，最新一条数据；</p>
-<p>可能我们第一时间想到的就是，先对<code>id</code>进行倒叙，然后<code>group</code>一下 <code>user_id</code>,<code>sql</code>如下：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#a6e22e">SELECT</span> <span style="color:#e6db74">`id`</span>, <span style="color:#e6db74">`user_id`</span>, <span style="color:#e6db74">`status`</span>, <span style="color:#e6db74">`reason`</span>  <span style="color:#a6e22e">FROM</span> <span style="color:#e6db74">`user_audit_log`</span>  <span style="color:#a6e22e">WHERE</span> <span style="color:#e6db74">`status`</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">3</span>  <span style="color:#a6e22e">GROUP</span> <span style="color:#a6e22e">BY</span> <span style="color:#e6db74">`user_id`</span> <span style="color:#a6e22e">ORDER</span> <span style="color:#a6e22e">BY</span> <span style="color:#e6db74">`id`</span> <span style="color:#a6e22e">DESC</span>
-</span></span></code></pre></div><p><img src="https://www.choudalao.com/uploads/20220621/20220621120206HyFG7F.png" alt=""></p>
-<p>但是，当把分组去掉的时候，你会发现，其实得到的不是最新一条的记录</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#a6e22e">SELECT</span> <span style="color:#e6db74">`id`</span>, <span style="color:#e6db74">`user_id`</span>, <span style="color:#e6db74">`status`</span>, <span style="color:#e6db74">`reason`</span>  <span style="color:#a6e22e">FROM</span> <span style="color:#e6db74">`user_audit_log`</span>  <span style="color:#a6e22e">WHERE</span> <span style="color:#e6db74">`status`</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">3</span>  <span style="color:#a6e22e">ORDER</span> <span style="color:#a6e22e">BY</span> <span style="color:#e6db74">`id`</span> <span style="color:#a6e22e">DESC</span>
-</span></span></code></pre></div><p><img src="https://www.choudalao.com/uploads/20220621/20220621120319BQ8xeK.png" alt=""></p>
-<p>截图中<code>user_id</code>=53的数据，<code>reason</code>字段最新记录的值是<code>会一样吗</code>，但分组后的却不是，说明这样是有问题的。</p>
-<p>这是因为mysql先分组再排序，这边排序是对已经分组过滤掉的数据进行排序的，而默认分组取的是每个分组的第一条，所以，结果不是我们想要的。</p>
-<p>因为 <code>user_id</code>=53 的数据会比较多，我们在上面的基础上，再加一个条件 <code>user_id</code>=53 来验证结果。下面是<code>user_id</code>=53的倒叙数据。</p>
-<p><img src="https://www.choudalao.com/uploads/20220621/2022062112510954Cx0r.png" alt=""></p>
-<p>既然分组后排序不起作用，那我们先进行倒叙，再把数据进行分组，这样取得第一条就是我们想要的，</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#a6e22e">SELECT</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#f92672">*</span> 
-</span></span><span style="display:flex;"><span><span style="color:#a6e22e">FROM</span>
-</span></span><span style="display:flex;"><span>	( <span style="color:#a6e22e">SELECT</span> <span style="color:#e6db74">`id`</span>, <span style="color:#e6db74">`user_id`</span>, <span style="color:#e6db74">`status`</span>, <span style="color:#e6db74">`reason`</span> <span style="color:#a6e22e">FROM</span> <span style="color:#e6db74">`user_audit_log`</span> <span style="color:#a6e22e">WHERE</span> <span style="color:#e6db74">`status`</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">3</span> <span style="color:#66d9ef">AND</span> <span style="color:#e6db74">`user_id`</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">53</span> <span style="color:#a6e22e">ORDER</span> <span style="color:#a6e22e">BY</span> <span style="color:#e6db74">`id`</span> <span style="color:#a6e22e">DESC</span> ) <span style="color:#66d9ef">AS</span> <span style="color:#a6e22e">t</span> 
-</span></span><span style="display:flex;"><span><span style="color:#a6e22e">GROUP</span> <span style="color:#a6e22e">BY</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">t</span><span style="color:#f92672">.</span><span style="color:#a6e22e">user_id</span> 
-</span></span><span style="display:flex;"><span><span style="color:#a6e22e">ORDER</span> <span style="color:#a6e22e">BY</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">user_id</span> <span style="color:#a6e22e">DESC</span>,
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">id</span> <span style="color:#a6e22e">DESC</span>
-</span></span></code></pre></div><p><img src="https://www.choudalao.com/uploads/20220621/20220621125242YyKG74.png" alt="">!</p>
-<p>从结果上看，并不是我们想要的，
-我们调整<code>order</code>字段，效果也是一样的</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#a6e22e">SELECT</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#f92672">*</span> 
-</span></span><span style="display:flex;"><span><span style="color:#a6e22e">FROM</span>
-</span></span><span style="display:flex;"><span>	( <span style="color:#a6e22e">SELECT</span> <span style="color:#e6db74">`id`</span>, <span style="color:#e6db74">`user_id`</span>, <span style="color:#e6db74">`status`</span>, <span style="color:#e6db74">`reason`</span> <span style="color:#a6e22e">FROM</span> <span style="color:#e6db74">`user_audit_log`</span> <span style="color:#a6e22e">WHERE</span> <span style="color:#e6db74">`status`</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">3</span> <span style="color:#66d9ef">AND</span> <span style="color:#e6db74">`user_id`</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">53</span> <span style="color:#a6e22e">ORDER</span> <span style="color:#a6e22e">BY</span> <span style="color:#e6db74">`id`</span> <span style="color:#a6e22e">DESC</span> ) <span style="color:#66d9ef">AS</span> <span style="color:#a6e22e">t</span> 
-</span></span><span style="display:flex;"><span><span style="color:#a6e22e">GROUP</span> <span style="color:#a6e22e">BY</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">t</span><span style="color:#f92672">.</span><span style="color:#a6e22e">user_id</span> 
-</span></span><span style="display:flex;"><span><span style="color:#a6e22e">ORDER</span> <span style="color:#a6e22e">BY</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">id</span> <span style="color:#a6e22e">DESC</span>,
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">user_id</span> <span style="color:#a6e22e">DESC</span>
-</span></span></code></pre></div><p>这是因为当子查询的<code>order by</code>语句后面没有<code>limit</code>关键字时，数据库会自动优化，即忽略<code>order by</code>语句。因此只需要添加<code>limit</code>关键字即可。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#a6e22e">FROM</span>
-</span></span><span style="display:flex;"><span>	( <span style="color:#a6e22e">SELECT</span> <span style="color:#e6db74">`id`</span>, <span style="color:#e6db74">`user_id`</span>, <span style="color:#e6db74">`status`</span>, <span style="color:#e6db74">`reason`</span> <span style="color:#a6e22e">FROM</span> <span style="color:#e6db74">`user_audit_log`</span> <span style="color:#a6e22e">WHERE</span> <span style="color:#e6db74">`status`</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">3</span>  <span style="color:#a6e22e">ORDER</span> <span style="color:#a6e22e">BY</span> <span style="color:#e6db74">`id`</span> <span style="color:#a6e22e">DESC</span> <span style="color:#a6e22e">LIMIT</span> <span style="color:#ae81ff">1000</span> ) <span style="color:#66d9ef">AS</span> <span style="color:#a6e22e">t</span> 
-</span></span><span style="display:flex;"><span><span style="color:#a6e22e">GROUP</span> <span style="color:#a6e22e">BY</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">t</span><span style="color:#f92672">.</span><span style="color:#a6e22e">user_id</span> 
-</span></span><span style="display:flex;"><span><span style="color:#a6e22e">ORDER</span> <span style="color:#a6e22e">BY</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">user_id</span> <span style="color:#a6e22e">DESC</span>,
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">id</span> <span style="color:#a6e22e">DESC</span>
-</span></span></code></pre></div><p><img src="https://www.choudalao.com/uploads/20220621/20220621125727QcUKH8.png" alt=""></p>
-<p>这次就是我们想要的结果了。</p>
-<h1 id="总结">总结</h1>
-<p><strong><code>group by</code>先于<code>order by</code>执行；
-当子查询的<code>order by</code>语句后面没有<code>limit</code>关键字时，数据库会自动优化，即忽略<code>order by</code>语句；</strong></p>
-
-		</div>
-	</article>
-</main>
-
-
-
-
-			</div>
-			
-		</div>
-		<footer class="footer">
-	<div class="container footer__container flex">
-		
-		<div class="footer__copyright">
-			&copy; 2026 臭大佬博客.
-			<span class="footer__copyright-credits">基于 <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> 引擎和 <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> 主题</span>
-		</div>
-	</div>
-</footer>
-	</div>
-<script async defer src="/js/menu.js"></script>
-</body>
-</html>
+<!doctype html><html class=no-js lang=en><head><meta charset=UTF-8><meta name=viewport content="width=device-width,initial-scale=1"><title>mysql 分组查询最新一条数据 - 臭大佬博客</title><script>(function(e,t){e[t]=e[t].replace("no-js","js")})(document.documentElement,"className")</script><meta name=description content="mysql 分组查询最新一条数据"><link rel=preconnect href=https://fonts.gstatic.com crossorigin><link rel=dns-prefetch href=//fonts.googleapis.com><link rel=dns-prefetch href=//fonts.gstatic.com><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700"><link rel=stylesheet href=/choudalao.github.io/css/style.css><link rel="shortcut icon" href=/choudalao.github.io/favicon.ico></head><body class=body><div class="container container--outer"><header class=header><div class="container header__container"><div class=logo><a class=logo__link href=/choudalao.github.io/ title=臭大佬博客 rel=home><div class="logo__item logo__text"><div class=logo__title>臭大佬博客</div></div></a></div><nav class=menu><button class=menu__btn aria-haspopup=true aria-expanded=false tabindex=0>
+<span class=menu__btn-title tabindex=-1>菜单</span></button><ul class=menu__list><li class=menu__item><a class=menu__link href=/choudalao.github.io/><span class=menu__text>首页</span></a></li><li class=menu__item><a class=menu__link href=/choudalao.github.io/post/><span class=menu__text>归档</span></a></li><li class=menu__item><a class=menu__link href=/choudalao.github.io/about/><span class=menu__text>关于</span></a></li></ul></nav></div></header><div class="wrapper flex"><div class=primary><main class=main role=main><article class=post><header class=post__header><h1 class=post__title>mysql 分组查询最新一条数据</h1></header><div class="content post__content clearfix"><h1 id=需求>需求</h1><p>下面是一张日志表</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-php data-lang=php><span style=display:flex><span><span style=color:#a6e22e>CREATE</span> <span style=color:#a6e22e>TABLE</span> <span style=color:#e6db74>`user_audit_log`</span> (
+</span></span><span style=display:flex><span>  <span style=color:#e6db74>`id`</span> <span style=color:#a6e22e>int</span>(<span style=color:#ae81ff>10</span>) <span style=color:#a6e22e>unsigned</span> <span style=color:#66d9ef>NOT</span> <span style=color:#66d9ef>NULL</span> <span style=color:#a6e22e>AUTO_INCREMENT</span>,
+</span></span><span style=display:flex><span>  <span style=color:#e6db74>`user_id`</span> <span style=color:#a6e22e>int</span>(<span style=color:#ae81ff>10</span>) <span style=color:#a6e22e>unsigned</span> <span style=color:#66d9ef>NOT</span> <span style=color:#66d9ef>NULL</span> <span style=color:#66d9ef>DEFAULT</span> <span style=color:#e6db74>&#39;0&#39;</span> <span style=color:#a6e22e>COMMENT</span> <span style=color:#e6db74>&#39;user表主键&#39;</span>,
+</span></span><span style=display:flex><span>  <span style=color:#e6db74>`status`</span> <span style=color:#a6e22e>tinyint</span>(<span style=color:#ae81ff>2</span>) <span style=color:#66d9ef>NOT</span> <span style=color:#66d9ef>NULL</span> <span style=color:#a6e22e>COMMENT</span> <span style=color:#e6db74>&#39;审核状态1: 通过 2:不通过&#39;</span>,
+</span></span><span style=display:flex><span>  <span style=color:#e6db74>`reason`</span> <span style=color:#a6e22e>varchar</span>(<span style=color:#ae81ff>2048</span>) <span style=color:#66d9ef>NOT</span> <span style=color:#66d9ef>NULL</span> <span style=color:#66d9ef>DEFAULT</span> <span style=color:#e6db74>&#39;&#39;</span> <span style=color:#a6e22e>COMMENT</span> <span style=color:#e6db74>&#39;审核不通过原因&#39;</span>,
+</span></span><span style=display:flex><span>  <span style=color:#e6db74>`auditor_id`</span> <span style=color:#a6e22e>int</span>(<span style=color:#ae81ff>10</span>) <span style=color:#a6e22e>unsigned</span> <span style=color:#66d9ef>NOT</span> <span style=color:#66d9ef>NULL</span> <span style=color:#a6e22e>COMMENT</span> <span style=color:#e6db74>&#39;sys_users表主键&#39;</span>,
+</span></span><span style=display:flex><span>  <span style=color:#e6db74>`updated_at`</span> <span style=color:#a6e22e>datetime</span> <span style=color:#66d9ef>NOT</span> <span style=color:#66d9ef>NULL</span> <span style=color:#66d9ef>DEFAULT</span> <span style=color:#a6e22e>CURRENT_TIMESTAMP</span> <span style=color:#a6e22e>ON</span> <span style=color:#a6e22e>UPDATE</span> <span style=color:#a6e22e>CURRENT_TIMESTAMP</span>,
+</span></span><span style=display:flex><span>  <span style=color:#e6db74>`created_at`</span> <span style=color:#a6e22e>datetime</span> <span style=color:#66d9ef>NOT</span> <span style=color:#66d9ef>NULL</span> <span style=color:#66d9ef>DEFAULT</span> <span style=color:#a6e22e>CURRENT_TIMESTAMP</span>,
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>PRIMARY</span> <span style=color:#a6e22e>KEY</span> (<span style=color:#e6db74>`id`</span>),
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>KEY</span> <span style=color:#e6db74>`idx_uid`</span> (<span style=color:#e6db74>`user_id`</span>)
+</span></span><span style=display:flex><span>) <span style=color:#a6e22e>ENGINE</span><span style=color:#f92672>=</span><span style=color:#a6e22e>InnoDB</span> <span style=color:#a6e22e>AUTO_INCREMENT</span><span style=color:#f92672>=</span><span style=color:#ae81ff>235</span> <span style=color:#66d9ef>DEFAULT</span> <span style=color:#a6e22e>CHARSET</span><span style=color:#f92672>=</span><span style=color:#a6e22e>utf8mb4</span> <span style=color:#a6e22e>COMMENT</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#39;用户入驻审核记录表&#39;</span>;
+</span></span></code></pre></div><p>现在要查询每个用户状态为3的，最新一条数据；</p><p>可能我们第一时间想到的就是，先对<code>id</code>进行倒叙，然后<code>group</code>一下 <code>user_id</code>,<code>sql</code>如下：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-php data-lang=php><span style=display:flex><span><span style=color:#a6e22e>SELECT</span> <span style=color:#e6db74>`id`</span>, <span style=color:#e6db74>`user_id`</span>, <span style=color:#e6db74>`status`</span>, <span style=color:#e6db74>`reason`</span>  <span style=color:#a6e22e>FROM</span> <span style=color:#e6db74>`user_audit_log`</span>  <span style=color:#a6e22e>WHERE</span> <span style=color:#e6db74>`status`</span> <span style=color:#f92672>=</span> <span style=color:#ae81ff>3</span>  <span style=color:#a6e22e>GROUP</span> <span style=color:#a6e22e>BY</span> <span style=color:#e6db74>`user_id`</span> <span style=color:#a6e22e>ORDER</span> <span style=color:#a6e22e>BY</span> <span style=color:#e6db74>`id`</span> <span style=color:#a6e22e>DESC</span>
+</span></span></code></pre></div><p><img src=https://www.choudalao.com/uploads/20220621/20220621120206HyFG7F.png alt></p><p>但是，当把分组去掉的时候，你会发现，其实得到的不是最新一条的记录</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-php data-lang=php><span style=display:flex><span><span style=color:#a6e22e>SELECT</span> <span style=color:#e6db74>`id`</span>, <span style=color:#e6db74>`user_id`</span>, <span style=color:#e6db74>`status`</span>, <span style=color:#e6db74>`reason`</span>  <span style=color:#a6e22e>FROM</span> <span style=color:#e6db74>`user_audit_log`</span>  <span style=color:#a6e22e>WHERE</span> <span style=color:#e6db74>`status`</span> <span style=color:#f92672>=</span> <span style=color:#ae81ff>3</span>  <span style=color:#a6e22e>ORDER</span> <span style=color:#a6e22e>BY</span> <span style=color:#e6db74>`id`</span> <span style=color:#a6e22e>DESC</span>
+</span></span></code></pre></div><p><img src=https://www.choudalao.com/uploads/20220621/20220621120319BQ8xeK.png alt></p><p>截图中<code>user_id</code>=53的数据，<code>reason</code>字段最新记录的值是<code>会一样吗</code>，但分组后的却不是，说明这样是有问题的。</p><p>这是因为mysql先分组再排序，这边排序是对已经分组过滤掉的数据进行排序的，而默认分组取的是每个分组的第一条，所以，结果不是我们想要的。</p><p>因为 <code>user_id</code>=53 的数据会比较多，我们在上面的基础上，再加一个条件 <code>user_id</code>=53 来验证结果。下面是<code>user_id</code>=53的倒叙数据。</p><p><img src=https://www.choudalao.com/uploads/20220621/2022062112510954Cx0r.png alt></p><p>既然分组后排序不起作用，那我们先进行倒叙，再把数据进行分组，这样取得第一条就是我们想要的，</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-php data-lang=php><span style=display:flex><span><span style=color:#a6e22e>SELECT</span>
+</span></span><span style=display:flex><span>	<span style=color:#f92672>*</span> 
+</span></span><span style=display:flex><span><span style=color:#a6e22e>FROM</span>
+</span></span><span style=display:flex><span>	( <span style=color:#a6e22e>SELECT</span> <span style=color:#e6db74>`id`</span>, <span style=color:#e6db74>`user_id`</span>, <span style=color:#e6db74>`status`</span>, <span style=color:#e6db74>`reason`</span> <span style=color:#a6e22e>FROM</span> <span style=color:#e6db74>`user_audit_log`</span> <span style=color:#a6e22e>WHERE</span> <span style=color:#e6db74>`status`</span> <span style=color:#f92672>=</span> <span style=color:#ae81ff>3</span> <span style=color:#66d9ef>AND</span> <span style=color:#e6db74>`user_id`</span> <span style=color:#f92672>=</span> <span style=color:#ae81ff>53</span> <span style=color:#a6e22e>ORDER</span> <span style=color:#a6e22e>BY</span> <span style=color:#e6db74>`id`</span> <span style=color:#a6e22e>DESC</span> ) <span style=color:#66d9ef>AS</span> <span style=color:#a6e22e>t</span> 
+</span></span><span style=display:flex><span><span style=color:#a6e22e>GROUP</span> <span style=color:#a6e22e>BY</span>
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>t</span><span style=color:#f92672>.</span><span style=color:#a6e22e>user_id</span> 
+</span></span><span style=display:flex><span><span style=color:#a6e22e>ORDER</span> <span style=color:#a6e22e>BY</span>
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>user_id</span> <span style=color:#a6e22e>DESC</span>,
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>id</span> <span style=color:#a6e22e>DESC</span>
+</span></span></code></pre></div><p><img src=https://www.choudalao.com/uploads/20220621/20220621125242YyKG74.png alt>!</p><p>从结果上看，并不是我们想要的，
+我们调整<code>order</code>字段，效果也是一样的</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-php data-lang=php><span style=display:flex><span><span style=color:#a6e22e>SELECT</span>
+</span></span><span style=display:flex><span>	<span style=color:#f92672>*</span> 
+</span></span><span style=display:flex><span><span style=color:#a6e22e>FROM</span>
+</span></span><span style=display:flex><span>	( <span style=color:#a6e22e>SELECT</span> <span style=color:#e6db74>`id`</span>, <span style=color:#e6db74>`user_id`</span>, <span style=color:#e6db74>`status`</span>, <span style=color:#e6db74>`reason`</span> <span style=color:#a6e22e>FROM</span> <span style=color:#e6db74>`user_audit_log`</span> <span style=color:#a6e22e>WHERE</span> <span style=color:#e6db74>`status`</span> <span style=color:#f92672>=</span> <span style=color:#ae81ff>3</span> <span style=color:#66d9ef>AND</span> <span style=color:#e6db74>`user_id`</span> <span style=color:#f92672>=</span> <span style=color:#ae81ff>53</span> <span style=color:#a6e22e>ORDER</span> <span style=color:#a6e22e>BY</span> <span style=color:#e6db74>`id`</span> <span style=color:#a6e22e>DESC</span> ) <span style=color:#66d9ef>AS</span> <span style=color:#a6e22e>t</span> 
+</span></span><span style=display:flex><span><span style=color:#a6e22e>GROUP</span> <span style=color:#a6e22e>BY</span>
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>t</span><span style=color:#f92672>.</span><span style=color:#a6e22e>user_id</span> 
+</span></span><span style=display:flex><span><span style=color:#a6e22e>ORDER</span> <span style=color:#a6e22e>BY</span>
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>id</span> <span style=color:#a6e22e>DESC</span>,
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>user_id</span> <span style=color:#a6e22e>DESC</span>
+</span></span></code></pre></div><p>这是因为当子查询的<code>order by</code>语句后面没有<code>limit</code>关键字时，数据库会自动优化，即忽略<code>order by</code>语句。因此只需要添加<code>limit</code>关键字即可。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-php data-lang=php><span style=display:flex><span><span style=color:#a6e22e>FROM</span>
+</span></span><span style=display:flex><span>	( <span style=color:#a6e22e>SELECT</span> <span style=color:#e6db74>`id`</span>, <span style=color:#e6db74>`user_id`</span>, <span style=color:#e6db74>`status`</span>, <span style=color:#e6db74>`reason`</span> <span style=color:#a6e22e>FROM</span> <span style=color:#e6db74>`user_audit_log`</span> <span style=color:#a6e22e>WHERE</span> <span style=color:#e6db74>`status`</span> <span style=color:#f92672>=</span> <span style=color:#ae81ff>3</span>  <span style=color:#a6e22e>ORDER</span> <span style=color:#a6e22e>BY</span> <span style=color:#e6db74>`id`</span> <span style=color:#a6e22e>DESC</span> <span style=color:#a6e22e>LIMIT</span> <span style=color:#ae81ff>1000</span> ) <span style=color:#66d9ef>AS</span> <span style=color:#a6e22e>t</span> 
+</span></span><span style=display:flex><span><span style=color:#a6e22e>GROUP</span> <span style=color:#a6e22e>BY</span>
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>t</span><span style=color:#f92672>.</span><span style=color:#a6e22e>user_id</span> 
+</span></span><span style=display:flex><span><span style=color:#a6e22e>ORDER</span> <span style=color:#a6e22e>BY</span>
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>user_id</span> <span style=color:#a6e22e>DESC</span>,
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>id</span> <span style=color:#a6e22e>DESC</span>
+</span></span></code></pre></div><p><img src=https://www.choudalao.com/uploads/20220621/20220621125727QcUKH8.png alt></p><p>这次就是我们想要的结果了。</p><h1 id=总结>总结</h1><p><strong><code>group by</code>先于<code>order by</code>执行；
+当子查询的<code>order by</code>语句后面没有<code>limit</code>关键字时，数据库会自动优化，即忽略<code>order by</code>语句；</strong></p></div></article></main></div></div><footer class=footer><div class="container footer__container flex"><div class=footer__copyright>&copy; 2026 臭大佬博客.
+<span class=footer__copyright-credits>基于 <a href=https://gohugo.io/ rel="nofollow noopener" target=_blank>Hugo</a> 引擎和 <a href=https://github.com/Vimux/Mainroad/ rel="nofollow noopener" target=_blank>Mainroad</a> 主题</span></div></div></footer></div><script async defer src=/choudalao.github.io/js/menu.js></script></body></html>

@@ -1,144 +1,19 @@
-<!DOCTYPE html>
-<html class="no-js" lang="en">
-<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>mysql和php字符长度判断 - 臭大佬博客</title>
-	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
-	<meta name="description" content="mysql和php字符长度判断">
-	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-	<link rel="dns-prefetch" href="//fonts.googleapis.com">
-	<link rel="dns-prefetch" href="//fonts.gstatic.com">
-	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
-
-	<link rel="stylesheet" href="/css/style.css">
-	
-
-	<link rel="shortcut icon" href="/favicon.ico">
-		
-</head>
-<body class="body">
-	<div class="container container--outer">
-		<header class="header">
-	<div class="container header__container">
-		
-	<div class="logo">
-		<a class="logo__link" href="/" title="臭大佬博客" rel="home">
-			<div class="logo__item logo__text">
-					<div class="logo__title">臭大佬博客</div>
-					
-				</div>
-		</a>
-	</div>
-		
-<nav class="menu">
-	<button class="menu__btn" aria-haspopup="true" aria-expanded="false" tabindex="0">
-		<span class="menu__btn-title" tabindex="-1">菜单</span>
-	</button>
-	<ul class="menu__list">
-		<li class="menu__item">
-			<a class="menu__link" href="/">
-				
-				<span class="menu__text">首页</span>
-				
-			</a>
-		</li>
-		<li class="menu__item">
-			<a class="menu__link" href="/post/">
-				
-				<span class="menu__text">归档</span>
-				
-			</a>
-		</li>
-		<li class="menu__item">
-			<a class="menu__link" href="/about/">
-				
-				<span class="menu__text">关于</span>
-				
-			</a>
-		</li>
-	</ul>
-</nav>
-
-	</div>
-</header>
-		<div class="wrapper flex">
-			<div class="primary">
-			
-<main class="main" role="main">
-	<article class="post">
-		<header class="post__header">
-			<h1 class="post__title">mysql和php字符长度判断</h1>
-			
-		</header>
-		<div class="content post__content clearfix">
-			<h1 id="问题">问题</h1>
-<p>最近工作中遇到一个问题，数据库字段设置的<code>varchar(255)</code>，测试测的时候总是在临界点那边给我提bug，今天研究一下mysql和php字符长度判断。</p>
-<h1 id="环境">环境</h1>
-<p>php7.2.9
+<!doctype html><html class=no-js lang=en><head><meta charset=UTF-8><meta name=viewport content="width=device-width,initial-scale=1"><title>mysql和php字符长度判断 - 臭大佬博客</title><script>(function(e,t){e[t]=e[t].replace("no-js","js")})(document.documentElement,"className")</script><meta name=description content="mysql和php字符长度判断"><link rel=preconnect href=https://fonts.gstatic.com crossorigin><link rel=dns-prefetch href=//fonts.googleapis.com><link rel=dns-prefetch href=//fonts.gstatic.com><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700"><link rel=stylesheet href=/choudalao.github.io/css/style.css><link rel="shortcut icon" href=/choudalao.github.io/favicon.ico></head><body class=body><div class="container container--outer"><header class=header><div class="container header__container"><div class=logo><a class=logo__link href=/choudalao.github.io/ title=臭大佬博客 rel=home><div class="logo__item logo__text"><div class=logo__title>臭大佬博客</div></div></a></div><nav class=menu><button class=menu__btn aria-haspopup=true aria-expanded=false tabindex=0>
+<span class=menu__btn-title tabindex=-1>菜单</span></button><ul class=menu__list><li class=menu__item><a class=menu__link href=/choudalao.github.io/><span class=menu__text>首页</span></a></li><li class=menu__item><a class=menu__link href=/choudalao.github.io/post/><span class=menu__text>归档</span></a></li><li class=menu__item><a class=menu__link href=/choudalao.github.io/about/><span class=menu__text>关于</span></a></li></ul></nav></div></header><div class="wrapper flex"><div class=primary><main class=main role=main><article class=post><header class=post__header><h1 class=post__title>mysql和php字符长度判断</h1></header><div class="content post__content clearfix"><h1 id=问题>问题</h1><p>最近工作中遇到一个问题，数据库字段设置的<code>varchar(255)</code>，测试测的时候总是在临界点那边给我提bug，今天研究一下mysql和php字符长度判断。</p><h1 id=环境>环境</h1><p>php7.2.9
 mysql8.0.12
 测试时文件的编码方式要是UTF8
-数据库字段类型大小为 varchar(255)，php中用strlen()与mb_strlen()函数。</p>
-<h2 id="注意">注意</h2>
-<p>需要注意的是，mb_strlen并不是PHP核心函数，使用前需要确保在php.ini中加载了php_mbstring.dll，即确保
-“extension=php_mbstring.dll”这一行存在并且没有被注释掉，否则会出现未定义函 数的问题。</p>
-<h1 id="分析">分析</h1>
-<p>考虑到汉字的特殊性，我们测试主要分为两种，一个是纯汉字，一个是纯英文字母。</p>
-<h3 id="纯汉字">纯汉字</h3>
-<p>准备一个255个汉字的字符串，然后提交数据库查看结果。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#75715e">//255个汉字
-</span></span></span><span style="display:flex;"><span><span style="color:#a6e22e">这是个十个汉字的句子这是个十个汉字的句子这是个十个汉字的句子这是个十个汉字的句子这是个十个汉字的句子这是个十个汉字的句子这是个十个汉字的句子这是个十个汉字的句子这是个十个汉字的句子这是个十个汉字的句子这是个十个汉字的句子这是个十个汉字的句子这是个十个汉字的句子这是个十个汉字的句子这是个十个汉字的句子这是个十个汉字的句子这是个十个汉字的句子这是个十个汉字的句子这是个十个汉字的句子这是个十个汉字的句子这是个十个汉字的句子这是个十个汉字的句子这是个十个汉字的句子这是个十个汉字的句子这是个十个汉字的句子这是个十个</span>
-</span></span></code></pre></div><h4 id="php函数的结果">php函数的结果</h4>
-<p>我们在提交前，看一下这两个php函数分别返回的值是多少</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#a6e22e">dd</span>(<span style="color:#a6e22e">strlen</span>($this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">beizhu</span>),<span style="color:#a6e22e">mb_strlen</span>($this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">beizhu</span>,<span style="color:#e6db74">&#39;UTF8&#39;</span>) );
-</span></span></code></pre></div><h6 id="结果">结果</h6>
-<p><img src="https://www.choudalao.com/uploads/20200429/20200429165741CaGVZe.png" alt=""></p>
-<p>可以看出mb_strlen($this-&gt;beizhu,&lsquo;UTF8&rsquo;)，是我们要的结果。</p>
-<h4 id="提交到数据库">提交到数据库</h4>
-<p>提交后发现可以成功保存：
-<img src="https://www.choudalao.com/uploads/20200429/20200429170744c1MrCJ.png" alt="">
-我们把加一个汉字，继续提交，结果如下：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#a6e22e">SQLSTATE</span>[<span style="color:#ae81ff">22001</span>]<span style="color:#f92672">:</span> <span style="color:#a6e22e">String</span> <span style="color:#a6e22e">data</span>, <span style="color:#a6e22e">right</span> <span style="color:#a6e22e">truncated</span><span style="color:#f92672">:</span> <span style="color:#ae81ff">1406</span> <span style="color:#a6e22e">Data</span> <span style="color:#a6e22e">too</span> <span style="color:#a6e22e">long</span> <span style="color:#66d9ef">for</span> <span style="color:#a6e22e">column</span> <span style="color:#e6db74">&#39;remark&#39;</span> <span style="color:#a6e22e">at</span> <span style="color:#a6e22e">row</span> <span style="color:#ae81ff">1</span> 
+数据库字段类型大小为 varchar(255)，php中用strlen()与mb_strlen()函数。</p><h2 id=注意>注意</h2><p>需要注意的是，mb_strlen并不是PHP核心函数，使用前需要确保在php.ini中加载了php_mbstring.dll，即确保
+“extension=php_mbstring.dll”这一行存在并且没有被注释掉，否则会出现未定义函 数的问题。</p><h1 id=分析>分析</h1><p>考虑到汉字的特殊性，我们测试主要分为两种，一个是纯汉字，一个是纯英文字母。</p><h3 id=纯汉字>纯汉字</h3><p>准备一个255个汉字的字符串，然后提交数据库查看结果。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-php data-lang=php><span style=display:flex><span><span style=color:#75715e>//255个汉字
+</span></span></span><span style=display:flex><span><span style=color:#a6e22e>这是个十个汉字的句子这是个十个汉字的句子这是个十个汉字的句子这是个十个汉字的句子这是个十个汉字的句子这是个十个汉字的句子这是个十个汉字的句子这是个十个汉字的句子这是个十个汉字的句子这是个十个汉字的句子这是个十个汉字的句子这是个十个汉字的句子这是个十个汉字的句子这是个十个汉字的句子这是个十个汉字的句子这是个十个汉字的句子这是个十个汉字的句子这是个十个汉字的句子这是个十个汉字的句子这是个十个汉字的句子这是个十个汉字的句子这是个十个汉字的句子这是个十个汉字的句子这是个十个汉字的句子这是个十个汉字的句子这是个十个</span>
+</span></span></code></pre></div><h4 id=php函数的结果>php函数的结果</h4><p>我们在提交前，看一下这两个php函数分别返回的值是多少</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-php data-lang=php><span style=display:flex><span><span style=color:#a6e22e>dd</span>(<span style=color:#a6e22e>strlen</span>($this<span style=color:#f92672>-&gt;</span><span style=color:#a6e22e>beizhu</span>),<span style=color:#a6e22e>mb_strlen</span>($this<span style=color:#f92672>-&gt;</span><span style=color:#a6e22e>beizhu</span>,<span style=color:#e6db74>&#39;UTF8&#39;</span>) );
+</span></span></code></pre></div><h6 id=结果>结果</h6><p><img src=https://www.choudalao.com/uploads/20200429/20200429165741CaGVZe.png alt></p><p>可以看出mb_strlen($this->beizhu,&lsquo;UTF8&rsquo;)，是我们要的结果。</p><h4 id=提交到数据库>提交到数据库</h4><p>提交后发现可以成功保存：
+<img src=https://www.choudalao.com/uploads/20200429/20200429170744c1MrCJ.png alt>
+我们把加一个汉字，继续提交，结果如下：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-php data-lang=php><span style=display:flex><span><span style=color:#a6e22e>SQLSTATE</span>[<span style=color:#ae81ff>22001</span>]<span style=color:#f92672>:</span> <span style=color:#a6e22e>String</span> <span style=color:#a6e22e>data</span>, <span style=color:#a6e22e>right</span> <span style=color:#a6e22e>truncated</span><span style=color:#f92672>:</span> <span style=color:#ae81ff>1406</span> <span style=color:#a6e22e>Data</span> <span style=color:#a6e22e>too</span> <span style=color:#a6e22e>long</span> <span style=color:#66d9ef>for</span> <span style=color:#a6e22e>column</span> <span style=color:#e6db74>&#39;remark&#39;</span> <span style=color:#a6e22e>at</span> <span style=color:#a6e22e>row</span> <span style=color:#ae81ff>1</span> 
 </span></span></code></pre></div><p>此时数据库报错了。
-所以，该环境下varchar(255)，可以存的汉字数是255个。</p>
-<h3 id="纯字母">纯字母</h3>
-<p>我们以同样的方式测试字母,首先准备255个字母的字符串。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#75715e">// 255个字母
-</span></span></span><span style="display:flex;"><span><span style="color:#a6e22e">ABCDEFGHIJABCDEFGHIJABCDEFGHIJABCDEFGHIJABCDEFGHIJABCDEFGHIJABCDEFGHIJABCDEFGHIJABCDEFGHIJABCDEFGHIJABCDEFGHIJABCDEFGHIJABCDEFGHIJABCDEFGHIJABCDEFGHIJABCDEFGHIJABCDEFGHIJABCDEFGHIJABCDEFGHIJABCDEFGHIJABCDEFGHIJABCDEFGHIJABCDEFGHIJABCDEFGHIJABCDEFGHIJABCDE</span>
-</span></span></code></pre></div><h4 id="php函数的结果-1">php函数的结果</h4>
-<p>我们在提交前，看一下这两个php函数分别返回的值是多少</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#a6e22e">dd</span>(<span style="color:#a6e22e">strlen</span>($this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">beizhu</span>),<span style="color:#a6e22e">mb_strlen</span>($this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">beizhu</span>,<span style="color:#e6db74">&#39;UTF8&#39;</span>) );
-</span></span></code></pre></div><h6 id="结果-1">结果</h6>
-<p><img src="https://www.choudalao.com/uploads/20200429/20200429170218QX6Rfr.png" alt="">
-字母的情况下，php的strlen和mb_strlen($str,&lsquo;UTF8&rsquo;)得到的结果一样，都是返回255.</p>
-<h4 id="提交到数据库-1">提交到数据库</h4>
-<p>测试是可以保存的，我们再往里面加个字母，可以发现报同样的错误。</p>
-<h1 id="结论">结论</h1>
-<h4 id="php在判断字段长度的时候用mb_strlenstrutf8可以得到和我们输入字符一样的结果">php在判断字段长度的时候用<code>mb_strlen($str,'UTF8')</code>，可以得到和我们输入字符一样的结果。</h4>
-<p>计算时，选定内码为UTF8，则会将一个中文字符当作长度1来计算，所以“中文a字1符”长度是6 ，虽然上面函数可以简单解决一些中英文混合问题，但是不能用于实际中，下面我来给各位朋友介绍其它比较好的办法。PHP获取中英文混合字符串长度的实现代码如下,1中文=1位，2英文=1位，可自行修改。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#a6e22e">mb_strlen</span>($str,<span style="color:#e6db74">&#39;UTF8&#39;</span>)
-</span></span></code></pre></div><h4 id="高版本-mysql-中的-varchar255-可以存放-1---255-个-utf-8-格式的字符">高版本 MySQL 中的 VARCHAR(255) 可以存放 1 - 255 个 UTF-8 格式的字符。</h4>
-
-		</div>
-	</article>
-</main>
-
-
-
-
-			</div>
-			
-		</div>
-		<footer class="footer">
-	<div class="container footer__container flex">
-		
-		<div class="footer__copyright">
-			&copy; 2026 臭大佬博客.
-			<span class="footer__copyright-credits">基于 <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> 引擎和 <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> 主题</span>
-		</div>
-	</div>
-</footer>
-	</div>
-<script async defer src="/js/menu.js"></script>
-</body>
-</html>
+所以，该环境下varchar(255)，可以存的汉字数是255个。</p><h3 id=纯字母>纯字母</h3><p>我们以同样的方式测试字母,首先准备255个字母的字符串。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-php data-lang=php><span style=display:flex><span><span style=color:#75715e>// 255个字母
+</span></span></span><span style=display:flex><span><span style=color:#a6e22e>ABCDEFGHIJABCDEFGHIJABCDEFGHIJABCDEFGHIJABCDEFGHIJABCDEFGHIJABCDEFGHIJABCDEFGHIJABCDEFGHIJABCDEFGHIJABCDEFGHIJABCDEFGHIJABCDEFGHIJABCDEFGHIJABCDEFGHIJABCDEFGHIJABCDEFGHIJABCDEFGHIJABCDEFGHIJABCDEFGHIJABCDEFGHIJABCDEFGHIJABCDEFGHIJABCDEFGHIJABCDEFGHIJABCDE</span>
+</span></span></code></pre></div><h4 id=php函数的结果-1>php函数的结果</h4><p>我们在提交前，看一下这两个php函数分别返回的值是多少</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-php data-lang=php><span style=display:flex><span><span style=color:#a6e22e>dd</span>(<span style=color:#a6e22e>strlen</span>($this<span style=color:#f92672>-&gt;</span><span style=color:#a6e22e>beizhu</span>),<span style=color:#a6e22e>mb_strlen</span>($this<span style=color:#f92672>-&gt;</span><span style=color:#a6e22e>beizhu</span>,<span style=color:#e6db74>&#39;UTF8&#39;</span>) );
+</span></span></code></pre></div><h6 id=结果-1>结果</h6><p><img src=https://www.choudalao.com/uploads/20200429/20200429170218QX6Rfr.png alt>
+字母的情况下，php的strlen和mb_strlen($str,&lsquo;UTF8&rsquo;)得到的结果一样，都是返回255.</p><h4 id=提交到数据库-1>提交到数据库</h4><p>测试是可以保存的，我们再往里面加个字母，可以发现报同样的错误。</p><h1 id=结论>结论</h1><h4 id=php在判断字段长度的时候用mb_strlenstrutf8可以得到和我们输入字符一样的结果>php在判断字段长度的时候用<code>mb_strlen($str,'UTF8')</code>，可以得到和我们输入字符一样的结果。</h4><p>计算时，选定内码为UTF8，则会将一个中文字符当作长度1来计算，所以“中文a字1符”长度是6 ，虽然上面函数可以简单解决一些中英文混合问题，但是不能用于实际中，下面我来给各位朋友介绍其它比较好的办法。PHP获取中英文混合字符串长度的实现代码如下,1中文=1位，2英文=1位，可自行修改。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-php data-lang=php><span style=display:flex><span><span style=color:#a6e22e>mb_strlen</span>($str,<span style=color:#e6db74>&#39;UTF8&#39;</span>)
+</span></span></code></pre></div><h4 id=高版本-mysql-中的-varchar255-可以存放-1---255-个-utf-8-格式的字符>高版本 MySQL 中的 VARCHAR(255) 可以存放 1 - 255 个 UTF-8 格式的字符。</h4></div></article></main></div></div><footer class=footer><div class="container footer__container flex"><div class=footer__copyright>&copy; 2026 臭大佬博客.
+<span class=footer__copyright-credits>基于 <a href=https://gohugo.io/ rel="nofollow noopener" target=_blank>Hugo</a> 引擎和 <a href=https://github.com/Vimux/Mainroad/ rel="nofollow noopener" target=_blank>Mainroad</a> 主题</span></div></div></footer></div><script async defer src=/choudalao.github.io/js/menu.js></script></body></html>

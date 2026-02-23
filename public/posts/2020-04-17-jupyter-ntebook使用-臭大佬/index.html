@@ -1,259 +1,149 @@
-<!DOCTYPE html>
-<html class="no-js" lang="en">
-<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>jupyter ntebook使用 | 臭大佬 - 臭大佬博客</title>
-	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
-	<meta name="description" content="jupyter ntebook使用 | 臭大佬">
-	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-	<link rel="dns-prefetch" href="//fonts.googleapis.com">
-	<link rel="dns-prefetch" href="//fonts.gstatic.com">
-	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
-
-	<link rel="stylesheet" href="/css/style.css">
-	
-
-	<link rel="shortcut icon" href="/favicon.ico">
-		
-</head>
-<body class="body">
-	<div class="container container--outer">
-		<header class="header">
-	<div class="container header__container">
-		
-	<div class="logo">
-		<a class="logo__link" href="/" title="臭大佬博客" rel="home">
-			<div class="logo__item logo__text">
-					<div class="logo__title">臭大佬博客</div>
-					
-				</div>
-		</a>
-	</div>
-		
-<nav class="menu">
-	<button class="menu__btn" aria-haspopup="true" aria-expanded="false" tabindex="0">
-		<span class="menu__btn-title" tabindex="-1">菜单</span>
-	</button>
-	<ul class="menu__list">
-		<li class="menu__item">
-			<a class="menu__link" href="/">
-				
-				<span class="menu__text">首页</span>
-				
-			</a>
-		</li>
-		<li class="menu__item">
-			<a class="menu__link" href="/post/">
-				
-				<span class="menu__text">归档</span>
-				
-			</a>
-		</li>
-		<li class="menu__item">
-			<a class="menu__link" href="/about/">
-				
-				<span class="menu__text">关于</span>
-				
-			</a>
-		</li>
-	</ul>
-</nav>
-
-	</div>
-</header>
-		<div class="wrapper flex">
-			<div class="primary">
-			
-<main class="main" role="main">
-	<article class="post">
-		<header class="post__header">
-			<h1 class="post__title">jupyter ntebook使用 | 臭大佬</h1>
-			
-		</header>
-		<div class="content post__content clearfix">
-			<h1 id="说明">说明</h1>
-<p>这里有用到两张表的数据，分别是一下两篇爬取的数据。
+<!doctype html><html class=no-js lang=en><head><meta charset=UTF-8><meta name=viewport content="width=device-width,initial-scale=1"><title>jupyter ntebook使用 | 臭大佬 - 臭大佬博客</title><script>(function(e,t){e[t]=e[t].replace("no-js","js")})(document.documentElement,"className")</script><meta name=description content="jupyter ntebook使用 | 臭大佬"><link rel=preconnect href=https://fonts.gstatic.com crossorigin><link rel=dns-prefetch href=//fonts.googleapis.com><link rel=dns-prefetch href=//fonts.gstatic.com><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700"><link rel=stylesheet href=/choudalao.github.io/css/style.css><link rel="shortcut icon" href=/choudalao.github.io/favicon.ico></head><body class=body><div class="container container--outer"><header class=header><div class="container header__container"><div class=logo><a class=logo__link href=/choudalao.github.io/ title=臭大佬博客 rel=home><div class="logo__item logo__text"><div class=logo__title>臭大佬博客</div></div></a></div><nav class=menu><button class=menu__btn aria-haspopup=true aria-expanded=false tabindex=0>
+<span class=menu__btn-title tabindex=-1>菜单</span></button><ul class=menu__list><li class=menu__item><a class=menu__link href=/choudalao.github.io/><span class=menu__text>首页</span></a></li><li class=menu__item><a class=menu__link href=/choudalao.github.io/post/><span class=menu__text>归档</span></a></li><li class=menu__item><a class=menu__link href=/choudalao.github.io/about/><span class=menu__text>关于</span></a></li></ul></nav></div></header><div class="wrapper flex"><div class=primary><main class=main role=main><article class=post><header class=post__header><h1 class=post__title>jupyter ntebook使用 | 臭大佬</h1></header><div class="content post__content clearfix"><h1 id=说明>说明</h1><p>这里有用到两张表的数据，分别是一下两篇爬取的数据。
 数据来源：
-《<a href="https://www.choudalao.com/article/133" title="网易云音乐爬取歌单 | 臭大佬">网易云音乐爬取歌单 | 臭大佬</a>》
-《<a href="https://www.choudalao.com/article/134" title="爬取网易云音乐歌单里面的歌曲 | 臭大佬">爬取网易云音乐歌单里面的歌曲 | 臭大佬</a>》</p>
-<h1 id="jupyter-ntebook-安装">jupyter ntebook 安装</h1>
-<p>jupyter ntebook 是一个交互式的笔记本，能够在上面记录文档以及运行各种代码。通常情况下，
+《<a href=https://www.choudalao.com/article/133 title="网易云音乐爬取歌单 | 臭大佬">网易云音乐爬取歌单 | 臭大佬</a>》
+《<a href=https://www.choudalao.com/article/134 title="爬取网易云音乐歌单里面的歌曲 | 臭大佬">爬取网易云音乐歌单里面的歌曲 | 臭大佬</a>》</p><h1 id=jupyter-ntebook-安装>jupyter ntebook 安装</h1><p>jupyter ntebook 是一个交互式的笔记本，能够在上面记录文档以及运行各种代码。通常情况下，
 我们使用 IDE 运行程序代码，程序运行完成之后，所有的记录和过程最后都只有结果能呈现出来；
-而 jupyter notebook 就可以记录我们编码的每一个步骤和过程。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#a6e22e">pip</span> <span style="color:#a6e22e">install</span> <span style="color:#a6e22e">jupyter</span>
-</span></span></code></pre></div><p><img src="https://www.choudalao.com/uploads/20200417/202004172130384iSZV2.png" alt="">
-安装完成后，在需要运行 jupyter notebook 的目录下，打开命令行终端界面，在其中键入命令&quot;jupyter notebook&quot;回车就打开了一个本地的 jupyter 服务器</p>
-<p><img src="https://www.choudalao.com/uploads/20200417/20200417213420Cvv9VO.png" alt="">
-<img src="https://www.choudalao.com/uploads/20200417/20200417213439PPaHRC.png" alt="">
+而 jupyter notebook 就可以记录我们编码的每一个步骤和过程。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-php data-lang=php><span style=display:flex><span><span style=color:#a6e22e>pip</span> <span style=color:#a6e22e>install</span> <span style=color:#a6e22e>jupyter</span>
+</span></span></code></pre></div><p><img src=https://www.choudalao.com/uploads/20200417/202004172130384iSZV2.png alt>
+安装完成后，在需要运行 jupyter notebook 的目录下，打开命令行终端界面，在其中键入命令"jupyter notebook"回车就打开了一个本地的 jupyter 服务器</p><p><img src=https://www.choudalao.com/uploads/20200417/20200417213420Cvv9VO.png alt>
+<img src=https://www.choudalao.com/uploads/20200417/20200417213439PPaHRC.png alt>
 点击notebook下的python（python3）,会打开个新标签页，我们可以用它来分析数据。
-<img src="https://www.choudalao.com/uploads/20200417/20200417213701nXvSsJ.png" alt=""></p>
-<h1 id="代码块">代码块</h1>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># coding:utf-8</span>
-</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> pandas
-</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> pymysql
-</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> matplotlib.pyplot <span style="color:#66d9ef">as</span> pyplot
-</span></span><span style="display:flex;"><span><span style="color:#75715e"># 设置中文显示和负号显示</span>
-</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> pylab <span style="color:#f92672">import</span> mpl
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>mpl<span style="color:#f92672">.</span>rcParams[<span style="color:#e6db74">&#39;font.sans-serif&#39;</span>] <span style="color:#f92672">=</span> [<span style="color:#e6db74">&#39;SimHei&#39;</span>]
-</span></span><span style="display:flex;"><span>mpl<span style="color:#f92672">.</span>rcParams[<span style="color:#e6db74">&#39;axes.unicode_minus&#39;</span>] <span style="color:#f92672">=</span> <span style="color:#66d9ef">False</span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e"># 设置图形风格</span>
-</span></span><span style="display:flex;"><span>pyplot<span style="color:#f92672">.</span>style<span style="color:#f92672">.</span>use(<span style="color:#e6db74">&#39;ggplot&#39;</span>)
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">WYSongList</span>(object):
-</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#39;&#39;&#39;
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    歌单类
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#39;&#39;&#39;</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">__init__</span>(self):
-</span></span><span style="display:flex;"><span>        conn <span style="color:#f92672">=</span> pymysql<span style="color:#f92672">.</span>connect(host<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;localhost&#39;</span>, port<span style="color:#f92672">=</span><span style="color:#ae81ff">3306</span>, user<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;root&#39;</span>, password<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;root&#39;</span>, db<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;python_test&#39;</span>,
-</span></span><span style="display:flex;"><span>                               charset<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;utf8&#39;</span>)
-</span></span><span style="display:flex;"><span>        sql <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;select title,favorite,share,comment,play_num,song_num from song_list&#34;</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># 使用pandas.read_sql读取数</span>
-</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>pandas <span style="color:#f92672">=</span> pandas<span style="color:#f92672">.</span>read_sql(sql, conn)
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">original</span>(self):
-</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#39;&#39;&#39;
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        原始表格展示
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        :return:
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        &#39;&#39;&#39;</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># 查看显示结果</span>
-</span></span><span style="display:flex;"><span>        table <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>pandas<span style="color:#f92672">.</span>head()
-</span></span><span style="display:flex;"><span>        print(table)
-</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># # 查看数据形态</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># shape = self.pandas.shape</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># print(shape)</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># # 查看数据类型</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># dtypes = self.pandas.dtypes</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># print(dtypes)</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">playFun</span>(self):
-</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#39;&#39;&#39;
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        播放次数
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        :return:
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        &#39;&#39;&#39;</span>
-</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>pandas[<span style="color:#e6db74">&#39;播放次数&#39;</span>] <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>pandas[<span style="color:#e6db74">&#39;play_num&#39;</span>]
-</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># 以favorite降序排序,并以title去重</span>
-</span></span><span style="display:flex;"><span>        res <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>pandas<span style="color:#f92672">.</span>sort_values(<span style="color:#e6db74">&#39;favorite&#39;</span>, ascending<span style="color:#f92672">=</span><span style="color:#66d9ef">False</span>)<span style="color:#f92672">.</span>drop_duplicates(<span style="color:#e6db74">&#39;title&#39;</span>)<span style="color:#f92672">.</span>head()
-</span></span><span style="display:flex;"><span>        print(res)
-</span></span><span style="display:flex;"><span>        pyplot<span style="color:#f92672">.</span>figure(figsize<span style="color:#f92672">=</span>(<span style="color:#ae81ff">10</span>, <span style="color:#ae81ff">5</span>))
-</span></span><span style="display:flex;"><span>        pyplot<span style="color:#f92672">.</span>title(<span style="color:#e6db74">&#39;网易云音乐歌单播放次数曲线&#39;</span>)
-</span></span><span style="display:flex;"><span>        pyplot<span style="color:#f92672">.</span>xlabel(<span style="color:#e6db74">&#39;排名&#39;</span>)
-</span></span><span style="display:flex;"><span>        pyplot<span style="color:#f92672">.</span>ylabel(<span style="color:#e6db74">&#39;播放次数&#39;</span>)
-</span></span><span style="display:flex;"><span>        pyplot<span style="color:#f92672">.</span>plot(range(len(res[<span style="color:#e6db74">&#39;播放次数&#39;</span>])), res[<span style="color:#e6db74">&#39;播放次数&#39;</span>])
-</span></span><span style="display:flex;"><span>        pyplot<span style="color:#f92672">.</span>show()
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">favoriteFun</span>(self):
-</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#39;&#39;&#39;
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        收藏次数
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        :return:
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        &#39;&#39;&#39;</span>
-</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>pandas[<span style="color:#e6db74">&#39;收藏次数&#39;</span>] <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>pandas[<span style="color:#e6db74">&#39;favorite&#39;</span>]
-</span></span><span style="display:flex;"><span>        res <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>pandas<span style="color:#f92672">.</span>sort_values(<span style="color:#e6db74">&#39;收藏次数&#39;</span>, ascending<span style="color:#f92672">=</span><span style="color:#66d9ef">False</span>)<span style="color:#f92672">.</span>drop_duplicates(<span style="color:#e6db74">&#39;title&#39;</span>)<span style="color:#f92672">.</span>head()
-</span></span><span style="display:flex;"><span>        print(res)
-</span></span><span style="display:flex;"><span>        pyplot<span style="color:#f92672">.</span>figure(figsize<span style="color:#f92672">=</span>(<span style="color:#ae81ff">10</span>, <span style="color:#ae81ff">5</span>))
-</span></span><span style="display:flex;"><span>        pyplot<span style="color:#f92672">.</span>title(<span style="color:#e6db74">&#39;网易云音乐歌单收藏次数曲线&#39;</span>)
-</span></span><span style="display:flex;"><span>        pyplot<span style="color:#f92672">.</span>xlabel(<span style="color:#e6db74">&#39;排名&#39;</span>)
-</span></span><span style="display:flex;"><span>        pyplot<span style="color:#f92672">.</span>ylabel(<span style="color:#e6db74">&#39;收藏次数&#39;</span>)
-</span></span><span style="display:flex;"><span>        pyplot<span style="color:#f92672">.</span>plot(range(len(res[<span style="color:#e6db74">&#39;收藏次数&#39;</span>])), res[<span style="color:#e6db74">&#39;收藏次数&#39;</span>])
-</span></span><span style="display:flex;"><span>        pyplot<span style="color:#f92672">.</span>show()
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">scatter</span>(self):
-</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#39;&#39;&#39;
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">       播放次数和收藏次数散点图
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">       :return:
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">       &#39;&#39;&#39;</span>
-</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>pandas[<span style="color:#e6db74">&#39;播放次数&#39;</span>] <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>pandas[<span style="color:#e6db74">&#39;play_num&#39;</span>]
-</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>pandas[<span style="color:#e6db74">&#39;收藏次数&#39;</span>] <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>pandas[<span style="color:#e6db74">&#39;favorite&#39;</span>]
-</span></span><span style="display:flex;"><span>        pyplot<span style="color:#f92672">.</span>figure(figsize<span style="color:#f92672">=</span>(<span style="color:#ae81ff">10</span>, <span style="color:#ae81ff">5</span>))
-</span></span><span style="display:flex;"><span>        pyplot<span style="color:#f92672">.</span>title(<span style="color:#e6db74">&#39;播放次数和收藏次数散点图&#39;</span>)
-</span></span><span style="display:flex;"><span>        pyplot<span style="color:#f92672">.</span>xlabel(<span style="color:#e6db74">&#39;播放次数&#39;</span>)
-</span></span><span style="display:flex;"><span>        pyplot<span style="color:#f92672">.</span>ylabel(<span style="color:#e6db74">&#39;收藏次数&#39;</span>)
-</span></span><span style="display:flex;"><span>        pyplot<span style="color:#f92672">.</span>scatter( self<span style="color:#f92672">.</span>pandas[<span style="color:#e6db74">&#39;播放次数&#39;</span>],  self<span style="color:#f92672">.</span>pandas[<span style="color:#e6db74">&#39;收藏次数&#39;</span>], alpha<span style="color:#f92672">=</span><span style="color:#ae81ff">0.8</span>)
-</span></span><span style="display:flex;"><span>        pyplot<span style="color:#f92672">.</span>show()
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">WYSong</span>(object):
-</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#39;&#39;&#39;
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    歌单
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#39;&#39;&#39;</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">__init__</span>(self):
-</span></span><span style="display:flex;"><span>        conn <span style="color:#f92672">=</span> pymysql<span style="color:#f92672">.</span>connect(host<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;localhost&#39;</span>, port<span style="color:#f92672">=</span><span style="color:#ae81ff">3306</span>, user<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;root&#39;</span>, password<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;root&#39;</span>, db<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;python_test&#39;</span>,
-</span></span><span style="display:flex;"><span>                               charset<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;utf8&#39;</span>)
-</span></span><span style="display:flex;"><span>        sql <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;select cate_id,singer,album,title from song&#34;</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># 使用pandas.read_sql读取数</span>
-</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>pandas <span style="color:#f92672">=</span> pandas<span style="color:#f92672">.</span>read_sql(sql, conn)
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">singerTj</span>(self):
-</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#39;&#39;&#39;
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        歌手歌曲统计
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        :return:
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        &#39;&#39;&#39;</span>
-</span></span><span style="display:flex;"><span>        res <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>pandas<span style="color:#f92672">.</span>groupby(<span style="color:#e6db74">&#39;singer&#39;</span>)[<span style="color:#e6db74">&#39;title&#39;</span>]<span style="color:#f92672">.</span>count()<span style="color:#f92672">.</span>reset_index()<span style="color:#f92672">.</span>sort_values(<span style="color:#e6db74">&#39;title&#39;</span>, ascending<span style="color:#f92672">=</span><span style="color:#66d9ef">False</span>)<span style="color:#f92672">.</span>head(<span style="color:#ae81ff">10</span>)
-</span></span><span style="display:flex;"><span>        print(res)
-</span></span><span style="display:flex;"><span>        pyplot<span style="color:#f92672">.</span>title(<span style="color:#e6db74">&#34;歌手歌曲数&#34;</span>)
-</span></span><span style="display:flex;"><span>        pyplot<span style="color:#f92672">.</span>xlabel(<span style="color:#e6db74">&#39;歌手&#39;</span>)
-</span></span><span style="display:flex;"><span>        pyplot<span style="color:#f92672">.</span>ylabel(<span style="color:#e6db74">&#39;歌曲数&#39;</span>)
-</span></span><span style="display:flex;"><span>        x <span style="color:#f92672">=</span> res[<span style="color:#e6db74">&#39;singer&#39;</span>]
-</span></span><span style="display:flex;"><span>        y <span style="color:#f92672">=</span> res[<span style="color:#e6db74">&#39;title&#39;</span>]
-</span></span><span style="display:flex;"><span>        pyplot<span style="color:#f92672">.</span>bar(range(len(y)), y, color<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;rgb&#39;</span>, tick_label<span style="color:#f92672">=</span>x)
-</span></span><span style="display:flex;"><span>        pyplot<span style="color:#f92672">.</span>show()
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">songNum</span>(self):
-</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#39;&#39;&#39;
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        统计出现次数最多的前10首歌曲
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        :return:
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        &#39;&#39;&#39;</span>
-</span></span><span style="display:flex;"><span>        res <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>pandas<span style="color:#f92672">.</span>groupby(<span style="color:#e6db74">&#39;title&#39;</span>)[<span style="color:#e6db74">&#39;album&#39;</span>]<span style="color:#f92672">.</span>count()<span style="color:#f92672">.</span>reset_index()<span style="color:#f92672">.</span>sort_values(<span style="color:#e6db74">&#39;album&#39;</span>, ascending <span style="color:#f92672">=</span> <span style="color:#66d9ef">False</span>)<span style="color:#f92672">.</span>head(<span style="color:#ae81ff">10</span>)
-</span></span><span style="display:flex;"><span>        <span style="color:#75715e">#print(res)</span>
-</span></span><span style="display:flex;"><span>        x <span style="color:#f92672">=</span> range(len(res))
-</span></span><span style="display:flex;"><span>        pyplot<span style="color:#f92672">.</span>figure(figsize<span style="color:#f92672">=</span>(<span style="color:#ae81ff">10</span>, <span style="color:#ae81ff">5</span>))
-</span></span><span style="display:flex;"><span>        pyplot<span style="color:#f92672">.</span>title(<span style="color:#e6db74">&#39;热度前10歌曲&#39;</span>)
-</span></span><span style="display:flex;"><span>        pyplot<span style="color:#f92672">.</span>barh(x, res[<span style="color:#e6db74">&#39;album&#39;</span>], color<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;rgb&#39;</span>)
-</span></span><span style="display:flex;"><span>        pyplot<span style="color:#f92672">.</span>yticks(x, res[<span style="color:#e6db74">&#39;title&#39;</span>])
-</span></span><span style="display:flex;"><span>        pyplot<span style="color:#f92672">.</span>show()
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> __name__ <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;__main__&#39;</span>:
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># list = WYSongList()</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># list.scatter()</span>
-</span></span><span style="display:flex;"><span>    song <span style="color:#f92672">=</span> WYSong()
-</span></span><span style="display:flex;"><span>    song<span style="color:#f92672">.</span>songNum()
-</span></span></code></pre></div><h1 id="jupyter-ntebook使用">jupyter ntebook使用</h1>
-<p>代码如上，需要运行时，把代码复制到notebook中。
-<img src="https://www.choudalao.com/uploads/20200417/20200417235925mAK9C2.png" alt="">
-<img src="https://www.choudalao.com/uploads/20200417/20200417235845brfy6h.png" alt=""></p>
-<h3 id="播放次数统计">播放次数统计</h3>
-<p><img src="https://www.choudalao.com/uploads/20200418/20200418000652gMzK66.png" alt=""></p>
-<h3 id="收藏次数">收藏次数</h3>
-<p><img src="https://www.choudalao.com/uploads/20200418/20200418000726mCndzO.png" alt=""></p>
-<h3 id="散点图">散点图</h3>
-<p><img src="https://www.choudalao.com/uploads/20200418/20200418000755dG4eB6.png" alt=""></p>
-
-		</div>
-	</article>
-</main>
-
-
-
-
-			</div>
-			
-		</div>
-		<footer class="footer">
-	<div class="container footer__container flex">
-		
-		<div class="footer__copyright">
-			&copy; 2026 臭大佬博客.
-			<span class="footer__copyright-credits">基于 <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> 引擎和 <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> 主题</span>
-		</div>
-	</div>
-</footer>
-	</div>
-<script async defer src="/js/menu.js"></script>
-</body>
-</html>
+<img src=https://www.choudalao.com/uploads/20200417/20200417213701nXvSsJ.png alt></p><h1 id=代码块>代码块</h1><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-python data-lang=python><span style=display:flex><span><span style=color:#75715e># coding:utf-8</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>import</span> pandas
+</span></span><span style=display:flex><span><span style=color:#f92672>import</span> pymysql
+</span></span><span style=display:flex><span><span style=color:#f92672>import</span> matplotlib.pyplot <span style=color:#66d9ef>as</span> pyplot
+</span></span><span style=display:flex><span><span style=color:#75715e># 设置中文显示和负号显示</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>from</span> pylab <span style=color:#f92672>import</span> mpl
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>mpl<span style=color:#f92672>.</span>rcParams[<span style=color:#e6db74>&#39;font.sans-serif&#39;</span>] <span style=color:#f92672>=</span> [<span style=color:#e6db74>&#39;SimHei&#39;</span>]
+</span></span><span style=display:flex><span>mpl<span style=color:#f92672>.</span>rcParams[<span style=color:#e6db74>&#39;axes.unicode_minus&#39;</span>] <span style=color:#f92672>=</span> <span style=color:#66d9ef>False</span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 设置图形风格</span>
+</span></span><span style=display:flex><span>pyplot<span style=color:#f92672>.</span>style<span style=color:#f92672>.</span>use(<span style=color:#e6db74>&#39;ggplot&#39;</span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>class</span> <span style=color:#a6e22e>WYSongList</span>(object):
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#39;&#39;&#39;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>    歌单类
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>    &#39;&#39;&#39;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>__init__</span>(self):
+</span></span><span style=display:flex><span>        conn <span style=color:#f92672>=</span> pymysql<span style=color:#f92672>.</span>connect(host<span style=color:#f92672>=</span><span style=color:#e6db74>&#39;localhost&#39;</span>, port<span style=color:#f92672>=</span><span style=color:#ae81ff>3306</span>, user<span style=color:#f92672>=</span><span style=color:#e6db74>&#39;root&#39;</span>, password<span style=color:#f92672>=</span><span style=color:#e6db74>&#39;root&#39;</span>, db<span style=color:#f92672>=</span><span style=color:#e6db74>&#39;python_test&#39;</span>,
+</span></span><span style=display:flex><span>                               charset<span style=color:#f92672>=</span><span style=color:#e6db74>&#39;utf8&#39;</span>)
+</span></span><span style=display:flex><span>        sql <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;select title,favorite,share,comment,play_num,song_num from song_list&#34;</span>
+</span></span><span style=display:flex><span>        <span style=color:#75715e># 使用pandas.read_sql读取数</span>
+</span></span><span style=display:flex><span>        self<span style=color:#f92672>.</span>pandas <span style=color:#f92672>=</span> pandas<span style=color:#f92672>.</span>read_sql(sql, conn)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>original</span>(self):
+</span></span><span style=display:flex><span>        <span style=color:#e6db74>&#39;&#39;&#39;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>        原始表格展示
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>        :return:
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>        &#39;&#39;&#39;</span>
+</span></span><span style=display:flex><span>        <span style=color:#75715e># 查看显示结果</span>
+</span></span><span style=display:flex><span>        table <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>pandas<span style=color:#f92672>.</span>head()
+</span></span><span style=display:flex><span>        print(table)
+</span></span><span style=display:flex><span>        <span style=color:#75715e># # 查看数据形态</span>
+</span></span><span style=display:flex><span>        <span style=color:#75715e># shape = self.pandas.shape</span>
+</span></span><span style=display:flex><span>        <span style=color:#75715e># print(shape)</span>
+</span></span><span style=display:flex><span>        <span style=color:#75715e># # 查看数据类型</span>
+</span></span><span style=display:flex><span>        <span style=color:#75715e># dtypes = self.pandas.dtypes</span>
+</span></span><span style=display:flex><span>        <span style=color:#75715e># print(dtypes)</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>playFun</span>(self):
+</span></span><span style=display:flex><span>        <span style=color:#e6db74>&#39;&#39;&#39;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>        播放次数
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>        :return:
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>        &#39;&#39;&#39;</span>
+</span></span><span style=display:flex><span>        self<span style=color:#f92672>.</span>pandas[<span style=color:#e6db74>&#39;播放次数&#39;</span>] <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>pandas[<span style=color:#e6db74>&#39;play_num&#39;</span>]
+</span></span><span style=display:flex><span>        <span style=color:#75715e># 以favorite降序排序,并以title去重</span>
+</span></span><span style=display:flex><span>        res <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>pandas<span style=color:#f92672>.</span>sort_values(<span style=color:#e6db74>&#39;favorite&#39;</span>, ascending<span style=color:#f92672>=</span><span style=color:#66d9ef>False</span>)<span style=color:#f92672>.</span>drop_duplicates(<span style=color:#e6db74>&#39;title&#39;</span>)<span style=color:#f92672>.</span>head()
+</span></span><span style=display:flex><span>        print(res)
+</span></span><span style=display:flex><span>        pyplot<span style=color:#f92672>.</span>figure(figsize<span style=color:#f92672>=</span>(<span style=color:#ae81ff>10</span>, <span style=color:#ae81ff>5</span>))
+</span></span><span style=display:flex><span>        pyplot<span style=color:#f92672>.</span>title(<span style=color:#e6db74>&#39;网易云音乐歌单播放次数曲线&#39;</span>)
+</span></span><span style=display:flex><span>        pyplot<span style=color:#f92672>.</span>xlabel(<span style=color:#e6db74>&#39;排名&#39;</span>)
+</span></span><span style=display:flex><span>        pyplot<span style=color:#f92672>.</span>ylabel(<span style=color:#e6db74>&#39;播放次数&#39;</span>)
+</span></span><span style=display:flex><span>        pyplot<span style=color:#f92672>.</span>plot(range(len(res[<span style=color:#e6db74>&#39;播放次数&#39;</span>])), res[<span style=color:#e6db74>&#39;播放次数&#39;</span>])
+</span></span><span style=display:flex><span>        pyplot<span style=color:#f92672>.</span>show()
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>favoriteFun</span>(self):
+</span></span><span style=display:flex><span>        <span style=color:#e6db74>&#39;&#39;&#39;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>        收藏次数
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>        :return:
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>        &#39;&#39;&#39;</span>
+</span></span><span style=display:flex><span>        self<span style=color:#f92672>.</span>pandas[<span style=color:#e6db74>&#39;收藏次数&#39;</span>] <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>pandas[<span style=color:#e6db74>&#39;favorite&#39;</span>]
+</span></span><span style=display:flex><span>        res <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>pandas<span style=color:#f92672>.</span>sort_values(<span style=color:#e6db74>&#39;收藏次数&#39;</span>, ascending<span style=color:#f92672>=</span><span style=color:#66d9ef>False</span>)<span style=color:#f92672>.</span>drop_duplicates(<span style=color:#e6db74>&#39;title&#39;</span>)<span style=color:#f92672>.</span>head()
+</span></span><span style=display:flex><span>        print(res)
+</span></span><span style=display:flex><span>        pyplot<span style=color:#f92672>.</span>figure(figsize<span style=color:#f92672>=</span>(<span style=color:#ae81ff>10</span>, <span style=color:#ae81ff>5</span>))
+</span></span><span style=display:flex><span>        pyplot<span style=color:#f92672>.</span>title(<span style=color:#e6db74>&#39;网易云音乐歌单收藏次数曲线&#39;</span>)
+</span></span><span style=display:flex><span>        pyplot<span style=color:#f92672>.</span>xlabel(<span style=color:#e6db74>&#39;排名&#39;</span>)
+</span></span><span style=display:flex><span>        pyplot<span style=color:#f92672>.</span>ylabel(<span style=color:#e6db74>&#39;收藏次数&#39;</span>)
+</span></span><span style=display:flex><span>        pyplot<span style=color:#f92672>.</span>plot(range(len(res[<span style=color:#e6db74>&#39;收藏次数&#39;</span>])), res[<span style=color:#e6db74>&#39;收藏次数&#39;</span>])
+</span></span><span style=display:flex><span>        pyplot<span style=color:#f92672>.</span>show()
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>scatter</span>(self):
+</span></span><span style=display:flex><span>        <span style=color:#e6db74>&#39;&#39;&#39;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>       播放次数和收藏次数散点图
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>       :return:
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>       &#39;&#39;&#39;</span>
+</span></span><span style=display:flex><span>        self<span style=color:#f92672>.</span>pandas[<span style=color:#e6db74>&#39;播放次数&#39;</span>] <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>pandas[<span style=color:#e6db74>&#39;play_num&#39;</span>]
+</span></span><span style=display:flex><span>        self<span style=color:#f92672>.</span>pandas[<span style=color:#e6db74>&#39;收藏次数&#39;</span>] <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>pandas[<span style=color:#e6db74>&#39;favorite&#39;</span>]
+</span></span><span style=display:flex><span>        pyplot<span style=color:#f92672>.</span>figure(figsize<span style=color:#f92672>=</span>(<span style=color:#ae81ff>10</span>, <span style=color:#ae81ff>5</span>))
+</span></span><span style=display:flex><span>        pyplot<span style=color:#f92672>.</span>title(<span style=color:#e6db74>&#39;播放次数和收藏次数散点图&#39;</span>)
+</span></span><span style=display:flex><span>        pyplot<span style=color:#f92672>.</span>xlabel(<span style=color:#e6db74>&#39;播放次数&#39;</span>)
+</span></span><span style=display:flex><span>        pyplot<span style=color:#f92672>.</span>ylabel(<span style=color:#e6db74>&#39;收藏次数&#39;</span>)
+</span></span><span style=display:flex><span>        pyplot<span style=color:#f92672>.</span>scatter( self<span style=color:#f92672>.</span>pandas[<span style=color:#e6db74>&#39;播放次数&#39;</span>],  self<span style=color:#f92672>.</span>pandas[<span style=color:#e6db74>&#39;收藏次数&#39;</span>], alpha<span style=color:#f92672>=</span><span style=color:#ae81ff>0.8</span>)
+</span></span><span style=display:flex><span>        pyplot<span style=color:#f92672>.</span>show()
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>class</span> <span style=color:#a6e22e>WYSong</span>(object):
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#39;&#39;&#39;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>    歌单
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>    &#39;&#39;&#39;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>__init__</span>(self):
+</span></span><span style=display:flex><span>        conn <span style=color:#f92672>=</span> pymysql<span style=color:#f92672>.</span>connect(host<span style=color:#f92672>=</span><span style=color:#e6db74>&#39;localhost&#39;</span>, port<span style=color:#f92672>=</span><span style=color:#ae81ff>3306</span>, user<span style=color:#f92672>=</span><span style=color:#e6db74>&#39;root&#39;</span>, password<span style=color:#f92672>=</span><span style=color:#e6db74>&#39;root&#39;</span>, db<span style=color:#f92672>=</span><span style=color:#e6db74>&#39;python_test&#39;</span>,
+</span></span><span style=display:flex><span>                               charset<span style=color:#f92672>=</span><span style=color:#e6db74>&#39;utf8&#39;</span>)
+</span></span><span style=display:flex><span>        sql <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;select cate_id,singer,album,title from song&#34;</span>
+</span></span><span style=display:flex><span>        <span style=color:#75715e># 使用pandas.read_sql读取数</span>
+</span></span><span style=display:flex><span>        self<span style=color:#f92672>.</span>pandas <span style=color:#f92672>=</span> pandas<span style=color:#f92672>.</span>read_sql(sql, conn)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>singerTj</span>(self):
+</span></span><span style=display:flex><span>        <span style=color:#e6db74>&#39;&#39;&#39;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>        歌手歌曲统计
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>        :return:
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>        &#39;&#39;&#39;</span>
+</span></span><span style=display:flex><span>        res <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>pandas<span style=color:#f92672>.</span>groupby(<span style=color:#e6db74>&#39;singer&#39;</span>)[<span style=color:#e6db74>&#39;title&#39;</span>]<span style=color:#f92672>.</span>count()<span style=color:#f92672>.</span>reset_index()<span style=color:#f92672>.</span>sort_values(<span style=color:#e6db74>&#39;title&#39;</span>, ascending<span style=color:#f92672>=</span><span style=color:#66d9ef>False</span>)<span style=color:#f92672>.</span>head(<span style=color:#ae81ff>10</span>)
+</span></span><span style=display:flex><span>        print(res)
+</span></span><span style=display:flex><span>        pyplot<span style=color:#f92672>.</span>title(<span style=color:#e6db74>&#34;歌手歌曲数&#34;</span>)
+</span></span><span style=display:flex><span>        pyplot<span style=color:#f92672>.</span>xlabel(<span style=color:#e6db74>&#39;歌手&#39;</span>)
+</span></span><span style=display:flex><span>        pyplot<span style=color:#f92672>.</span>ylabel(<span style=color:#e6db74>&#39;歌曲数&#39;</span>)
+</span></span><span style=display:flex><span>        x <span style=color:#f92672>=</span> res[<span style=color:#e6db74>&#39;singer&#39;</span>]
+</span></span><span style=display:flex><span>        y <span style=color:#f92672>=</span> res[<span style=color:#e6db74>&#39;title&#39;</span>]
+</span></span><span style=display:flex><span>        pyplot<span style=color:#f92672>.</span>bar(range(len(y)), y, color<span style=color:#f92672>=</span><span style=color:#e6db74>&#39;rgb&#39;</span>, tick_label<span style=color:#f92672>=</span>x)
+</span></span><span style=display:flex><span>        pyplot<span style=color:#f92672>.</span>show()
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>songNum</span>(self):
+</span></span><span style=display:flex><span>        <span style=color:#e6db74>&#39;&#39;&#39;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>        统计出现次数最多的前10首歌曲
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>        :return:
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>        &#39;&#39;&#39;</span>
+</span></span><span style=display:flex><span>        res <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>pandas<span style=color:#f92672>.</span>groupby(<span style=color:#e6db74>&#39;title&#39;</span>)[<span style=color:#e6db74>&#39;album&#39;</span>]<span style=color:#f92672>.</span>count()<span style=color:#f92672>.</span>reset_index()<span style=color:#f92672>.</span>sort_values(<span style=color:#e6db74>&#39;album&#39;</span>, ascending <span style=color:#f92672>=</span> <span style=color:#66d9ef>False</span>)<span style=color:#f92672>.</span>head(<span style=color:#ae81ff>10</span>)
+</span></span><span style=display:flex><span>        <span style=color:#75715e>#print(res)</span>
+</span></span><span style=display:flex><span>        x <span style=color:#f92672>=</span> range(len(res))
+</span></span><span style=display:flex><span>        pyplot<span style=color:#f92672>.</span>figure(figsize<span style=color:#f92672>=</span>(<span style=color:#ae81ff>10</span>, <span style=color:#ae81ff>5</span>))
+</span></span><span style=display:flex><span>        pyplot<span style=color:#f92672>.</span>title(<span style=color:#e6db74>&#39;热度前10歌曲&#39;</span>)
+</span></span><span style=display:flex><span>        pyplot<span style=color:#f92672>.</span>barh(x, res[<span style=color:#e6db74>&#39;album&#39;</span>], color<span style=color:#f92672>=</span><span style=color:#e6db74>&#39;rgb&#39;</span>)
+</span></span><span style=display:flex><span>        pyplot<span style=color:#f92672>.</span>yticks(x, res[<span style=color:#e6db74>&#39;title&#39;</span>])
+</span></span><span style=display:flex><span>        pyplot<span style=color:#f92672>.</span>show()
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>if</span> __name__ <span style=color:#f92672>==</span> <span style=color:#e6db74>&#39;__main__&#39;</span>:
+</span></span><span style=display:flex><span>    <span style=color:#75715e># list = WYSongList()</span>
+</span></span><span style=display:flex><span>    <span style=color:#75715e># list.scatter()</span>
+</span></span><span style=display:flex><span>    song <span style=color:#f92672>=</span> WYSong()
+</span></span><span style=display:flex><span>    song<span style=color:#f92672>.</span>songNum()
+</span></span></code></pre></div><h1 id=jupyter-ntebook使用>jupyter ntebook使用</h1><p>代码如上，需要运行时，把代码复制到notebook中。
+<img src=https://www.choudalao.com/uploads/20200417/20200417235925mAK9C2.png alt>
+<img src=https://www.choudalao.com/uploads/20200417/20200417235845brfy6h.png alt></p><h3 id=播放次数统计>播放次数统计</h3><p><img src=https://www.choudalao.com/uploads/20200418/20200418000652gMzK66.png alt></p><h3 id=收藏次数>收藏次数</h3><p><img src=https://www.choudalao.com/uploads/20200418/20200418000726mCndzO.png alt></p><h3 id=散点图>散点图</h3><p><img src=https://www.choudalao.com/uploads/20200418/20200418000755dG4eB6.png alt></p></div></article></main></div></div><footer class=footer><div class="container footer__container flex"><div class=footer__copyright>&copy; 2026 臭大佬博客.
+<span class=footer__copyright-credits>基于 <a href=https://gohugo.io/ rel="nofollow noopener" target=_blank>Hugo</a> 引擎和 <a href=https://github.com/Vimux/Mainroad/ rel="nofollow noopener" target=_blank>Mainroad</a> 主题</span></div></div></footer></div><script async defer src=/choudalao.github.io/js/menu.js></script></body></html>

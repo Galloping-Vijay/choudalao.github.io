@@ -1,599 +1,438 @@
-<!DOCTYPE html>
-<html class="no-js" lang="en">
-<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>牛逼的 NGINX - 臭大佬博客</title>
-	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
-	<meta name="description" content="它是一款免费开源的高性能 HTTP 代理服务器及反向代理服务器（Reverse Proxy）产品，同时它还可以提供 IMAP/POP3 邮件代理服务等功能。">
-	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-	<link rel="dns-prefetch" href="//fonts.googleapis.com">
-	<link rel="dns-prefetch" href="//fonts.gstatic.com">
-	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
-
-	<link rel="stylesheet" href="/css/style.css">
-	
-
-	<link rel="shortcut icon" href="/favicon.ico">
-		
-</head>
-<body class="body">
-	<div class="container container--outer">
-		<header class="header">
-	<div class="container header__container">
-		
-	<div class="logo">
-		<a class="logo__link" href="/" title="臭大佬博客" rel="home">
-			<div class="logo__item logo__text">
-					<div class="logo__title">臭大佬博客</div>
-					
-				</div>
-		</a>
-	</div>
-		
-<nav class="menu">
-	<button class="menu__btn" aria-haspopup="true" aria-expanded="false" tabindex="0">
-		<span class="menu__btn-title" tabindex="-1">菜单</span>
-	</button>
-	<ul class="menu__list">
-		<li class="menu__item">
-			<a class="menu__link" href="/">
-				
-				<span class="menu__text">首页</span>
-				
-			</a>
-		</li>
-		<li class="menu__item">
-			<a class="menu__link" href="/post/">
-				
-				<span class="menu__text">归档</span>
-				
-			</a>
-		</li>
-		<li class="menu__item">
-			<a class="menu__link" href="/about/">
-				
-				<span class="menu__text">关于</span>
-				
-			</a>
-		</li>
-	</ul>
-</nav>
-
-	</div>
-</header>
-		<div class="wrapper flex">
-			<div class="primary">
-			
-<main class="main" role="main">
-	<article class="post">
-		<header class="post__header">
-			<h1 class="post__title">牛逼的 NGINX</h1>
-			
-		</header>
-		<div class="content post__content clearfix">
-			<h1 id="简介">简介</h1>
-<p>官方网站为：http://nginx.org/ 。它是一款免费开源的高性能 HTTP 代理服务器及反向代理服务器（Reverse Proxy）产品，同时它还可以提供 IMAP/POP3 邮件代理服务等功能。</p>
-<h2 id="nginx-配置介绍">Nginx 配置介绍</h2>
-<p>我从宝塔里面拿一个完整的网站配置出来。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#75715e">#######   Nginx的main(全局配置)文件
-</span></span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e"># 指定nginx运行的用户及用户组,默认为www
-</span></span></span><span style="display:flex;"><span><span style="color:#a6e22e">user</span>  <span style="color:#a6e22e">www</span> <span style="color:#a6e22e">www</span>;
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e"># 开启的线程数，一般跟逻辑CPU核数一致
-</span></span></span><span style="display:flex;"><span><span style="color:#a6e22e">worker_processes</span> <span style="color:#a6e22e">auto</span>;
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e"># 定位全局错误日志文件，级别以notice显示，还有debug,info,warn,error,crit模式，debug输出最多，crir输出最少，根据实际环境而定
-</span></span></span><span style="display:flex;"><span><span style="color:#a6e22e">error_log</span>  <span style="color:#f92672">/</span><span style="color:#a6e22e">www</span><span style="color:#f92672">/</span><span style="color:#a6e22e">wwwlogs</span><span style="color:#f92672">/</span><span style="color:#a6e22e">nginx_error</span><span style="color:#f92672">.</span><span style="color:#a6e22e">log</span>  <span style="color:#a6e22e">crit</span>;
-</span></span><span style="display:flex;"><span><span style="color:#75715e">#error_log  logs/error.log;
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e">#error_log  logs/error.log  notice;
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e">#error_log  logs/error.log  info;
-</span></span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e"># 指定进程id的存储文件位置
-</span></span></span><span style="display:flex;"><span><span style="color:#a6e22e">pid</span>        <span style="color:#f92672">/</span><span style="color:#a6e22e">www</span><span style="color:#f92672">/</span><span style="color:#a6e22e">server</span><span style="color:#f92672">/</span><span style="color:#a6e22e">nginx</span><span style="color:#f92672">/</span><span style="color:#a6e22e">logs</span><span style="color:#f92672">/</span><span style="color:#a6e22e">nginx</span><span style="color:#f92672">.</span><span style="color:#a6e22e">pid</span>;
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e"># 指定一个nginx进程打开的最多文件描述符数目，受系统进程的最大打开文件数量限制
-</span></span></span><span style="display:flex;"><span><span style="color:#a6e22e">worker_rlimit_nofile</span> <span style="color:#ae81ff">51200</span>;
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e"># events 块涉及的指令主要影响 Nginx 服务器与用户的网络连接，常用的设置包括是否开启对多 work process 下的网络连接进行序列化，是否允许同时接收多个网络连接，选取哪种事件驱动模型来处理连接请求，每个 word process 可以同时支持的最大连接数等。
-</span></span></span><span style="display:flex;"><span><span style="color:#a6e22e">events</span>
-</span></span><span style="display:flex;"><span>    {
-</span></span><span style="display:flex;"><span>		<span style="color:#75715e"># 设置工作模式为epoll,除此之外还有select,poll,kqueue,rtsig和/dev/poll模式
-</span></span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">use</span> <span style="color:#a6e22e">epoll</span>;	
-</span></span><span style="display:flex;"><span>		<span style="color:#75715e"># 定义每个进程的最大连接数,受系统进程的最大打开文件数量限制。
-</span></span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">worker_connections</span> <span style="color:#ae81ff">51200</span>;
-</span></span><span style="display:flex;"><span>		<span style="color:#75715e"># 打开同时接受多个新网络连接请求的功能。
-</span></span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">multi_accept</span> <span style="color:#a6e22e">on</span>;
-</span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e"># http全局块配置的指令包括文件引入、MIME-TYPE 定义、日志自定义、连接超时时间、单链接请求数上限等。
-</span></span></span><span style="display:flex;"><span><span style="color:#a6e22e">http</span>
-</span></span><span style="display:flex;"><span>    {
-</span></span><span style="display:flex;"><span>		<span style="color:#75715e"># 主模块指令，实现对配置文件所包含的文件的设定，可以减少主配置文件的复杂度，DNS主配置文件中的zonerfc1912,acl基本上都是用include语句。
-</span></span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">include</span>       <span style="color:#a6e22e">mime</span><span style="color:#f92672">.</span><span style="color:#a6e22e">types</span>;
-</span></span><span style="display:flex;"><span>		<span style="color:#75715e">#include luawaf.conf;
-</span></span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">include</span> <span style="color:#a6e22e">proxy</span><span style="color:#f92672">.</span><span style="color:#a6e22e">conf</span>;
-</span></span><span style="display:flex;"><span>		<span style="color:#75715e"># 核心模块指令，指令默认设置为二进制流，也就是当文件类型未定义时使用这种方式
-</span></span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">default_type</span>  <span style="color:#a6e22e">application</span><span style="color:#f92672">/</span><span style="color:#a6e22e">octet</span><span style="color:#f92672">-</span><span style="color:#a6e22e">stream</span>;
-</span></span><span style="display:flex;"><span>		
-</span></span><span style="display:flex;"><span>		
-</span></span><span style="display:flex;"><span>		<span style="color:#75715e"># 下面代码为日志格式的设定，main为日志格式的名称，可自行设置，后面引用
-</span></span></span><span style="display:flex;"><span>		<span style="color:#75715e">#log_format  main  &#39;$remote_addr - $remote_user [$time_local] &#34;$request&#34; &#39;
-</span></span></span><span style="display:flex;"><span>		<span style="color:#75715e">#                  &#39;$status $body_bytes_sent &#34;$http_referer&#34; &#39;
-</span></span></span><span style="display:flex;"><span>		<span style="color:#75715e">#                  &#39;&#34;$http_user_agent&#34; &#34;$http_x_forwarded_for&#34;&#39;;
-</span></span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>		<span style="color:#75715e"># 引用日志main
-</span></span></span><span style="display:flex;"><span>		<span style="color:#75715e">#access_log  logs/access.log  main;
-</span></span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>		<span style="color:#75715e"># 设置允许客户端请求的最大的单个文件字节数
-</span></span></span><span style="display:flex;"><span>		<span style="color:#75715e">#client_max_body_size 20M;
-</span></span></span><span style="display:flex;"><span>		<span style="color:#75715e"># 指定来自客户端请求头的headebuffer大小
-</span></span></span><span style="display:flex;"><span>		<span style="color:#75715e">#client_header_buffer_size  32k;
-</span></span></span><span style="display:flex;"><span>		<span style="color:#75715e"># 指定连接请求试图写入缓存文件的目录路径
-</span></span></span><span style="display:flex;"><span>		<span style="color:#75715e">#client_body_temp_path /dev/shm/client_body_temp;
-</span></span></span><span style="display:flex;"><span>		<span style="color:#75715e"># 指定客户端请求中较大的消息头的缓存最大数量和大小，目前设置为4个32KB
-</span></span></span><span style="display:flex;"><span>		<span style="color:#75715e">#large client_header_buffers 4 32k;
-</span></span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>		<span style="color:#75715e">#设定请求缓存  
-</span></span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">server_names_hash_bucket_size</span> <span style="color:#ae81ff">512</span>;
-</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">client_header_buffer_size</span> <span style="color:#ae81ff">32</span><span style="color:#a6e22e">k</span>;
-</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">large_client_header_buffers</span> <span style="color:#ae81ff">4</span> <span style="color:#ae81ff">32</span><span style="color:#a6e22e">k</span>;
-</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">client_max_body_size</span> <span style="color:#ae81ff">50</span><span style="color:#a6e22e">m</span>;
-</span></span><span style="display:flex;"><span>		<span style="color:#75715e"># 开启高效文件传输模式
-</span></span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">sendfile</span>   <span style="color:#a6e22e">on</span>;
-</span></span><span style="display:flex;"><span>		<span style="color:#75715e"># 开启防止网络阻塞
-</span></span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">tcp_nopush</span> <span style="color:#a6e22e">on</span>;
-</span></span><span style="display:flex;"><span>		
-</span></span><span style="display:flex;"><span>		<span style="color:#75715e"># 设置客户端连接保存活动的超时时间
-</span></span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">keepalive_timeout</span> <span style="color:#ae81ff">60</span>;
-</span></span><span style="display:flex;"><span>		<span style="color:#75715e"># 开启防止网络阻塞
-</span></span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">tcp_nodelay</span> <span style="color:#a6e22e">on</span>;
-</span></span><span style="display:flex;"><span>		
-</span></span><span style="display:flex;"><span>		<span style="color:#75715e"># 设置客户端请求读取超时时间
-</span></span></span><span style="display:flex;"><span>		<span style="color:#75715e">#client_header_timeout 10;
-</span></span></span><span style="display:flex;"><span>		<span style="color:#75715e"># 设置客户端请求主体读取超时时间
-</span></span></span><span style="display:flex;"><span>		<span style="color:#75715e">#client_body_timeout 10;
-</span></span></span><span style="display:flex;"><span>		<span style="color:#75715e"># 用于设置相应客户端的超时时间
-</span></span></span><span style="display:flex;"><span>		<span style="color:#75715e">#send_timeout
-</span></span></span><span style="display:flex;"><span>		
-</span></span><span style="display:flex;"><span>		<span style="color:#75715e">#### fastcgi参数
-</span></span></span><span style="display:flex;"><span>		<span style="color:#75715e"># 连接到后端fastcgi超时时间
-</span></span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">fastcgi_connect_timeout</span> <span style="color:#ae81ff">300</span>;
-</span></span><span style="display:flex;"><span>		<span style="color:#75715e"># 向fastcgi请求超时时间(这个指定值已经完成两次握手后向fastcgi传送请求的超时时间)
-</span></span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">fastcgi_send_timeout</span> <span style="color:#ae81ff">300</span>;
-</span></span><span style="display:flex;"><span>		<span style="color:#75715e"># 接收fastcgi应答超时时间，同理也是2次握手后
-</span></span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">fastcgi_read_timeout</span> <span style="color:#ae81ff">300</span>;<span style="color:#75715e"># 读取fastcgi应答第一部分需要多大缓冲区，该值表示使用1个64kb的缓冲区读取应答第一部分(应答头),可以设置为fastcgi_buffers选项缓冲区大小
-</span></span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">fastcgi_buffer_size</span> <span style="color:#ae81ff">64</span><span style="color:#a6e22e">k</span>;	
-</span></span><span style="display:flex;"><span>		<span style="color:#75715e"># 指定本地需要多少和多大的缓冲区来缓冲fastcgi应答请求，假设一个php或java脚本所产生页面大小为256kb,那么会为其分配4个64kb的缓冲来缓存；若页面大于256kb,那么大于的256kb的部分会缓存到fastcgi_temp指定路径中，这并非是个好办法，内存数据处理快于硬盘，一般该值应该为站点中php/java脚本所产生页面大小中间值，如果站点大部分脚本所产生的页面大小为256kb，那么可把值设置为16 16k,4 64k等
-</span></span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">fastcgi_buffers</span> <span style="color:#ae81ff">4</span> <span style="color:#ae81ff">64</span><span style="color:#a6e22e">k</span>;
-</span></span><span style="display:flex;"><span>		<span style="color:#75715e"># 默认值是fastcgi_buffer的2倍
-</span></span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">fastcgi_busy_buffers_size</span> <span style="color:#ae81ff">128</span><span style="color:#a6e22e">k</span>;
-</span></span><span style="display:flex;"><span>		<span style="color:#75715e"># 写入缓存文件使用多大的数据块，默认值是fastcgi_buffer的2倍
-</span></span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">fastcgi_temp_file_write_size</span> <span style="color:#ae81ff">256</span><span style="color:#a6e22e">k</span>;
-</span></span><span style="display:flex;"><span>		<span style="color:#75715e"># 是否传递4xx和5xx错误信息到客户端
-</span></span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">fastcgi_intercept_errors</span> <span style="color:#a6e22e">on</span>;
-</span></span><span style="display:flex;"><span>		
-</span></span><span style="display:flex;"><span>		<span style="color:#75715e">#### HttpGZip模块配置
-</span></span></span><span style="display:flex;"><span>		<span style="color:#75715e"># 开启gzip压缩
-</span></span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">gzip</span> <span style="color:#a6e22e">on</span>;
-</span></span><span style="display:flex;"><span>		<span style="color:#75715e"># 设置允许压缩的页面最小字节数
-</span></span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">gzip_min_length</span>  <span style="color:#ae81ff">1</span><span style="color:#a6e22e">k</span>;
-</span></span><span style="display:flex;"><span>		<span style="color:#75715e"># 申请4个单位为16K的内存作为压缩结果流缓存
-</span></span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">gzip_buffers</span>     <span style="color:#ae81ff">4</span> <span style="color:#ae81ff">16</span><span style="color:#a6e22e">k</span>;
-</span></span><span style="display:flex;"><span>		<span style="color:#75715e"># 设置识别http协议的版本，默认为1.1
-</span></span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">gzip_http_version</span> <span style="color:#ae81ff">1.1</span>;
-</span></span><span style="display:flex;"><span>		<span style="color:#75715e"># 指定gzip压缩比，1-9数字越小，压缩比越小，速度越快
-</span></span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">gzip_comp_level</span> <span style="color:#ae81ff">2</span>;
-</span></span><span style="display:flex;"><span>		<span style="color:#75715e"># 指定压缩的类型
-</span></span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">gzip_types</span>     <span style="color:#a6e22e">text</span><span style="color:#f92672">/</span><span style="color:#a6e22e">plain</span> <span style="color:#a6e22e">application</span><span style="color:#f92672">/</span><span style="color:#a6e22e">javascript</span> <span style="color:#a6e22e">application</span><span style="color:#f92672">/</span><span style="color:#a6e22e">x</span><span style="color:#f92672">-</span><span style="color:#a6e22e">javascript</span> <span style="color:#a6e22e">text</span><span style="color:#f92672">/</span><span style="color:#a6e22e">javascript</span> <span style="color:#a6e22e">text</span><span style="color:#f92672">/</span><span style="color:#a6e22e">css</span> <span style="color:#a6e22e">application</span><span style="color:#f92672">/</span><span style="color:#a6e22e">xml</span>;
-</span></span><span style="display:flex;"><span>		<span style="color:#75715e">#让前端的缓存服务器进过gzip压缩的页面
-</span></span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">gzip_vary</span> <span style="color:#a6e22e">on</span>;
-</span></span><span style="display:flex;"><span>		<span style="color:#75715e"># Nginx做为反向代理的时候启用
-</span></span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">gzip_proxied</span>   <span style="color:#a6e22e">expired</span> <span style="color:#a6e22e">no</span><span style="color:#f92672">-</span><span style="color:#a6e22e">cache</span> <span style="color:#a6e22e">no</span><span style="color:#f92672">-</span><span style="color:#a6e22e">store</span> <span style="color:#66d9ef">private</span> <span style="color:#a6e22e">auth</span>;
-</span></span><span style="display:flex;"><span>		<span style="color:#75715e"># 通过表达式，表明哪些UA头不使用gzip压缩
-</span></span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">gzip_disable</span>   <span style="color:#e6db74">&#34;MSIE [1-6]\.&#34;</span>;
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>		<span style="color:#75715e"># 对客户端访问目录和文件的访问频率和次数进行限制
-</span></span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">limit_conn_zone</span> $binary_remote_addr <span style="color:#a6e22e">zone</span><span style="color:#f92672">=</span><span style="color:#a6e22e">perip</span><span style="color:#f92672">:</span><span style="color:#ae81ff">10</span><span style="color:#a6e22e">m</span>;
-</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">limit_conn_zone</span> $server_name <span style="color:#a6e22e">zone</span><span style="color:#f92672">=</span><span style="color:#a6e22e">perserver</span><span style="color:#f92672">:</span><span style="color:#ae81ff">10</span><span style="color:#a6e22e">m</span>;
-</span></span><span style="display:flex;"><span>		
-</span></span><span style="display:flex;"><span>		<span style="color:#75715e"># 隐藏版本号开关
-</span></span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">server_tokens</span> <span style="color:#a6e22e">off</span>;
-</span></span><span style="display:flex;"><span>		<span style="color:#75715e"># 访问日志
-</span></span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">access_log</span> <span style="color:#a6e22e">off</span>;
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e"># 最常见的配置是本虚拟机主机的监听配置和本虚拟主机的名称或IP配置,宝塔等软件通过 include引入多个网站配置文件
-</span></span></span><span style="display:flex;"><span><span style="color:#a6e22e">server</span>
-</span></span><span style="display:flex;"><span>    {
-</span></span><span style="display:flex;"><span>		<span style="color:#75715e"># 设置网络监听
-</span></span></span><span style="display:flex;"><span>		<span style="color:#75715e"># listen *:80 | *:8080 #监听所有80端口和8080端口
-</span></span></span><span style="display:flex;"><span>		<span style="color:#75715e"># listen  IP_address:port   #监听指定的地址和端口号
-</span></span></span><span style="display:flex;"><span>		<span style="color:#75715e"># listen  IP_address     #监听指定ip地址所有端口
-</span></span></span><span style="display:flex;"><span>		<span style="color:#75715e"># listen port     #监听该端口的所有IP连接
-</span></span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">listen</span> <span style="color:#ae81ff">888</span>;
-</span></span><span style="display:flex;"><span>		<span style="color:#75715e"># 设置主机域名
-</span></span></span><span style="display:flex;"><span>		<span style="color:#75715e"># server_name choudalao.com www.choudalao.com #多个域名
-</span></span></span><span style="display:flex;"><span>		<span style="color:#75715e"># server_name 192.168.1.1 #  IP 地址的虚拟主机配置
-</span></span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">server_name</span> <span style="color:#a6e22e">www</span><span style="color:#f92672">.</span><span style="color:#a6e22e">choudalao</span><span style="color:#f92672">.</span><span style="color:#a6e22e">com</span>;
-</span></span><span style="display:flex;"><span>		
-</span></span><span style="display:flex;"><span>		<span style="color:#75715e"># 设置访问的语言编码
-</span></span></span><span style="display:flex;"><span>        <span style="color:#75715e">#charset koi8-r;
-</span></span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># 设置虚拟主机访问日志的存放路径及日志的格式为main
-</span></span></span><span style="display:flex;"><span>        <span style="color:#75715e">#access_log  logs/host.access.log  main;
-</span></span></span><span style="display:flex;"><span>		
-</span></span><span style="display:flex;"><span>		<span style="color:#75715e"># 设置网站的默认首页。
-</span></span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">index</span> <span style="color:#a6e22e">index</span><span style="color:#f92672">.</span><span style="color:#a6e22e">html</span> <span style="color:#a6e22e">index</span><span style="color:#f92672">.</span><span style="color:#a6e22e">htm</span> <span style="color:#a6e22e">index</span><span style="color:#f92672">.</span><span style="color:#a6e22e">php</span>;
-</span></span><span style="display:flex;"><span>		<span style="color:#75715e"># 访问路径
-</span></span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">root</span>  <span style="color:#f92672">/</span><span style="color:#a6e22e">www</span><span style="color:#f92672">/</span><span style="color:#a6e22e">server</span><span style="color:#f92672">/</span><span style="color:#a6e22e">phpmyadmin</span>;
-</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">location</span> <span style="color:#f92672">~</span> <span style="color:#f92672">/</span><span style="color:#a6e22e">tmp</span><span style="color:#f92672">/</span> {
-</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">403</span>;
-</span></span><span style="display:flex;"><span>            }
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        <span style="color:#75715e">#SSL-START SSL相关配置，请勿删除或修改下一行带注释的404规则
-</span></span></span><span style="display:flex;"><span>		<span style="color:#75715e">#error_page 404/404.html;
-</span></span></span><span style="display:flex;"><span>		<span style="color:#75715e">#SSL-END
-</span></span></span><span style="display:flex;"><span>		
-</span></span><span style="display:flex;"><span>		<span style="color:#75715e">#ERROR-PAGE-START  错误页配置，可以注释、删除或修改
-</span></span></span><span style="display:flex;"><span>		<span style="color:#75715e">#error_page 404 /404.html;
-</span></span></span><span style="display:flex;"><span>		<span style="color:#75715e">#error_page 502 /502.html;
-</span></span></span><span style="display:flex;"><span>		<span style="color:#75715e">#ERROR-PAGE-END
-</span></span></span><span style="display:flex;"><span>		
-</span></span><span style="display:flex;"><span>		<span style="color:#75715e">#PHP-INFO-START  PHP引用配置，可以注释或修改
-</span></span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">include</span> <span style="color:#a6e22e">enable</span><span style="color:#f92672">-</span><span style="color:#a6e22e">php</span><span style="color:#f92672">-</span><span style="color:#ae81ff">74.</span><span style="color:#a6e22e">conf</span>;
-</span></span><span style="display:flex;"><span>		<span style="color:#75715e">#PHP-INFO-END
-</span></span></span><span style="display:flex;"><span>		
-</span></span><span style="display:flex;"><span>		<span style="color:#75715e">#禁止访问的文件或目录
-</span></span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">location</span> <span style="color:#f92672">~</span> <span style="color:#f92672">^/</span>(<span style="color:#a6e22e">\</span><span style="color:#f92672">.</span><span style="color:#a6e22e">user</span><span style="color:#f92672">.</span><span style="color:#a6e22e">ini</span><span style="color:#f92672">|</span><span style="color:#a6e22e">\</span><span style="color:#f92672">.</span><span style="color:#a6e22e">htaccess</span><span style="color:#f92672">|</span><span style="color:#a6e22e">\</span><span style="color:#f92672">.</span><span style="color:#a6e22e">git</span><span style="color:#f92672">|</span><span style="color:#a6e22e">\</span><span style="color:#f92672">.</span><span style="color:#a6e22e">svn</span><span style="color:#f92672">|</span><span style="color:#a6e22e">\</span><span style="color:#f92672">.</span><span style="color:#a6e22e">project</span><span style="color:#f92672">|</span><span style="color:#a6e22e">LICENSE</span><span style="color:#f92672">|</span><span style="color:#a6e22e">README</span><span style="color:#f92672">.</span><span style="color:#a6e22e">md</span>)
-</span></span><span style="display:flex;"><span>		{
-</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">return</span> <span style="color:#ae81ff">404</span>;
-</span></span><span style="display:flex;"><span>		}
-</span></span><span style="display:flex;"><span>		
-</span></span><span style="display:flex;"><span>		<span style="color:#75715e">#一键申请SSL证书验证目录相关设置
-</span></span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">location</span> <span style="color:#f92672">~</span> <span style="color:#a6e22e">\</span><span style="color:#f92672">.</span><span style="color:#a6e22e">well</span><span style="color:#f92672">-</span><span style="color:#a6e22e">known</span>{
-</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">allow</span> <span style="color:#a6e22e">all</span>;
-</span></span><span style="display:flex;"><span>		}
-</span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>	<span style="color:#75715e"># 引入其他网站配置
-</span></span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">include</span> <span style="color:#f92672">/</span><span style="color:#a6e22e">www</span><span style="color:#f92672">/</span><span style="color:#a6e22e">server</span><span style="color:#f92672">/</span><span style="color:#a6e22e">panel</span><span style="color:#f92672">/</span><span style="color:#a6e22e">vhost</span><span style="color:#f92672">/</span><span style="color:#a6e22e">nginx</span><span style="color:#f92672">/*.</span><span style="color:#a6e22e">conf</span>;
-</span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><h1 id="常用功能">常用功能</h1>
-<h2 id="反向代理">反向代理</h2>
-<p>在说反向代理之前，先说说什么是代理以及正向代理。</p>
-<h3 id="代理">代理</h3>
-<p>顾名思义，代理就是自己让别人帮忙做某事，举几个职业便于理解，代理律师、代理记账等职业在我们工作中是经常能听到的。他们就是代替我们去做我们想做的事的。</p>
-<h3 id="正向代理">正向代理</h3>
-<p>最常见的就是我们翻墙的候使用的VPN,，VPN的中转服务，是把我们的IP地址转化成VPN服务器公网IP,我们请求或接受任何数据都会通过这个VPN 服务器然后传入到我们本机。连上VPN后输出我们的IP地址，变成代理ip了。</p>
-<p><img src="https://www.choudalao.com/uploads/20210117/202101171911561IIAFz.png" alt=""></p>
-<p>正向代理服务器位于客户端和服务器之间，为了向服务器获取数据，客户端要向代理服务器发送一个请求，并指定目标服务器，代理服务器将目标服务器返回的数据转交给客户端。这里客户端是要进行一些正向代理的设置的。</p>
-<h3 id="反向代理-1">反向代理</h3>
-<p>客户端向服务器发送请求时，会首先经过 Nginx 服务器，由服务器将请求分发到相应的 WEB 服务器。正向代理是代理客户端，而反向代理则是代理服务器，Nginx 在提供反向代理服务方面，通过使用正则表达式进行相关配置，采取不同的转发策略，配置相当灵活，而且在配置后端转发请求时，完全不用关心网络环境如何，可以指定任意的IP地址和端口号，或其他类型的连接、请求等。</p>
-<p>反向代理和正向代理的区别就是：<strong>正向代理代理客户端，反向代理代理服务器。</strong></p>
-<p>反向代理，其实客户端对代理是无感知的，因为客户端不需要任何配置就可以访问，我们只需要将请求发送到反向代理服务器，由反向代理服务器去选择目标服务器获取数据后，在返回给客户端，此时反向代理服务器和目标服务器对外就是一个服务器，暴露的是代理服务器地址，隐藏了真实服务器IP地址。</p>
-<h4 id="实例">实例</h4>
-<p>来个反向代理的配置栗子：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#a6e22e">server</span>
-</span></span><span style="display:flex;"><span>{
-</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">listen</span> <span style="color:#ae81ff">80</span>;
-</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">server_name</span> <span style="color:#a6e22e">admin</span><span style="color:#f92672">-</span><span style="color:#a6e22e">api</span><span style="color:#f92672">.</span><span style="color:#a6e22e">choudalao</span><span style="color:#f92672">.</span><span style="color:#a6e22e">com</span>;
-</span></span><span style="display:flex;"><span>    
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 其他配置 ....
-</span></span></span><span style="display:flex;"><span>	
-</span></span><span style="display:flex;"><span>	<span style="color:#75715e"># 反向代理配置
-</span></span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">location</span> <span style="color:#f92672">/</span> {
-</span></span><span style="display:flex;"><span>		 <span style="color:#a6e22e">proxy_pass</span> <span style="color:#a6e22e">http</span><span style="color:#f92672">://</span><span style="color:#ae81ff">127.0</span><span style="color:#f92672">.</span><span style="color:#ae81ff">0.1</span><span style="color:#f92672">:</span><span style="color:#ae81ff">9777</span>;<span style="color:#75715e"># http://xxx.com;# 也可以是域名
-</span></span></span><span style="display:flex;"><span>		 <span style="color:#a6e22e">index</span>  <span style="color:#a6e22e">index</span><span style="color:#f92672">.</span><span style="color:#a6e22e">html</span> <span style="color:#a6e22e">index</span><span style="color:#f92672">.</span><span style="color:#a6e22e">htm</span> <span style="color:#a6e22e">index</span><span style="color:#f92672">.</span><span style="color:#a6e22e">php</span>;
-</span></span><span style="display:flex;"><span>	}
-</span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><p>当我们访问 <code>admin-api.choudalao.com</code>时，处理请求的是 <code>http://127.0.0.1:9777</code>，这样就实现了反向代理。</p>
-<h2 id="负载均衡">负载均衡</h2>
-<p>一方面是将单一的重负载分担到多个网络节点上做并行处理，每个节点处理结束后将结果汇总返回给用户，这样可以大幅度提高网络系统的处理能力；另一方面将大量的前端并发请求或数据流量分担到多个后端网络节点分别处理，这样可以有效减少前端用户等待相应的时间。而 Nginx 负载均衡都是属于后一方面，<strong>主要是对大量前端访问或流量进行分流，已保证前端用户访问效率，并可以减少后端服务器处理压力。</strong></p>
-<h4 id="配置说明">配置说明</h4>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#75715e"># upstream将创建一个上游服务配置项,用于交给proxy_pass 转发ip.
-</span></span></span><span style="display:flex;"><span><span style="color:#a6e22e">upstream</span> <span style="color:#a6e22e">bb</span><span style="color:#f92672">.</span><span style="color:#a6e22e">com</span> {
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">server</span> <span style="color:#ae81ff">127.0</span><span style="color:#f92672">.</span><span style="color:#ae81ff">0.1</span><span style="color:#f92672">:</span><span style="color:#ae81ff">1111</span>;
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">server</span> <span style="color:#ae81ff">127.0</span><span style="color:#f92672">.</span><span style="color:#ae81ff">0.1</span><span style="color:#f92672">:</span><span style="color:#ae81ff">2222</span>;
-</span></span><span style="display:flex;"><span>}
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#a6e22e">upstream</span> <span style="color:#a6e22e">cc</span><span style="color:#f92672">.</span><span style="color:#a6e22e">com</span> {
-</span></span><span style="display:flex;"><span>	<span style="color:#75715e"># weight表示权重，越大请求权重越大
-</span></span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">server</span> <span style="color:#ae81ff">127.125</span><span style="color:#f92672">.</span><span style="color:#ae81ff">0.1</span><span style="color:#f92672">:</span><span style="color:#ae81ff">80</span> <span style="color:#a6e22e">weight</span><span style="color:#f92672">=</span><span style="color:#ae81ff">5</span>;
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">server</span> <span style="color:#ae81ff">123.123</span><span style="color:#f92672">.</span><span style="color:#ae81ff">123.123</span><span style="color:#f92672">:</span><span style="color:#ae81ff">8081</span> <span style="color:#a6e22e">weight</span><span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>;
-</span></span><span style="display:flex;"><span>	
-</span></span><span style="display:flex;"><span>	<span style="color:#75715e"># 该指令就是告诉 nginx 服务器，同一个 IP 地址客户端发送的请求都将分发到同一个服务器进行处理。
-</span></span></span><span style="display:flex;"><span>	<span style="color:#75715e"># ip_hash;
-</span></span></span><span style="display:flex;"><span>	<span style="color:#75715e">#根据服务器处理请求的时间来进行负载，处理请求越快，也就是响应时间越短的优先分配。
-</span></span></span><span style="display:flex;"><span>	<span style="color:#75715e"># fair;
-</span></span></span><span style="display:flex;"><span>}
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#a6e22e">server</span> {
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">listen</span>       <span style="color:#ae81ff">80</span>;
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">server_name</span>  <span style="color:#a6e22e">dev</span><span style="color:#f92672">.</span><span style="color:#a6e22e">host</span><span style="color:#f92672">.</span><span style="color:#a6e22e">net</span>;
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">location</span> <span style="color:#f92672">/</span> {
-</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">proxy_pass</span> <span style="color:#a6e22e">http</span><span style="color:#f92672">://</span><span style="color:#a6e22e">bb</span><span style="color:#f92672">.</span><span style="color:#a6e22e">com</span>;
-</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">index</span> <span style="color:#a6e22e">index</span><span style="color:#f92672">.</span><span style="color:#a6e22e">php</span> <span style="color:#a6e22e">index</span><span style="color:#f92672">.</span><span style="color:#a6e22e">html</span>;
-</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">autoindex</span>  <span style="color:#a6e22e">off</span>;
-</span></span><span style="display:flex;"><span>	}
-</span></span><span style="display:flex;"><span>	
-</span></span><span style="display:flex;"><span>	<span style="color:#75715e"># 访问localhost的cc模块
-</span></span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">location</span> <span style="color:#f92672">/</span><span style="color:#a6e22e">cc</span><span style="color:#f92672">/</span> {
-</span></span><span style="display:flex;"><span>		<span style="color:#75715e"># proxy_pass代理了http://cc.com，获取到upstream中cc.com的配置
-</span></span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">proxy_pass</span> <span style="color:#a6e22e">http</span><span style="color:#f92672">://</span><span style="color:#a6e22e">cc</span><span style="color:#f92672">.</span><span style="color:#a6e22e">com</span>;
-</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">index</span> <span style="color:#a6e22e">index</span><span style="color:#f92672">.</span><span style="color:#a6e22e">php</span> <span style="color:#a6e22e">index</span><span style="color:#f92672">.</span><span style="color:#a6e22e">html</span>;
-</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">autoindex</span>  <span style="color:#a6e22e">off</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>	}
-</span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><h3 id="实例-1">实例</h3>
-<p>本案例是在<code>win10</code>的<code>phpstudy</code>下实现的，配置三个站点，
+<!doctype html><html class=no-js lang=en><head><meta charset=UTF-8><meta name=viewport content="width=device-width,initial-scale=1"><title>牛逼的 NGINX - 臭大佬博客</title><script>(function(e,t){e[t]=e[t].replace("no-js","js")})(document.documentElement,"className")</script><meta name=description content="它是一款免费开源的高性能 HTTP 代理服务器及反向代理服务器（Reverse Proxy）产品，同时它还可以提供 IMAP/POP3 邮件代理服务等功能。"><link rel=preconnect href=https://fonts.gstatic.com crossorigin><link rel=dns-prefetch href=//fonts.googleapis.com><link rel=dns-prefetch href=//fonts.gstatic.com><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700"><link rel=stylesheet href=/choudalao.github.io/css/style.css><link rel="shortcut icon" href=/choudalao.github.io/favicon.ico></head><body class=body><div class="container container--outer"><header class=header><div class="container header__container"><div class=logo><a class=logo__link href=/choudalao.github.io/ title=臭大佬博客 rel=home><div class="logo__item logo__text"><div class=logo__title>臭大佬博客</div></div></a></div><nav class=menu><button class=menu__btn aria-haspopup=true aria-expanded=false tabindex=0>
+<span class=menu__btn-title tabindex=-1>菜单</span></button><ul class=menu__list><li class=menu__item><a class=menu__link href=/choudalao.github.io/><span class=menu__text>首页</span></a></li><li class=menu__item><a class=menu__link href=/choudalao.github.io/post/><span class=menu__text>归档</span></a></li><li class=menu__item><a class=menu__link href=/choudalao.github.io/about/><span class=menu__text>关于</span></a></li></ul></nav></div></header><div class="wrapper flex"><div class=primary><main class=main role=main><article class=post><header class=post__header><h1 class=post__title>牛逼的 NGINX</h1></header><div class="content post__content clearfix"><h1 id=简介>简介</h1><p>官方网站为：http://nginx.org/ 。它是一款免费开源的高性能 HTTP 代理服务器及反向代理服务器（Reverse Proxy）产品，同时它还可以提供 IMAP/POP3 邮件代理服务等功能。</p><h2 id=nginx-配置介绍>Nginx 配置介绍</h2><p>我从宝塔里面拿一个完整的网站配置出来。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-php data-lang=php><span style=display:flex><span><span style=color:#75715e>#######   Nginx的main(全局配置)文件
+</span></span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 指定nginx运行的用户及用户组,默认为www
+</span></span></span><span style=display:flex><span><span style=color:#a6e22e>user</span>  <span style=color:#a6e22e>www</span> <span style=color:#a6e22e>www</span>;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 开启的线程数，一般跟逻辑CPU核数一致
+</span></span></span><span style=display:flex><span><span style=color:#a6e22e>worker_processes</span> <span style=color:#a6e22e>auto</span>;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 定位全局错误日志文件，级别以notice显示，还有debug,info,warn,error,crit模式，debug输出最多，crir输出最少，根据实际环境而定
+</span></span></span><span style=display:flex><span><span style=color:#a6e22e>error_log</span>  <span style=color:#f92672>/</span><span style=color:#a6e22e>www</span><span style=color:#f92672>/</span><span style=color:#a6e22e>wwwlogs</span><span style=color:#f92672>/</span><span style=color:#a6e22e>nginx_error</span><span style=color:#f92672>.</span><span style=color:#a6e22e>log</span>  <span style=color:#a6e22e>crit</span>;
+</span></span><span style=display:flex><span><span style=color:#75715e>#error_log  logs/error.log;
+</span></span></span><span style=display:flex><span><span style=color:#75715e>#error_log  logs/error.log  notice;
+</span></span></span><span style=display:flex><span><span style=color:#75715e>#error_log  logs/error.log  info;
+</span></span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 指定进程id的存储文件位置
+</span></span></span><span style=display:flex><span><span style=color:#a6e22e>pid</span>        <span style=color:#f92672>/</span><span style=color:#a6e22e>www</span><span style=color:#f92672>/</span><span style=color:#a6e22e>server</span><span style=color:#f92672>/</span><span style=color:#a6e22e>nginx</span><span style=color:#f92672>/</span><span style=color:#a6e22e>logs</span><span style=color:#f92672>/</span><span style=color:#a6e22e>nginx</span><span style=color:#f92672>.</span><span style=color:#a6e22e>pid</span>;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 指定一个nginx进程打开的最多文件描述符数目，受系统进程的最大打开文件数量限制
+</span></span></span><span style=display:flex><span><span style=color:#a6e22e>worker_rlimit_nofile</span> <span style=color:#ae81ff>51200</span>;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># events 块涉及的指令主要影响 Nginx 服务器与用户的网络连接，常用的设置包括是否开启对多 work process 下的网络连接进行序列化，是否允许同时接收多个网络连接，选取哪种事件驱动模型来处理连接请求，每个 word process 可以同时支持的最大连接数等。
+</span></span></span><span style=display:flex><span><span style=color:#a6e22e>events</span>
+</span></span><span style=display:flex><span>    {
+</span></span><span style=display:flex><span>		<span style=color:#75715e># 设置工作模式为epoll,除此之外还有select,poll,kqueue,rtsig和/dev/poll模式
+</span></span></span><span style=display:flex><span>        <span style=color:#66d9ef>use</span> <span style=color:#a6e22e>epoll</span>;	
+</span></span><span style=display:flex><span>		<span style=color:#75715e># 定义每个进程的最大连接数,受系统进程的最大打开文件数量限制。
+</span></span></span><span style=display:flex><span>        <span style=color:#a6e22e>worker_connections</span> <span style=color:#ae81ff>51200</span>;
+</span></span><span style=display:flex><span>		<span style=color:#75715e># 打开同时接受多个新网络连接请求的功能。
+</span></span></span><span style=display:flex><span>        <span style=color:#a6e22e>multi_accept</span> <span style=color:#a6e22e>on</span>;
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># http全局块配置的指令包括文件引入、MIME-TYPE 定义、日志自定义、连接超时时间、单链接请求数上限等。
+</span></span></span><span style=display:flex><span><span style=color:#a6e22e>http</span>
+</span></span><span style=display:flex><span>    {
+</span></span><span style=display:flex><span>		<span style=color:#75715e># 主模块指令，实现对配置文件所包含的文件的设定，可以减少主配置文件的复杂度，DNS主配置文件中的zonerfc1912,acl基本上都是用include语句。
+</span></span></span><span style=display:flex><span>        <span style=color:#66d9ef>include</span>       <span style=color:#a6e22e>mime</span><span style=color:#f92672>.</span><span style=color:#a6e22e>types</span>;
+</span></span><span style=display:flex><span>		<span style=color:#75715e>#include luawaf.conf;
+</span></span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>		<span style=color:#66d9ef>include</span> <span style=color:#a6e22e>proxy</span><span style=color:#f92672>.</span><span style=color:#a6e22e>conf</span>;
+</span></span><span style=display:flex><span>		<span style=color:#75715e># 核心模块指令，指令默认设置为二进制流，也就是当文件类型未定义时使用这种方式
+</span></span></span><span style=display:flex><span>        <span style=color:#a6e22e>default_type</span>  <span style=color:#a6e22e>application</span><span style=color:#f92672>/</span><span style=color:#a6e22e>octet</span><span style=color:#f92672>-</span><span style=color:#a6e22e>stream</span>;
+</span></span><span style=display:flex><span>		
+</span></span><span style=display:flex><span>		
+</span></span><span style=display:flex><span>		<span style=color:#75715e># 下面代码为日志格式的设定，main为日志格式的名称，可自行设置，后面引用
+</span></span></span><span style=display:flex><span>		<span style=color:#75715e>#log_format  main  &#39;$remote_addr - $remote_user [$time_local] &#34;$request&#34; &#39;
+</span></span></span><span style=display:flex><span>		<span style=color:#75715e>#                  &#39;$status $body_bytes_sent &#34;$http_referer&#34; &#39;
+</span></span></span><span style=display:flex><span>		<span style=color:#75715e>#                  &#39;&#34;$http_user_agent&#34; &#34;$http_x_forwarded_for&#34;&#39;;
+</span></span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>		<span style=color:#75715e># 引用日志main
+</span></span></span><span style=display:flex><span>		<span style=color:#75715e>#access_log  logs/access.log  main;
+</span></span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>		<span style=color:#75715e># 设置允许客户端请求的最大的单个文件字节数
+</span></span></span><span style=display:flex><span>		<span style=color:#75715e>#client_max_body_size 20M;
+</span></span></span><span style=display:flex><span>		<span style=color:#75715e># 指定来自客户端请求头的headebuffer大小
+</span></span></span><span style=display:flex><span>		<span style=color:#75715e>#client_header_buffer_size  32k;
+</span></span></span><span style=display:flex><span>		<span style=color:#75715e># 指定连接请求试图写入缓存文件的目录路径
+</span></span></span><span style=display:flex><span>		<span style=color:#75715e>#client_body_temp_path /dev/shm/client_body_temp;
+</span></span></span><span style=display:flex><span>		<span style=color:#75715e># 指定客户端请求中较大的消息头的缓存最大数量和大小，目前设置为4个32KB
+</span></span></span><span style=display:flex><span>		<span style=color:#75715e>#large client_header_buffers 4 32k;
+</span></span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>		<span style=color:#75715e>#设定请求缓存  
+</span></span></span><span style=display:flex><span>        <span style=color:#a6e22e>server_names_hash_bucket_size</span> <span style=color:#ae81ff>512</span>;
+</span></span><span style=display:flex><span>        <span style=color:#a6e22e>client_header_buffer_size</span> <span style=color:#ae81ff>32</span><span style=color:#a6e22e>k</span>;
+</span></span><span style=display:flex><span>        <span style=color:#a6e22e>large_client_header_buffers</span> <span style=color:#ae81ff>4</span> <span style=color:#ae81ff>32</span><span style=color:#a6e22e>k</span>;
+</span></span><span style=display:flex><span>        <span style=color:#a6e22e>client_max_body_size</span> <span style=color:#ae81ff>50</span><span style=color:#a6e22e>m</span>;
+</span></span><span style=display:flex><span>		<span style=color:#75715e># 开启高效文件传输模式
+</span></span></span><span style=display:flex><span>        <span style=color:#a6e22e>sendfile</span>   <span style=color:#a6e22e>on</span>;
+</span></span><span style=display:flex><span>		<span style=color:#75715e># 开启防止网络阻塞
+</span></span></span><span style=display:flex><span>        <span style=color:#a6e22e>tcp_nopush</span> <span style=color:#a6e22e>on</span>;
+</span></span><span style=display:flex><span>		
+</span></span><span style=display:flex><span>		<span style=color:#75715e># 设置客户端连接保存活动的超时时间
+</span></span></span><span style=display:flex><span>        <span style=color:#a6e22e>keepalive_timeout</span> <span style=color:#ae81ff>60</span>;
+</span></span><span style=display:flex><span>		<span style=color:#75715e># 开启防止网络阻塞
+</span></span></span><span style=display:flex><span>        <span style=color:#a6e22e>tcp_nodelay</span> <span style=color:#a6e22e>on</span>;
+</span></span><span style=display:flex><span>		
+</span></span><span style=display:flex><span>		<span style=color:#75715e># 设置客户端请求读取超时时间
+</span></span></span><span style=display:flex><span>		<span style=color:#75715e>#client_header_timeout 10;
+</span></span></span><span style=display:flex><span>		<span style=color:#75715e># 设置客户端请求主体读取超时时间
+</span></span></span><span style=display:flex><span>		<span style=color:#75715e>#client_body_timeout 10;
+</span></span></span><span style=display:flex><span>		<span style=color:#75715e># 用于设置相应客户端的超时时间
+</span></span></span><span style=display:flex><span>		<span style=color:#75715e>#send_timeout
+</span></span></span><span style=display:flex><span>		
+</span></span><span style=display:flex><span>		<span style=color:#75715e>#### fastcgi参数
+</span></span></span><span style=display:flex><span>		<span style=color:#75715e># 连接到后端fastcgi超时时间
+</span></span></span><span style=display:flex><span>        <span style=color:#a6e22e>fastcgi_connect_timeout</span> <span style=color:#ae81ff>300</span>;
+</span></span><span style=display:flex><span>		<span style=color:#75715e># 向fastcgi请求超时时间(这个指定值已经完成两次握手后向fastcgi传送请求的超时时间)
+</span></span></span><span style=display:flex><span>        <span style=color:#a6e22e>fastcgi_send_timeout</span> <span style=color:#ae81ff>300</span>;
+</span></span><span style=display:flex><span>		<span style=color:#75715e># 接收fastcgi应答超时时间，同理也是2次握手后
+</span></span></span><span style=display:flex><span>        <span style=color:#a6e22e>fastcgi_read_timeout</span> <span style=color:#ae81ff>300</span>;<span style=color:#75715e># 读取fastcgi应答第一部分需要多大缓冲区，该值表示使用1个64kb的缓冲区读取应答第一部分(应答头),可以设置为fastcgi_buffers选项缓冲区大小
+</span></span></span><span style=display:flex><span>        <span style=color:#a6e22e>fastcgi_buffer_size</span> <span style=color:#ae81ff>64</span><span style=color:#a6e22e>k</span>;	
+</span></span><span style=display:flex><span>		<span style=color:#75715e># 指定本地需要多少和多大的缓冲区来缓冲fastcgi应答请求，假设一个php或java脚本所产生页面大小为256kb,那么会为其分配4个64kb的缓冲来缓存；若页面大于256kb,那么大于的256kb的部分会缓存到fastcgi_temp指定路径中，这并非是个好办法，内存数据处理快于硬盘，一般该值应该为站点中php/java脚本所产生页面大小中间值，如果站点大部分脚本所产生的页面大小为256kb，那么可把值设置为16 16k,4 64k等
+</span></span></span><span style=display:flex><span>        <span style=color:#a6e22e>fastcgi_buffers</span> <span style=color:#ae81ff>4</span> <span style=color:#ae81ff>64</span><span style=color:#a6e22e>k</span>;
+</span></span><span style=display:flex><span>		<span style=color:#75715e># 默认值是fastcgi_buffer的2倍
+</span></span></span><span style=display:flex><span>        <span style=color:#a6e22e>fastcgi_busy_buffers_size</span> <span style=color:#ae81ff>128</span><span style=color:#a6e22e>k</span>;
+</span></span><span style=display:flex><span>		<span style=color:#75715e># 写入缓存文件使用多大的数据块，默认值是fastcgi_buffer的2倍
+</span></span></span><span style=display:flex><span>        <span style=color:#a6e22e>fastcgi_temp_file_write_size</span> <span style=color:#ae81ff>256</span><span style=color:#a6e22e>k</span>;
+</span></span><span style=display:flex><span>		<span style=color:#75715e># 是否传递4xx和5xx错误信息到客户端
+</span></span></span><span style=display:flex><span>		<span style=color:#a6e22e>fastcgi_intercept_errors</span> <span style=color:#a6e22e>on</span>;
+</span></span><span style=display:flex><span>		
+</span></span><span style=display:flex><span>		<span style=color:#75715e>#### HttpGZip模块配置
+</span></span></span><span style=display:flex><span>		<span style=color:#75715e># 开启gzip压缩
+</span></span></span><span style=display:flex><span>        <span style=color:#a6e22e>gzip</span> <span style=color:#a6e22e>on</span>;
+</span></span><span style=display:flex><span>		<span style=color:#75715e># 设置允许压缩的页面最小字节数
+</span></span></span><span style=display:flex><span>        <span style=color:#a6e22e>gzip_min_length</span>  <span style=color:#ae81ff>1</span><span style=color:#a6e22e>k</span>;
+</span></span><span style=display:flex><span>		<span style=color:#75715e># 申请4个单位为16K的内存作为压缩结果流缓存
+</span></span></span><span style=display:flex><span>        <span style=color:#a6e22e>gzip_buffers</span>     <span style=color:#ae81ff>4</span> <span style=color:#ae81ff>16</span><span style=color:#a6e22e>k</span>;
+</span></span><span style=display:flex><span>		<span style=color:#75715e># 设置识别http协议的版本，默认为1.1
+</span></span></span><span style=display:flex><span>        <span style=color:#a6e22e>gzip_http_version</span> <span style=color:#ae81ff>1.1</span>;
+</span></span><span style=display:flex><span>		<span style=color:#75715e># 指定gzip压缩比，1-9数字越小，压缩比越小，速度越快
+</span></span></span><span style=display:flex><span>        <span style=color:#a6e22e>gzip_comp_level</span> <span style=color:#ae81ff>2</span>;
+</span></span><span style=display:flex><span>		<span style=color:#75715e># 指定压缩的类型
+</span></span></span><span style=display:flex><span>        <span style=color:#a6e22e>gzip_types</span>     <span style=color:#a6e22e>text</span><span style=color:#f92672>/</span><span style=color:#a6e22e>plain</span> <span style=color:#a6e22e>application</span><span style=color:#f92672>/</span><span style=color:#a6e22e>javascript</span> <span style=color:#a6e22e>application</span><span style=color:#f92672>/</span><span style=color:#a6e22e>x</span><span style=color:#f92672>-</span><span style=color:#a6e22e>javascript</span> <span style=color:#a6e22e>text</span><span style=color:#f92672>/</span><span style=color:#a6e22e>javascript</span> <span style=color:#a6e22e>text</span><span style=color:#f92672>/</span><span style=color:#a6e22e>css</span> <span style=color:#a6e22e>application</span><span style=color:#f92672>/</span><span style=color:#a6e22e>xml</span>;
+</span></span><span style=display:flex><span>		<span style=color:#75715e>#让前端的缓存服务器进过gzip压缩的页面
+</span></span></span><span style=display:flex><span>        <span style=color:#a6e22e>gzip_vary</span> <span style=color:#a6e22e>on</span>;
+</span></span><span style=display:flex><span>		<span style=color:#75715e># Nginx做为反向代理的时候启用
+</span></span></span><span style=display:flex><span>        <span style=color:#a6e22e>gzip_proxied</span>   <span style=color:#a6e22e>expired</span> <span style=color:#a6e22e>no</span><span style=color:#f92672>-</span><span style=color:#a6e22e>cache</span> <span style=color:#a6e22e>no</span><span style=color:#f92672>-</span><span style=color:#a6e22e>store</span> <span style=color:#66d9ef>private</span> <span style=color:#a6e22e>auth</span>;
+</span></span><span style=display:flex><span>		<span style=color:#75715e># 通过表达式，表明哪些UA头不使用gzip压缩
+</span></span></span><span style=display:flex><span>        <span style=color:#a6e22e>gzip_disable</span>   <span style=color:#e6db74>&#34;MSIE [1-6]\.&#34;</span>;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>		<span style=color:#75715e># 对客户端访问目录和文件的访问频率和次数进行限制
+</span></span></span><span style=display:flex><span>        <span style=color:#a6e22e>limit_conn_zone</span> $binary_remote_addr <span style=color:#a6e22e>zone</span><span style=color:#f92672>=</span><span style=color:#a6e22e>perip</span><span style=color:#f92672>:</span><span style=color:#ae81ff>10</span><span style=color:#a6e22e>m</span>;
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>limit_conn_zone</span> $server_name <span style=color:#a6e22e>zone</span><span style=color:#f92672>=</span><span style=color:#a6e22e>perserver</span><span style=color:#f92672>:</span><span style=color:#ae81ff>10</span><span style=color:#a6e22e>m</span>;
+</span></span><span style=display:flex><span>		
+</span></span><span style=display:flex><span>		<span style=color:#75715e># 隐藏版本号开关
+</span></span></span><span style=display:flex><span>        <span style=color:#a6e22e>server_tokens</span> <span style=color:#a6e22e>off</span>;
+</span></span><span style=display:flex><span>		<span style=color:#75715e># 访问日志
+</span></span></span><span style=display:flex><span>        <span style=color:#a6e22e>access_log</span> <span style=color:#a6e22e>off</span>;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 最常见的配置是本虚拟机主机的监听配置和本虚拟主机的名称或IP配置,宝塔等软件通过 include引入多个网站配置文件
+</span></span></span><span style=display:flex><span><span style=color:#a6e22e>server</span>
+</span></span><span style=display:flex><span>    {
+</span></span><span style=display:flex><span>		<span style=color:#75715e># 设置网络监听
+</span></span></span><span style=display:flex><span>		<span style=color:#75715e># listen *:80 | *:8080 #监听所有80端口和8080端口
+</span></span></span><span style=display:flex><span>		<span style=color:#75715e># listen  IP_address:port   #监听指定的地址和端口号
+</span></span></span><span style=display:flex><span>		<span style=color:#75715e># listen  IP_address     #监听指定ip地址所有端口
+</span></span></span><span style=display:flex><span>		<span style=color:#75715e># listen port     #监听该端口的所有IP连接
+</span></span></span><span style=display:flex><span>        <span style=color:#a6e22e>listen</span> <span style=color:#ae81ff>888</span>;
+</span></span><span style=display:flex><span>		<span style=color:#75715e># 设置主机域名
+</span></span></span><span style=display:flex><span>		<span style=color:#75715e># server_name choudalao.com www.choudalao.com #多个域名
+</span></span></span><span style=display:flex><span>		<span style=color:#75715e># server_name 192.168.1.1 #  IP 地址的虚拟主机配置
+</span></span></span><span style=display:flex><span>        <span style=color:#a6e22e>server_name</span> <span style=color:#a6e22e>www</span><span style=color:#f92672>.</span><span style=color:#a6e22e>choudalao</span><span style=color:#f92672>.</span><span style=color:#a6e22e>com</span>;
+</span></span><span style=display:flex><span>		
+</span></span><span style=display:flex><span>		<span style=color:#75715e># 设置访问的语言编码
+</span></span></span><span style=display:flex><span>        <span style=color:#75715e>#charset koi8-r;
+</span></span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>        <span style=color:#75715e># 设置虚拟主机访问日志的存放路径及日志的格式为main
+</span></span></span><span style=display:flex><span>        <span style=color:#75715e>#access_log  logs/host.access.log  main;
+</span></span></span><span style=display:flex><span>		
+</span></span><span style=display:flex><span>		<span style=color:#75715e># 设置网站的默认首页。
+</span></span></span><span style=display:flex><span>        <span style=color:#a6e22e>index</span> <span style=color:#a6e22e>index</span><span style=color:#f92672>.</span><span style=color:#a6e22e>html</span> <span style=color:#a6e22e>index</span><span style=color:#f92672>.</span><span style=color:#a6e22e>htm</span> <span style=color:#a6e22e>index</span><span style=color:#f92672>.</span><span style=color:#a6e22e>php</span>;
+</span></span><span style=display:flex><span>		<span style=color:#75715e># 访问路径
+</span></span></span><span style=display:flex><span>        <span style=color:#a6e22e>root</span>  <span style=color:#f92672>/</span><span style=color:#a6e22e>www</span><span style=color:#f92672>/</span><span style=color:#a6e22e>server</span><span style=color:#f92672>/</span><span style=color:#a6e22e>phpmyadmin</span>;
+</span></span><span style=display:flex><span>            <span style=color:#a6e22e>location</span> <span style=color:#f92672>~</span> <span style=color:#f92672>/</span><span style=color:#a6e22e>tmp</span><span style=color:#f92672>/</span> {
+</span></span><span style=display:flex><span>                <span style=color:#66d9ef>return</span> <span style=color:#ae81ff>403</span>;
+</span></span><span style=display:flex><span>            }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>        <span style=color:#75715e>#SSL-START SSL相关配置，请勿删除或修改下一行带注释的404规则
+</span></span></span><span style=display:flex><span>		<span style=color:#75715e>#error_page 404/404.html;
+</span></span></span><span style=display:flex><span>		<span style=color:#75715e>#SSL-END
+</span></span></span><span style=display:flex><span>		
+</span></span><span style=display:flex><span>		<span style=color:#75715e>#ERROR-PAGE-START  错误页配置，可以注释、删除或修改
+</span></span></span><span style=display:flex><span>		<span style=color:#75715e>#error_page 404 /404.html;
+</span></span></span><span style=display:flex><span>		<span style=color:#75715e>#error_page 502 /502.html;
+</span></span></span><span style=display:flex><span>		<span style=color:#75715e>#ERROR-PAGE-END
+</span></span></span><span style=display:flex><span>		
+</span></span><span style=display:flex><span>		<span style=color:#75715e>#PHP-INFO-START  PHP引用配置，可以注释或修改
+</span></span></span><span style=display:flex><span>		<span style=color:#66d9ef>include</span> <span style=color:#a6e22e>enable</span><span style=color:#f92672>-</span><span style=color:#a6e22e>php</span><span style=color:#f92672>-</span><span style=color:#ae81ff>74.</span><span style=color:#a6e22e>conf</span>;
+</span></span><span style=display:flex><span>		<span style=color:#75715e>#PHP-INFO-END
+</span></span></span><span style=display:flex><span>		
+</span></span><span style=display:flex><span>		<span style=color:#75715e>#禁止访问的文件或目录
+</span></span></span><span style=display:flex><span>		<span style=color:#a6e22e>location</span> <span style=color:#f92672>~</span> <span style=color:#f92672>^/</span>(<span style=color:#a6e22e>\</span><span style=color:#f92672>.</span><span style=color:#a6e22e>user</span><span style=color:#f92672>.</span><span style=color:#a6e22e>ini</span><span style=color:#f92672>|</span><span style=color:#a6e22e>\</span><span style=color:#f92672>.</span><span style=color:#a6e22e>htaccess</span><span style=color:#f92672>|</span><span style=color:#a6e22e>\</span><span style=color:#f92672>.</span><span style=color:#a6e22e>git</span><span style=color:#f92672>|</span><span style=color:#a6e22e>\</span><span style=color:#f92672>.</span><span style=color:#a6e22e>svn</span><span style=color:#f92672>|</span><span style=color:#a6e22e>\</span><span style=color:#f92672>.</span><span style=color:#a6e22e>project</span><span style=color:#f92672>|</span><span style=color:#a6e22e>LICENSE</span><span style=color:#f92672>|</span><span style=color:#a6e22e>README</span><span style=color:#f92672>.</span><span style=color:#a6e22e>md</span>)
+</span></span><span style=display:flex><span>		{
+</span></span><span style=display:flex><span>			<span style=color:#66d9ef>return</span> <span style=color:#ae81ff>404</span>;
+</span></span><span style=display:flex><span>		}
+</span></span><span style=display:flex><span>		
+</span></span><span style=display:flex><span>		<span style=color:#75715e>#一键申请SSL证书验证目录相关设置
+</span></span></span><span style=display:flex><span>		<span style=color:#a6e22e>location</span> <span style=color:#f92672>~</span> <span style=color:#a6e22e>\</span><span style=color:#f92672>.</span><span style=color:#a6e22e>well</span><span style=color:#f92672>-</span><span style=color:#a6e22e>known</span>{
+</span></span><span style=display:flex><span>			<span style=color:#a6e22e>allow</span> <span style=color:#a6e22e>all</span>;
+</span></span><span style=display:flex><span>		}
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>	<span style=color:#75715e># 引入其他网站配置
+</span></span></span><span style=display:flex><span>	<span style=color:#66d9ef>include</span> <span style=color:#f92672>/</span><span style=color:#a6e22e>www</span><span style=color:#f92672>/</span><span style=color:#a6e22e>server</span><span style=color:#f92672>/</span><span style=color:#a6e22e>panel</span><span style=color:#f92672>/</span><span style=color:#a6e22e>vhost</span><span style=color:#f92672>/</span><span style=color:#a6e22e>nginx</span><span style=color:#f92672>/*.</span><span style=color:#a6e22e>conf</span>;
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h1 id=常用功能>常用功能</h1><h2 id=反向代理>反向代理</h2><p>在说反向代理之前，先说说什么是代理以及正向代理。</p><h3 id=代理>代理</h3><p>顾名思义，代理就是自己让别人帮忙做某事，举几个职业便于理解，代理律师、代理记账等职业在我们工作中是经常能听到的。他们就是代替我们去做我们想做的事的。</p><h3 id=正向代理>正向代理</h3><p>最常见的就是我们翻墙的候使用的VPN,，VPN的中转服务，是把我们的IP地址转化成VPN服务器公网IP,我们请求或接受任何数据都会通过这个VPN 服务器然后传入到我们本机。连上VPN后输出我们的IP地址，变成代理ip了。</p><p><img src=https://www.choudalao.com/uploads/20210117/202101171911561IIAFz.png alt></p><p>正向代理服务器位于客户端和服务器之间，为了向服务器获取数据，客户端要向代理服务器发送一个请求，并指定目标服务器，代理服务器将目标服务器返回的数据转交给客户端。这里客户端是要进行一些正向代理的设置的。</p><h3 id=反向代理-1>反向代理</h3><p>客户端向服务器发送请求时，会首先经过 Nginx 服务器，由服务器将请求分发到相应的 WEB 服务器。正向代理是代理客户端，而反向代理则是代理服务器，Nginx 在提供反向代理服务方面，通过使用正则表达式进行相关配置，采取不同的转发策略，配置相当灵活，而且在配置后端转发请求时，完全不用关心网络环境如何，可以指定任意的IP地址和端口号，或其他类型的连接、请求等。</p><p>反向代理和正向代理的区别就是：<strong>正向代理代理客户端，反向代理代理服务器。</strong></p><p>反向代理，其实客户端对代理是无感知的，因为客户端不需要任何配置就可以访问，我们只需要将请求发送到反向代理服务器，由反向代理服务器去选择目标服务器获取数据后，在返回给客户端，此时反向代理服务器和目标服务器对外就是一个服务器，暴露的是代理服务器地址，隐藏了真实服务器IP地址。</p><h4 id=实例>实例</h4><p>来个反向代理的配置栗子：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-php data-lang=php><span style=display:flex><span><span style=color:#a6e22e>server</span>
+</span></span><span style=display:flex><span>{
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>listen</span> <span style=color:#ae81ff>80</span>;
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>server_name</span> <span style=color:#a6e22e>admin</span><span style=color:#f92672>-</span><span style=color:#a6e22e>api</span><span style=color:#f92672>.</span><span style=color:#a6e22e>choudalao</span><span style=color:#f92672>.</span><span style=color:#a6e22e>com</span>;
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#75715e># 其他配置 ....
+</span></span></span><span style=display:flex><span>	
+</span></span><span style=display:flex><span>	<span style=color:#75715e># 反向代理配置
+</span></span></span><span style=display:flex><span>    <span style=color:#a6e22e>location</span> <span style=color:#f92672>/</span> {
+</span></span><span style=display:flex><span>		 <span style=color:#a6e22e>proxy_pass</span> <span style=color:#a6e22e>http</span><span style=color:#f92672>://</span><span style=color:#ae81ff>127.0</span><span style=color:#f92672>.</span><span style=color:#ae81ff>0.1</span><span style=color:#f92672>:</span><span style=color:#ae81ff>9777</span>;<span style=color:#75715e># http://xxx.com;# 也可以是域名
+</span></span></span><span style=display:flex><span>		 <span style=color:#a6e22e>index</span>  <span style=color:#a6e22e>index</span><span style=color:#f92672>.</span><span style=color:#a6e22e>html</span> <span style=color:#a6e22e>index</span><span style=color:#f92672>.</span><span style=color:#a6e22e>htm</span> <span style=color:#a6e22e>index</span><span style=color:#f92672>.</span><span style=color:#a6e22e>php</span>;
+</span></span><span style=display:flex><span>	}
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>当我们访问 <code>admin-api.choudalao.com</code>时，处理请求的是 <code>http://127.0.0.1:9777</code>，这样就实现了反向代理。</p><h2 id=负载均衡>负载均衡</h2><p>一方面是将单一的重负载分担到多个网络节点上做并行处理，每个节点处理结束后将结果汇总返回给用户，这样可以大幅度提高网络系统的处理能力；另一方面将大量的前端并发请求或数据流量分担到多个后端网络节点分别处理，这样可以有效减少前端用户等待相应的时间。而 Nginx 负载均衡都是属于后一方面，<strong>主要是对大量前端访问或流量进行分流，已保证前端用户访问效率，并可以减少后端服务器处理压力。</strong></p><h4 id=配置说明>配置说明</h4><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-php data-lang=php><span style=display:flex><span><span style=color:#75715e># upstream将创建一个上游服务配置项,用于交给proxy_pass 转发ip.
+</span></span></span><span style=display:flex><span><span style=color:#a6e22e>upstream</span> <span style=color:#a6e22e>bb</span><span style=color:#f92672>.</span><span style=color:#a6e22e>com</span> {
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>server</span> <span style=color:#ae81ff>127.0</span><span style=color:#f92672>.</span><span style=color:#ae81ff>0.1</span><span style=color:#f92672>:</span><span style=color:#ae81ff>1111</span>;
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>server</span> <span style=color:#ae81ff>127.0</span><span style=color:#f92672>.</span><span style=color:#ae81ff>0.1</span><span style=color:#f92672>:</span><span style=color:#ae81ff>2222</span>;
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>upstream</span> <span style=color:#a6e22e>cc</span><span style=color:#f92672>.</span><span style=color:#a6e22e>com</span> {
+</span></span><span style=display:flex><span>	<span style=color:#75715e># weight表示权重，越大请求权重越大
+</span></span></span><span style=display:flex><span>	<span style=color:#a6e22e>server</span> <span style=color:#ae81ff>127.125</span><span style=color:#f92672>.</span><span style=color:#ae81ff>0.1</span><span style=color:#f92672>:</span><span style=color:#ae81ff>80</span> <span style=color:#a6e22e>weight</span><span style=color:#f92672>=</span><span style=color:#ae81ff>5</span>;
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>server</span> <span style=color:#ae81ff>123.123</span><span style=color:#f92672>.</span><span style=color:#ae81ff>123.123</span><span style=color:#f92672>:</span><span style=color:#ae81ff>8081</span> <span style=color:#a6e22e>weight</span><span style=color:#f92672>=</span><span style=color:#ae81ff>2</span>;
+</span></span><span style=display:flex><span>	
+</span></span><span style=display:flex><span>	<span style=color:#75715e># 该指令就是告诉 nginx 服务器，同一个 IP 地址客户端发送的请求都将分发到同一个服务器进行处理。
+</span></span></span><span style=display:flex><span>	<span style=color:#75715e># ip_hash;
+</span></span></span><span style=display:flex><span>	<span style=color:#75715e>#根据服务器处理请求的时间来进行负载，处理请求越快，也就是响应时间越短的优先分配。
+</span></span></span><span style=display:flex><span>	<span style=color:#75715e># fair;
+</span></span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>server</span> {
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>listen</span>       <span style=color:#ae81ff>80</span>;
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>server_name</span>  <span style=color:#a6e22e>dev</span><span style=color:#f92672>.</span><span style=color:#a6e22e>host</span><span style=color:#f92672>.</span><span style=color:#a6e22e>net</span>;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>location</span> <span style=color:#f92672>/</span> {
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>proxy_pass</span> <span style=color:#a6e22e>http</span><span style=color:#f92672>://</span><span style=color:#a6e22e>bb</span><span style=color:#f92672>.</span><span style=color:#a6e22e>com</span>;
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>index</span> <span style=color:#a6e22e>index</span><span style=color:#f92672>.</span><span style=color:#a6e22e>php</span> <span style=color:#a6e22e>index</span><span style=color:#f92672>.</span><span style=color:#a6e22e>html</span>;
+</span></span><span style=display:flex><span>        <span style=color:#a6e22e>autoindex</span>  <span style=color:#a6e22e>off</span>;
+</span></span><span style=display:flex><span>	}
+</span></span><span style=display:flex><span>	
+</span></span><span style=display:flex><span>	<span style=color:#75715e># 访问localhost的cc模块
+</span></span></span><span style=display:flex><span>	<span style=color:#a6e22e>location</span> <span style=color:#f92672>/</span><span style=color:#a6e22e>cc</span><span style=color:#f92672>/</span> {
+</span></span><span style=display:flex><span>		<span style=color:#75715e># proxy_pass代理了http://cc.com，获取到upstream中cc.com的配置
+</span></span></span><span style=display:flex><span>		<span style=color:#a6e22e>proxy_pass</span> <span style=color:#a6e22e>http</span><span style=color:#f92672>://</span><span style=color:#a6e22e>cc</span><span style=color:#f92672>.</span><span style=color:#a6e22e>com</span>;
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>index</span> <span style=color:#a6e22e>index</span><span style=color:#f92672>.</span><span style=color:#a6e22e>php</span> <span style=color:#a6e22e>index</span><span style=color:#f92672>.</span><span style=color:#a6e22e>html</span>;
+</span></span><span style=display:flex><span>        <span style=color:#a6e22e>autoindex</span>  <span style=color:#a6e22e>off</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>	}
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h3 id=实例-1>实例</h3><p>本案例是在<code>win10</code>的<code>phpstudy</code>下实现的，配置三个站点，
 <code>dev.host.net</code>（监听<code>80</code>端口）
 <code>dev.localhost.net</code>（监听<code>1111</code>端口）
-<code>dev.localhost1.net</code>（监听<code>2222</code>端口）</p>
-<p><code>dev.localhost.net</code>和<code>dev.localhost1.net</code>根目录下分别有个<code>index.php</code>文件，内容分别如下，
-<code>dev.localhost.net</code>的<code>index.php</code></p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#f92672">&lt;?</span><span style="color:#a6e22e">php</span>  
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">echo</span> <span style="color:#e6db74">&#39;dev.localhost.net&#39;</span>;
-</span></span></code></pre></div><p><code>dev.localhost1.net</code>的<code>index.php</code></p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#f92672">&lt;?</span><span style="color:#a6e22e">php</span>  
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">echo</span> <span style="color:#e6db74">&#39;dev.localhost1.net&#39;</span>;
-</span></span></code></pre></div><p><code>nginx</code>配置分别如下：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#75715e"># dev.host.net配置文件
-</span></span></span><span style="display:flex;"><span><span style="color:#a6e22e">upstream</span> <span style="color:#a6e22e">bb</span><span style="color:#f92672">.</span><span style="color:#a6e22e">com</span> {
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># weight表示权重，越大请求权重越大
-</span></span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">server</span> <span style="color:#ae81ff">127.0</span><span style="color:#f92672">.</span><span style="color:#ae81ff">0.1</span><span style="color:#f92672">:</span><span style="color:#ae81ff">1111</span> <span style="color:#a6e22e">weight</span><span style="color:#f92672">=</span><span style="color:#ae81ff">5</span>;
-</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">server</span> <span style="color:#ae81ff">127.0</span><span style="color:#f92672">.</span><span style="color:#ae81ff">0.1</span><span style="color:#f92672">:</span><span style="color:#ae81ff">2222</span> <span style="color:#a6e22e">weight</span><span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>;
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 该指令就是告诉 nginx 服务器，同一个 IP 地址客户端发送的请求都将分发到同一个服务器进行处理。
-</span></span></span><span style="display:flex;"><span>    <span style="color:#75715e"># ip_hash;
-</span></span></span><span style="display:flex;"><span>    <span style="color:#75715e">#根据服务器处理请求的时间来进行负载，处理请求越快，也就是响应时间越短的优先分配。
-</span></span></span><span style="display:flex;"><span>    <span style="color:#75715e"># fair;
-</span></span></span><span style="display:flex;"><span>}
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#a6e22e">server</span> {
-</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">listen</span>        <span style="color:#ae81ff">80</span>;
-</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">server_name</span>  <span style="color:#a6e22e">dev</span><span style="color:#f92672">.</span><span style="color:#a6e22e">host</span><span style="color:#f92672">.</span><span style="color:#a6e22e">net</span>;
-</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">root</span>   <span style="color:#e6db74">&#34;D:/phpstudy_pro/WWW/dev.host.net&#34;</span>;
-</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">location</span> <span style="color:#f92672">/</span> {
-</span></span><span style="display:flex;"><span>             <span style="color:#a6e22e">proxy_pass</span> <span style="color:#a6e22e">http</span><span style="color:#f92672">://</span><span style="color:#a6e22e">bb</span><span style="color:#f92672">.</span><span style="color:#a6e22e">com</span>;
-</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">index</span> <span style="color:#a6e22e">index</span><span style="color:#f92672">.</span><span style="color:#a6e22e">php</span> <span style="color:#a6e22e">index</span><span style="color:#f92672">.</span><span style="color:#a6e22e">html</span> <span style="color:#a6e22e">error</span><span style="color:#f92672">/</span><span style="color:#a6e22e">index</span><span style="color:#f92672">.</span><span style="color:#a6e22e">html</span>;
-</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">include</span> <span style="color:#a6e22e">D</span><span style="color:#f92672">:/</span><span style="color:#a6e22e">phpstudy_pro</span><span style="color:#f92672">/</span><span style="color:#a6e22e">WWW</span><span style="color:#f92672">/</span><span style="color:#a6e22e">dev</span><span style="color:#f92672">.</span><span style="color:#a6e22e">host</span><span style="color:#f92672">.</span><span style="color:#a6e22e">net</span><span style="color:#f92672">/</span><span style="color:#a6e22e">nginx</span><span style="color:#f92672">.</span><span style="color:#a6e22e">htaccess</span>;
-</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">autoindex</span>  <span style="color:#a6e22e">off</span>;
-</span></span><span style="display:flex;"><span>        }
-</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">location</span> <span style="color:#f92672">~</span> <span style="color:#a6e22e">\</span><span style="color:#f92672">.</span><span style="color:#a6e22e">php</span>(<span style="color:#f92672">.*</span>)<span style="color:#960050;background-color:#1e0010">$</span> {
-</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">fastcgi_pass</span>   <span style="color:#ae81ff">127.0</span><span style="color:#f92672">.</span><span style="color:#ae81ff">0.1</span><span style="color:#f92672">:</span><span style="color:#ae81ff">9003</span>;
-</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">fastcgi_index</span>  <span style="color:#a6e22e">index</span><span style="color:#f92672">.</span><span style="color:#a6e22e">php</span>;
-</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">fastcgi_split_path_info</span>  <span style="color:#f92672">^</span>((<span style="color:#f92672">?</span><span style="color:#a6e22e">U</span>)<span style="color:#f92672">.+</span><span style="color:#a6e22e">\</span><span style="color:#f92672">.</span><span style="color:#a6e22e">php</span>)(<span style="color:#f92672">/?.+</span>)<span style="color:#960050;background-color:#1e0010">$</span>;
-</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">fastcgi_param</span>  <span style="color:#a6e22e">SCRIPT_FILENAME</span>  $document_root$fastcgi_script_name;
-</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">fastcgi_param</span>  <span style="color:#a6e22e">PATH_INFO</span>  $fastcgi_path_info;
-</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">fastcgi_param</span>  <span style="color:#a6e22e">PATH_TRANSLATED</span>  $document_root$fastcgi_path_info;
-</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">include</span>        <span style="color:#a6e22e">fastcgi_params</span>;
-</span></span><span style="display:flex;"><span>        }
-</span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#75715e"># dev.localhost.net配置文件
-</span></span></span><span style="display:flex;"><span><span style="color:#a6e22e">server</span> {
-</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">listen</span>        <span style="color:#ae81ff">1111</span>;
-</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">server_name</span>  <span style="color:#a6e22e">dev</span><span style="color:#f92672">.</span><span style="color:#a6e22e">localhost</span><span style="color:#f92672">.</span><span style="color:#a6e22e">net</span>;
-</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">root</span>   <span style="color:#e6db74">&#34;D:/phpstudy_pro/WWW/dev.localhost.net&#34;</span>;
-</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">location</span> <span style="color:#f92672">/</span> {
-</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">index</span> <span style="color:#a6e22e">index</span><span style="color:#f92672">.</span><span style="color:#a6e22e">php</span> <span style="color:#a6e22e">index</span><span style="color:#f92672">.</span><span style="color:#a6e22e">html</span> <span style="color:#a6e22e">error</span><span style="color:#f92672">/</span><span style="color:#a6e22e">index</span><span style="color:#f92672">.</span><span style="color:#a6e22e">html</span>;
-</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">include</span> <span style="color:#a6e22e">D</span><span style="color:#f92672">:/</span><span style="color:#a6e22e">phpstudy_pro</span><span style="color:#f92672">/</span><span style="color:#a6e22e">WWW</span><span style="color:#f92672">/</span><span style="color:#a6e22e">dev</span><span style="color:#f92672">.</span><span style="color:#a6e22e">localhost</span><span style="color:#f92672">.</span><span style="color:#a6e22e">net</span><span style="color:#f92672">/</span><span style="color:#a6e22e">nginx</span><span style="color:#f92672">.</span><span style="color:#a6e22e">htaccess</span>;
-</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">autoindex</span>  <span style="color:#a6e22e">off</span>;
-</span></span><span style="display:flex;"><span>        }
-</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">location</span> <span style="color:#f92672">~</span> <span style="color:#a6e22e">\</span><span style="color:#f92672">.</span><span style="color:#a6e22e">php</span>(<span style="color:#f92672">.*</span>)<span style="color:#960050;background-color:#1e0010">$</span> {
-</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">fastcgi_pass</span>   <span style="color:#ae81ff">127.0</span><span style="color:#f92672">.</span><span style="color:#ae81ff">0.1</span><span style="color:#f92672">:</span><span style="color:#ae81ff">9000</span>;
-</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">fastcgi_index</span>  <span style="color:#a6e22e">index</span><span style="color:#f92672">.</span><span style="color:#a6e22e">php</span>;
-</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">fastcgi_split_path_info</span>  <span style="color:#f92672">^</span>((<span style="color:#f92672">?</span><span style="color:#a6e22e">U</span>)<span style="color:#f92672">.+</span><span style="color:#a6e22e">\</span><span style="color:#f92672">.</span><span style="color:#a6e22e">php</span>)(<span style="color:#f92672">/?.+</span>)<span style="color:#960050;background-color:#1e0010">$</span>;
-</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">fastcgi_param</span>  <span style="color:#a6e22e">SCRIPT_FILENAME</span>  $document_root$fastcgi_script_name;
-</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">fastcgi_param</span>  <span style="color:#a6e22e">PATH_INFO</span>  $fastcgi_path_info;
-</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">fastcgi_param</span>  <span style="color:#a6e22e">PATH_TRANSLATED</span>  $document_root$fastcgi_path_info;
-</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">include</span>        <span style="color:#a6e22e">fastcgi_params</span>;
-</span></span><span style="display:flex;"><span>        }
-</span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#75715e"># dev.localhost1.net配置文件
-</span></span></span><span style="display:flex;"><span><span style="color:#a6e22e">server</span> {
-</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">listen</span>        <span style="color:#ae81ff">2222</span>;
-</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">server_name</span>  <span style="color:#a6e22e">dev</span><span style="color:#f92672">.</span><span style="color:#a6e22e">localhost1</span><span style="color:#f92672">.</span><span style="color:#a6e22e">net</span>;
-</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">root</span>   <span style="color:#e6db74">&#34;D:/phpstudy_pro/WWW/dev.localhost1.net&#34;</span>;
-</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">location</span> <span style="color:#f92672">/</span> {
-</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">index</span> <span style="color:#a6e22e">index</span><span style="color:#f92672">.</span><span style="color:#a6e22e">php</span> <span style="color:#a6e22e">index</span><span style="color:#f92672">.</span><span style="color:#a6e22e">html</span> <span style="color:#a6e22e">error</span><span style="color:#f92672">/</span><span style="color:#a6e22e">index</span><span style="color:#f92672">.</span><span style="color:#a6e22e">html</span>;
-</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">include</span> <span style="color:#a6e22e">D</span><span style="color:#f92672">:/</span><span style="color:#a6e22e">phpstudy_pro</span><span style="color:#f92672">/</span><span style="color:#a6e22e">WWW</span><span style="color:#f92672">/</span><span style="color:#a6e22e">dev</span><span style="color:#f92672">.</span><span style="color:#a6e22e">localhost1</span><span style="color:#f92672">.</span><span style="color:#a6e22e">net</span><span style="color:#f92672">/</span><span style="color:#a6e22e">nginx</span><span style="color:#f92672">.</span><span style="color:#a6e22e">htaccess</span>;
-</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">autoindex</span>  <span style="color:#a6e22e">off</span>;
-</span></span><span style="display:flex;"><span>        }
-</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">location</span> <span style="color:#f92672">~</span> <span style="color:#a6e22e">\</span><span style="color:#f92672">.</span><span style="color:#a6e22e">php</span>(<span style="color:#f92672">.*</span>)<span style="color:#960050;background-color:#1e0010">$</span> {
-</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">fastcgi_pass</span>   <span style="color:#ae81ff">127.0</span><span style="color:#f92672">.</span><span style="color:#ae81ff">0.1</span><span style="color:#f92672">:</span><span style="color:#ae81ff">9000</span>;
-</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">fastcgi_index</span>  <span style="color:#a6e22e">index</span><span style="color:#f92672">.</span><span style="color:#a6e22e">php</span>;
-</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">fastcgi_split_path_info</span>  <span style="color:#f92672">^</span>((<span style="color:#f92672">?</span><span style="color:#a6e22e">U</span>)<span style="color:#f92672">.+</span><span style="color:#a6e22e">\</span><span style="color:#f92672">.</span><span style="color:#a6e22e">php</span>)(<span style="color:#f92672">/?.+</span>)<span style="color:#960050;background-color:#1e0010">$</span>;
-</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">fastcgi_param</span>  <span style="color:#a6e22e">SCRIPT_FILENAME</span>  $document_root$fastcgi_script_name;
-</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">fastcgi_param</span>  <span style="color:#a6e22e">PATH_INFO</span>  $fastcgi_path_info;
-</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">fastcgi_param</span>  <span style="color:#a6e22e">PATH_TRANSLATED</span>  $document_root$fastcgi_path_info;
-</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">include</span>        <span style="color:#a6e22e">fastcgi_params</span>;
-</span></span><span style="display:flex;"><span>        }
-</span></span><span style="display:flex;"><span>}
+<code>dev.localhost1.net</code>（监听<code>2222</code>端口）</p><p><code>dev.localhost.net</code>和<code>dev.localhost1.net</code>根目录下分别有个<code>index.php</code>文件，内容分别如下，
+<code>dev.localhost.net</code>的<code>index.php</code></p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-php data-lang=php><span style=display:flex><span><span style=color:#f92672>&lt;?</span><span style=color:#a6e22e>php</span>  
+</span></span><span style=display:flex><span><span style=color:#66d9ef>echo</span> <span style=color:#e6db74>&#39;dev.localhost.net&#39;</span>;
+</span></span></code></pre></div><p><code>dev.localhost1.net</code>的<code>index.php</code></p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-php data-lang=php><span style=display:flex><span><span style=color:#f92672>&lt;?</span><span style=color:#a6e22e>php</span>  
+</span></span><span style=display:flex><span><span style=color:#66d9ef>echo</span> <span style=color:#e6db74>&#39;dev.localhost1.net&#39;</span>;
+</span></span></code></pre></div><p><code>nginx</code>配置分别如下：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-php data-lang=php><span style=display:flex><span><span style=color:#75715e># dev.host.net配置文件
+</span></span></span><span style=display:flex><span><span style=color:#a6e22e>upstream</span> <span style=color:#a6e22e>bb</span><span style=color:#f92672>.</span><span style=color:#a6e22e>com</span> {
+</span></span><span style=display:flex><span>    <span style=color:#75715e># weight表示权重，越大请求权重越大
+</span></span></span><span style=display:flex><span>    <span style=color:#a6e22e>server</span> <span style=color:#ae81ff>127.0</span><span style=color:#f92672>.</span><span style=color:#ae81ff>0.1</span><span style=color:#f92672>:</span><span style=color:#ae81ff>1111</span> <span style=color:#a6e22e>weight</span><span style=color:#f92672>=</span><span style=color:#ae81ff>5</span>;
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>server</span> <span style=color:#ae81ff>127.0</span><span style=color:#f92672>.</span><span style=color:#ae81ff>0.1</span><span style=color:#f92672>:</span><span style=color:#ae81ff>2222</span> <span style=color:#a6e22e>weight</span><span style=color:#f92672>=</span><span style=color:#ae81ff>2</span>;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#75715e># 该指令就是告诉 nginx 服务器，同一个 IP 地址客户端发送的请求都将分发到同一个服务器进行处理。
+</span></span></span><span style=display:flex><span>    <span style=color:#75715e># ip_hash;
+</span></span></span><span style=display:flex><span>    <span style=color:#75715e>#根据服务器处理请求的时间来进行负载，处理请求越快，也就是响应时间越短的优先分配。
+</span></span></span><span style=display:flex><span>    <span style=color:#75715e># fair;
+</span></span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>server</span> {
+</span></span><span style=display:flex><span>        <span style=color:#a6e22e>listen</span>        <span style=color:#ae81ff>80</span>;
+</span></span><span style=display:flex><span>        <span style=color:#a6e22e>server_name</span>  <span style=color:#a6e22e>dev</span><span style=color:#f92672>.</span><span style=color:#a6e22e>host</span><span style=color:#f92672>.</span><span style=color:#a6e22e>net</span>;
+</span></span><span style=display:flex><span>        <span style=color:#a6e22e>root</span>   <span style=color:#e6db74>&#34;D:/phpstudy_pro/WWW/dev.host.net&#34;</span>;
+</span></span><span style=display:flex><span>        <span style=color:#a6e22e>location</span> <span style=color:#f92672>/</span> {
+</span></span><span style=display:flex><span>             <span style=color:#a6e22e>proxy_pass</span> <span style=color:#a6e22e>http</span><span style=color:#f92672>://</span><span style=color:#a6e22e>bb</span><span style=color:#f92672>.</span><span style=color:#a6e22e>com</span>;
+</span></span><span style=display:flex><span>            <span style=color:#a6e22e>index</span> <span style=color:#a6e22e>index</span><span style=color:#f92672>.</span><span style=color:#a6e22e>php</span> <span style=color:#a6e22e>index</span><span style=color:#f92672>.</span><span style=color:#a6e22e>html</span> <span style=color:#a6e22e>error</span><span style=color:#f92672>/</span><span style=color:#a6e22e>index</span><span style=color:#f92672>.</span><span style=color:#a6e22e>html</span>;
+</span></span><span style=display:flex><span>            <span style=color:#66d9ef>include</span> <span style=color:#a6e22e>D</span><span style=color:#f92672>:/</span><span style=color:#a6e22e>phpstudy_pro</span><span style=color:#f92672>/</span><span style=color:#a6e22e>WWW</span><span style=color:#f92672>/</span><span style=color:#a6e22e>dev</span><span style=color:#f92672>.</span><span style=color:#a6e22e>host</span><span style=color:#f92672>.</span><span style=color:#a6e22e>net</span><span style=color:#f92672>/</span><span style=color:#a6e22e>nginx</span><span style=color:#f92672>.</span><span style=color:#a6e22e>htaccess</span>;
+</span></span><span style=display:flex><span>            <span style=color:#a6e22e>autoindex</span>  <span style=color:#a6e22e>off</span>;
+</span></span><span style=display:flex><span>        }
+</span></span><span style=display:flex><span>        <span style=color:#a6e22e>location</span> <span style=color:#f92672>~</span> <span style=color:#a6e22e>\</span><span style=color:#f92672>.</span><span style=color:#a6e22e>php</span>(<span style=color:#f92672>.*</span>)<span style=color:#960050;background-color:#1e0010>$</span> {
+</span></span><span style=display:flex><span>            <span style=color:#a6e22e>fastcgi_pass</span>   <span style=color:#ae81ff>127.0</span><span style=color:#f92672>.</span><span style=color:#ae81ff>0.1</span><span style=color:#f92672>:</span><span style=color:#ae81ff>9003</span>;
+</span></span><span style=display:flex><span>            <span style=color:#a6e22e>fastcgi_index</span>  <span style=color:#a6e22e>index</span><span style=color:#f92672>.</span><span style=color:#a6e22e>php</span>;
+</span></span><span style=display:flex><span>            <span style=color:#a6e22e>fastcgi_split_path_info</span>  <span style=color:#f92672>^</span>((<span style=color:#f92672>?</span><span style=color:#a6e22e>U</span>)<span style=color:#f92672>.+</span><span style=color:#a6e22e>\</span><span style=color:#f92672>.</span><span style=color:#a6e22e>php</span>)(<span style=color:#f92672>/?.+</span>)<span style=color:#960050;background-color:#1e0010>$</span>;
+</span></span><span style=display:flex><span>            <span style=color:#a6e22e>fastcgi_param</span>  <span style=color:#a6e22e>SCRIPT_FILENAME</span>  $document_root$fastcgi_script_name;
+</span></span><span style=display:flex><span>            <span style=color:#a6e22e>fastcgi_param</span>  <span style=color:#a6e22e>PATH_INFO</span>  $fastcgi_path_info;
+</span></span><span style=display:flex><span>            <span style=color:#a6e22e>fastcgi_param</span>  <span style=color:#a6e22e>PATH_TRANSLATED</span>  $document_root$fastcgi_path_info;
+</span></span><span style=display:flex><span>            <span style=color:#66d9ef>include</span>        <span style=color:#a6e22e>fastcgi_params</span>;
+</span></span><span style=display:flex><span>        }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-php data-lang=php><span style=display:flex><span><span style=color:#75715e># dev.localhost.net配置文件
+</span></span></span><span style=display:flex><span><span style=color:#a6e22e>server</span> {
+</span></span><span style=display:flex><span>        <span style=color:#a6e22e>listen</span>        <span style=color:#ae81ff>1111</span>;
+</span></span><span style=display:flex><span>        <span style=color:#a6e22e>server_name</span>  <span style=color:#a6e22e>dev</span><span style=color:#f92672>.</span><span style=color:#a6e22e>localhost</span><span style=color:#f92672>.</span><span style=color:#a6e22e>net</span>;
+</span></span><span style=display:flex><span>        <span style=color:#a6e22e>root</span>   <span style=color:#e6db74>&#34;D:/phpstudy_pro/WWW/dev.localhost.net&#34;</span>;
+</span></span><span style=display:flex><span>        <span style=color:#a6e22e>location</span> <span style=color:#f92672>/</span> {
+</span></span><span style=display:flex><span>            <span style=color:#a6e22e>index</span> <span style=color:#a6e22e>index</span><span style=color:#f92672>.</span><span style=color:#a6e22e>php</span> <span style=color:#a6e22e>index</span><span style=color:#f92672>.</span><span style=color:#a6e22e>html</span> <span style=color:#a6e22e>error</span><span style=color:#f92672>/</span><span style=color:#a6e22e>index</span><span style=color:#f92672>.</span><span style=color:#a6e22e>html</span>;
+</span></span><span style=display:flex><span>            <span style=color:#66d9ef>include</span> <span style=color:#a6e22e>D</span><span style=color:#f92672>:/</span><span style=color:#a6e22e>phpstudy_pro</span><span style=color:#f92672>/</span><span style=color:#a6e22e>WWW</span><span style=color:#f92672>/</span><span style=color:#a6e22e>dev</span><span style=color:#f92672>.</span><span style=color:#a6e22e>localhost</span><span style=color:#f92672>.</span><span style=color:#a6e22e>net</span><span style=color:#f92672>/</span><span style=color:#a6e22e>nginx</span><span style=color:#f92672>.</span><span style=color:#a6e22e>htaccess</span>;
+</span></span><span style=display:flex><span>            <span style=color:#a6e22e>autoindex</span>  <span style=color:#a6e22e>off</span>;
+</span></span><span style=display:flex><span>        }
+</span></span><span style=display:flex><span>        <span style=color:#a6e22e>location</span> <span style=color:#f92672>~</span> <span style=color:#a6e22e>\</span><span style=color:#f92672>.</span><span style=color:#a6e22e>php</span>(<span style=color:#f92672>.*</span>)<span style=color:#960050;background-color:#1e0010>$</span> {
+</span></span><span style=display:flex><span>            <span style=color:#a6e22e>fastcgi_pass</span>   <span style=color:#ae81ff>127.0</span><span style=color:#f92672>.</span><span style=color:#ae81ff>0.1</span><span style=color:#f92672>:</span><span style=color:#ae81ff>9000</span>;
+</span></span><span style=display:flex><span>            <span style=color:#a6e22e>fastcgi_index</span>  <span style=color:#a6e22e>index</span><span style=color:#f92672>.</span><span style=color:#a6e22e>php</span>;
+</span></span><span style=display:flex><span>            <span style=color:#a6e22e>fastcgi_split_path_info</span>  <span style=color:#f92672>^</span>((<span style=color:#f92672>?</span><span style=color:#a6e22e>U</span>)<span style=color:#f92672>.+</span><span style=color:#a6e22e>\</span><span style=color:#f92672>.</span><span style=color:#a6e22e>php</span>)(<span style=color:#f92672>/?.+</span>)<span style=color:#960050;background-color:#1e0010>$</span>;
+</span></span><span style=display:flex><span>            <span style=color:#a6e22e>fastcgi_param</span>  <span style=color:#a6e22e>SCRIPT_FILENAME</span>  $document_root$fastcgi_script_name;
+</span></span><span style=display:flex><span>            <span style=color:#a6e22e>fastcgi_param</span>  <span style=color:#a6e22e>PATH_INFO</span>  $fastcgi_path_info;
+</span></span><span style=display:flex><span>            <span style=color:#a6e22e>fastcgi_param</span>  <span style=color:#a6e22e>PATH_TRANSLATED</span>  $document_root$fastcgi_path_info;
+</span></span><span style=display:flex><span>            <span style=color:#66d9ef>include</span>        <span style=color:#a6e22e>fastcgi_params</span>;
+</span></span><span style=display:flex><span>        }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-php data-lang=php><span style=display:flex><span><span style=color:#75715e># dev.localhost1.net配置文件
+</span></span></span><span style=display:flex><span><span style=color:#a6e22e>server</span> {
+</span></span><span style=display:flex><span>        <span style=color:#a6e22e>listen</span>        <span style=color:#ae81ff>2222</span>;
+</span></span><span style=display:flex><span>        <span style=color:#a6e22e>server_name</span>  <span style=color:#a6e22e>dev</span><span style=color:#f92672>.</span><span style=color:#a6e22e>localhost1</span><span style=color:#f92672>.</span><span style=color:#a6e22e>net</span>;
+</span></span><span style=display:flex><span>        <span style=color:#a6e22e>root</span>   <span style=color:#e6db74>&#34;D:/phpstudy_pro/WWW/dev.localhost1.net&#34;</span>;
+</span></span><span style=display:flex><span>        <span style=color:#a6e22e>location</span> <span style=color:#f92672>/</span> {
+</span></span><span style=display:flex><span>            <span style=color:#a6e22e>index</span> <span style=color:#a6e22e>index</span><span style=color:#f92672>.</span><span style=color:#a6e22e>php</span> <span style=color:#a6e22e>index</span><span style=color:#f92672>.</span><span style=color:#a6e22e>html</span> <span style=color:#a6e22e>error</span><span style=color:#f92672>/</span><span style=color:#a6e22e>index</span><span style=color:#f92672>.</span><span style=color:#a6e22e>html</span>;
+</span></span><span style=display:flex><span>            <span style=color:#66d9ef>include</span> <span style=color:#a6e22e>D</span><span style=color:#f92672>:/</span><span style=color:#a6e22e>phpstudy_pro</span><span style=color:#f92672>/</span><span style=color:#a6e22e>WWW</span><span style=color:#f92672>/</span><span style=color:#a6e22e>dev</span><span style=color:#f92672>.</span><span style=color:#a6e22e>localhost1</span><span style=color:#f92672>.</span><span style=color:#a6e22e>net</span><span style=color:#f92672>/</span><span style=color:#a6e22e>nginx</span><span style=color:#f92672>.</span><span style=color:#a6e22e>htaccess</span>;
+</span></span><span style=display:flex><span>            <span style=color:#a6e22e>autoindex</span>  <span style=color:#a6e22e>off</span>;
+</span></span><span style=display:flex><span>        }
+</span></span><span style=display:flex><span>        <span style=color:#a6e22e>location</span> <span style=color:#f92672>~</span> <span style=color:#a6e22e>\</span><span style=color:#f92672>.</span><span style=color:#a6e22e>php</span>(<span style=color:#f92672>.*</span>)<span style=color:#960050;background-color:#1e0010>$</span> {
+</span></span><span style=display:flex><span>            <span style=color:#a6e22e>fastcgi_pass</span>   <span style=color:#ae81ff>127.0</span><span style=color:#f92672>.</span><span style=color:#ae81ff>0.1</span><span style=color:#f92672>:</span><span style=color:#ae81ff>9000</span>;
+</span></span><span style=display:flex><span>            <span style=color:#a6e22e>fastcgi_index</span>  <span style=color:#a6e22e>index</span><span style=color:#f92672>.</span><span style=color:#a6e22e>php</span>;
+</span></span><span style=display:flex><span>            <span style=color:#a6e22e>fastcgi_split_path_info</span>  <span style=color:#f92672>^</span>((<span style=color:#f92672>?</span><span style=color:#a6e22e>U</span>)<span style=color:#f92672>.+</span><span style=color:#a6e22e>\</span><span style=color:#f92672>.</span><span style=color:#a6e22e>php</span>)(<span style=color:#f92672>/?.+</span>)<span style=color:#960050;background-color:#1e0010>$</span>;
+</span></span><span style=display:flex><span>            <span style=color:#a6e22e>fastcgi_param</span>  <span style=color:#a6e22e>SCRIPT_FILENAME</span>  $document_root$fastcgi_script_name;
+</span></span><span style=display:flex><span>            <span style=color:#a6e22e>fastcgi_param</span>  <span style=color:#a6e22e>PATH_INFO</span>  $fastcgi_path_info;
+</span></span><span style=display:flex><span>            <span style=color:#a6e22e>fastcgi_param</span>  <span style=color:#a6e22e>PATH_TRANSLATED</span>  $document_root$fastcgi_path_info;
+</span></span><span style=display:flex><span>            <span style=color:#66d9ef>include</span>        <span style=color:#a6e22e>fastcgi_params</span>;
+</span></span><span style=display:flex><span>        }
+</span></span><span style=display:flex><span>}
 </span></span></code></pre></div><p>配置好后重启<code>nginx</code>，访问 <code>http://dev.host.net/</code>
-<img src="https://www.choudalao.com/uploads/20210118/202101181154058Aaokw.png" alt="">
-<img src="https://www.choudalao.com/uploads/20210118/20210118115429FKdfg2.png" alt=""></p>
-<p>刷新页面，可以看到出现的内容有变化，而且<code>weight</code>值大的出现的频率相对来说大，这样就实现了简单的负载均衡，</p>
-<h3 id="问题">问题</h3>
-<h4 id="集群环境下的-session-共享如何解决这个问题">集群环境下的 session 共享，如何解决这个问题？</h4>
-<p>我们知道一个请求在经过一个服务器处理时，服务器会保存相关的会话信息，比如<code>session</code>，但是该请求如果第一个服务器没处理完，通过<code>nginx</code>轮询到第二个服务器上，那么这个服务器是没有会话信息的。</p>
-<p>　　最典型的一个例子：用户第一次进入一个系统是需要进行登录身份验证的，首先将请求跳转到 服务器1 进行处理，登录信息是保存 在 服务器1 上的，这时候需要进行别的操作，那么可能会将请求轮询到 服务器2 上，那么由于 服务器2 没有保存会话信息，会以为该用户没有登录，然后继续登录一次，如果有多个服务器，每次第一次访问都要进行登录，这显然是很影响用户体验的。</p>
-<h5 id="方法一中间件存储">方法一：中间件存储</h5>
-<p>选择一个中间件，将登录信息保存在一个中间件上，这个中间件可以为 <code>Redis</code> 这样的数据库。那么第一次登录，我们将<code>session</code> 信息保存在 <code>Redis</code> 中，跳转到第二个服务器时，我们可以先去<code>Redis</code>上查询是否有登录信息，如果有，就能直接进行登录之后的操作了，而不用进行重复登录。</p>
-<h5 id="方法二ip-hash取模分组">方法二：ip hash取模分组</h5>
-<p>根据客户端的IP地址划分，每次都将同一个 <code>IP </code>地址发送的请求都分发到同一个服务器，那么也不会存在 <code>session</code> 共享的问题。</p>
-<p>我们在 <code>upstream</code> 指令块中增加了 ip_hash 指令。该指令就是告诉 <code>nginx</code> 服务器，同一个 <code>IP</code> 地址客户端发送的请求都将分发到同一个服务器进行处理。</p>
-<p>我们来实现<code>ip hash</code>取模分组，把上面的<code>dev.host.net</code>配置修改如下</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#a6e22e">upstream</span> <span style="color:#a6e22e">bb</span><span style="color:#f92672">.</span><span style="color:#a6e22e">com</span> {
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 该指令就是告诉 nginx 服务器，同一个 IP 地址客户端发送的请求都将分发到同一个服务器进行处理。
-</span></span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">ip_hash</span>;
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># weight 将失效
-</span></span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">server</span> <span style="color:#ae81ff">127.0</span><span style="color:#f92672">.</span><span style="color:#ae81ff">0.1</span><span style="color:#f92672">:</span><span style="color:#ae81ff">1111</span> <span style="color:#a6e22e">weight</span><span style="color:#f92672">=</span><span style="color:#ae81ff">5</span>;
-</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">server</span> <span style="color:#ae81ff">127.0</span><span style="color:#f92672">.</span><span style="color:#ae81ff">0.1</span><span style="color:#f92672">:</span><span style="color:#ae81ff">2222</span> <span style="color:#a6e22e">weight</span><span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>;
-</span></span><span style="display:flex;"><span>}
-</span></span><span style="display:flex;"><span><span style="color:#a6e22e">server</span> {
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">listen</span>       <span style="color:#ae81ff">80</span>;
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">server_name</span>  <span style="color:#a6e22e">dev</span><span style="color:#f92672">.</span><span style="color:#a6e22e">host</span><span style="color:#f92672">.</span><span style="color:#a6e22e">net</span>;
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">location</span> <span style="color:#f92672">/</span> {
-</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">proxy_pass</span> <span style="color:#a6e22e">http</span><span style="color:#f92672">://</span><span style="color:#a6e22e">bb</span><span style="color:#f92672">.</span><span style="color:#a6e22e">com</span>;
-</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">index</span> <span style="color:#a6e22e">index</span><span style="color:#f92672">.</span><span style="color:#a6e22e">php</span> <span style="color:#a6e22e">index</span><span style="color:#f92672">.</span><span style="color:#a6e22e">html</span>;
-</span></span><span style="display:flex;"><span>	}
-</span></span><span style="display:flex;"><span>	<span style="color:#75715e"># 其他配置
-</span></span></span><span style="display:flex;"><span>}
+<img src=https://www.choudalao.com/uploads/20210118/202101181154058Aaokw.png alt>
+<img src=https://www.choudalao.com/uploads/20210118/20210118115429FKdfg2.png alt></p><p>刷新页面，可以看到出现的内容有变化，而且<code>weight</code>值大的出现的频率相对来说大，这样就实现了简单的负载均衡，</p><h3 id=问题>问题</h3><h4 id=集群环境下的-session-共享如何解决这个问题>集群环境下的 session 共享，如何解决这个问题？</h4><p>我们知道一个请求在经过一个服务器处理时，服务器会保存相关的会话信息，比如<code>session</code>，但是该请求如果第一个服务器没处理完，通过<code>nginx</code>轮询到第二个服务器上，那么这个服务器是没有会话信息的。</p><p>　　最典型的一个例子：用户第一次进入一个系统是需要进行登录身份验证的，首先将请求跳转到 服务器1 进行处理，登录信息是保存 在 服务器1 上的，这时候需要进行别的操作，那么可能会将请求轮询到 服务器2 上，那么由于 服务器2 没有保存会话信息，会以为该用户没有登录，然后继续登录一次，如果有多个服务器，每次第一次访问都要进行登录，这显然是很影响用户体验的。</p><h5 id=方法一中间件存储>方法一：中间件存储</h5><p>选择一个中间件，将登录信息保存在一个中间件上，这个中间件可以为 <code>Redis</code> 这样的数据库。那么第一次登录，我们将<code>session</code> 信息保存在 <code>Redis</code> 中，跳转到第二个服务器时，我们可以先去<code>Redis</code>上查询是否有登录信息，如果有，就能直接进行登录之后的操作了，而不用进行重复登录。</p><h5 id=方法二ip-hash取模分组>方法二：ip hash取模分组</h5><p>根据客户端的IP地址划分，每次都将同一个 <code>IP </code>地址发送的请求都分发到同一个服务器，那么也不会存在 <code>session</code> 共享的问题。</p><p>我们在 <code>upstream</code> 指令块中增加了 ip_hash 指令。该指令就是告诉 <code>nginx</code> 服务器，同一个 <code>IP</code> 地址客户端发送的请求都将分发到同一个服务器进行处理。</p><p>我们来实现<code>ip hash</code>取模分组，把上面的<code>dev.host.net</code>配置修改如下</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-php data-lang=php><span style=display:flex><span><span style=color:#a6e22e>upstream</span> <span style=color:#a6e22e>bb</span><span style=color:#f92672>.</span><span style=color:#a6e22e>com</span> {
+</span></span><span style=display:flex><span>    <span style=color:#75715e># 该指令就是告诉 nginx 服务器，同一个 IP 地址客户端发送的请求都将分发到同一个服务器进行处理。
+</span></span></span><span style=display:flex><span>    <span style=color:#a6e22e>ip_hash</span>;
+</span></span><span style=display:flex><span>    <span style=color:#75715e># weight 将失效
+</span></span></span><span style=display:flex><span>    <span style=color:#a6e22e>server</span> <span style=color:#ae81ff>127.0</span><span style=color:#f92672>.</span><span style=color:#ae81ff>0.1</span><span style=color:#f92672>:</span><span style=color:#ae81ff>1111</span> <span style=color:#a6e22e>weight</span><span style=color:#f92672>=</span><span style=color:#ae81ff>5</span>;
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>server</span> <span style=color:#ae81ff>127.0</span><span style=color:#f92672>.</span><span style=color:#ae81ff>0.1</span><span style=color:#f92672>:</span><span style=color:#ae81ff>2222</span> <span style=color:#a6e22e>weight</span><span style=color:#f92672>=</span><span style=color:#ae81ff>2</span>;
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span><span style=color:#a6e22e>server</span> {
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>listen</span>       <span style=color:#ae81ff>80</span>;
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>server_name</span>  <span style=color:#a6e22e>dev</span><span style=color:#f92672>.</span><span style=color:#a6e22e>host</span><span style=color:#f92672>.</span><span style=color:#a6e22e>net</span>;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>location</span> <span style=color:#f92672>/</span> {
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>proxy_pass</span> <span style=color:#a6e22e>http</span><span style=color:#f92672>://</span><span style=color:#a6e22e>bb</span><span style=color:#f92672>.</span><span style=color:#a6e22e>com</span>;
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>index</span> <span style=color:#a6e22e>index</span><span style=color:#f92672>.</span><span style=color:#a6e22e>php</span> <span style=color:#a6e22e>index</span><span style=color:#f92672>.</span><span style=color:#a6e22e>html</span>;
+</span></span><span style=display:flex><span>	}
+</span></span><span style=display:flex><span>	<span style=color:#75715e># 其他配置
+</span></span></span><span style=display:flex><span>}
 </span></span></code></pre></div><p>重启<code>nignx</code>访问 <code>dev.host.net</code>
-<img src="https://www.choudalao.com/uploads/20210118/20210118120543TfdsoN.png" alt="">
-发现刷新<code>n</code>次输出的结果都是<code>dev.localhost.net</code>。</p>
-<h2 id="web-缓存">Web 缓存</h2>
-<p>Nginx 可以作为前置缓存服务器，它被用于缓存前端请求，从而提高 Web服务器的性能。Nginx 会对用户已经访问过的内容在服务器本地建立副本，这样在一段时间内再次访问该数据，就不需要通过 Nginx 服务器向后端发出请求。减轻网络拥堵，减小数据传输延时，提高用户访问速度。</p>
-<h3 id="配置">配置</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#75715e">#### http模块
-</span></span></span><span style="display:flex;"><span><span style="color:#a6e22e">http</span> {
-</span></span><span style="display:flex;"><span>	
-</span></span><span style="display:flex;"><span>	<span style="color:#75715e">### 其他配置
-</span></span></span><span style="display:flex;"><span>	<span style="color:#75715e">#.....
-</span></span></span><span style="display:flex;"><span>	<span style="color:#75715e">#要想开启nginx的缓存功能，需要添加此处的两行内容！
-</span></span></span><span style="display:flex;"><span>	<span style="color:#75715e">#设置Web缓存区名称为cache_one,内存缓存空间大小为500M,缓存的数据超过1天没有被访问就自动清除;访问的缓存数据,硬盘缓存空间大小为30G
-</span></span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">proxy_cache_path</span> <span style="color:#f92672">/</span><span style="color:#a6e22e">usr</span><span style="color:#f92672">/</span><span style="color:#a6e22e">local</span><span style="color:#f92672">/</span><span style="color:#a6e22e">nginx</span><span style="color:#f92672">/</span><span style="color:#a6e22e">proxy_cache_path</span> <span style="color:#a6e22e">levels</span><span style="color:#f92672">=</span><span style="color:#ae81ff">1</span><span style="color:#f92672">:</span><span style="color:#ae81ff">2</span> <span style="color:#a6e22e">keys_zone</span><span style="color:#f92672">=</span><span style="color:#a6e22e">cache_one</span><span style="color:#f92672">:</span><span style="color:#ae81ff">500</span><span style="color:#a6e22e">m</span> <span style="color:#a6e22e">inactive</span><span style="color:#f92672">=</span><span style="color:#ae81ff">1</span><span style="color:#a6e22e">d</span> <span style="color:#a6e22e">max_size</span><span style="color:#f92672">=</span><span style="color:#ae81ff">30</span><span style="color:#a6e22e">g</span>;
-</span></span><span style="display:flex;"><span> 
-</span></span><span style="display:flex;"><span>	<span style="color:#75715e">#创建缓存的时候可能生成一些临时文件存放的位置
-</span></span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">proxy_temp_path</span> <span style="color:#f92672">/</span><span style="color:#a6e22e">usr</span><span style="color:#f92672">/</span><span style="color:#a6e22e">local</span><span style="color:#f92672">/</span><span style="color:#a6e22e">nginx</span><span style="color:#f92672">/</span><span style="color:#a6e22e">proxy_temp_path</span>;
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>}
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e">### server块
-</span></span></span><span style="display:flex;"><span><span style="color:#a6e22e">server</span> {
-</span></span><span style="display:flex;"><span>     <span style="color:#a6e22e">listen</span> <span style="color:#ae81ff">888</span>;
-</span></span><span style="display:flex;"><span>     <span style="color:#a6e22e">server_name</span> <span style="color:#a6e22e">www</span><span style="color:#f92672">.</span><span style="color:#a6e22e">choudalao</span><span style="color:#f92672">.</span><span style="color:#a6e22e">com</span>;
-</span></span><span style="display:flex;"><span>	 
-</span></span><span style="display:flex;"><span>	 <span style="color:#75715e"># 其他配置
-</span></span></span><span style="display:flex;"><span>	 <span style="color:#75715e">#....
-</span></span></span><span style="display:flex;"><span>	 
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">location</span> <span style="color:#f92672">/</span> {
-</span></span><span style="display:flex;"><span>		<span style="color:#75715e"># 其他配置
-</span></span></span><span style="display:flex;"><span>		<span style="color:#75715e">#....
-</span></span></span><span style="display:flex;"><span>		<span style="color:#75715e">#使用Web缓存区cache_one，已在nginx.conf的缓存配置中命名的。
-</span></span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">proxy_cache</span> <span style="color:#a6e22e">cache_one</span>;
-</span></span><span style="display:flex;"><span>		<span style="color:#75715e">#对不同HTTP状态码缓存设置不同的缓存时间
-</span></span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">proxy_cache_valid</span> <span style="color:#ae81ff">200</span> <span style="color:#ae81ff">206</span> <span style="color:#ae81ff">304</span> <span style="color:#ae81ff">301</span> <span style="color:#ae81ff">302</span> <span style="color:#ae81ff">10</span><span style="color:#a6e22e">d</span>;
-</span></span><span style="display:flex;"><span>		<span style="color:#75715e">#设置Web缓存的Key值,Nginx根据Key值md5哈希存储缓存,这里根据&#34;域名,URI,
-</span></span></span><span style="display:flex;"><span>		<span style="color:#75715e">#参数&#34;组合成Key
-</span></span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">proxy_cache_key</span> $uri;
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">proxy_set_header</span> <span style="color:#a6e22e">Host</span> $host<span style="color:#f92672">:</span>$server_port;
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">proxy_set_header</span> <span style="color:#a6e22e">X</span><span style="color:#f92672">-</span><span style="color:#a6e22e">Real</span><span style="color:#f92672">-</span><span style="color:#a6e22e">IP</span> $remote_addr;
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">proxy_set_header</span> <span style="color:#a6e22e">X</span><span style="color:#f92672">-</span><span style="color:#a6e22e">Forwarded</span><span style="color:#f92672">-</span><span style="color:#66d9ef">For</span> $proxy_add_x_forwarded_for;
-</span></span><span style="display:flex;"><span>		
-</span></span><span style="display:flex;"><span>		<span style="color:#75715e">#proxy_connect_timeout 300;             ##跟后端服务器连接超时时间，发起握手等候响应时间
-</span></span></span><span style="display:flex;"><span>		<span style="color:#75715e">#proxy_send_timeout 300;                ##后端服务器回传时间，就是在规定时间内后端服务器必须传完所有数据
-</span></span></span><span style="display:flex;"><span>		<span style="color:#75715e">#proxy_read_timeout 600;                ##连接成功后等待后端服务器的响应时间，已经进入后端的排队之中等候处理
-</span></span></span><span style="display:flex;"><span>		<span style="color:#75715e">#proxy_buffer_size 256k;                ##代理请求缓冲区,会保存用户的头信息以供nginx进行处理
-</span></span></span><span style="display:flex;"><span>		<span style="color:#75715e">#proxy_buffers 4 256k;                  ##同上，告诉nginx保存单个用几个buffer最大用多少空间
-</span></span></span><span style="display:flex;"><span>		<span style="color:#75715e">#proxy_busy_buffers_size 256k;          ##如果系统很忙时候可以申请最大的proxy_buffers
-</span></span></span><span style="display:flex;"><span>		<span style="color:#75715e">#proxy_temp_file_write_size 256k;       ##proxy缓存临时文件的大小
-</span></span></span><span style="display:flex;"><span>	}
-</span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><h3 id="实例-2">实例，</h3>
-<p>本实例在<code>win10</code>的<code>phpstudy</code>环境下测试，</p>
-<p>新建如下两个目录
-<code>D:\phpstudy_pro\Extensions\Nginx1.15.11\weblog\proxy_cache_path</code> 和 <code>D:\phpstudy_pro\Extensions\Nginx1.15.11\weblog\proxy_temp_path</code></p>
-<p>在<code>nginx.conf</code>中添加如下配置</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#75715e">#### http模块
-</span></span></span><span style="display:flex;"><span><span style="color:#a6e22e">http</span> {
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e">### 其他配置
-</span></span></span><span style="display:flex;"><span>    <span style="color:#75715e">#.....
-</span></span></span><span style="display:flex;"><span>    <span style="color:#75715e">#要想开启nginx的缓存功能，需要添加此处的两行内容！
-</span></span></span><span style="display:flex;"><span>    <span style="color:#75715e">#设置Web缓存区名称为cache_one,内存缓存空间大小为500M,缓存的数据超过1天没有被访问就自动清除;访问的缓存数据,硬盘缓存空间大小为30G
-</span></span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">proxy_cache_path</span> <span style="color:#a6e22e">D</span><span style="color:#f92672">:/</span><span style="color:#a6e22e">phpstudy_pro</span><span style="color:#f92672">/</span><span style="color:#a6e22e">Extensions</span><span style="color:#f92672">/</span><span style="color:#a6e22e">Nginx1</span><span style="color:#f92672">.</span><span style="color:#ae81ff">15.11</span><span style="color:#f92672">/</span><span style="color:#a6e22e">weblog</span><span style="color:#f92672">/</span><span style="color:#a6e22e">proxy_cache_path</span> <span style="color:#a6e22e">levels</span><span style="color:#f92672">=</span><span style="color:#ae81ff">1</span><span style="color:#f92672">:</span><span style="color:#ae81ff">2</span> <span style="color:#a6e22e">keys_zone</span><span style="color:#f92672">=</span><span style="color:#a6e22e">cache_one</span><span style="color:#f92672">:</span><span style="color:#ae81ff">500</span><span style="color:#a6e22e">m</span> <span style="color:#a6e22e">inactive</span><span style="color:#f92672">=</span><span style="color:#ae81ff">1</span><span style="color:#a6e22e">d</span> <span style="color:#a6e22e">max_size</span><span style="color:#f92672">=</span><span style="color:#ae81ff">30</span><span style="color:#a6e22e">g</span>;
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e">#创建缓存的时候可能生成一些临时文件存放的位置
-</span></span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">proxy_temp_path</span> <span style="color:#a6e22e">D</span><span style="color:#f92672">:/</span><span style="color:#a6e22e">phpstudy_pro</span><span style="color:#f92672">/</span><span style="color:#a6e22e">Extensions</span><span style="color:#f92672">/</span><span style="color:#a6e22e">Nginx1</span><span style="color:#f92672">.</span><span style="color:#ae81ff">15.11</span><span style="color:#f92672">/</span><span style="color:#a6e22e">weblog</span><span style="color:#f92672">/</span><span style="color:#a6e22e">proxy_temp_path</span>;
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><p><img src="https://www.choudalao.com/uploads/20210118/20210118171909Epra6c.png" alt=""></p>
-<p>我们修改上面 <code>dev.localhost.net</code> 的配置</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#a6e22e">server</span> {
-</span></span><span style="display:flex;"><span>	<span style="color:#75715e">#其他配置
-</span></span></span><span style="display:flex;"><span>	<span style="color:#75715e">#....
-</span></span></span><span style="display:flex;"><span>	 <span style="color:#a6e22e">location</span> <span style="color:#f92672">/</span> {
-</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">index</span> <span style="color:#a6e22e">index</span><span style="color:#f92672">.</span><span style="color:#a6e22e">php</span> <span style="color:#a6e22e">index</span><span style="color:#f92672">.</span><span style="color:#a6e22e">html</span> <span style="color:#a6e22e">error</span><span style="color:#f92672">/</span><span style="color:#a6e22e">index</span><span style="color:#f92672">.</span><span style="color:#a6e22e">html</span>;
-</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">include</span> <span style="color:#a6e22e">D</span><span style="color:#f92672">:/</span><span style="color:#a6e22e">phpstudy_pro</span><span style="color:#f92672">/</span><span style="color:#a6e22e">WWW</span><span style="color:#f92672">/</span><span style="color:#a6e22e">dev</span><span style="color:#f92672">.</span><span style="color:#a6e22e">localhost</span><span style="color:#f92672">.</span><span style="color:#a6e22e">net</span><span style="color:#f92672">/</span><span style="color:#a6e22e">nginx</span><span style="color:#f92672">.</span><span style="color:#a6e22e">htaccess</span>;
-</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">autoindex</span>  <span style="color:#a6e22e">off</span>;
-</span></span><span style="display:flex;"><span>            <span style="color:#75715e">#使用Web缓存区cache_one，已在nginx.conf的缓存配置中命名的。
-</span></span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">proxy_cache</span> <span style="color:#a6e22e">cache_one</span>;
-</span></span><span style="display:flex;"><span>            <span style="color:#75715e">#对不同HTTP状态码缓存设置不同的缓存时间
-</span></span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">proxy_cache_valid</span> <span style="color:#ae81ff">200</span> <span style="color:#ae81ff">206</span> <span style="color:#ae81ff">304</span> <span style="color:#ae81ff">301</span> <span style="color:#ae81ff">302</span> <span style="color:#ae81ff">10</span><span style="color:#a6e22e">d</span>;
-</span></span><span style="display:flex;"><span>            <span style="color:#75715e">#设置Web缓存的Key值,Nginx根据Key值md5哈希存储缓存,这里根据&#34;域名,URI,
-</span></span></span><span style="display:flex;"><span>            <span style="color:#75715e">#参数&#34;组合成Key
-</span></span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">proxy_cache_key</span> $host$uri$is_args$args;
-</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">proxy_set_header</span> <span style="color:#a6e22e">Host</span> $host;
-</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">proxy_set_header</span> <span style="color:#a6e22e">X</span><span style="color:#f92672">-</span><span style="color:#a6e22e">Forwarded</span><span style="color:#f92672">-</span><span style="color:#66d9ef">For</span> $remote_addr;
-</span></span><span style="display:flex;"><span>        }
-</span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><p>在<code>dev.localhost.net</code>网站根目录下把<code>index.php</code>改成<code>index.html</code>.并在同级创建<code>img</code>目录，并放一张图片上去。</p>
-<p><img src="https://www.choudalao.com/uploads/20210118/20210118172306wzQYYy.png" alt=""></p>
-<p><code>index.html</code>里面代码如下：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#f92672">&lt;!</span><span style="color:#a6e22e">DOCTYPE</span> <span style="color:#a6e22e">html</span><span style="color:#f92672">&gt;</span>
-</span></span><span style="display:flex;"><span><span style="color:#f92672">&lt;</span><span style="color:#a6e22e">html</span><span style="color:#f92672">&gt;</span>
-</span></span><span style="display:flex;"><span><span style="color:#f92672">&lt;</span><span style="color:#a6e22e">body</span><span style="color:#f92672">&gt;</span>
-</span></span><span style="display:flex;"><span><span style="color:#f92672">&lt;</span><span style="color:#a6e22e">h1</span><span style="color:#f92672">&gt;</span><span style="color:#a6e22e">测试</span><span style="color:#f92672">&lt;/</span><span style="color:#a6e22e">h1</span><span style="color:#f92672">&gt;</span>
-</span></span><span style="display:flex;"><span><span style="color:#f92672">&lt;</span><span style="color:#a6e22e">img</span> <span style="color:#a6e22e">src</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;./img/QQ图片20201104180508.png&#34;</span><span style="color:#f92672">&gt;</span>
-</span></span><span style="display:flex;"><span><span style="color:#f92672">&lt;/</span><span style="color:#a6e22e">body</span><span style="color:#f92672">&gt;</span>
-</span></span><span style="display:flex;"><span><span style="color:#f92672">&lt;/</span><span style="color:#a6e22e">html</span><span style="color:#f92672">&gt;</span>
-</span></span></code></pre></div><p>重启<code>nginx</code>，访问 <code>http://127.0.0.1:1111/</code>，</p>
-<p><img src="https://www.choudalao.com/uploads/20210118/20210118172412HcYcFH.png" alt=""></p>
-<p>然后删除图片</p>
-<p><img src="https://www.choudalao.com/uploads/20210118/202101181724322UOTwa.png" alt=""></p>
-<p>再次访问</p>
-<p><img src="https://www.choudalao.com/uploads/20210118/20210118172452hD3FRG.png" alt=""></p>
-<p>已经缓存起来了，至于删除缓存，需要用到 <code>proxy_cache_purge</code>模块，感兴趣的去研究一下。</p>
-<h3 id="nginx与php-fpm的结合">nginx与php-fpm的结合</h3>
-<p><a href="https://www.example.com">www.example.com</a>||Nginx||路由到www.example.com/index.php||加载nginx的fast-cgi模块||fast-cgi监听127.0.0.1:9000地址||www.example.com/index.php请求到达127.0.0.1:9000||php-fpm 监听127.0.0.1:9000||php-fpm 接收到请求，启用worker进程处理请求||php-fpm 处理完请求，返回给nginx||nginx将结果通过http返回给浏览器</p>
-<h2 id="nginx-解决跨域">nginx 解决跨域</h2>
-<p>前端 http://localhost:3200
-后端 http://localhost:32000</p>
-<p>由于端口不一致,所以会有跨域问题,
-解决方式:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">server</span> {
-</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">listen</span>       <span style="color:#ae81ff">80</span>;
-</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">server_name</span>  <span style="color:#a6e22e">dev</span>.<span style="color:#a6e22e">im</span>.<span style="color:#a6e22e">net</span>;
-</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">location</span> <span style="color:#f92672">/</span> {
-</span></span><span style="display:flex;"><span>     <span style="color:#a6e22e">proxy_pass</span> <span style="color:#a6e22e">http</span>:<span style="color:#75715e">//127.0.0.1:3200;</span>
-</span></span><span style="display:flex;"><span>	}
-</span></span><span style="display:flex;"><span>	<span style="color:#960050;background-color:#1e0010">#</span> <span style="color:#a6e22e">接口都是在api下</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">location</span> <span style="color:#f92672">/</span><span style="color:#a6e22e">api</span><span style="color:#f92672">/</span> {
-</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">proxy_pass</span> <span style="color:#a6e22e">http</span>:<span style="color:#75715e">//127.0.0.1:32000;</span>
-</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">index</span> <span style="color:#a6e22e">index</span>.<span style="color:#a6e22e">php</span> <span style="color:#a6e22e">index</span>.<span style="color:#a6e22e">html</span>;
-</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">autoindex</span>  <span style="color:#a6e22e">off</span>;
-</span></span><span style="display:flex;"><span>	}
-</span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><p>这样,前端访问就是<code>http://dev.im.net/</code>,后端接口访问是<code>http://dev.im.net/api/</code>,就不会出现跨域问题了</p>
-
-		</div>
-	</article>
-</main>
-
-
-
-
-			</div>
-			
-		</div>
-		<footer class="footer">
-	<div class="container footer__container flex">
-		
-		<div class="footer__copyright">
-			&copy; 2026 臭大佬博客.
-			<span class="footer__copyright-credits">基于 <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> 引擎和 <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> 主题</span>
-		</div>
-	</div>
-</footer>
-	</div>
-<script async defer src="/js/menu.js"></script>
-</body>
-</html>
+<img src=https://www.choudalao.com/uploads/20210118/20210118120543TfdsoN.png alt>
+发现刷新<code>n</code>次输出的结果都是<code>dev.localhost.net</code>。</p><h2 id=web-缓存>Web 缓存</h2><p>Nginx 可以作为前置缓存服务器，它被用于缓存前端请求，从而提高 Web服务器的性能。Nginx 会对用户已经访问过的内容在服务器本地建立副本，这样在一段时间内再次访问该数据，就不需要通过 Nginx 服务器向后端发出请求。减轻网络拥堵，减小数据传输延时，提高用户访问速度。</p><h3 id=配置>配置</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-php data-lang=php><span style=display:flex><span><span style=color:#75715e>#### http模块
+</span></span></span><span style=display:flex><span><span style=color:#a6e22e>http</span> {
+</span></span><span style=display:flex><span>	
+</span></span><span style=display:flex><span>	<span style=color:#75715e>### 其他配置
+</span></span></span><span style=display:flex><span>	<span style=color:#75715e>#.....
+</span></span></span><span style=display:flex><span>	<span style=color:#75715e>#要想开启nginx的缓存功能，需要添加此处的两行内容！
+</span></span></span><span style=display:flex><span>	<span style=color:#75715e>#设置Web缓存区名称为cache_one,内存缓存空间大小为500M,缓存的数据超过1天没有被访问就自动清除;访问的缓存数据,硬盘缓存空间大小为30G
+</span></span></span><span style=display:flex><span>    <span style=color:#a6e22e>proxy_cache_path</span> <span style=color:#f92672>/</span><span style=color:#a6e22e>usr</span><span style=color:#f92672>/</span><span style=color:#a6e22e>local</span><span style=color:#f92672>/</span><span style=color:#a6e22e>nginx</span><span style=color:#f92672>/</span><span style=color:#a6e22e>proxy_cache_path</span> <span style=color:#a6e22e>levels</span><span style=color:#f92672>=</span><span style=color:#ae81ff>1</span><span style=color:#f92672>:</span><span style=color:#ae81ff>2</span> <span style=color:#a6e22e>keys_zone</span><span style=color:#f92672>=</span><span style=color:#a6e22e>cache_one</span><span style=color:#f92672>:</span><span style=color:#ae81ff>500</span><span style=color:#a6e22e>m</span> <span style=color:#a6e22e>inactive</span><span style=color:#f92672>=</span><span style=color:#ae81ff>1</span><span style=color:#a6e22e>d</span> <span style=color:#a6e22e>max_size</span><span style=color:#f92672>=</span><span style=color:#ae81ff>30</span><span style=color:#a6e22e>g</span>;
+</span></span><span style=display:flex><span> 
+</span></span><span style=display:flex><span>	<span style=color:#75715e>#创建缓存的时候可能生成一些临时文件存放的位置
+</span></span></span><span style=display:flex><span>    <span style=color:#a6e22e>proxy_temp_path</span> <span style=color:#f92672>/</span><span style=color:#a6e22e>usr</span><span style=color:#f92672>/</span><span style=color:#a6e22e>local</span><span style=color:#f92672>/</span><span style=color:#a6e22e>nginx</span><span style=color:#f92672>/</span><span style=color:#a6e22e>proxy_temp_path</span>;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>### server块
+</span></span></span><span style=display:flex><span><span style=color:#a6e22e>server</span> {
+</span></span><span style=display:flex><span>     <span style=color:#a6e22e>listen</span> <span style=color:#ae81ff>888</span>;
+</span></span><span style=display:flex><span>     <span style=color:#a6e22e>server_name</span> <span style=color:#a6e22e>www</span><span style=color:#f92672>.</span><span style=color:#a6e22e>choudalao</span><span style=color:#f92672>.</span><span style=color:#a6e22e>com</span>;
+</span></span><span style=display:flex><span>	 
+</span></span><span style=display:flex><span>	 <span style=color:#75715e># 其他配置
+</span></span></span><span style=display:flex><span>	 <span style=color:#75715e>#....
+</span></span></span><span style=display:flex><span>	 
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>location</span> <span style=color:#f92672>/</span> {
+</span></span><span style=display:flex><span>		<span style=color:#75715e># 其他配置
+</span></span></span><span style=display:flex><span>		<span style=color:#75715e>#....
+</span></span></span><span style=display:flex><span>		<span style=color:#75715e>#使用Web缓存区cache_one，已在nginx.conf的缓存配置中命名的。
+</span></span></span><span style=display:flex><span>		<span style=color:#a6e22e>proxy_cache</span> <span style=color:#a6e22e>cache_one</span>;
+</span></span><span style=display:flex><span>		<span style=color:#75715e>#对不同HTTP状态码缓存设置不同的缓存时间
+</span></span></span><span style=display:flex><span>		<span style=color:#a6e22e>proxy_cache_valid</span> <span style=color:#ae81ff>200</span> <span style=color:#ae81ff>206</span> <span style=color:#ae81ff>304</span> <span style=color:#ae81ff>301</span> <span style=color:#ae81ff>302</span> <span style=color:#ae81ff>10</span><span style=color:#a6e22e>d</span>;
+</span></span><span style=display:flex><span>		<span style=color:#75715e>#设置Web缓存的Key值,Nginx根据Key值md5哈希存储缓存,这里根据&#34;域名,URI,
+</span></span></span><span style=display:flex><span>		<span style=color:#75715e>#参数&#34;组合成Key
+</span></span></span><span style=display:flex><span>		<span style=color:#a6e22e>proxy_cache_key</span> $uri;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>proxy_set_header</span> <span style=color:#a6e22e>Host</span> $host<span style=color:#f92672>:</span>$server_port;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>proxy_set_header</span> <span style=color:#a6e22e>X</span><span style=color:#f92672>-</span><span style=color:#a6e22e>Real</span><span style=color:#f92672>-</span><span style=color:#a6e22e>IP</span> $remote_addr;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>proxy_set_header</span> <span style=color:#a6e22e>X</span><span style=color:#f92672>-</span><span style=color:#a6e22e>Forwarded</span><span style=color:#f92672>-</span><span style=color:#66d9ef>For</span> $proxy_add_x_forwarded_for;
+</span></span><span style=display:flex><span>		
+</span></span><span style=display:flex><span>		<span style=color:#75715e>#proxy_connect_timeout 300;             ##跟后端服务器连接超时时间，发起握手等候响应时间
+</span></span></span><span style=display:flex><span>		<span style=color:#75715e>#proxy_send_timeout 300;                ##后端服务器回传时间，就是在规定时间内后端服务器必须传完所有数据
+</span></span></span><span style=display:flex><span>		<span style=color:#75715e>#proxy_read_timeout 600;                ##连接成功后等待后端服务器的响应时间，已经进入后端的排队之中等候处理
+</span></span></span><span style=display:flex><span>		<span style=color:#75715e>#proxy_buffer_size 256k;                ##代理请求缓冲区,会保存用户的头信息以供nginx进行处理
+</span></span></span><span style=display:flex><span>		<span style=color:#75715e>#proxy_buffers 4 256k;                  ##同上，告诉nginx保存单个用几个buffer最大用多少空间
+</span></span></span><span style=display:flex><span>		<span style=color:#75715e>#proxy_busy_buffers_size 256k;          ##如果系统很忙时候可以申请最大的proxy_buffers
+</span></span></span><span style=display:flex><span>		<span style=color:#75715e>#proxy_temp_file_write_size 256k;       ##proxy缓存临时文件的大小
+</span></span></span><span style=display:flex><span>	}
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h3 id=实例-2>实例，</h3><p>本实例在<code>win10</code>的<code>phpstudy</code>环境下测试，</p><p>新建如下两个目录
+<code>D:\phpstudy_pro\Extensions\Nginx1.15.11\weblog\proxy_cache_path</code> 和 <code>D:\phpstudy_pro\Extensions\Nginx1.15.11\weblog\proxy_temp_path</code></p><p>在<code>nginx.conf</code>中添加如下配置</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-php data-lang=php><span style=display:flex><span><span style=color:#75715e>#### http模块
+</span></span></span><span style=display:flex><span><span style=color:#a6e22e>http</span> {
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#75715e>### 其他配置
+</span></span></span><span style=display:flex><span>    <span style=color:#75715e>#.....
+</span></span></span><span style=display:flex><span>    <span style=color:#75715e>#要想开启nginx的缓存功能，需要添加此处的两行内容！
+</span></span></span><span style=display:flex><span>    <span style=color:#75715e>#设置Web缓存区名称为cache_one,内存缓存空间大小为500M,缓存的数据超过1天没有被访问就自动清除;访问的缓存数据,硬盘缓存空间大小为30G
+</span></span></span><span style=display:flex><span>    <span style=color:#a6e22e>proxy_cache_path</span> <span style=color:#a6e22e>D</span><span style=color:#f92672>:/</span><span style=color:#a6e22e>phpstudy_pro</span><span style=color:#f92672>/</span><span style=color:#a6e22e>Extensions</span><span style=color:#f92672>/</span><span style=color:#a6e22e>Nginx1</span><span style=color:#f92672>.</span><span style=color:#ae81ff>15.11</span><span style=color:#f92672>/</span><span style=color:#a6e22e>weblog</span><span style=color:#f92672>/</span><span style=color:#a6e22e>proxy_cache_path</span> <span style=color:#a6e22e>levels</span><span style=color:#f92672>=</span><span style=color:#ae81ff>1</span><span style=color:#f92672>:</span><span style=color:#ae81ff>2</span> <span style=color:#a6e22e>keys_zone</span><span style=color:#f92672>=</span><span style=color:#a6e22e>cache_one</span><span style=color:#f92672>:</span><span style=color:#ae81ff>500</span><span style=color:#a6e22e>m</span> <span style=color:#a6e22e>inactive</span><span style=color:#f92672>=</span><span style=color:#ae81ff>1</span><span style=color:#a6e22e>d</span> <span style=color:#a6e22e>max_size</span><span style=color:#f92672>=</span><span style=color:#ae81ff>30</span><span style=color:#a6e22e>g</span>;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#75715e>#创建缓存的时候可能生成一些临时文件存放的位置
+</span></span></span><span style=display:flex><span>    <span style=color:#a6e22e>proxy_temp_path</span> <span style=color:#a6e22e>D</span><span style=color:#f92672>:/</span><span style=color:#a6e22e>phpstudy_pro</span><span style=color:#f92672>/</span><span style=color:#a6e22e>Extensions</span><span style=color:#f92672>/</span><span style=color:#a6e22e>Nginx1</span><span style=color:#f92672>.</span><span style=color:#ae81ff>15.11</span><span style=color:#f92672>/</span><span style=color:#a6e22e>weblog</span><span style=color:#f92672>/</span><span style=color:#a6e22e>proxy_temp_path</span>;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p><img src=https://www.choudalao.com/uploads/20210118/20210118171909Epra6c.png alt></p><p>我们修改上面 <code>dev.localhost.net</code> 的配置</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-php data-lang=php><span style=display:flex><span><span style=color:#a6e22e>server</span> {
+</span></span><span style=display:flex><span>	<span style=color:#75715e>#其他配置
+</span></span></span><span style=display:flex><span>	<span style=color:#75715e>#....
+</span></span></span><span style=display:flex><span>	 <span style=color:#a6e22e>location</span> <span style=color:#f92672>/</span> {
+</span></span><span style=display:flex><span>            <span style=color:#a6e22e>index</span> <span style=color:#a6e22e>index</span><span style=color:#f92672>.</span><span style=color:#a6e22e>php</span> <span style=color:#a6e22e>index</span><span style=color:#f92672>.</span><span style=color:#a6e22e>html</span> <span style=color:#a6e22e>error</span><span style=color:#f92672>/</span><span style=color:#a6e22e>index</span><span style=color:#f92672>.</span><span style=color:#a6e22e>html</span>;
+</span></span><span style=display:flex><span>            <span style=color:#66d9ef>include</span> <span style=color:#a6e22e>D</span><span style=color:#f92672>:/</span><span style=color:#a6e22e>phpstudy_pro</span><span style=color:#f92672>/</span><span style=color:#a6e22e>WWW</span><span style=color:#f92672>/</span><span style=color:#a6e22e>dev</span><span style=color:#f92672>.</span><span style=color:#a6e22e>localhost</span><span style=color:#f92672>.</span><span style=color:#a6e22e>net</span><span style=color:#f92672>/</span><span style=color:#a6e22e>nginx</span><span style=color:#f92672>.</span><span style=color:#a6e22e>htaccess</span>;
+</span></span><span style=display:flex><span>            <span style=color:#a6e22e>autoindex</span>  <span style=color:#a6e22e>off</span>;
+</span></span><span style=display:flex><span>            <span style=color:#75715e>#使用Web缓存区cache_one，已在nginx.conf的缓存配置中命名的。
+</span></span></span><span style=display:flex><span>            <span style=color:#a6e22e>proxy_cache</span> <span style=color:#a6e22e>cache_one</span>;
+</span></span><span style=display:flex><span>            <span style=color:#75715e>#对不同HTTP状态码缓存设置不同的缓存时间
+</span></span></span><span style=display:flex><span>            <span style=color:#a6e22e>proxy_cache_valid</span> <span style=color:#ae81ff>200</span> <span style=color:#ae81ff>206</span> <span style=color:#ae81ff>304</span> <span style=color:#ae81ff>301</span> <span style=color:#ae81ff>302</span> <span style=color:#ae81ff>10</span><span style=color:#a6e22e>d</span>;
+</span></span><span style=display:flex><span>            <span style=color:#75715e>#设置Web缓存的Key值,Nginx根据Key值md5哈希存储缓存,这里根据&#34;域名,URI,
+</span></span></span><span style=display:flex><span>            <span style=color:#75715e>#参数&#34;组合成Key
+</span></span></span><span style=display:flex><span>            <span style=color:#a6e22e>proxy_cache_key</span> $host$uri$is_args$args;
+</span></span><span style=display:flex><span>            <span style=color:#a6e22e>proxy_set_header</span> <span style=color:#a6e22e>Host</span> $host;
+</span></span><span style=display:flex><span>            <span style=color:#a6e22e>proxy_set_header</span> <span style=color:#a6e22e>X</span><span style=color:#f92672>-</span><span style=color:#a6e22e>Forwarded</span><span style=color:#f92672>-</span><span style=color:#66d9ef>For</span> $remote_addr;
+</span></span><span style=display:flex><span>        }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>在<code>dev.localhost.net</code>网站根目录下把<code>index.php</code>改成<code>index.html</code>.并在同级创建<code>img</code>目录，并放一张图片上去。</p><p><img src=https://www.choudalao.com/uploads/20210118/20210118172306wzQYYy.png alt></p><p><code>index.html</code>里面代码如下：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-php data-lang=php><span style=display:flex><span><span style=color:#f92672>&lt;!</span><span style=color:#a6e22e>DOCTYPE</span> <span style=color:#a6e22e>html</span><span style=color:#f92672>&gt;</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>&lt;</span><span style=color:#a6e22e>html</span><span style=color:#f92672>&gt;</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>&lt;</span><span style=color:#a6e22e>body</span><span style=color:#f92672>&gt;</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>&lt;</span><span style=color:#a6e22e>h1</span><span style=color:#f92672>&gt;</span><span style=color:#a6e22e>测试</span><span style=color:#f92672>&lt;/</span><span style=color:#a6e22e>h1</span><span style=color:#f92672>&gt;</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>&lt;</span><span style=color:#a6e22e>img</span> <span style=color:#a6e22e>src</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;./img/QQ图片20201104180508.png&#34;</span><span style=color:#f92672>&gt;</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>&lt;/</span><span style=color:#a6e22e>body</span><span style=color:#f92672>&gt;</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>&lt;/</span><span style=color:#a6e22e>html</span><span style=color:#f92672>&gt;</span>
+</span></span></code></pre></div><p>重启<code>nginx</code>，访问 <code>http://127.0.0.1:1111/</code>，</p><p><img src=https://www.choudalao.com/uploads/20210118/20210118172412HcYcFH.png alt></p><p>然后删除图片</p><p><img src=https://www.choudalao.com/uploads/20210118/202101181724322UOTwa.png alt></p><p>再次访问</p><p><img src=https://www.choudalao.com/uploads/20210118/20210118172452hD3FRG.png alt></p><p>已经缓存起来了，至于删除缓存，需要用到 <code>proxy_cache_purge</code>模块，感兴趣的去研究一下。</p><h3 id=nginx与php-fpm的结合>nginx与php-fpm的结合</h3><p><a href=https://www.example.com>www.example.com</a>||Nginx||路由到www.example.com/index.php||加载nginx的fast-cgi模块||fast-cgi监听127.0.0.1:9000地址||www.example.com/index.php请求到达127.0.0.1:9000||php-fpm 监听127.0.0.1:9000||php-fpm 接收到请求，启用worker进程处理请求||php-fpm 处理完请求，返回给nginx||nginx将结果通过http返回给浏览器</p><h2 id=nginx-解决跨域>nginx 解决跨域</h2><p>前端 http://localhost:3200
+后端 http://localhost:32000</p><p>由于端口不一致,所以会有跨域问题,
+解决方式:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#a6e22e>server</span> {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>listen</span>       <span style=color:#ae81ff>80</span>;
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>server_name</span>  <span style=color:#a6e22e>dev</span>.<span style=color:#a6e22e>im</span>.<span style=color:#a6e22e>net</span>;
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>location</span> <span style=color:#f92672>/</span> {
+</span></span><span style=display:flex><span>     <span style=color:#a6e22e>proxy_pass</span> <span style=color:#a6e22e>http</span>:<span style=color:#75715e>//127.0.0.1:3200;</span>
+</span></span><span style=display:flex><span>	}
+</span></span><span style=display:flex><span>	<span style=color:#960050;background-color:#1e0010>#</span> <span style=color:#a6e22e>接口都是在api下</span>
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>location</span> <span style=color:#f92672>/</span><span style=color:#a6e22e>api</span><span style=color:#f92672>/</span> {
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>proxy_pass</span> <span style=color:#a6e22e>http</span>:<span style=color:#75715e>//127.0.0.1:32000;</span>
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>index</span> <span style=color:#a6e22e>index</span>.<span style=color:#a6e22e>php</span> <span style=color:#a6e22e>index</span>.<span style=color:#a6e22e>html</span>;
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>autoindex</span>  <span style=color:#a6e22e>off</span>;
+</span></span><span style=display:flex><span>	}
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>这样,前端访问就是<code>http://dev.im.net/</code>,后端接口访问是<code>http://dev.im.net/api/</code>,就不会出现跨域问题了</p></div></article></main></div></div><footer class=footer><div class="container footer__container flex"><div class=footer__copyright>&copy; 2026 臭大佬博客.
+<span class=footer__copyright-credits>基于 <a href=https://gohugo.io/ rel="nofollow noopener" target=_blank>Hugo</a> 引擎和 <a href=https://github.com/Vimux/Mainroad/ rel="nofollow noopener" target=_blank>Mainroad</a> 主题</span></div></div></footer></div><script async defer src=/choudalao.github.io/js/menu.js></script></body></html>

@@ -1,402 +1,148 @@
-<!DOCTYPE html>
-<html class="no-js" lang="en">
-<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>Go - 臭大佬博客</title>
-	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
-	<meta name="description" content="">
-	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-	<link rel="dns-prefetch" href="//fonts.googleapis.com">
-	<link rel="dns-prefetch" href="//fonts.gstatic.com">
-	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
-
-	<link rel="stylesheet" href="/css/style.css">
-	
-	<link rel="alternate" type="application/rss+xml" href="/categories/go/index.xml" title="臭大佬博客">
-
-	<link rel="shortcut icon" href="/favicon.ico">
-		
-</head>
-<body class="body">
-	<div class="container container--outer">
-		<header class="header">
-	<div class="container header__container">
-		
-	<div class="logo">
-		<a class="logo__link" href="/" title="臭大佬博客" rel="home">
-			<div class="logo__item logo__text">
-					<div class="logo__title">臭大佬博客</div>
-					
-				</div>
-		</a>
-	</div>
-		
-<nav class="menu">
-	<button class="menu__btn" aria-haspopup="true" aria-expanded="false" tabindex="0">
-		<span class="menu__btn-title" tabindex="-1">菜单</span>
-	</button>
-	<ul class="menu__list">
-		<li class="menu__item">
-			<a class="menu__link" href="/">
-				
-				<span class="menu__text">首页</span>
-				
-			</a>
-		</li>
-		<li class="menu__item">
-			<a class="menu__link" href="/post/">
-				
-				<span class="menu__text">归档</span>
-				
-			</a>
-		</li>
-		<li class="menu__item">
-			<a class="menu__link" href="/about/">
-				
-				<span class="menu__text">关于</span>
-				
-			</a>
-		</li>
-	</ul>
-</nav>
-
-	</div>
-</header>
-		<div class="wrapper flex">
-			<div class="primary">
-			
-<main class="main list" role="main">
-	<header class="main__header">
-		<h1 class="main__title">Go</h1>
-	</header><article class="list__item post">
-	
-	<header class="list__header">
-		<h2 class="list__title post__title">
-			<a href="/posts/2020-08-06-gopath-not-set-for-more-details-see-go-help-gopath/" rel="bookmark">
-			$GOPATH not set. For more details see: go help gopath
-			</a>
-		</h2>
-		
-	</header>
-	<div class="content list__excerpt post__content clearfix">
-		<h1 id="问题">问题</h1>
-<p>今天在<code>ubuntu</code>上安装 <code>go</code> 依赖时报错，执行命令如下：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>sudo go get github.com/gorilla/mux
-</span></span></code></pre></div><blockquote>
-<p>$GOPATH not set. For more details see: go help gopath</p>
-</blockquote>
-<p><img src="https://www.choudalao.com/uploads/20200806/20200806135704FeBsN2.png" alt=""></p>
-<h1 id="分析">分析</h1>
-<p>因为<code>sudo</code>我们使用了<code>root</code>的环境，而我们没有在<code>root</code>的<code>.bashrc</code>文件中设置<code>GOPATH</code>。</p>
-	</div>
-</article><article class="list__item post">
-	
-	<header class="list__header">
-		<h2 class="list__title post__title">
-			<a href="/posts/2020-07-27-dial-tcp-34644113443-connectex-a-connection-attempt-failed-because-the-connected/" rel="bookmark">
-			dial tcp 34.64.4.113:443: connectex: A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond.
-			</a>
-		</h2>
-		
-	</header>
-	<div class="content list__excerpt post__content clearfix">
-		<h1 id="问题">问题</h1>
-<p>在拉取 go 第三方扩展包的时候报如下错误：</p>
-<blockquote>
-<p>dial tcp 34.64.4.113:443: connectex: A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond.</p>
-</blockquote>
-<p><img src="https://www.choudalao.com/uploads/20200727/20200727155018uNIdDv.png" alt=""></p>
-<h1 id="分析">分析</h1>
-<p>查看 GOSUMDB 的配置</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span> <span style="color:#66d9ef">go</span> <span style="color:#a6e22e">env</span>
-</span></span></code></pre></div><p><img src="https://www.choudalao.com/uploads/20200727/20200727155555otuFMn.png" alt=""></p>
-<p>最后是因为set GOSUMDB=sum.golang.org</p>
-<p>把它关掉</p>
-	</div>
-</article><article class="list__item post">
-	
-	<header class="list__header">
-		<h2 class="list__title post__title">
-			<a href="/posts/2020-07-23-error-during-connect-get-http2f2f2fpipe2fdocker_enginev140imagesjson/" rel="bookmark">
-			error during connect: Get http://%2F%2F.%2Fpipe%2Fdocker_engine/v1.40/images/json:
-			</a>
-		</h2>
-		
-	</header>
-	<div class="content list__excerpt post__content clearfix">
-		<h1 id="问题">问题</h1>
-<p>Win10在运行 <code>docker</code> 命令的时候报如下错误:</p>
-<blockquote>
-<p>error during connect: Get http://%2F%2F.%2Fpipe%2Fdocker_engine/v1.40/images/json: open //./pipe/docker_engine: The system cannot find the file specified. In the default daemon configuration on Windows, the docker client must be run elevated to connect. This error may also indicate that the docker daemon is not running.</p>
-</blockquote>
-<p><img src="https://www.choudalao.com/uploads/20200723/202007231537202ExhLx.png" alt=""></p>
-<h1 id="解决方案">解决方案</h1>
-<p>点击工具栏docker desktop的小图标上右键，然后 Setting&ndash;&gt; General&ndash;&gt;勾选Expose daemon on tcp localhost那个选项。重启</p>
-	</div>
-</article><article class="list__item post">
-	
-	<header class="list__header">
-		<h2 class="list__title post__title">
-			<a href="/posts/2020-07-22-phper%E7%9A%84go%E4%B9%8B%E8%B7%AF-http%E8%AF%B7%E6%B1%82/" rel="bookmark">
-			PHPer的Go之路 -- http请求
-			</a>
-		</h2>
-		
-	</header>
-	<div class="content list__excerpt post__content clearfix">
-		<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> (
-</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;fmt&#34;</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;io&#34;</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;net/http&#34;</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;net/url&#34;</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;os&#34;</span>
-</span></span><span style="display:flex;"><span>)
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">getUrl</span> <span style="color:#66d9ef">string</span> = <span style="color:#e6db74">&#34;http://www.choudalao.com&#34;</span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">postUrl</span> <span style="color:#66d9ef">string</span> = <span style="color:#e6db74">&#34;http://www.choudalao.com/login&#34;</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e">/**
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e">get 请求
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e">*/</span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">getHttp</span>() {
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">resp</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">Get</span>(<span style="color:#a6e22e">getUrl</span>)
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
-</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;发起请求失败：%v&#34;</span>, <span style="color:#a6e22e">err</span>)
-</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">return</span>
-</span></span><span style="display:flex;"><span>	}
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">resp</span>.<span style="color:#a6e22e">Body</span>.<span style="color:#a6e22e">Close</span>()
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">io</span>.<span style="color:#a6e22e">Copy</span>(<span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Stdout</span>, <span style="color:#a6e22e">resp</span>.<span style="color:#a6e22e">Body</span>)
-</span></span><span style="display:flex;"><span>}
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e">/**
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e">post 请求
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e">*/</span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">postHttp</span>() {
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">resp</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">PostForm</span>(<span style="color:#a6e22e">postUrl</span>, <span style="color:#a6e22e">url</span>.<span style="color:#a6e22e">Values</span>{<span style="color:#e6db74">&#34;name&#34;</span>: {<span style="color:#e6db74">&#34;choudalao&#34;</span>}, <span style="color:#e6db74">&#34;password&#34;</span>: {<span style="color:#e6db74">&#34;123456&#34;</span>}})
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
-</span></span><span style="display:flex;"><span>		<span style="color:#75715e">// 处理错误</span>
-</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">return</span>
-</span></span><span style="display:flex;"><span>	}
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">resp</span>.<span style="color:#a6e22e">StatusCode</span> <span style="color:#f92672">!=</span> <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">StatusOK</span> {
-</span></span><span style="display:flex;"><span>		<span style="color:#75715e">// 处理错误</span>
-</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">return</span>
-</span></span><span style="display:flex;"><span>	}
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">resp</span>.<span style="color:#a6e22e">Body</span>.<span style="color:#a6e22e">Close</span>()
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">io</span>.<span style="color:#a6e22e">Copy</span>(<span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Stdout</span>, <span style="color:#a6e22e">resp</span>.<span style="color:#a6e22e">Body</span>)
-</span></span><span style="display:flex;"><span>}
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e">/**
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e">可以设置请求头信息等
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e">*/</span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">clientHttp</span>() {
-</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// 初始化客户端请求对象</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">req</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">NewRequest</span>(<span style="color:#e6db74">&#34;GET&#34;</span>, <span style="color:#a6e22e">getUrl</span>, <span style="color:#66d9ef">nil</span>)
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
-</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;请求初始化失败：%v&#34;</span>, <span style="color:#a6e22e">err</span>)
-</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">return</span>
-</span></span><span style="display:flex;"><span>	}
-</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// 添加自定义请求头</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">req</span>.<span style="color:#a6e22e">Header</span>.<span style="color:#a6e22e">Add</span>(<span style="color:#e6db74">&#34;User-Agent&#34;</span>, <span style="color:#e6db74">&#34;Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36&#34;</span>)
-</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// ... 其它请求头配置</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">client</span> <span style="color:#f92672">:=</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">Client</span>{
-</span></span><span style="display:flex;"><span>		<span style="color:#75715e">// ... 设置客户端属性</span>
-</span></span><span style="display:flex;"><span>	}
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">resp</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">client</span>.<span style="color:#a6e22e">Do</span>(<span style="color:#a6e22e">req</span>)
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
-</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;客户端发起请求失败：%v&#34;</span>, <span style="color:#a6e22e">err</span>)
-</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">return</span>
-</span></span><span style="display:flex;"><span>	}
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">resp</span>.<span style="color:#a6e22e">Body</span>.<span style="color:#a6e22e">Close</span>()
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">io</span>.<span style="color:#a6e22e">Copy</span>(<span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Stdout</span>, <span style="color:#a6e22e">resp</span>.<span style="color:#a6e22e">Body</span>)
-</span></span><span style="display:flex;"><span>}
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
-</span></span><span style="display:flex;"><span>	<span style="color:#75715e">//getHttp()</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#75715e">//postHttp()</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">clientHttp</span>()
-</span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div>
-	</div>
-</article><article class="list__item post">
-	
-	<header class="list__header">
-		<h2 class="list__title post__title">
-			<a href="/posts/2020-07-22-phper%E7%9A%84go%E4%B9%8B%E8%B7%AF-%E8%AF%BB%E5%86%99%E6%96%87%E4%BB%B6/" rel="bookmark">
-			PHPer的Go之路 --读写文件
-			</a>
-		</h2>
-		
-	</header>
-	<div class="content list__excerpt post__content clearfix">
-		<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> (
-</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;fmt&#34;</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;io/ioutil&#34;</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;os&#34;</span>
-</span></span><span style="display:flex;"><span>)
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e">/**
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e">绝对路径读取文件
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e">*/</span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">realRead</span>() {
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">data</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">ioutil</span>.<span style="color:#a6e22e">ReadFile</span>(<span style="color:#e6db74">&#34;E:/goCode/test.txt&#34;</span>)
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
-</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;读取文件报错：&#34;</span>, <span style="color:#a6e22e">err</span>)
-</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">return</span>
-</span></span><span style="display:flex;"><span>	}
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;文件内容:&#34;</span>, string(<span style="color:#a6e22e">data</span>))
-</span></span><span style="display:flex;"><span>}
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e">/**
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e">写入文件
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> */</span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">writeFile</span>() {
-</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// 创建文件</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">f</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Create</span>(<span style="color:#e6db74">&#34;test.txt&#34;</span>)
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
-</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">err</span>)
-</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">return</span>
-</span></span><span style="display:flex;"><span>	}
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">l</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">f</span>.<span style="color:#a6e22e">WriteString</span>(<span style="color:#e6db74">&#34;哈喽鸭，德玛西亚&#34;</span>)
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
-</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">err</span>)
-</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">f</span>.<span style="color:#a6e22e">Close</span>()
-</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">return</span>
-</span></span><span style="display:flex;"><span>	}
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">l</span>, <span style="color:#e6db74">&#34;写入成功&#34;</span>)
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">err</span> = <span style="color:#a6e22e">f</span>.<span style="color:#a6e22e">Close</span>()
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
-</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">err</span>)
-</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">return</span>
-</span></span><span style="display:flex;"><span>	}
-</span></span><span style="display:flex;"><span>}
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
-</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// 写入文件</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">writeFile</span>()
-</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// 读取文件内容</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">realRead</span>()
-</span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><p><img src="https://www.choudalao.com/uploads/20200722/20200722143205cHFp3L.png" alt=""></p>
-	</div>
-</article><article class="list__item post">
-	
-	<header class="list__header">
-		<h2 class="list__title post__title">
-			<a href="/posts/2020-07-20-phper%E7%9A%84go%E4%B9%8B%E8%B7%AF-%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/" rel="bookmark">
-			PHPer的Go之路 --异常处理
-			</a>
-		</h2>
-		
-	</header>
-	<div class="content list__excerpt post__content clearfix">
-		<h1 id="panic">panic</h1>
-<p><code>php</code> 使用 <code>try...catch</code> 对异常进行捕获和处理，在 <code>go</code> 中 使用 panic 抛出。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> <span style="color:#e6db74">&#34;fmt&#34;</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">defer</span> <span style="color:#66d9ef">func</span>() {
-</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;defer会执行&#34;</span>)
-</span></span><span style="display:flex;"><span>	}()
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">a</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">0</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">a</span> <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>) {
-</span></span><span style="display:flex;"><span>		panic(<span style="color:#e6db74">&#34;除数是0&#34;</span>)
-</span></span><span style="display:flex;"><span>	}
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">c</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">100</span> <span style="color:#f92672">/</span> <span style="color:#a6e22e">a</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;上面出现异常，不会执行到这里&#34;</span>)
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;%d&#34;</span>, <span style="color:#a6e22e">c</span>)
-</span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><p><img src="https://www.choudalao.com/uploads/20200720/202007201119430SjvJ8.png" alt=""></p>
-<h1 id="recover">recover</h1>
-<p>在<code>php</code>中对异常的捕获和处理，避免程序崩溃，使用的是<code>try...catch...finally</code>，在<code>go</code>中，对应的实现方式是：通过 recover() 函数对 panic 进行捕获和处理，panic 的捕获和其他代码的恢复执行需要放到 defer 语句中完成。</p>
-	</div>
-</article><article class="list__item post">
-	
-	<header class="list__header">
-		<h2 class="list__title post__title">
-			<a href="/posts/2020-07-17-phper%E7%9A%84go%E4%B9%8B%E8%B7%AF-sync%E5%8C%85/" rel="bookmark">
-			PHPer的Go之路 --sync包
-			</a>
-		</h2>
-		
-	</header>
-	<div class="content list__excerpt post__content clearfix">
-		<p>好久没有学习Go啦，都颓废了，最近看到微软放弃对拍黄片（PHP）的支持，如果要在 Windows 上运行最新的 PHP 版本，则需要使用 WSL 并在 Linux 环境中运行 PHP。</p>
-<blockquote>
-<p>我们知道，对于漏洞修复，当前的发布日期是 2 年，而对于安全修复，则是 1 年之后。这意味着 PHP 7.2 将在 11 月停止支持。PHP 7.3 仅在 11 月才进入安全修复模式。PHP 7.4 将继续进行一年的错误修复，然后再进行一年的安全修复。只要官方支持，我们致力于在 Windows 上针对 7.2、7.3 和 7.4 维护 PHP 的开发和构建。但是，我们不会以 8.0 及更高版本的任何能力支持 Windows 的 PHP。</p>
-	</div>
-</article><article class="list__item post">
-	
-	<header class="list__header">
-		<h2 class="list__title post__title">
-			<a href="/posts/2019-12-27-phper%E7%9A%84go%E4%B9%8B%E8%B7%AF-%E5%8D%8F%E7%A8%8Bgo%E5%8F%8A%E4%BF%A1%E9%81%93channel/" rel="bookmark">
-			PHPer的Go之路 -- 协程（go）及信道（channel）
-			</a>
-		</h2>
-		
-	</header>
-	<div class="content list__excerpt post__content clearfix">
-		<h1 id="go协程">Go协程</h1>
-<p>Go 协程是与其他函数或方法一起并发运行的函数或方法。Go 协程可以看作是轻量级线程。与线程相比，创建一个 Go 协程的成本很小。因此在 Go 应用中，常常会看到有数以千计的 Go 协程并发地运行。</p>
-	</div>
-</article><article class="list__item post">
-	
-	<header class="list__header">
-		<h2 class="list__title post__title">
-			<a href="/posts/2019-12-19-phper%E7%9A%84go%E4%B9%8B%E8%B7%AF-%E5%B9%B6%E5%8F%91%E4%B8%8E%E5%B9%B6%E8%A1%8C/" rel="bookmark">
-			PHPer的Go之路 --并发与并行
-			</a>
-		</h2>
-		
-	</header>
-	<div class="content list__excerpt post__content clearfix">
-		<p>#并发
-并发是不同的代码块交替执行，也就是交替可以做不同的事情。</p>
-<p>举个栗子:
-当你在敲代码的时候,突然女朋友回来了(程序员怎么可能有女朋友?),然后你去开门,开完门后你又继续敲代码(是的,你这样肯定没有女朋友)&hellip;..这就是并发,敲代码和开门交替进行。</p>
-	</div>
-</article><article class="list__item post">
-	
-	<header class="list__header">
-		<h2 class="list__title post__title">
-			<a href="/posts/2019-12-18-phper%E7%9A%84go%E4%B9%8B%E8%B7%AF-%E7%A8%8B%E5%BA%8F%E8%BF%9B%E7%A8%8B%E7%BA%BF%E7%A8%8B%E5%8D%8F%E7%A8%8B/" rel="bookmark">
-			PHPer的Go之路 -- 程序、进程、线程、协程
-			</a>
-		</h2>
-		
-	</header>
-	<div class="content list__excerpt post__content clearfix">
-		<p>对于拍黄片（php）程序员来说，对于进程、线程、协程这些概念可能比较模糊，因为，在php当中，很少会出现这些概念，学习go语言之前，我们先来介绍一些php接触较少的概念。</p>
-	</div>
-</article>
-</main>
-
-<div class="pagination">
-	<a class="pagination__item pagination__item--prev btn" href="/categories/go/page/4/">«</a>
-	<span class="pagination__item pagination__item--current">5/7</span>
-	<a class="pagination__item pagination__item--next btn" href="/categories/go/page/6/">»</a>
-</div>
-
-			</div>
-			
-
-		</div>
-		<footer class="footer">
-	<div class="container footer__container flex">
-		
-		<div class="footer__copyright">
-			&copy; 2026 臭大佬博客.
-			<span class="footer__copyright-credits">基于 <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> 引擎和 <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> 主题</span>
-		</div>
-	</div>
-</footer>
-	</div>
-<script async defer src="/js/menu.js"></script>
-</body>
-</html>
+<!doctype html><html class=no-js lang=en><head><meta charset=UTF-8><meta name=viewport content="width=device-width,initial-scale=1"><title>Go - 臭大佬博客</title><script>(function(e,t){e[t]=e[t].replace("no-js","js")})(document.documentElement,"className")</script><meta name=description content><link rel=preconnect href=https://fonts.gstatic.com crossorigin><link rel=dns-prefetch href=//fonts.googleapis.com><link rel=dns-prefetch href=//fonts.gstatic.com><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700"><link rel=stylesheet href=/choudalao.github.io/css/style.css><link rel=alternate type=application/rss+xml href=/choudalao.github.io/categories/go/index.xml title=臭大佬博客><link rel="shortcut icon" href=/choudalao.github.io/favicon.ico></head><body class=body><div class="container container--outer"><header class=header><div class="container header__container"><div class=logo><a class=logo__link href=/choudalao.github.io/ title=臭大佬博客 rel=home><div class="logo__item logo__text"><div class=logo__title>臭大佬博客</div></div></a></div><nav class=menu><button class=menu__btn aria-haspopup=true aria-expanded=false tabindex=0>
+<span class=menu__btn-title tabindex=-1>菜单</span></button><ul class=menu__list><li class=menu__item><a class=menu__link href=/choudalao.github.io/><span class=menu__text>首页</span></a></li><li class=menu__item><a class=menu__link href=/choudalao.github.io/post/><span class=menu__text>归档</span></a></li><li class=menu__item><a class=menu__link href=/choudalao.github.io/about/><span class=menu__text>关于</span></a></li></ul></nav></div></header><div class="wrapper flex"><div class=primary><main class="main list" role=main><header class=main__header><h1 class=main__title>Go</h1></header><article class="list__item post"><header class=list__header><h2 class="list__title post__title"><a href=/choudalao.github.io/posts/2020-08-06-gopath-not-set-for-more-details-see-go-help-gopath/ rel=bookmark>$GOPATH not set. For more details see: go help gopath</a></h2></header><div class="content list__excerpt post__content clearfix"><h1 id=问题>问题</h1><p>今天在<code>ubuntu</code>上安装 <code>go</code> 依赖时报错，执行命令如下：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-shell data-lang=shell><span style=display:flex><span>sudo go get github.com/gorilla/mux
+</span></span></code></pre></div><blockquote><p>$GOPATH not set. For more details see: go help gopath</p></blockquote><p><img src=https://www.choudalao.com/uploads/20200806/20200806135704FeBsN2.png alt></p><h1 id=分析>分析</h1><p>因为<code>sudo</code>我们使用了<code>root</code>的环境，而我们没有在<code>root</code>的<code>.bashrc</code>文件中设置<code>GOPATH</code>。</p></div></article><article class="list__item post"><header class=list__header><h2 class="list__title post__title"><a href=/choudalao.github.io/posts/2020-07-27-dial-tcp-34644113443-connectex-a-connection-attempt-failed-because-the-connected/ rel=bookmark>dial tcp 34.64.4.113:443: connectex: A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond.</a></h2></header><div class="content list__excerpt post__content clearfix"><h1 id=问题>问题</h1><p>在拉取 go 第三方扩展包的时候报如下错误：</p><blockquote><p>dial tcp 34.64.4.113:443: connectex: A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond.</p></blockquote><p><img src=https://www.choudalao.com/uploads/20200727/20200727155018uNIdDv.png alt></p><h1 id=分析>分析</h1><p>查看 GOSUMDB 的配置</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-go data-lang=go><span style=display:flex><span> <span style=color:#66d9ef>go</span> <span style=color:#a6e22e>env</span>
+</span></span></code></pre></div><p><img src=https://www.choudalao.com/uploads/20200727/20200727155555otuFMn.png alt></p><p>最后是因为set GOSUMDB=sum.golang.org</p><p>把它关掉</p></div></article><article class="list__item post"><header class=list__header><h2 class="list__title post__title"><a href=/choudalao.github.io/posts/2020-07-23-error-during-connect-get-http2f2f2fpipe2fdocker_enginev140imagesjson/ rel=bookmark>error during connect: Get http://%2F%2F.%2Fpipe%2Fdocker_engine/v1.40/images/json:</a></h2></header><div class="content list__excerpt post__content clearfix"><h1 id=问题>问题</h1><p>Win10在运行 <code>docker</code> 命令的时候报如下错误:</p><blockquote><p>error during connect: Get http://%2F%2F.%2Fpipe%2Fdocker_engine/v1.40/images/json: open //./pipe/docker_engine: The system cannot find the file specified. In the default daemon configuration on Windows, the docker client must be run elevated to connect. This error may also indicate that the docker daemon is not running.</p></blockquote><p><img src=https://www.choudalao.com/uploads/20200723/202007231537202ExhLx.png alt></p><h1 id=解决方案>解决方案</h1><p>点击工具栏docker desktop的小图标上右键，然后 Setting&ndash;> General&ndash;>勾选Expose daemon on tcp localhost那个选项。重启</p></div></article><article class="list__item post"><header class=list__header><h2 class="list__title post__title"><a href=/choudalao.github.io/posts/2020-07-22-phper%E7%9A%84go%E4%B9%8B%E8%B7%AF-http%E8%AF%B7%E6%B1%82/ rel=bookmark>PHPer的Go之路 -- http请求</a></h2></header><div class="content list__excerpt post__content clearfix"><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#f92672>package</span> <span style=color:#a6e22e>main</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#f92672>import</span> (
+</span></span><span style=display:flex><span>	<span style=color:#e6db74>&#34;fmt&#34;</span>
+</span></span><span style=display:flex><span>	<span style=color:#e6db74>&#34;io&#34;</span>
+</span></span><span style=display:flex><span>	<span style=color:#e6db74>&#34;net/http&#34;</span>
+</span></span><span style=display:flex><span>	<span style=color:#e6db74>&#34;net/url&#34;</span>
+</span></span><span style=display:flex><span>	<span style=color:#e6db74>&#34;os&#34;</span>
+</span></span><span style=display:flex><span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>const</span> <span style=color:#a6e22e>getUrl</span> <span style=color:#66d9ef>string</span> = <span style=color:#e6db74>&#34;http://www.choudalao.com&#34;</span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>const</span> <span style=color:#a6e22e>postUrl</span> <span style=color:#66d9ef>string</span> = <span style=color:#e6db74>&#34;http://www.choudalao.com/login&#34;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>/**
+</span></span></span><span style=display:flex><span><span style=color:#75715e>get 请求
+</span></span></span><span style=display:flex><span><span style=color:#75715e>*/</span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>getHttp</span>() {
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>resp</span>, <span style=color:#a6e22e>err</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>http</span>.<span style=color:#a6e22e>Get</span>(<span style=color:#a6e22e>getUrl</span>)
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>if</span> <span style=color:#a6e22e>err</span> <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nil</span> {
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Printf</span>(<span style=color:#e6db74>&#34;发起请求失败：%v&#34;</span>, <span style=color:#a6e22e>err</span>)
+</span></span><span style=display:flex><span>		<span style=color:#66d9ef>return</span>
+</span></span><span style=display:flex><span>	}
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>defer</span> <span style=color:#a6e22e>resp</span>.<span style=color:#a6e22e>Body</span>.<span style=color:#a6e22e>Close</span>()
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>io</span>.<span style=color:#a6e22e>Copy</span>(<span style=color:#a6e22e>os</span>.<span style=color:#a6e22e>Stdout</span>, <span style=color:#a6e22e>resp</span>.<span style=color:#a6e22e>Body</span>)
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>/**
+</span></span></span><span style=display:flex><span><span style=color:#75715e>post 请求
+</span></span></span><span style=display:flex><span><span style=color:#75715e>*/</span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>postHttp</span>() {
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>resp</span>, <span style=color:#a6e22e>err</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>http</span>.<span style=color:#a6e22e>PostForm</span>(<span style=color:#a6e22e>postUrl</span>, <span style=color:#a6e22e>url</span>.<span style=color:#a6e22e>Values</span>{<span style=color:#e6db74>&#34;name&#34;</span>: {<span style=color:#e6db74>&#34;choudalao&#34;</span>}, <span style=color:#e6db74>&#34;password&#34;</span>: {<span style=color:#e6db74>&#34;123456&#34;</span>}})
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>if</span> <span style=color:#a6e22e>err</span> <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nil</span> {
+</span></span><span style=display:flex><span>		<span style=color:#75715e>// 处理错误</span>
+</span></span><span style=display:flex><span>		<span style=color:#66d9ef>return</span>
+</span></span><span style=display:flex><span>	}
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>if</span> <span style=color:#a6e22e>resp</span>.<span style=color:#a6e22e>StatusCode</span> <span style=color:#f92672>!=</span> <span style=color:#a6e22e>http</span>.<span style=color:#a6e22e>StatusOK</span> {
+</span></span><span style=display:flex><span>		<span style=color:#75715e>// 处理错误</span>
+</span></span><span style=display:flex><span>		<span style=color:#66d9ef>return</span>
+</span></span><span style=display:flex><span>	}
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>defer</span> <span style=color:#a6e22e>resp</span>.<span style=color:#a6e22e>Body</span>.<span style=color:#a6e22e>Close</span>()
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>io</span>.<span style=color:#a6e22e>Copy</span>(<span style=color:#a6e22e>os</span>.<span style=color:#a6e22e>Stdout</span>, <span style=color:#a6e22e>resp</span>.<span style=color:#a6e22e>Body</span>)
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>/**
+</span></span></span><span style=display:flex><span><span style=color:#75715e>可以设置请求头信息等
+</span></span></span><span style=display:flex><span><span style=color:#75715e>*/</span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>clientHttp</span>() {
+</span></span><span style=display:flex><span>	<span style=color:#75715e>// 初始化客户端请求对象</span>
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>req</span>, <span style=color:#a6e22e>err</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>http</span>.<span style=color:#a6e22e>NewRequest</span>(<span style=color:#e6db74>&#34;GET&#34;</span>, <span style=color:#a6e22e>getUrl</span>, <span style=color:#66d9ef>nil</span>)
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>if</span> <span style=color:#a6e22e>err</span> <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nil</span> {
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Printf</span>(<span style=color:#e6db74>&#34;请求初始化失败：%v&#34;</span>, <span style=color:#a6e22e>err</span>)
+</span></span><span style=display:flex><span>		<span style=color:#66d9ef>return</span>
+</span></span><span style=display:flex><span>	}
+</span></span><span style=display:flex><span>	<span style=color:#75715e>// 添加自定义请求头</span>
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>req</span>.<span style=color:#a6e22e>Header</span>.<span style=color:#a6e22e>Add</span>(<span style=color:#e6db74>&#34;User-Agent&#34;</span>, <span style=color:#e6db74>&#34;Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36&#34;</span>)
+</span></span><span style=display:flex><span>	<span style=color:#75715e>// ... 其它请求头配置</span>
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>client</span> <span style=color:#f92672>:=</span> <span style=color:#f92672>&amp;</span><span style=color:#a6e22e>http</span>.<span style=color:#a6e22e>Client</span>{
+</span></span><span style=display:flex><span>		<span style=color:#75715e>// ... 设置客户端属性</span>
+</span></span><span style=display:flex><span>	}
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>resp</span>, <span style=color:#a6e22e>err</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>client</span>.<span style=color:#a6e22e>Do</span>(<span style=color:#a6e22e>req</span>)
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>if</span> <span style=color:#a6e22e>err</span> <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nil</span> {
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Printf</span>(<span style=color:#e6db74>&#34;客户端发起请求失败：%v&#34;</span>, <span style=color:#a6e22e>err</span>)
+</span></span><span style=display:flex><span>		<span style=color:#66d9ef>return</span>
+</span></span><span style=display:flex><span>	}
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>defer</span> <span style=color:#a6e22e>resp</span>.<span style=color:#a6e22e>Body</span>.<span style=color:#a6e22e>Close</span>()
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>io</span>.<span style=color:#a6e22e>Copy</span>(<span style=color:#a6e22e>os</span>.<span style=color:#a6e22e>Stdout</span>, <span style=color:#a6e22e>resp</span>.<span style=color:#a6e22e>Body</span>)
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>main</span>() {
+</span></span><span style=display:flex><span>	<span style=color:#75715e>//getHttp()</span>
+</span></span><span style=display:flex><span>	<span style=color:#75715e>//postHttp()</span>
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>clientHttp</span>()
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div></div></article><article class="list__item post"><header class=list__header><h2 class="list__title post__title"><a href=/choudalao.github.io/posts/2020-07-22-phper%E7%9A%84go%E4%B9%8B%E8%B7%AF-%E8%AF%BB%E5%86%99%E6%96%87%E4%BB%B6/ rel=bookmark>PHPer的Go之路 --读写文件</a></h2></header><div class="content list__excerpt post__content clearfix"><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#f92672>package</span> <span style=color:#a6e22e>main</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#f92672>import</span> (
+</span></span><span style=display:flex><span>	<span style=color:#e6db74>&#34;fmt&#34;</span>
+</span></span><span style=display:flex><span>	<span style=color:#e6db74>&#34;io/ioutil&#34;</span>
+</span></span><span style=display:flex><span>	<span style=color:#e6db74>&#34;os&#34;</span>
+</span></span><span style=display:flex><span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>/**
+</span></span></span><span style=display:flex><span><span style=color:#75715e>绝对路径读取文件
+</span></span></span><span style=display:flex><span><span style=color:#75715e>*/</span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>realRead</span>() {
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>data</span>, <span style=color:#a6e22e>err</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>ioutil</span>.<span style=color:#a6e22e>ReadFile</span>(<span style=color:#e6db74>&#34;E:/goCode/test.txt&#34;</span>)
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>if</span> <span style=color:#a6e22e>err</span> <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nil</span> {
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span>(<span style=color:#e6db74>&#34;读取文件报错：&#34;</span>, <span style=color:#a6e22e>err</span>)
+</span></span><span style=display:flex><span>		<span style=color:#66d9ef>return</span>
+</span></span><span style=display:flex><span>	}
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span>(<span style=color:#e6db74>&#34;文件内容:&#34;</span>, string(<span style=color:#a6e22e>data</span>))
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>/**
+</span></span></span><span style=display:flex><span><span style=color:#75715e>写入文件
+</span></span></span><span style=display:flex><span><span style=color:#75715e> */</span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>writeFile</span>() {
+</span></span><span style=display:flex><span>	<span style=color:#75715e>// 创建文件</span>
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>f</span>, <span style=color:#a6e22e>err</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>os</span>.<span style=color:#a6e22e>Create</span>(<span style=color:#e6db74>&#34;test.txt&#34;</span>)
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>if</span> <span style=color:#a6e22e>err</span> <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nil</span> {
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span>(<span style=color:#a6e22e>err</span>)
+</span></span><span style=display:flex><span>		<span style=color:#66d9ef>return</span>
+</span></span><span style=display:flex><span>	}
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>l</span>, <span style=color:#a6e22e>err</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>f</span>.<span style=color:#a6e22e>WriteString</span>(<span style=color:#e6db74>&#34;哈喽鸭，德玛西亚&#34;</span>)
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>if</span> <span style=color:#a6e22e>err</span> <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nil</span> {
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span>(<span style=color:#a6e22e>err</span>)
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>f</span>.<span style=color:#a6e22e>Close</span>()
+</span></span><span style=display:flex><span>		<span style=color:#66d9ef>return</span>
+</span></span><span style=display:flex><span>	}
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span>(<span style=color:#a6e22e>l</span>, <span style=color:#e6db74>&#34;写入成功&#34;</span>)
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>err</span> = <span style=color:#a6e22e>f</span>.<span style=color:#a6e22e>Close</span>()
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>if</span> <span style=color:#a6e22e>err</span> <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nil</span> {
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span>(<span style=color:#a6e22e>err</span>)
+</span></span><span style=display:flex><span>		<span style=color:#66d9ef>return</span>
+</span></span><span style=display:flex><span>	}
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>main</span>() {
+</span></span><span style=display:flex><span>	<span style=color:#75715e>// 写入文件</span>
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>writeFile</span>()
+</span></span><span style=display:flex><span>	<span style=color:#75715e>// 读取文件内容</span>
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>realRead</span>()
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p><img src=https://www.choudalao.com/uploads/20200722/20200722143205cHFp3L.png alt></p></div></article><article class="list__item post"><header class=list__header><h2 class="list__title post__title"><a href=/choudalao.github.io/posts/2020-07-20-phper%E7%9A%84go%E4%B9%8B%E8%B7%AF-%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/ rel=bookmark>PHPer的Go之路 --异常处理</a></h2></header><div class="content list__excerpt post__content clearfix"><h1 id=panic>panic</h1><p><code>php</code> 使用 <code>try...catch</code> 对异常进行捕获和处理，在 <code>go</code> 中 使用 panic 抛出。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#f92672>package</span> <span style=color:#a6e22e>main</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#f92672>import</span> <span style=color:#e6db74>&#34;fmt&#34;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>main</span>() {
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>defer</span> <span style=color:#66d9ef>func</span>() {
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span>(<span style=color:#e6db74>&#34;defer会执行&#34;</span>)
+</span></span><span style=display:flex><span>	}()
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>a</span> <span style=color:#f92672>:=</span> <span style=color:#ae81ff>0</span>
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>if</span> (<span style=color:#a6e22e>a</span> <span style=color:#f92672>==</span> <span style=color:#ae81ff>0</span>) {
+</span></span><span style=display:flex><span>		panic(<span style=color:#e6db74>&#34;除数是0&#34;</span>)
+</span></span><span style=display:flex><span>	}
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>c</span> <span style=color:#f92672>:=</span> <span style=color:#ae81ff>100</span> <span style=color:#f92672>/</span> <span style=color:#a6e22e>a</span>
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Printf</span>(<span style=color:#e6db74>&#34;上面出现异常，不会执行到这里&#34;</span>)
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Printf</span>(<span style=color:#e6db74>&#34;%d&#34;</span>, <span style=color:#a6e22e>c</span>)
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p><img src=https://www.choudalao.com/uploads/20200720/202007201119430SjvJ8.png alt></p><h1 id=recover>recover</h1><p>在<code>php</code>中对异常的捕获和处理，避免程序崩溃，使用的是<code>try...catch...finally</code>，在<code>go</code>中，对应的实现方式是：通过 recover() 函数对 panic 进行捕获和处理，panic 的捕获和其他代码的恢复执行需要放到 defer 语句中完成。</p></div></article><article class="list__item post"><header class=list__header><h2 class="list__title post__title"><a href=/choudalao.github.io/posts/2020-07-17-phper%E7%9A%84go%E4%B9%8B%E8%B7%AF-sync%E5%8C%85/ rel=bookmark>PHPer的Go之路 --sync包</a></h2></header><div class="content list__excerpt post__content clearfix"><p>好久没有学习Go啦，都颓废了，最近看到微软放弃对拍黄片（PHP）的支持，如果要在 Windows 上运行最新的 PHP 版本，则需要使用 WSL 并在 Linux 环境中运行 PHP。</p><blockquote><p>我们知道，对于漏洞修复，当前的发布日期是 2 年，而对于安全修复，则是 1 年之后。这意味着 PHP 7.2 将在 11 月停止支持。PHP 7.3 仅在 11 月才进入安全修复模式。PHP 7.4 将继续进行一年的错误修复，然后再进行一年的安全修复。只要官方支持，我们致力于在 Windows 上针对 7.2、7.3 和 7.4 维护 PHP 的开发和构建。但是，我们不会以 8.0 及更高版本的任何能力支持 Windows 的 PHP。</p></div></article><article class="list__item post"><header class=list__header><h2 class="list__title post__title"><a href=/choudalao.github.io/posts/2019-12-27-phper%E7%9A%84go%E4%B9%8B%E8%B7%AF-%E5%8D%8F%E7%A8%8Bgo%E5%8F%8A%E4%BF%A1%E9%81%93channel/ rel=bookmark>PHPer的Go之路 -- 协程（go）及信道（channel）</a></h2></header><div class="content list__excerpt post__content clearfix"><h1 id=go协程>Go协程</h1><p>Go 协程是与其他函数或方法一起并发运行的函数或方法。Go 协程可以看作是轻量级线程。与线程相比，创建一个 Go 协程的成本很小。因此在 Go 应用中，常常会看到有数以千计的 Go 协程并发地运行。</p></div></article><article class="list__item post"><header class=list__header><h2 class="list__title post__title"><a href=/choudalao.github.io/posts/2019-12-19-phper%E7%9A%84go%E4%B9%8B%E8%B7%AF-%E5%B9%B6%E5%8F%91%E4%B8%8E%E5%B9%B6%E8%A1%8C/ rel=bookmark>PHPer的Go之路 --并发与并行</a></h2></header><div class="content list__excerpt post__content clearfix"><p>#并发
+并发是不同的代码块交替执行，也就是交替可以做不同的事情。</p><p>举个栗子:
+当你在敲代码的时候,突然女朋友回来了(程序员怎么可能有女朋友?),然后你去开门,开完门后你又继续敲代码(是的,你这样肯定没有女朋友)&mldr;..这就是并发,敲代码和开门交替进行。</p></div></article><article class="list__item post"><header class=list__header><h2 class="list__title post__title"><a href=/choudalao.github.io/posts/2019-12-18-phper%E7%9A%84go%E4%B9%8B%E8%B7%AF-%E7%A8%8B%E5%BA%8F%E8%BF%9B%E7%A8%8B%E7%BA%BF%E7%A8%8B%E5%8D%8F%E7%A8%8B/ rel=bookmark>PHPer的Go之路 -- 程序、进程、线程、协程</a></h2></header><div class="content list__excerpt post__content clearfix"><p>对于拍黄片（php）程序员来说，对于进程、线程、协程这些概念可能比较模糊，因为，在php当中，很少会出现这些概念，学习go语言之前，我们先来介绍一些php接触较少的概念。</p></div></article></main><div class=pagination><a class="pagination__item pagination__item--prev btn" href=/choudalao.github.io/categories/go/page/4/>«</a>
+<span class="pagination__item pagination__item--current">5/7</span>
+<a class="pagination__item pagination__item--next btn" href=/choudalao.github.io/categories/go/page/6/>»</a></div></div></div><footer class=footer><div class="container footer__container flex"><div class=footer__copyright>&copy; 2026 臭大佬博客.
+<span class=footer__copyright-credits>基于 <a href=https://gohugo.io/ rel="nofollow noopener" target=_blank>Hugo</a> 引擎和 <a href=https://github.com/Vimux/Mainroad/ rel="nofollow noopener" target=_blank>Mainroad</a> 主题</span></div></div></footer></div><script async defer src=/choudalao.github.io/js/menu.js></script></body></html>

@@ -1,190 +1,36 @@
-<!DOCTYPE html>
-<html class="no-js" lang="en">
-<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>PHPer的Go之路 -- Go 语言基础语法 - 臭大佬博客</title>
-	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
-	<meta name="description" content="Go基本语法，包括标记、行分隔符、注释、变量、数据类型、常量、运算符">
-	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-	<link rel="dns-prefetch" href="//fonts.googleapis.com">
-	<link rel="dns-prefetch" href="//fonts.gstatic.com">
-	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
-
-	<link rel="stylesheet" href="/css/style.css">
-	
-
-	<link rel="shortcut icon" href="/favicon.ico">
-		
-</head>
-<body class="body">
-	<div class="container container--outer">
-		<header class="header">
-	<div class="container header__container">
-		
-	<div class="logo">
-		<a class="logo__link" href="/" title="臭大佬博客" rel="home">
-			<div class="logo__item logo__text">
-					<div class="logo__title">臭大佬博客</div>
-					
-				</div>
-		</a>
-	</div>
-		
-<nav class="menu">
-	<button class="menu__btn" aria-haspopup="true" aria-expanded="false" tabindex="0">
-		<span class="menu__btn-title" tabindex="-1">菜单</span>
-	</button>
-	<ul class="menu__list">
-		<li class="menu__item">
-			<a class="menu__link" href="/">
-				
-				<span class="menu__text">首页</span>
-				
-			</a>
-		</li>
-		<li class="menu__item">
-			<a class="menu__link" href="/post/">
-				
-				<span class="menu__text">归档</span>
-				
-			</a>
-		</li>
-		<li class="menu__item">
-			<a class="menu__link" href="/about/">
-				
-				<span class="menu__text">关于</span>
-				
-			</a>
-		</li>
-	</ul>
-</nav>
-
-	</div>
-</header>
-		<div class="wrapper flex">
-			<div class="primary">
-			
-<main class="main" role="main">
-	<article class="post">
-		<header class="post__header">
-			<h1 class="post__title">PHPer的Go之路 -- Go 语言基础语法</h1>
-			
-		</header>
-		<div class="content post__content clearfix">
-			<h1 id="go-标记">Go 标记</h1>
-<p>Go 程序可以由多个标记组成，可以是关键字，标识符，常量，字符串，符号。如以下 GO 语句由 6 个标记组成：</p>
-<h1 id="行分隔符">行分隔符</h1>
-<p>在 Go 程序中，一行代表一个语句结束。每个语句不需要像 C 家族中的其它语言一样以分号 ; 结尾，因为这些工作都将由 Go 编译器自动完成。</p>
-<p>如果你打算将多个语句写在同一行，它们则必须使用 ; 人为区分，但在实际开发中我们并不鼓励这种做法。
-以下为两个语句：</p>
-<pre tabindex="0"><code>	fmt.Println(&#34;德玛西亚&#34;)
+<!doctype html><html class=no-js lang=en><head><meta charset=UTF-8><meta name=viewport content="width=device-width,initial-scale=1"><title>PHPer的Go之路 -- Go 语言基础语法 - 臭大佬博客</title><script>(function(e,t){e[t]=e[t].replace("no-js","js")})(document.documentElement,"className")</script><meta name=description content="Go基本语法，包括标记、行分隔符、注释、变量、数据类型、常量、运算符"><link rel=preconnect href=https://fonts.gstatic.com crossorigin><link rel=dns-prefetch href=//fonts.googleapis.com><link rel=dns-prefetch href=//fonts.gstatic.com><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700"><link rel=stylesheet href=/choudalao.github.io/css/style.css><link rel="shortcut icon" href=/choudalao.github.io/favicon.ico></head><body class=body><div class="container container--outer"><header class=header><div class="container header__container"><div class=logo><a class=logo__link href=/choudalao.github.io/ title=臭大佬博客 rel=home><div class="logo__item logo__text"><div class=logo__title>臭大佬博客</div></div></a></div><nav class=menu><button class=menu__btn aria-haspopup=true aria-expanded=false tabindex=0>
+<span class=menu__btn-title tabindex=-1>菜单</span></button><ul class=menu__list><li class=menu__item><a class=menu__link href=/choudalao.github.io/><span class=menu__text>首页</span></a></li><li class=menu__item><a class=menu__link href=/choudalao.github.io/post/><span class=menu__text>归档</span></a></li><li class=menu__item><a class=menu__link href=/choudalao.github.io/about/><span class=menu__text>关于</span></a></li></ul></nav></div></header><div class="wrapper flex"><div class=primary><main class=main role=main><article class=post><header class=post__header><h1 class=post__title>PHPer的Go之路 -- Go 语言基础语法</h1></header><div class="content post__content clearfix"><h1 id=go-标记>Go 标记</h1><p>Go 程序可以由多个标记组成，可以是关键字，标识符，常量，字符串，符号。如以下 GO 语句由 6 个标记组成：</p><h1 id=行分隔符>行分隔符</h1><p>在 Go 程序中，一行代表一个语句结束。每个语句不需要像 C 家族中的其它语言一样以分号 ; 结尾，因为这些工作都将由 Go 编译器自动完成。</p><p>如果你打算将多个语句写在同一行，它们则必须使用 ; 人为区分，但在实际开发中我们并不鼓励这种做法。
+以下为两个语句：</p><pre tabindex=0><code>	fmt.Println(&#34;德玛西亚&#34;)
 	fmt.Println(&#34;啦啦啦&#34;)
-</code></pre><p> </p>
-<h1 id="注释">注释</h1>
-<p>Go语言的单行注释是最常见的注释形式，你可以在任何地方使用以 、<strong>//</strong> 开头的单行注释。多行注释也叫块注释，均已以 /* 开头，并以 */ 结尾。如：</p>
-<pre tabindex="0"><code>// 单行注释
+</code></pre><p> </p><h1 id=注释>注释</h1><p>Go语言的单行注释是最常见的注释形式，你可以在任何地方使用以 、<strong>//</strong> 开头的单行注释。多行注释也叫块注释，均已以 /* 开头，并以 */ 结尾。如：</p><pre tabindex=0><code>// 单行注释
 
 /*
  我是多行注释
  */
-</code></pre><p> </p>
-<h1 id="数据类型">数据类型</h1>
-<p> </p>
-<h2 id="布尔型">布尔型：</h2>
-<p>布尔型的值只可以是常量 true 或者 false。一个简单的栗子：</p>
-<pre tabindex="0"><code>var b bool = true。
-</code></pre><p> </p>
-<h2 id="数字类型">数字类型：</h2>
-<p>整型 int 和浮点型 float32、float64，Go 语言支持整型和浮点型数字，并且支持复数，其中位的运算采用补码。</p>
-<h3 id="uint8">uint8</h3>
-<p>无符号 8 位整型 (0 到 255)</p>
-<h3 id="uint16">uint16</h3>
-<p>无符号 16 位整型 (0 到 65535)</p>
-<h3 id="uint32">uint32</h3>
-<p>无符号 32 位整型 (0 到 4294967295)</p>
-<h3 id="uint64">uint64</h3>
-<p>无符号 64 位整型 (0 到 18446744073709551615)</p>
-<h3 id="int8">int8</h3>
-<p>有符号 8 位整型 (-128 到 127)</p>
-<h3 id="int16">int16</h3>
-<p>有符号 16 位整型 (-32768 到 32767)</p>
-<h3 id="int32">int32</h3>
-<p>有符号 32 位整型 (-2147483648 到 2147483647)</p>
-<h3 id="int64">int64</h3>
-<p>有符号 64 位整型 (-9223372036854775808 到 9223372036854775807)</p>
-<h3 id="float32">float32</h3>
-<p>IEEE-754 32位浮点型数，float32 等价于 PHP 的 float 类型（单精度浮点数），可以精确到小数点后 7 位</p>
-<h3 id="float64">float64</h3>
-<p>IEEE-754 64位浮点型数，float64 等价于 PHP 的 double 类型（双精度浮点数），可以精确到小数点后 15 位。</p>
-<h3 id="complex64">complex64</h3>
-<p>32 位实数和虚数</p>
-<h3 id="complex128">complex128</h3>
-<p>64 位实数和虚数</p>
-<p>Go 语言还支持复数类型，与复数相对，我们可以把整型和浮点型这种日常比较常见的数字称为实数，复数是实数的延伸，可以通过两个实数（在计算机中用浮点数表示）构成，一个表示实部（real），一个表示虚部（imag），常见的表达形式如下：</p>
-<pre tabindex="0"><code>z = a + bi
-</code></pre><p>其中 a、b 均为实数，i 称为虚数单位，当 b = 0 时，z 就是常见的实数，当 a = 0 而 b ≠ 0 时，将 z 称之为纯虚数，如果你理解数学概念中的复数概念，这些都很好理解，下面我们来看下复数在 Go 语言中的表示和使用。</p>
-<p>在 Go 语言中，复数支持两种类型：complex64（32位实部和虚部） 和 complex128（64位实部与虚部），对应的表示示例如下，和数学概念中的复数表示形式一致：</p>
-<pre tabindex="0"><code>var complex_value_1 complex64
+</code></pre><p> </p><h1 id=数据类型>数据类型</h1><p> </p><h2 id=布尔型>布尔型：</h2><p>布尔型的值只可以是常量 true 或者 false。一个简单的栗子：</p><pre tabindex=0><code>var b bool = true。
+</code></pre><p> </p><h2 id=数字类型>数字类型：</h2><p>整型 int 和浮点型 float32、float64，Go 语言支持整型和浮点型数字，并且支持复数，其中位的运算采用补码。</p><h3 id=uint8>uint8</h3><p>无符号 8 位整型 (0 到 255)</p><h3 id=uint16>uint16</h3><p>无符号 16 位整型 (0 到 65535)</p><h3 id=uint32>uint32</h3><p>无符号 32 位整型 (0 到 4294967295)</p><h3 id=uint64>uint64</h3><p>无符号 64 位整型 (0 到 18446744073709551615)</p><h3 id=int8>int8</h3><p>有符号 8 位整型 (-128 到 127)</p><h3 id=int16>int16</h3><p>有符号 16 位整型 (-32768 到 32767)</p><h3 id=int32>int32</h3><p>有符号 32 位整型 (-2147483648 到 2147483647)</p><h3 id=int64>int64</h3><p>有符号 64 位整型 (-9223372036854775808 到 9223372036854775807)</p><h3 id=float32>float32</h3><p>IEEE-754 32位浮点型数，float32 等价于 PHP 的 float 类型（单精度浮点数），可以精确到小数点后 7 位</p><h3 id=float64>float64</h3><p>IEEE-754 64位浮点型数，float64 等价于 PHP 的 double 类型（双精度浮点数），可以精确到小数点后 15 位。</p><h3 id=complex64>complex64</h3><p>32 位实数和虚数</p><h3 id=complex128>complex128</h3><p>64 位实数和虚数</p><p>Go 语言还支持复数类型，与复数相对，我们可以把整型和浮点型这种日常比较常见的数字称为实数，复数是实数的延伸，可以通过两个实数（在计算机中用浮点数表示）构成，一个表示实部（real），一个表示虚部（imag），常见的表达形式如下：</p><pre tabindex=0><code>z = a + bi
+</code></pre><p>其中 a、b 均为实数，i 称为虚数单位，当 b = 0 时，z 就是常见的实数，当 a = 0 而 b ≠ 0 时，将 z 称之为纯虚数，如果你理解数学概念中的复数概念，这些都很好理解，下面我们来看下复数在 Go 语言中的表示和使用。</p><p>在 Go 语言中，复数支持两种类型：complex64（32位实部和虚部） 和 complex128（64位实部与虚部），对应的表示示例如下，和数学概念中的复数表示形式一致：</p><pre tabindex=0><code>var complex_value_1 complex64
 
 complex_value_1 = 1.10 + 10i// 由两个 float32 实数构成的复数类型
 complex_value_2 := 1.10 + 10i// 和浮点型一样，默认自动推导的实数类型是 float64，所以 complex_value_2 是 complex128 类型
 complex_value_3 := complex(1.10, 10)// 与 complex_value_2 等价
-</code></pre><p>对于一个复数 z = complex(x, y)，就可以通过 Go 语言内置函数 real(z) 获得该复数的实部，也就是 x，通过 imag(z) 获得该复数的虚部，也就是 y。</p>
-<p>复数支持和其它数字类型一样的算术运算符。当你使用 == 或者 != 对复数进行比较运算时，由于构成复数的实数部分也是浮点型，需要注意对精度的把握。</p>
-<p>更多关于复数的函数，请查阅   <a href="https://golang.org/pkg/math/cmplx/" title="math/cmplx ">math/cmplx </a> 标准库的文档。如果你对内存的要求不是特别高，最好使用 complex128 作为计算类型，因为相关函数大都使用这个类型的参数。</p>
-<h3 id="byte">byte</h3>
-<p>类似 uint8，代表 UTF-8 字符串的单个字节的值。</p>
-<h3 id="rune">rune</h3>
-<p>类似 int32，代表单个 Unicode 字符，可查阅 Go 标准库的  <a href="https://golang.org/pkg/unicode/" title="unicode">unicode</a>  包</p>
-<h3 id="uint">uint</h3>
-<p>32 或 64 位</p>
-<h3 id="int">int</h3>
-<p>与 uint 一样大小</p>
-<h3 id="uintptr">uintptr</h3>
-<p>无符号整型，用于存放一个指针</p>
-<h2 id="字符串类型">字符串类型:</h2>
-<p>字符串就是一串固定长度的字符连接起来的字符序列。Go 的字符串是由单个字节连接起来的。Go 语言的字符串的字节使用 UTF-8 编码标识 Unicode 文本。</p>
-<p>在 Go 语言中，字符串是一种基本类型，默认是通过 UTF-8 编码的字符序列，当字符为 ASCII 码时则占用 1 个字节，其它字符根据需要占用 2-4 个字节，比如中文编码通常需要 3 个字节。</p>
-<pre tabindex="0"><code>var str string         // 声明字符串变量
+</code></pre><p>对于一个复数 z = complex(x, y)，就可以通过 Go 语言内置函数 real(z) 获得该复数的实部，也就是 x，通过 imag(z) 获得该复数的虚部，也就是 y。</p><p>复数支持和其它数字类型一样的算术运算符。当你使用 == 或者 != 对复数进行比较运算时，由于构成复数的实数部分也是浮点型，需要注意对精度的把握。</p><p>更多关于复数的函数，请查阅 <a href=https://golang.org/pkg/math/cmplx/ title="math/cmplx ">math/cmplx </a>标准库的文档。如果你对内存的要求不是特别高，最好使用 complex128 作为计算类型，因为相关函数大都使用这个类型的参数。</p><h3 id=byte>byte</h3><p>类似 uint8，代表 UTF-8 字符串的单个字节的值。</p><h3 id=rune>rune</h3><p>类似 int32，代表单个 Unicode 字符，可查阅 Go 标准库的 <a href=https://golang.org/pkg/unicode/ title=unicode>unicode</a> 包</p><h3 id=uint>uint</h3><p>32 或 64 位</p><h3 id=int>int</h3><p>与 uint 一样大小</p><h3 id=uintptr>uintptr</h3><p>无符号整型，用于存放一个指针</p><h2 id=字符串类型>字符串类型:</h2><p>字符串就是一串固定长度的字符连接起来的字符序列。Go 的字符串是由单个字节连接起来的。Go 语言的字符串的字节使用 UTF-8 编码标识 Unicode 文本。</p><p>在 Go 语言中，字符串是一种基本类型，默认是通过 UTF-8 编码的字符序列，当字符为 ASCII 码时则占用 1 个字节，其它字符根据需要占用 2-4 个字节，比如中文编码通常需要 3 个字节。</p><pre tabindex=0><code>var str string         // 声明字符串变量
 str = &#34;Hello World&#34;    // 变量初始化
 str_2 := &#34;你好，中国&#34;  // 也可以同时进行声明和初始化
-</code></pre><h4 id="获取单个字符">获取单个字符</h4>
-<p>要获取字符串中的某个字符，可以通过访问数组下标的方式：</p>
-<pre tabindex="0"><code>ch := str[0] // 取字符串的第一个字符
+</code></pre><h4 id=获取单个字符>获取单个字符</h4><p>要获取字符串中的某个字符，可以通过访问数组下标的方式：</p><pre tabindex=0><code>ch := str[0] // 取字符串的第一个字符
 // H
-</code></pre><p>虽然可以通过数组下标方式访问字符串中的字符，但是和数组不同，在 Go 语言中，字符串是一种不可变值类型，一旦初始化之后，它的内容不能被修改。</p>
-<pre tabindex="0"><code>str := &#34;Hello world&#34;
+</code></pre><p>虽然可以通过数组下标方式访问字符串中的字符，但是和数组不同，在 Go 语言中，字符串是一种不可变值类型，一旦初始化之后，它的内容不能被修改。</p><pre tabindex=0><code>str := &#34;Hello world&#34;
 str[0] = &#39;X&#39; // 编译错误
-</code></pre><blockquote>
-<p>cannot assign to str[0]</p>
-</blockquote>
-<h4 id="格式化输出">格式化输出</h4>
-<p>还可以通过 Go 语言内置的 len() 函数获取指定字符串的长度，以及通过 fmt 包提供的 Printf 进行字符串格式化输出（用法和 PHP 中的 printf 类似）：</p>
-<pre tabindex="0"><code>fmt.Printf(&#34;The length of \&#34;%s\&#34; is %d \n&#34;, str, len(str)) 
+</code></pre><blockquote><p>cannot assign to str[0]</p></blockquote><h4 id=格式化输出>格式化输出</h4><p>还可以通过 Go 语言内置的 len() 函数获取指定字符串的长度，以及通过 fmt 包提供的 Printf 进行字符串格式化输出（用法和 PHP 中的 printf 类似）：</p><pre tabindex=0><code>fmt.Printf(&#34;The length of \&#34;%s\&#34; is %d \n&#34;, str, len(str)) 
 fmt.Printf(&#34;The first character of \&#34;%s\&#34; is %c.\n&#34;, str, ch)
-</code></pre><h4 id="转义字符">转义字符</h4>
-<p>与 PHP 不同，<strong>Go 语言的字符串不支持单引号</strong>，只能通过双引号定义字符串字面值，<strong>如果要对特定字符进行转义，可以通过 \ 实现</strong>，就像我们上面在字符串中转义双引号和换行符那样，常见的需要转义的字符如下所示：</p>
-<ul>
-<li>\n ：换行符</li>
-<li>\r ：回车符</li>
-<li>\t ：tab 键</li>
-<li>\u 或 \U ：Unicode 字符</li>
-<li>\ ：反斜杠自身
-所以，上述打印代码输出结果为：</li>
-</ul>
-<pre tabindex="0"><code>The length of &#34;Hello world&#34; is 11 
+</code></pre><h4 id=转义字符>转义字符</h4><p>与 PHP 不同，<strong>Go 语言的字符串不支持单引号</strong>，只能通过双引号定义字符串字面值，<strong>如果要对特定字符进行转义，可以通过 \ 实现</strong>，就像我们上面在字符串中转义双引号和换行符那样，常见的需要转义的字符如下所示：</p><ul><li>\n ：换行符</li><li>\r ：回车符</li><li>\t ：tab 键</li><li>\u 或 \U ：Unicode 字符</li><li>\ ：反斜杠自身
+所以，上述打印代码输出结果为：</li></ul><pre tabindex=0><code>The length of &#34;Hello world&#34; is 11 
 The first character of &#34;Hello world&#34; is H.
-</code></pre><h4 id="字符串操作">字符串操作</h4>
-<h5 id="字符串连接">字符串连接</h5>
-<p>php中用“.”连接，Go中用“+”连接。</p>
-<pre tabindex="0"><code>str = str + &#34;, 臭大佬&#34;
+</code></pre><h4 id=字符串操作>字符串操作</h4><h5 id=字符串连接>字符串连接</h5><p>php中用“.”连接，Go中用“+”连接。</p><pre tabindex=0><code>str = str + &#34;, 臭大佬&#34;
 str += &#34;, 臭大佬&#34;  // 上述语句也可以简写为这样，效果完全一样
 str = str +
         &#34;, 臭大佬&#34;//另外，还有一点需要注意的是如果字符串长度较长，需要换行，则「+」必须出现在上一行的末尾，否则会报错：
-</code></pre><h5 id="字符串切片">字符串切片</h5>
-<p>在 PHP 中我们可以通过 substr 函数获取字符串的子串，在 Go 语言中，可以通过字符串切片功能实现类似的操作，相比 substr 函数，使用起来更加方便：</p>
-<pre tabindex="0"><code>str = &#34;hello, world&#34;
+</code></pre><h5 id=字符串切片>字符串切片</h5><p>在 PHP 中我们可以通过 substr 函数获取字符串的子串，在 Go 语言中，可以通过字符串切片功能实现类似的操作，相比 substr 函数，使用起来更加方便：</p><pre tabindex=0><code>str = &#34;hello, world&#34;
 str_1 := str[:5]  // 获取索引5（不含）之前的子串
 str_2 := str[7:]  // 获取索引7（含）之后的子串
 str_3 := str[0:5]  // 获取从索引0（含）到索引5（不含）之间的子串
@@ -195,11 +41,7 @@ fmt.Println(str_3)
 //hello
 //world
 //hello
-</code></pre><p>字符串切片和 PHP 的 substr 函数使用方式有所差异，通过「:」对字符串进行切片，冒号之前的数字代表起始点（为空表示从0开始），之后的数字代表结束点（为空表示到字符串最后），而不是子串的长度。</p>
-<p>此外 Go 字符串也支持字符串比较、是否包含指定字符/子串、获取指定子串索引位置、字符串替换、大小写转换、trim 等操作，更多操作 API，请参考标准库 <a href="https://golang.org/pkg/strings/" title=" strings"> strings</a>  包。</p>
-<h5 id="字符串遍历">字符串遍历</h5>
-<h6 id="以字节数组的方式遍历">以字节数组的方式遍历：</h6>
-<pre tabindex="0"><code>str := &#34;Hello, 世界&#34;
+</code></pre><p>字符串切片和 PHP 的 substr 函数使用方式有所差异，通过「:」对字符串进行切片，冒号之前的数字代表起始点（为空表示从0开始），之后的数字代表结束点（为空表示到字符串最后），而不是子串的长度。</p><p>此外 Go 字符串也支持字符串比较、是否包含指定字符/子串、获取指定子串索引位置、字符串替换、大小写转换、trim 等操作，更多操作 API，请参考标准库 <a href=https://golang.org/pkg/strings/ title=" strings">strings</a> 包。</p><h5 id=字符串遍历>字符串遍历</h5><h6 id=以字节数组的方式遍历>以字节数组的方式遍历：</h6><pre tabindex=0><code>str := &#34;Hello, 世界&#34;
 n := len(str)
 for i := 0; i &lt; n; i++ {
     ch := str[i]    // 依据下标取字符串中的字符，类型为byte
@@ -219,9 +61,7 @@ for i := 0; i &lt; n; i++ {
 //10 231 
 //11 149 
 //12 140
-</code></pre><p>可以看出，这个字符串长度为 13，尽管从直观上来说，这个字符串应该只有 9 个字符。这是因为<strong>每个中文字符在 UTF-8 中占 3 个字节</strong>，而不是 1 个字节。</p>
-<h6 id="以-unicode-字符遍历">以 Unicode 字符遍历：</h6>
-<pre tabindex="0"><code>str := &#34;Hello, 世界&#34; 
+</code></pre><p>可以看出，这个字符串长度为 13，尽管从直观上来说，这个字符串应该只有 9 个字符。这是因为<strong>每个中文字符在 UTF-8 中占 3 个字节</strong>，而不是 1 个字节。</p><h6 id=以-unicode-字符遍历>以 Unicode 字符遍历：</h6><pre tabindex=0><code>str := &#34;Hello, 世界&#34; 
 for i, ch := range str { 
     fmt.Println(i, ch)    // ch 的类型为 rune 
 }
@@ -235,35 +75,19 @@ for i, ch := range str {
 //6 32 
 //7 19990 
 //10 30028
-</code></pre><p>这个时候，打印的就是 9 个字符了，以 Unicode 字符方式遍历时，每个字符的类型是 rune（早期的 Go 语言用 int 类型表示 Unicode 字符），而不是 byte。</p>
-<h4 id="数字和字符串转化">数字和字符串转化</h4>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">import</span> <span style="color:#e6db74">&#34;strconv&#34;</span> <span style="color:#75715e">//先导入strconv包</span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e">// string到int</span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">int</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">strconv</span>.<span style="color:#a6e22e">Atoi</span>(<span style="color:#66d9ef">string</span>)
-</span></span><span style="display:flex;"><span><span style="color:#75715e">// string到int64</span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">int64</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">strconv</span>.<span style="color:#a6e22e">ParseInt</span>(<span style="color:#66d9ef">string</span>, <span style="color:#ae81ff">10</span>, <span style="color:#ae81ff">64</span>)
-</span></span><span style="display:flex;"><span><span style="color:#75715e">// string到float64 第二个参数:32 表示 float32，64 表示 float64</span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">float64</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">strconv</span>.<span style="color:#a6e22e">ParseFloat</span>(<span style="color:#66d9ef">string</span>, <span style="color:#ae81ff">64</span>)
-</span></span><span style="display:flex;"><span><span style="color:#75715e">// int到string</span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">string</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">strconv</span>.<span style="color:#a6e22e">Itoa</span>(<span style="color:#66d9ef">int</span>)
-</span></span><span style="display:flex;"><span><span style="color:#75715e">// int64到string</span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e">// base 表示整数的进制，base 必须在2到36之间，结果中会使用小写字母&#39;a&#39;到&#39;z&#39;表示大于10的数字。</span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">string</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">strconv</span>.<span style="color:#a6e22e">FormatInt</span>(<span style="color:#66d9ef">int64</span>,<span style="color:#ae81ff">10</span>)
-</span></span></code></pre></div><h2 id="派生类型">派生类型:</h2>
-<p>包括：</p>
-<ul>
-<li>指针类型（Pointer）</li>
-<li>数组类型</li>
-<li>结构化类型(struct)</li>
-<li>Channel 类型</li>
-<li>函数类型</li>
-<li>切片类型</li>
-<li>接口类型（interface）</li>
-<li>Map 类型</li>
-</ul>
-<h1 id="变量">变量</h1>
-<p>声明变量的一般形式是使用 var 关键字：</p>
-<pre tabindex="0"><code>//声明一个变量
+</code></pre><p>这个时候，打印的就是 9 个字符了，以 Unicode 字符方式遍历时，每个字符的类型是 rune（早期的 Go 语言用 int 类型表示 Unicode 字符），而不是 byte。</p><h4 id=数字和字符串转化>数字和字符串转化</h4><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#f92672>import</span> <span style=color:#e6db74>&#34;strconv&#34;</span> <span style=color:#75715e>//先导入strconv包</span>
+</span></span><span style=display:flex><span><span style=color:#75715e>// string到int</span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>int</span>, <span style=color:#a6e22e>err</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>strconv</span>.<span style=color:#a6e22e>Atoi</span>(<span style=color:#66d9ef>string</span>)
+</span></span><span style=display:flex><span><span style=color:#75715e>// string到int64</span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>int64</span>, <span style=color:#a6e22e>err</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>strconv</span>.<span style=color:#a6e22e>ParseInt</span>(<span style=color:#66d9ef>string</span>, <span style=color:#ae81ff>10</span>, <span style=color:#ae81ff>64</span>)
+</span></span><span style=display:flex><span><span style=color:#75715e>// string到float64 第二个参数:32 表示 float32，64 表示 float64</span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>float64</span>, <span style=color:#a6e22e>err</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>strconv</span>.<span style=color:#a6e22e>ParseFloat</span>(<span style=color:#66d9ef>string</span>, <span style=color:#ae81ff>64</span>)
+</span></span><span style=display:flex><span><span style=color:#75715e>// int到string</span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>string</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>strconv</span>.<span style=color:#a6e22e>Itoa</span>(<span style=color:#66d9ef>int</span>)
+</span></span><span style=display:flex><span><span style=color:#75715e>// int64到string</span>
+</span></span><span style=display:flex><span><span style=color:#75715e>// base 表示整数的进制，base 必须在2到36之间，结果中会使用小写字母&#39;a&#39;到&#39;z&#39;表示大于10的数字。</span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>string</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>strconv</span>.<span style=color:#a6e22e>FormatInt</span>(<span style=color:#66d9ef>int64</span>,<span style=color:#ae81ff>10</span>)
+</span></span></code></pre></div><h2 id=派生类型>派生类型:</h2><p>包括：</p><ul><li>指针类型（Pointer）</li><li>数组类型</li><li>结构化类型(struct)</li><li>Channel 类型</li><li>函数类型</li><li>切片类型</li><li>接口类型（interface）</li><li>Map 类型</li></ul><h1 id=变量>变量</h1><p>声明变量的一般形式是使用 var 关键字：</p><pre tabindex=0><code>//声明一个变量
 var identifier type
 //声明多个变量
 var identifier1, identifier2 type
@@ -272,26 +96,13 @@ var (
     identifier1 type 
     identifier2 type
 ）
-</code></pre><p>需要注意的是，变量在声明之后，系统会自动将变量值初始化为对应类型的零值，比如 int类型 的值为 0，string 的值空字符串，bool 的值为 false</p>
-<p>如果变量名包含多个单词，Go 语言变量命名规则遵循<strong>驼峰命名法</strong>，即首个单词小写，每个新单词的首字母大写，如 statusName。</p>
-<p>但如果你的全局变量希望能够被外部包所使用，则需要将首个单词的首字母也大写。</p>
-<h2 id="变量初始化">变量初始化</h2>
-<p> </p>
-<pre tabindex="0"><code>var v1 int = 10 // 方式一，常规的初始化操作
+</code></pre><p>需要注意的是，变量在声明之后，系统会自动将变量值初始化为对应类型的零值，比如 int类型 的值为 0，string 的值空字符串，bool 的值为 false</p><p>如果变量名包含多个单词，Go 语言变量命名规则遵循<strong>驼峰命名法</strong>，即首个单词小写，每个新单词的首字母大写，如 statusName。</p><p>但如果你的全局变量希望能够被外部包所使用，则需要将首个单词的首字母也大写。</p><h2 id=变量初始化>变量初始化</h2><p> </p><pre tabindex=0><code>var v1 int = 10 // 方式一，常规的初始化操作
 var v2 = 10 // 方式二，此时变量类型会被编译器自动推导出来
 v3 := 10 // 方式三，可以省略 var，编译器可以自动推导出v3的类型
-</code></pre><p>以上三种用法的效果是完全一样的。与第一种用法相比，第三种用法更简捷，推荐用这种方式对变量进行初始化。这里 Go 语言也引入了另一个 PHP 语言中没有的运算符 :=，用于明确表达同时对变量进行声明和初始化。</p>
-<p>另外，出现在 := 左侧的变量不应该是已经被声明过的，否则会导致编译错误，比如下面这个写法：</p>
-<pre tabindex="0"><code>var i int 
+</code></pre><p>以上三种用法的效果是完全一样的。与第一种用法相比，第三种用法更简捷，推荐用这种方式对变量进行初始化。这里 Go 语言也引入了另一个 PHP 语言中没有的运算符 :=，用于明确表达同时对变量进行声明和初始化。</p><p>另外，出现在 := 左侧的变量不应该是已经被声明过的，否则会导致编译错误，比如下面这个写法：</p><pre tabindex=0><code>var i int 
 i := 2
-</code></pre><p>会导致错误：</p>
-<pre tabindex="0"><code>no new variables on left side of :=
-</code></pre><blockquote>
-<p>注：在 PHP 中，通常变量声明和初始化是一体的，即通过初始化的方式完成变量的声明，类的成员变量除外</p>
-</blockquote>
-<h2 id="多变量声明">多变量声明</h2>
-<p> </p>
-<pre tabindex="0"><code>//类型相同多个变量, 非全局变量
+</code></pre><p>会导致错误：</p><pre tabindex=0><code>no new variables on left side of :=
+</code></pre><blockquote><p>注：在 PHP 中，通常变量声明和初始化是一体的，即通过初始化的方式完成变量的声明，类的成员变量除外</p></blockquote><h2 id=多变量声明>多变量声明</h2><p> </p><pre tabindex=0><code>//类型相同多个变量, 非全局变量
 var vname1, vname2, vname3 type
 vname1, vname2, vname3 = v1, v2, v3
 
@@ -305,8 +116,7 @@ var (
     vname1 v_type1
     vname2 v_type2
 )
-</code></pre><p>栗子：</p>
-<pre tabindex="0"><code>package main
+</code></pre><p>栗子：</p><pre tabindex=0><code>package main
 
 var x, y int
 var (  // 这种因式分解关键字的写法一般用于声明全局变量
@@ -326,36 +136,18 @@ func main(){
 }
 //运行结果 
 // 0 0 0 false 1 2 123 hello 123 hello
-</code></pre><p> </p>
-<h2 id="匿名变量">匿名变量</h2>
-<p>我们在使用传统的强类型语言编程时，经常会出现这种情况，即在调用函数时为了获取一个值，却因为该函数返回多个值而不得不定义一堆没用的变量。</p>
-<p>在 Go 语言中，这种情况可以通过结合使用多重赋值和匿名变量来避免这种丑陋的写法，让代码看起来更加优雅，多重赋值上面已经介绍过，匿名变量则通过下划线 _ 来声明，任何赋予它的值都会被丢弃。</p>
-<p>我们来看个例子，假设 GetName() 函数的定义如下，它返回两个值，分别为 userName 和 nickName：</p>
-<pre tabindex="0"><code>func GetName() (userName, nickName string) { 
+</code></pre><p> </p><h2 id=匿名变量>匿名变量</h2><p>我们在使用传统的强类型语言编程时，经常会出现这种情况，即在调用函数时为了获取一个值，却因为该函数返回多个值而不得不定义一堆没用的变量。</p><p>在 Go 语言中，这种情况可以通过结合使用多重赋值和匿名变量来避免这种丑陋的写法，让代码看起来更加优雅，多重赋值上面已经介绍过，匿名变量则通过下划线 _ 来声明，任何赋予它的值都会被丢弃。</p><p>我们来看个例子，假设 GetName() 函数的定义如下，它返回两个值，分别为 userName 和 nickName：</p><pre tabindex=0><code>func GetName() (userName, nickName string) { 
     return userName, nickName
 }
-</code></pre><p>若只想获得 nickName，则函数调用语句可以用如下方式实现：</p>
-<pre tabindex="0"><code>_, nickName := GetName()
-</code></pre><p> </p>
-<h1 id="常量">常量</h1>
-<p>常量是一个简单值的标识符，在程序运行时，不会被修改的量。
+</code></pre><p>若只想获得 nickName，则函数调用语句可以用如下方式实现：</p><pre tabindex=0><code>_, nickName := GetName()
+</code></pre><p> </p><h1 id=常量>常量</h1><p>常量是一个简单值的标识符，在程序运行时，不会被修改的量。
 常量中的数据类型只可以是布尔型、数字型（整数型、浮点型和复数）和字符串型。
-通过 const 关键字来定义常量（遵循 C 语言的约定）。</p>
-<p>常量的定义格式：</p>
-<pre tabindex="0"><code>const identifier [type] = value
+通过 const 关键字来定义常量（遵循 C 语言的约定）。</p><p>常量的定义格式：</p><pre tabindex=0><code>const identifier [type] = value
 //多个相同类型的声明可以简写为：
 const c_name1, c_name2 = value1, value2
 </code></pre><p>显式类型定义： const b string = &ldquo;abc&rdquo;
-隐式类型定义： const b = &ldquo;abc&rdquo;</p>
-<blockquote>
-<p>Go语言常量和变量声明规律：
-从左往右，第一个标识符 var 或  const 表明声明的是变量还是常量，第二个标识符标识变量或常量的内存存储块别名，以便后续引用，第三个标识符表示变量或常量的数据类型，可以省略，省略的情况下底层会在编译期自动推导对应的变量或常量类型。</p>
-</blockquote>
-<h2 id="iota">iota</h2>
-<p>iota，特殊常量，可以认为是一个可以被编译器修改的常量。</p>
-<p>iota 在 const关键字出现时将被重置为 0(const 内部的第一行之前)，const 中每新增一行常量声明将使 iota 计数一次(iota 可理解为 const 语句块中的行索引)。</p>
-<p>iota 可以被用作枚举值：</p>
-<pre tabindex="0"><code>package main
+隐式类型定义： const b = &ldquo;abc&rdquo;</p><blockquote><p>Go语言常量和变量声明规律：
+从左往右，第一个标识符 var 或 const 表明声明的是变量还是常量，第二个标识符标识变量或常量的内存存储块别名，以便后续引用，第三个标识符表示变量或常量的数据类型，可以省略，省略的情况下底层会在编译期自动推导对应的变量或常量类型。</p></blockquote><h2 id=iota>iota</h2><p>iota，特殊常量，可以认为是一个可以被编译器修改的常量。</p><p>iota 在 const关键字出现时将被重置为 0(const 内部的第一行之前)，const 中每新增一行常量声明将使 iota 计数一次(iota 可理解为 const 语句块中的行索引)。</p><p>iota 可以被用作枚举值：</p><pre tabindex=0><code>package main
 
 import &#34;fmt&#34;
 
@@ -375,45 +167,10 @@ func main() {
 }
 //结果
 //0 1 2 ha ha 100 100 7 8
-</code></pre><p> </p>
-<h2 id="运算符">运算符</h2>
-<p> </p>
-<h3 id="注意">注意</h3>
-<p>在Go语言中，不同类型的变量是不能直接运算的，比如（<code>int</code>和<code>int32</code>两种类型的变量不能直接进行运算，这点和php不一样，一定要注意）。</p>
-<p>Go中比较运算符也没有<code>===</code>和 <code>!==</code>这种严格比较运算符，因为所有运算符在比较的时候都会考虑数据类型。</p>
-<h1 id="类型转换">类型转换</h1>
-<p>Go语言是强类型语言，不能像php那样，数据类型可以自动相互转换。</p>
-<h2 id="数值类型间的转换">数值类型间的转换</h2>
-<p> </p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">v1</span> <span style="color:#f92672">:=</span> uint(<span style="color:#ae81ff">16</span>)   <span style="color:#75715e">// 初始化 v1 类型为 unit</span>
-</span></span><span style="display:flex;"><span><span style="color:#a6e22e">v2</span> <span style="color:#f92672">:=</span> int8(<span style="color:#a6e22e">v1</span>)   <span style="color:#75715e">// 将 v1 转化为 int8 类型并赋值给 v2</span>
-</span></span><span style="display:flex;"><span><span style="color:#a6e22e">v3</span> <span style="color:#f92672">:=</span> uint16(<span style="color:#a6e22e">v2</span>) <span style="color:#75715e">// 将 v2 转化为 uint16 类型并赋值给 v3</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#a6e22e">v1</span> <span style="color:#f92672">:=</span> uint(<span style="color:#f92672">-</span><span style="color:#ae81ff">255</span>) <span style="color:#75715e">//由于 uint 是无符号整型，所以上述转化编译时会报错： constant -255 overflows uint</span>
-</span></span></code></pre></div><p> </p>
-<h2 id="数值和布尔值不支持转换">数值和布尔值不支持转换</h2>
-<p>Go不能像php那样，true和1结果一样，false和0可以相同。</p>
-
-		</div>
-	</article>
-</main>
-
-
-
-
-			</div>
-			
-		</div>
-		<footer class="footer">
-	<div class="container footer__container flex">
-		
-		<div class="footer__copyright">
-			&copy; 2026 臭大佬博客.
-			<span class="footer__copyright-credits">基于 <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> 引擎和 <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> 主题</span>
-		</div>
-	</div>
-</footer>
-	</div>
-<script async defer src="/js/menu.js"></script>
-</body>
-</html>
+</code></pre><p> </p><h2 id=运算符>运算符</h2><p> </p><h3 id=注意>注意</h3><p>在Go语言中，不同类型的变量是不能直接运算的，比如（<code>int</code>和<code>int32</code>两种类型的变量不能直接进行运算，这点和php不一样，一定要注意）。</p><p>Go中比较运算符也没有<code>===</code>和 <code>!==</code>这种严格比较运算符，因为所有运算符在比较的时候都会考虑数据类型。</p><h1 id=类型转换>类型转换</h1><p>Go语言是强类型语言，不能像php那样，数据类型可以自动相互转换。</p><h2 id=数值类型间的转换>数值类型间的转换</h2><p> </p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#a6e22e>v1</span> <span style=color:#f92672>:=</span> uint(<span style=color:#ae81ff>16</span>)   <span style=color:#75715e>// 初始化 v1 类型为 unit</span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>v2</span> <span style=color:#f92672>:=</span> int8(<span style=color:#a6e22e>v1</span>)   <span style=color:#75715e>// 将 v1 转化为 int8 类型并赋值给 v2</span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>v3</span> <span style=color:#f92672>:=</span> uint16(<span style=color:#a6e22e>v2</span>) <span style=color:#75715e>// 将 v2 转化为 uint16 类型并赋值给 v3</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>v1</span> <span style=color:#f92672>:=</span> uint(<span style=color:#f92672>-</span><span style=color:#ae81ff>255</span>) <span style=color:#75715e>//由于 uint 是无符号整型，所以上述转化编译时会报错： constant -255 overflows uint</span>
+</span></span></code></pre></div><p> </p><h2 id=数值和布尔值不支持转换>数值和布尔值不支持转换</h2><p>Go不能像php那样，true和1结果一样，false和0可以相同。</p></div></article></main></div></div><footer class=footer><div class="container footer__container flex"><div class=footer__copyright>&copy; 2026 臭大佬博客.
+<span class=footer__copyright-credits>基于 <a href=https://gohugo.io/ rel="nofollow noopener" target=_blank>Hugo</a> 引擎和 <a href=https://github.com/Vimux/Mainroad/ rel="nofollow noopener" target=_blank>Mainroad</a> 主题</span></div></div></footer></div><script async defer src=/choudalao.github.io/js/menu.js></script></body></html>

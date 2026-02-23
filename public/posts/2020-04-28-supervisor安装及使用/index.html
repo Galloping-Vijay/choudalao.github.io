@@ -1,226 +1,105 @@
-<!DOCTYPE html>
-<html class="no-js" lang="en">
-<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>Supervisor安装及使用 - 臭大佬博客</title>
-	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
-	<meta name="description" content="Supervisor安装及使用">
-	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-	<link rel="dns-prefetch" href="//fonts.googleapis.com">
-	<link rel="dns-prefetch" href="//fonts.gstatic.com">
-	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
-
-	<link rel="stylesheet" href="/css/style.css">
-	
-
-	<link rel="shortcut icon" href="/favicon.ico">
-		
-</head>
-<body class="body">
-	<div class="container container--outer">
-		<header class="header">
-	<div class="container header__container">
-		
-	<div class="logo">
-		<a class="logo__link" href="/" title="臭大佬博客" rel="home">
-			<div class="logo__item logo__text">
-					<div class="logo__title">臭大佬博客</div>
-					
-				</div>
-		</a>
-	</div>
-		
-<nav class="menu">
-	<button class="menu__btn" aria-haspopup="true" aria-expanded="false" tabindex="0">
-		<span class="menu__btn-title" tabindex="-1">菜单</span>
-	</button>
-	<ul class="menu__list">
-		<li class="menu__item">
-			<a class="menu__link" href="/">
-				
-				<span class="menu__text">首页</span>
-				
-			</a>
-		</li>
-		<li class="menu__item">
-			<a class="menu__link" href="/post/">
-				
-				<span class="menu__text">归档</span>
-				
-			</a>
-		</li>
-		<li class="menu__item">
-			<a class="menu__link" href="/about/">
-				
-				<span class="menu__text">关于</span>
-				
-			</a>
-		</li>
-	</ul>
-</nav>
-
-	</div>
-</header>
-		<div class="wrapper flex">
-			<div class="primary">
-			
-<main class="main" role="main">
-	<article class="post">
-		<header class="post__header">
-			<h1 class="post__title">Supervisor安装及使用</h1>
-			
-		</header>
-		<div class="content post__content clearfix">
-			<h1 id="介绍">介绍</h1>
-<p>Supervisor官网：http://supervisord.org。
-Supervisor是用Python开发的一套通用的进程管理程序，能将一个普通的命令行进程变为后台daemon，并监控进程状态，异常退出时能自动重启。它是通过fork/exec的方式把这些被管理的进程当作supervisor的子进程来启动，这样只要在supervisor的配置文件中，把要管理的进程的可执行文件的路径写进去即可。也实现当子进程挂掉的时候，父进程可以准确获取子进程挂掉的信息的，可以选择是否自己启动和报警。supervisor还提供了一个功能，可以为supervisord或者每个子进程，设置一个非root的user，这个user就可以管理它对应的进程。</p>
-<p>注：本文以centos7为例。</p>
-<h1 id="安装">安装</h1>
-<h3 id="直接安装">直接安装</h3>
-<h5 id="centos">CentOS</h5>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>yum install supervisor
-</span></span></code></pre></div><h5 id="ubuntu">ubuntu</h5>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>sudo apt-get install supervisor
-</span></span></code></pre></div><p><img src="https://www.choudalao.com/uploads/20200428/20200428155114r4FBSQ.png" alt=""></p>
-<h1 id="使用centos为例">使用(centos为例)</h1>
-<p>supervisor配置文件：/etc/supervisord.conf
-<img src="https://www.choudalao.com/uploads/20200428/20200428155715PK1YYZ.png" alt=""></p>
-<p>子进程配置文件路径：/etc/supervisord.d/</p>
-<h1 id="配置文件说明">配置文件说明</h1>
-<p>supervisor.conf配置文件说明：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>[unix_http_server]
-</span></span><span style="display:flex;"><span>file<span style="color:#f92672">=/</span>tmp<span style="color:#f92672">/</span>supervisor<span style="color:#f92672">.</span>sock   ;UNIX socket 文件<span style="color:#960050;background-color:#1e0010">，</span>supervisorctl 会使用
-</span></span><span style="display:flex;"><span>;chmod<span style="color:#f92672">=</span><span style="color:#ae81ff">0700</span>                 ;socket文件的mode<span style="color:#960050;background-color:#1e0010">，</span>默认是0700
-</span></span><span style="display:flex;"><span>;chown<span style="color:#f92672">=</span>nobody:nogroup       ;socket文件的owner<span style="color:#960050;background-color:#1e0010">，</span>格式<span style="color:#960050;background-color:#1e0010">：</span>uid:gid
-</span></span><span style="display:flex;"><span> 
-</span></span><span style="display:flex;"><span>;[inet_http_server]         ;HTTP服务器<span style="color:#960050;background-color:#1e0010">，</span>提供web管理界面
-</span></span><span style="display:flex;"><span>;port<span style="color:#f92672">=</span><span style="color:#ae81ff">127.0.0.1</span>:<span style="color:#ae81ff">9001</span>        ;Web管理后台运行的IP和端口<span style="color:#960050;background-color:#1e0010">，</span>如果开放到公网<span style="color:#960050;background-color:#1e0010">，</span>需要注意安全性
-</span></span><span style="display:flex;"><span>;username<span style="color:#f92672">=</span>user              ;登录管理后台的用户名
-</span></span><span style="display:flex;"><span>;password<span style="color:#f92672">=</span><span style="color:#ae81ff">123</span>               ;登录管理后台的密码
-</span></span><span style="display:flex;"><span> 
-</span></span><span style="display:flex;"><span>[supervisord]
-</span></span><span style="display:flex;"><span>logfile<span style="color:#f92672">=/</span>tmp<span style="color:#f92672">/</span>supervisord<span style="color:#f92672">.</span>log ;日志文件<span style="color:#960050;background-color:#1e0010">，</span>默认是 <span style="color:#960050;background-color:#1e0010">$</span>CWD<span style="color:#f92672">/</span>supervisord<span style="color:#f92672">.</span>log
-</span></span><span style="display:flex;"><span>logfile_maxbytes<span style="color:#f92672">=</span><span style="color:#ae81ff">50</span>MB        ;日志文件大小<span style="color:#960050;background-color:#1e0010">，</span>超出会rotate<span style="color:#960050;background-color:#1e0010">，</span>默认 <span style="color:#ae81ff">50</span>MB<span style="color:#960050;background-color:#1e0010">，</span>如果设成0<span style="color:#960050;background-color:#1e0010">，</span>表示不限制大小
-</span></span><span style="display:flex;"><span>logfile_backups<span style="color:#f92672">=</span><span style="color:#ae81ff">10</span>           ;日志文件保留备份数量默认10<span style="color:#960050;background-color:#1e0010">，</span>设为0表示不备份
-</span></span><span style="display:flex;"><span>loglevel<span style="color:#f92672">=</span>info                ;日志级别<span style="color:#960050;background-color:#1e0010">，</span>默认info<span style="color:#960050;background-color:#1e0010">，</span>其它: debug,warn,trace
-</span></span><span style="display:flex;"><span>pidfile<span style="color:#f92672">=/</span>tmp<span style="color:#f92672">/</span>supervisord<span style="color:#f92672">.</span>pid ;pid 文件
-</span></span><span style="display:flex;"><span>nodaemon<span style="color:#f92672">=</span>false               ;是否在前台启动<span style="color:#960050;background-color:#1e0010">，</span>默认是false<span style="color:#960050;background-color:#1e0010">，</span>即以 daemon 的方式启动
-</span></span><span style="display:flex;"><span>minfds<span style="color:#f92672">=</span><span style="color:#ae81ff">1024</span>                  ;可以打开的文件描述符的最小值<span style="color:#960050;background-color:#1e0010">，</span>默认 <span style="color:#ae81ff">1024</span>
-</span></span><span style="display:flex;"><span>minprocs<span style="color:#f92672">=</span><span style="color:#ae81ff">200</span>                 ;可以打开的进程数的最小值<span style="color:#960050;background-color:#1e0010">，</span>默认 <span style="color:#ae81ff">200</span>
-</span></span><span style="display:flex;"><span> 
-</span></span><span style="display:flex;"><span>[supervisorctl]
-</span></span><span style="display:flex;"><span>serverurl<span style="color:#f92672">=</span>unix:<span style="color:#f92672">///</span>tmp<span style="color:#f92672">/</span>supervisor<span style="color:#f92672">.</span>sock ;通过UNIX socket连接supervisord<span style="color:#960050;background-color:#1e0010">，</span>路径与unix_http_server部分的file一致
-</span></span><span style="display:flex;"><span>;serverurl<span style="color:#f92672">=</span>http:<span style="color:#f92672">//</span><span style="color:#ae81ff">127.0.0.1</span>:<span style="color:#ae81ff">9001</span> ; 通过HTTP的方式连接supervisord
-</span></span><span style="display:flex;"><span> 
-</span></span><span style="display:flex;"><span>; [program:xx]是被管理的进程配置参数<span style="color:#960050;background-color:#1e0010">，</span>xx是进程的名称
-</span></span><span style="display:flex;"><span>[program:xx]
-</span></span><span style="display:flex;"><span>command<span style="color:#f92672">=/</span>opt<span style="color:#f92672">/</span>apache<span style="color:#f92672">-</span>tomcat<span style="color:#f92672">-</span><span style="color:#ae81ff">8.0.35</span><span style="color:#f92672">/</span>bin<span style="color:#f92672">/</span>catalina<span style="color:#f92672">.</span>sh run  ; 程序启动命令
-</span></span><span style="display:flex;"><span>autostart<span style="color:#f92672">=</span>true       ; 在supervisord启动的时候也自动启动
-</span></span><span style="display:flex;"><span>startsecs<span style="color:#f92672">=</span><span style="color:#ae81ff">10</span>         ; 启动10秒后没有异常退出<span style="color:#960050;background-color:#1e0010">，</span>就表示进程正常启动了<span style="color:#960050;background-color:#1e0010">，</span>默认为1秒
-</span></span><span style="display:flex;"><span>autorestart<span style="color:#f92672">=</span>true     ; 程序退出后自动重启,可选值<span style="color:#960050;background-color:#1e0010">：</span>[unexpected,true,false]<span style="color:#960050;background-color:#1e0010">，</span>默认为unexpected<span style="color:#960050;background-color:#1e0010">，</span>表示进程意外杀死后才重启
-</span></span><span style="display:flex;"><span>startretries<span style="color:#f92672">=</span><span style="color:#ae81ff">3</span>       ; 启动失败自动重试次数<span style="color:#960050;background-color:#1e0010">，</span>默认是3
-</span></span><span style="display:flex;"><span>user<span style="color:#f92672">=</span>tomcat          ; 用哪个用户启动进程<span style="color:#960050;background-color:#1e0010">，</span>默认是root
-</span></span><span style="display:flex;"><span>priority<span style="color:#f92672">=</span><span style="color:#ae81ff">999</span>         ; 进程启动优先级<span style="color:#960050;background-color:#1e0010">，</span>默认999<span style="color:#960050;background-color:#1e0010">，</span>值小的优先启动
-</span></span><span style="display:flex;"><span>redirect_stderr<span style="color:#f92672">=</span>true ; 把stderr重定向到stdout<span style="color:#960050;background-color:#1e0010">，</span>默认false
-</span></span><span style="display:flex;"><span>stdout_logfile_maxbytes<span style="color:#f92672">=</span><span style="color:#ae81ff">20</span>MB  ; stdout 日志文件大小<span style="color:#960050;background-color:#1e0010">，</span>默认50MB
-</span></span><span style="display:flex;"><span>stdout_logfile_backups <span style="color:#f92672">=</span> <span style="color:#ae81ff">20</span>   ; stdout 日志文件备份数<span style="color:#960050;background-color:#1e0010">，</span>默认是10
-</span></span><span style="display:flex;"><span>; stdout 日志文件<span style="color:#960050;background-color:#1e0010">，</span>需要注意当指定目录不存在时无法正常启动<span style="color:#960050;background-color:#1e0010">，</span>所以需要手动创建目录<span style="color:#960050;background-color:#1e0010">（</span>supervisord 会自动创建日志文件<span style="color:#960050;background-color:#1e0010">）</span>
-</span></span><span style="display:flex;"><span>stdout_logfile<span style="color:#f92672">=/</span>opt<span style="color:#f92672">/</span>apache<span style="color:#f92672">-</span>tomcat<span style="color:#f92672">-</span><span style="color:#ae81ff">8.0.35</span><span style="color:#f92672">/</span>logs<span style="color:#f92672">/</span>catalina<span style="color:#f92672">.</span>out
-</span></span><span style="display:flex;"><span>stopasgroup<span style="color:#f92672">=</span>false     ;默认为false,进程被杀死时<span style="color:#960050;background-color:#1e0010">，</span>是否向这个进程组发送stop信号<span style="color:#960050;background-color:#1e0010">，</span>包括子进程
-</span></span><span style="display:flex;"><span>killasgroup<span style="color:#f92672">=</span>false     ;默认为false<span style="color:#960050;background-color:#1e0010">，</span>向进程组发送kill信号<span style="color:#960050;background-color:#1e0010">，</span>包括子进程
-</span></span><span style="display:flex;"><span> 
-</span></span><span style="display:flex;"><span>;包含其它配置文件
-</span></span><span style="display:flex;"><span>[include]
-</span></span><span style="display:flex;"><span>files <span style="color:#f92672">=</span> relative<span style="color:#f92672">/</span>directory<span style="color:#f92672">/*.</span>ini    ;可以指定一个或多个以<span style="color:#f92672">.</span>ini结束的配置文件
+<!doctype html><html class=no-js lang=en><head><meta charset=UTF-8><meta name=viewport content="width=device-width,initial-scale=1"><title>Supervisor安装及使用 - 臭大佬博客</title><script>(function(e,t){e[t]=e[t].replace("no-js","js")})(document.documentElement,"className")</script><meta name=description content="Supervisor安装及使用"><link rel=preconnect href=https://fonts.gstatic.com crossorigin><link rel=dns-prefetch href=//fonts.googleapis.com><link rel=dns-prefetch href=//fonts.gstatic.com><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700"><link rel=stylesheet href=/choudalao.github.io/css/style.css><link rel="shortcut icon" href=/choudalao.github.io/favicon.ico></head><body class=body><div class="container container--outer"><header class=header><div class="container header__container"><div class=logo><a class=logo__link href=/choudalao.github.io/ title=臭大佬博客 rel=home><div class="logo__item logo__text"><div class=logo__title>臭大佬博客</div></div></a></div><nav class=menu><button class=menu__btn aria-haspopup=true aria-expanded=false tabindex=0>
+<span class=menu__btn-title tabindex=-1>菜单</span></button><ul class=menu__list><li class=menu__item><a class=menu__link href=/choudalao.github.io/><span class=menu__text>首页</span></a></li><li class=menu__item><a class=menu__link href=/choudalao.github.io/post/><span class=menu__text>归档</span></a></li><li class=menu__item><a class=menu__link href=/choudalao.github.io/about/><span class=menu__text>关于</span></a></li></ul></nav></div></header><div class="wrapper flex"><div class=primary><main class=main role=main><article class=post><header class=post__header><h1 class=post__title>Supervisor安装及使用</h1></header><div class="content post__content clearfix"><h1 id=介绍>介绍</h1><p>Supervisor官网：http://supervisord.org。
+Supervisor是用Python开发的一套通用的进程管理程序，能将一个普通的命令行进程变为后台daemon，并监控进程状态，异常退出时能自动重启。它是通过fork/exec的方式把这些被管理的进程当作supervisor的子进程来启动，这样只要在supervisor的配置文件中，把要管理的进程的可执行文件的路径写进去即可。也实现当子进程挂掉的时候，父进程可以准确获取子进程挂掉的信息的，可以选择是否自己启动和报警。supervisor还提供了一个功能，可以为supervisord或者每个子进程，设置一个非root的user，这个user就可以管理它对应的进程。</p><p>注：本文以centos7为例。</p><h1 id=安装>安装</h1><h3 id=直接安装>直接安装</h3><h5 id=centos>CentOS</h5><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-python data-lang=python><span style=display:flex><span>yum install supervisor
+</span></span></code></pre></div><h5 id=ubuntu>ubuntu</h5><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-shell data-lang=shell><span style=display:flex><span>sudo apt-get install supervisor
+</span></span></code></pre></div><p><img src=https://www.choudalao.com/uploads/20200428/20200428155114r4FBSQ.png alt></p><h1 id=使用centos为例>使用(centos为例)</h1><p>supervisor配置文件：/etc/supervisord.conf
+<img src=https://www.choudalao.com/uploads/20200428/20200428155715PK1YYZ.png alt></p><p>子进程配置文件路径：/etc/supervisord.d/</p><h1 id=配置文件说明>配置文件说明</h1><p>supervisor.conf配置文件说明：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-python data-lang=python><span style=display:flex><span>[unix_http_server]
+</span></span><span style=display:flex><span>file<span style=color:#f92672>=/</span>tmp<span style=color:#f92672>/</span>supervisor<span style=color:#f92672>.</span>sock   ;UNIX socket 文件<span style=color:#960050;background-color:#1e0010>，</span>supervisorctl 会使用
+</span></span><span style=display:flex><span>;chmod<span style=color:#f92672>=</span><span style=color:#ae81ff>0700</span>                 ;socket文件的mode<span style=color:#960050;background-color:#1e0010>，</span>默认是0700
+</span></span><span style=display:flex><span>;chown<span style=color:#f92672>=</span>nobody:nogroup       ;socket文件的owner<span style=color:#960050;background-color:#1e0010>，</span>格式<span style=color:#960050;background-color:#1e0010>：</span>uid:gid
+</span></span><span style=display:flex><span> 
+</span></span><span style=display:flex><span>;[inet_http_server]         ;HTTP服务器<span style=color:#960050;background-color:#1e0010>，</span>提供web管理界面
+</span></span><span style=display:flex><span>;port<span style=color:#f92672>=</span><span style=color:#ae81ff>127.0.0.1</span>:<span style=color:#ae81ff>9001</span>        ;Web管理后台运行的IP和端口<span style=color:#960050;background-color:#1e0010>，</span>如果开放到公网<span style=color:#960050;background-color:#1e0010>，</span>需要注意安全性
+</span></span><span style=display:flex><span>;username<span style=color:#f92672>=</span>user              ;登录管理后台的用户名
+</span></span><span style=display:flex><span>;password<span style=color:#f92672>=</span><span style=color:#ae81ff>123</span>               ;登录管理后台的密码
+</span></span><span style=display:flex><span> 
+</span></span><span style=display:flex><span>[supervisord]
+</span></span><span style=display:flex><span>logfile<span style=color:#f92672>=/</span>tmp<span style=color:#f92672>/</span>supervisord<span style=color:#f92672>.</span>log ;日志文件<span style=color:#960050;background-color:#1e0010>，</span>默认是 <span style=color:#960050;background-color:#1e0010>$</span>CWD<span style=color:#f92672>/</span>supervisord<span style=color:#f92672>.</span>log
+</span></span><span style=display:flex><span>logfile_maxbytes<span style=color:#f92672>=</span><span style=color:#ae81ff>50</span>MB        ;日志文件大小<span style=color:#960050;background-color:#1e0010>，</span>超出会rotate<span style=color:#960050;background-color:#1e0010>，</span>默认 <span style=color:#ae81ff>50</span>MB<span style=color:#960050;background-color:#1e0010>，</span>如果设成0<span style=color:#960050;background-color:#1e0010>，</span>表示不限制大小
+</span></span><span style=display:flex><span>logfile_backups<span style=color:#f92672>=</span><span style=color:#ae81ff>10</span>           ;日志文件保留备份数量默认10<span style=color:#960050;background-color:#1e0010>，</span>设为0表示不备份
+</span></span><span style=display:flex><span>loglevel<span style=color:#f92672>=</span>info                ;日志级别<span style=color:#960050;background-color:#1e0010>，</span>默认info<span style=color:#960050;background-color:#1e0010>，</span>其它: debug,warn,trace
+</span></span><span style=display:flex><span>pidfile<span style=color:#f92672>=/</span>tmp<span style=color:#f92672>/</span>supervisord<span style=color:#f92672>.</span>pid ;pid 文件
+</span></span><span style=display:flex><span>nodaemon<span style=color:#f92672>=</span>false               ;是否在前台启动<span style=color:#960050;background-color:#1e0010>，</span>默认是false<span style=color:#960050;background-color:#1e0010>，</span>即以 daemon 的方式启动
+</span></span><span style=display:flex><span>minfds<span style=color:#f92672>=</span><span style=color:#ae81ff>1024</span>                  ;可以打开的文件描述符的最小值<span style=color:#960050;background-color:#1e0010>，</span>默认 <span style=color:#ae81ff>1024</span>
+</span></span><span style=display:flex><span>minprocs<span style=color:#f92672>=</span><span style=color:#ae81ff>200</span>                 ;可以打开的进程数的最小值<span style=color:#960050;background-color:#1e0010>，</span>默认 <span style=color:#ae81ff>200</span>
+</span></span><span style=display:flex><span> 
+</span></span><span style=display:flex><span>[supervisorctl]
+</span></span><span style=display:flex><span>serverurl<span style=color:#f92672>=</span>unix:<span style=color:#f92672>///</span>tmp<span style=color:#f92672>/</span>supervisor<span style=color:#f92672>.</span>sock ;通过UNIX socket连接supervisord<span style=color:#960050;background-color:#1e0010>，</span>路径与unix_http_server部分的file一致
+</span></span><span style=display:flex><span>;serverurl<span style=color:#f92672>=</span>http:<span style=color:#f92672>//</span><span style=color:#ae81ff>127.0.0.1</span>:<span style=color:#ae81ff>9001</span> ; 通过HTTP的方式连接supervisord
+</span></span><span style=display:flex><span> 
+</span></span><span style=display:flex><span>; [program:xx]是被管理的进程配置参数<span style=color:#960050;background-color:#1e0010>，</span>xx是进程的名称
+</span></span><span style=display:flex><span>[program:xx]
+</span></span><span style=display:flex><span>command<span style=color:#f92672>=/</span>opt<span style=color:#f92672>/</span>apache<span style=color:#f92672>-</span>tomcat<span style=color:#f92672>-</span><span style=color:#ae81ff>8.0.35</span><span style=color:#f92672>/</span>bin<span style=color:#f92672>/</span>catalina<span style=color:#f92672>.</span>sh run  ; 程序启动命令
+</span></span><span style=display:flex><span>autostart<span style=color:#f92672>=</span>true       ; 在supervisord启动的时候也自动启动
+</span></span><span style=display:flex><span>startsecs<span style=color:#f92672>=</span><span style=color:#ae81ff>10</span>         ; 启动10秒后没有异常退出<span style=color:#960050;background-color:#1e0010>，</span>就表示进程正常启动了<span style=color:#960050;background-color:#1e0010>，</span>默认为1秒
+</span></span><span style=display:flex><span>autorestart<span style=color:#f92672>=</span>true     ; 程序退出后自动重启,可选值<span style=color:#960050;background-color:#1e0010>：</span>[unexpected,true,false]<span style=color:#960050;background-color:#1e0010>，</span>默认为unexpected<span style=color:#960050;background-color:#1e0010>，</span>表示进程意外杀死后才重启
+</span></span><span style=display:flex><span>startretries<span style=color:#f92672>=</span><span style=color:#ae81ff>3</span>       ; 启动失败自动重试次数<span style=color:#960050;background-color:#1e0010>，</span>默认是3
+</span></span><span style=display:flex><span>user<span style=color:#f92672>=</span>tomcat          ; 用哪个用户启动进程<span style=color:#960050;background-color:#1e0010>，</span>默认是root
+</span></span><span style=display:flex><span>priority<span style=color:#f92672>=</span><span style=color:#ae81ff>999</span>         ; 进程启动优先级<span style=color:#960050;background-color:#1e0010>，</span>默认999<span style=color:#960050;background-color:#1e0010>，</span>值小的优先启动
+</span></span><span style=display:flex><span>redirect_stderr<span style=color:#f92672>=</span>true ; 把stderr重定向到stdout<span style=color:#960050;background-color:#1e0010>，</span>默认false
+</span></span><span style=display:flex><span>stdout_logfile_maxbytes<span style=color:#f92672>=</span><span style=color:#ae81ff>20</span>MB  ; stdout 日志文件大小<span style=color:#960050;background-color:#1e0010>，</span>默认50MB
+</span></span><span style=display:flex><span>stdout_logfile_backups <span style=color:#f92672>=</span> <span style=color:#ae81ff>20</span>   ; stdout 日志文件备份数<span style=color:#960050;background-color:#1e0010>，</span>默认是10
+</span></span><span style=display:flex><span>; stdout 日志文件<span style=color:#960050;background-color:#1e0010>，</span>需要注意当指定目录不存在时无法正常启动<span style=color:#960050;background-color:#1e0010>，</span>所以需要手动创建目录<span style=color:#960050;background-color:#1e0010>（</span>supervisord 会自动创建日志文件<span style=color:#960050;background-color:#1e0010>）</span>
+</span></span><span style=display:flex><span>stdout_logfile<span style=color:#f92672>=/</span>opt<span style=color:#f92672>/</span>apache<span style=color:#f92672>-</span>tomcat<span style=color:#f92672>-</span><span style=color:#ae81ff>8.0.35</span><span style=color:#f92672>/</span>logs<span style=color:#f92672>/</span>catalina<span style=color:#f92672>.</span>out
+</span></span><span style=display:flex><span>stopasgroup<span style=color:#f92672>=</span>false     ;默认为false,进程被杀死时<span style=color:#960050;background-color:#1e0010>，</span>是否向这个进程组发送stop信号<span style=color:#960050;background-color:#1e0010>，</span>包括子进程
+</span></span><span style=display:flex><span>killasgroup<span style=color:#f92672>=</span>false     ;默认为false<span style=color:#960050;background-color:#1e0010>，</span>向进程组发送kill信号<span style=color:#960050;background-color:#1e0010>，</span>包括子进程
+</span></span><span style=display:flex><span> 
+</span></span><span style=display:flex><span>;包含其它配置文件
+</span></span><span style=display:flex><span>[include]
+</span></span><span style=display:flex><span>files <span style=color:#f92672>=</span> relative<span style=color:#f92672>/</span>directory<span style=color:#f92672>/*.</span>ini    ;可以指定一个或多个以<span style=color:#f92672>.</span>ini结束的配置文件
 </span></span></code></pre></div><p>子进程配置文件说明：
-给需要管理的子进程(程序)编写一个配置文件，放在/etc/supervisor.d/目录下，以.ini作为扩展名（每个进程的配置文件都可以单独分拆也可以把相关的脚本放一起）。如任意定义一个和脚本相关的项目名称的选项组（/etc/supervisord.d/test.conf）</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e">#项目名</span>
-</span></span><span style="display:flex;"><span>[program:blog]
-</span></span><span style="display:flex;"><span><span style="color:#75715e">#脚本目录</span>
-</span></span><span style="display:flex;"><span>directory<span style="color:#f92672">=/</span>opt<span style="color:#f92672">/</span>bin
-</span></span><span style="display:flex;"><span><span style="color:#75715e">#脚本执行命令</span>
-</span></span><span style="display:flex;"><span>command<span style="color:#f92672">=/</span>usr<span style="color:#f92672">/</span>bin<span style="color:#f92672">/</span>python <span style="color:#f92672">/</span>opt<span style="color:#f92672">/</span>bin<span style="color:#f92672">/</span>test<span style="color:#f92672">.</span>py
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e">#supervisor启动的时候是否随着同时启动，默认True</span>
-</span></span><span style="display:flex;"><span>autostart<span style="color:#f92672">=</span>true
-</span></span><span style="display:flex;"><span><span style="color:#75715e">#当程序exit的时候，这个program不会自动重启,默认unexpected，设置子进程挂掉后自动重启的情况，有三个选项，false,unexpected和true。如果为false的时候，无论什么情况下，都不会被重新启动，如果为unexpected，只有当进程的退出码不在下面的exitcodes里面定义的</span>
-</span></span><span style="display:flex;"><span>autorestart<span style="color:#f92672">=</span>false
-</span></span><span style="display:flex;"><span><span style="color:#75715e">#这个选项是子进程启动多少秒之后，此时状态如果是running，则我们认为启动成功了。默认值为1</span>
-</span></span><span style="display:flex;"><span>startsecs<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e">#脚本运行的用户身份 </span>
-</span></span><span style="display:flex;"><span>user <span style="color:#f92672">=</span> test
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e">#日志输出 </span>
-</span></span><span style="display:flex;"><span>stderr_logfile<span style="color:#f92672">=/</span>tmp<span style="color:#f92672">/</span>blog_stderr<span style="color:#f92672">.</span>log 
-</span></span><span style="display:flex;"><span>stdout_logfile<span style="color:#f92672">=/</span>tmp<span style="color:#f92672">/</span>blog_stdout<span style="color:#f92672">.</span>log 
-</span></span><span style="display:flex;"><span><span style="color:#75715e">#把stderr重定向到stdout，默认 false</span>
-</span></span><span style="display:flex;"><span>redirect_stderr <span style="color:#f92672">=</span> true
-</span></span><span style="display:flex;"><span><span style="color:#75715e">#stdout日志文件大小，默认 50MB</span>
-</span></span><span style="display:flex;"><span>stdout_logfile_maxbytes <span style="color:#f92672">=</span> <span style="color:#ae81ff">20</span>M
-</span></span><span style="display:flex;"><span><span style="color:#75715e">#stdout日志文件备份数</span>
-</span></span><span style="display:flex;"><span>stdout_logfile_backups <span style="color:#f92672">=</span> <span style="color:#ae81ff">20</span>
-</span></span></code></pre></div><p>子进程配置示例：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e">#说明同上</span>
-</span></span><span style="display:flex;"><span>[program:test] 
-</span></span><span style="display:flex;"><span>directory<span style="color:#f92672">=/</span>opt<span style="color:#f92672">/</span>bin 
-</span></span><span style="display:flex;"><span>command<span style="color:#f92672">=/</span>opt<span style="color:#f92672">/</span>bin<span style="color:#f92672">/</span>test
-</span></span><span style="display:flex;"><span>autostart<span style="color:#f92672">=</span>true 
-</span></span><span style="display:flex;"><span>autorestart<span style="color:#f92672">=</span>false 
-</span></span><span style="display:flex;"><span>stderr_logfile<span style="color:#f92672">=/</span>tmp<span style="color:#f92672">/</span>test_stderr<span style="color:#f92672">.</span>log 
-</span></span><span style="display:flex;"><span>stdout_logfile<span style="color:#f92672">=/</span>tmp<span style="color:#f92672">/</span>test_stdout<span style="color:#f92672">.</span>log 
-</span></span><span style="display:flex;"><span><span style="color:#75715e">#user = test  </span>
-</span></span></code></pre></div><h1 id="命令说明">命令说明</h1>
-<h4 id="常用命令">常用命令</h4>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>supervisorctl status        //查看所有进程的状态
-</span></span><span style="display:flex;"><span>supervisorctl stop es       //停止es
-</span></span><span style="display:flex;"><span>supervisorctl start es      //启动es
-</span></span><span style="display:flex;"><span>supervisorctl restart       //重启es
-</span></span><span style="display:flex;"><span>supervisorctl update        //配置文件修改后使用该命令加载新的配置
-</span></span><span style="display:flex;"><span>supervisorctl reload        //重新启动配置中的所有程序
-</span></span></code></pre></div><p>注：把es换成all可以管理配置中的所有进程。直接输入supervisorctl进入supervisorctl的shell交互界面，此时上面的命令不带supervisorctl可直接使用。</p>
-<h1 id="注意事项">注意事项</h1>
-<p>使用supervisor进程管理命令之前先启动supervisord，否则程序报错。
+给需要管理的子进程(程序)编写一个配置文件，放在/etc/supervisor.d/目录下，以.ini作为扩展名（每个进程的配置文件都可以单独分拆也可以把相关的脚本放一起）。如任意定义一个和脚本相关的项目名称的选项组（/etc/supervisord.d/test.conf）</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-python data-lang=python><span style=display:flex><span><span style=color:#75715e>#项目名</span>
+</span></span><span style=display:flex><span>[program:blog]
+</span></span><span style=display:flex><span><span style=color:#75715e>#脚本目录</span>
+</span></span><span style=display:flex><span>directory<span style=color:#f92672>=/</span>opt<span style=color:#f92672>/</span>bin
+</span></span><span style=display:flex><span><span style=color:#75715e>#脚本执行命令</span>
+</span></span><span style=display:flex><span>command<span style=color:#f92672>=/</span>usr<span style=color:#f92672>/</span>bin<span style=color:#f92672>/</span>python <span style=color:#f92672>/</span>opt<span style=color:#f92672>/</span>bin<span style=color:#f92672>/</span>test<span style=color:#f92672>.</span>py
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>#supervisor启动的时候是否随着同时启动，默认True</span>
+</span></span><span style=display:flex><span>autostart<span style=color:#f92672>=</span>true
+</span></span><span style=display:flex><span><span style=color:#75715e>#当程序exit的时候，这个program不会自动重启,默认unexpected，设置子进程挂掉后自动重启的情况，有三个选项，false,unexpected和true。如果为false的时候，无论什么情况下，都不会被重新启动，如果为unexpected，只有当进程的退出码不在下面的exitcodes里面定义的</span>
+</span></span><span style=display:flex><span>autorestart<span style=color:#f92672>=</span>false
+</span></span><span style=display:flex><span><span style=color:#75715e>#这个选项是子进程启动多少秒之后，此时状态如果是running，则我们认为启动成功了。默认值为1</span>
+</span></span><span style=display:flex><span>startsecs<span style=color:#f92672>=</span><span style=color:#ae81ff>1</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>#脚本运行的用户身份 </span>
+</span></span><span style=display:flex><span>user <span style=color:#f92672>=</span> test
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>#日志输出 </span>
+</span></span><span style=display:flex><span>stderr_logfile<span style=color:#f92672>=/</span>tmp<span style=color:#f92672>/</span>blog_stderr<span style=color:#f92672>.</span>log 
+</span></span><span style=display:flex><span>stdout_logfile<span style=color:#f92672>=/</span>tmp<span style=color:#f92672>/</span>blog_stdout<span style=color:#f92672>.</span>log 
+</span></span><span style=display:flex><span><span style=color:#75715e>#把stderr重定向到stdout，默认 false</span>
+</span></span><span style=display:flex><span>redirect_stderr <span style=color:#f92672>=</span> true
+</span></span><span style=display:flex><span><span style=color:#75715e>#stdout日志文件大小，默认 50MB</span>
+</span></span><span style=display:flex><span>stdout_logfile_maxbytes <span style=color:#f92672>=</span> <span style=color:#ae81ff>20</span>M
+</span></span><span style=display:flex><span><span style=color:#75715e>#stdout日志文件备份数</span>
+</span></span><span style=display:flex><span>stdout_logfile_backups <span style=color:#f92672>=</span> <span style=color:#ae81ff>20</span>
+</span></span></code></pre></div><p>子进程配置示例：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-python data-lang=python><span style=display:flex><span><span style=color:#75715e>#说明同上</span>
+</span></span><span style=display:flex><span>[program:test] 
+</span></span><span style=display:flex><span>directory<span style=color:#f92672>=/</span>opt<span style=color:#f92672>/</span>bin 
+</span></span><span style=display:flex><span>command<span style=color:#f92672>=/</span>opt<span style=color:#f92672>/</span>bin<span style=color:#f92672>/</span>test
+</span></span><span style=display:flex><span>autostart<span style=color:#f92672>=</span>true 
+</span></span><span style=display:flex><span>autorestart<span style=color:#f92672>=</span>false 
+</span></span><span style=display:flex><span>stderr_logfile<span style=color:#f92672>=/</span>tmp<span style=color:#f92672>/</span>test_stderr<span style=color:#f92672>.</span>log 
+</span></span><span style=display:flex><span>stdout_logfile<span style=color:#f92672>=/</span>tmp<span style=color:#f92672>/</span>test_stdout<span style=color:#f92672>.</span>log 
+</span></span><span style=display:flex><span><span style=color:#75715e>#user = test  </span>
+</span></span></code></pre></div><h1 id=命令说明>命令说明</h1><h4 id=常用命令>常用命令</h4><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-shell data-lang=shell><span style=display:flex><span>supervisorctl status        //查看所有进程的状态
+</span></span><span style=display:flex><span>supervisorctl stop es       //停止es
+</span></span><span style=display:flex><span>supervisorctl start es      //启动es
+</span></span><span style=display:flex><span>supervisorctl restart       //重启es
+</span></span><span style=display:flex><span>supervisorctl update        //配置文件修改后使用该命令加载新的配置
+</span></span><span style=display:flex><span>supervisorctl reload        //重新启动配置中的所有程序
+</span></span></code></pre></div><p>注：把es换成all可以管理配置中的所有进程。直接输入supervisorctl进入supervisorctl的shell交互界面，此时上面的命令不带supervisorctl可直接使用。</p><h1 id=注意事项>注意事项</h1><p>使用supervisor进程管理命令之前先启动supervisord，否则程序报错。
 使用命令supervisord -c /etc/supervisord.conf启动。
-若是centos7：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>systemctl start supervisord.service     //启动supervisor并加载默认配置文件
-</span></span><span style="display:flex;"><span>systemctl enable supervisord.service    //将supervisor加入开机启动项
-</span></span></code></pre></div><h1 id="常见问题">常见问题</h1>
-<p>unix:///var/run/supervisor.sock no such file
+若是centos7：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-shell data-lang=shell><span style=display:flex><span>systemctl start supervisord.service     //启动supervisor并加载默认配置文件
+</span></span><span style=display:flex><span>systemctl enable supervisord.service    //将supervisor加入开机启动项
+</span></span></code></pre></div><h1 id=常见问题>常见问题</h1><p>unix:///var/run/supervisor.sock no such file
 问题描述：安装好supervisor没有开启服务直接使用supervisorctl报的错
-解决办法：supervisord -c /etc/supervisord.conf</p>
-<p>command中指定的进程已经起来，但supervisor还不断重启
+解决办法：supervisord -c /etc/supervisord.conf</p><p>command中指定的进程已经起来，但supervisor还不断重启
 问题描述：command中启动方式为后台启动，导致识别不到pid，然后不断重启，这里使用的是elasticsearch，command指定的是$path/bin/elasticsearch -d
-解决办法：supervisor无法检测后台启动进程的pid，而supervisor本身就是后台启动守护进程，因此不用担心这个</p>
-<p>启动了多个supervisord服务，导致无法正常关闭服务
+解决办法：supervisor无法检测后台启动进程的pid，而supervisor本身就是后台启动守护进程，因此不用担心这个</p><p>启动了多个supervisord服务，导致无法正常关闭服务
 问题描述：在运行supervisord -c /etc/supervisord.conf之前，直接运行过supervisord -c /etc/supervisord.d/xx.conf导致有些进程被多个superviord管理，无法正常关闭进程。
-解决办法：使用ps -fe | grep supervisord查看所有启动过的supervisord服务，kill相关的进程。</p>
-<h1 id="参考文章">参考文章：</h1>
-<p>作者：风吹我已散博客
+解决办法：使用ps -fe | grep supervisord查看所有启动过的supervisord服务，kill相关的进程。</p><h1 id=参考文章>参考文章：</h1><p>作者：风吹我已散博客
 链接：https://www.jianshu.com/p/0b9054b33db3
-来源：简书</p>
-
-		</div>
-	</article>
-</main>
-
-
-
-
-			</div>
-			
-		</div>
-		<footer class="footer">
-	<div class="container footer__container flex">
-		
-		<div class="footer__copyright">
-			&copy; 2026 臭大佬博客.
-			<span class="footer__copyright-credits">基于 <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> 引擎和 <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> 主题</span>
-		</div>
-	</div>
-</footer>
-	</div>
-<script async defer src="/js/menu.js"></script>
-</body>
-</html>
+来源：简书</p></div></article></main></div></div><footer class=footer><div class="container footer__container flex"><div class=footer__copyright>&copy; 2026 臭大佬博客.
+<span class=footer__copyright-credits>基于 <a href=https://gohugo.io/ rel="nofollow noopener" target=_blank>Hugo</a> 引擎和 <a href=https://github.com/Vimux/Mainroad/ rel="nofollow noopener" target=_blank>Mainroad</a> 主题</span></div></div></footer></div><script async defer src=/choudalao.github.io/js/menu.js></script></body></html>

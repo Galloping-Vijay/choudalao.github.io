@@ -1,82 +1,6 @@
-<!DOCTYPE html>
-<html class="no-js" lang="en">
-<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>laravel里面的CSRF设置 - 臭大佬博客</title>
-	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
-	<meta name="description" content="laravel里面的CSRF设置">
-	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-	<link rel="dns-prefetch" href="//fonts.googleapis.com">
-	<link rel="dns-prefetch" href="//fonts.gstatic.com">
-	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
-
-	<link rel="stylesheet" href="/css/style.css">
-	
-
-	<link rel="shortcut icon" href="/favicon.ico">
-		
-</head>
-<body class="body">
-	<div class="container container--outer">
-		<header class="header">
-	<div class="container header__container">
-		
-	<div class="logo">
-		<a class="logo__link" href="/" title="臭大佬博客" rel="home">
-			<div class="logo__item logo__text">
-					<div class="logo__title">臭大佬博客</div>
-					
-				</div>
-		</a>
-	</div>
-		
-<nav class="menu">
-	<button class="menu__btn" aria-haspopup="true" aria-expanded="false" tabindex="0">
-		<span class="menu__btn-title" tabindex="-1">菜单</span>
-	</button>
-	<ul class="menu__list">
-		<li class="menu__item">
-			<a class="menu__link" href="/">
-				
-				<span class="menu__text">首页</span>
-				
-			</a>
-		</li>
-		<li class="menu__item">
-			<a class="menu__link" href="/post/">
-				
-				<span class="menu__text">归档</span>
-				
-			</a>
-		</li>
-		<li class="menu__item">
-			<a class="menu__link" href="/about/">
-				
-				<span class="menu__text">关于</span>
-				
-			</a>
-		</li>
-	</ul>
-</nav>
-
-	</div>
-</header>
-		<div class="wrapper flex">
-			<div class="primary">
-			
-<main class="main" role="main">
-	<article class="post">
-		<header class="post__header">
-			<h1 class="post__title">laravel里面的CSRF设置</h1>
-			
-		</header>
-		<div class="content post__content clearfix">
-			<!-- raw HTML omitted -->
-<p>use Closure;
-use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken as BaseVerifier;</p>
-<p>class VerifyCsrfToken extends BaseVerifier {</p>
-<pre><code>/**
+<!doctype html><html class=no-js lang=en><head><meta charset=UTF-8><meta name=viewport content="width=device-width,initial-scale=1"><title>laravel里面的CSRF设置 - 臭大佬博客</title><script>(function(e,t){e[t]=e[t].replace("no-js","js")})(document.documentElement,"className")</script><meta name=description content="laravel里面的CSRF设置"><link rel=preconnect href=https://fonts.gstatic.com crossorigin><link rel=dns-prefetch href=//fonts.googleapis.com><link rel=dns-prefetch href=//fonts.gstatic.com><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700"><link rel=stylesheet href=/choudalao.github.io/css/style.css><link rel="shortcut icon" href=/choudalao.github.io/favicon.ico></head><body class=body><div class="container container--outer"><header class=header><div class="container header__container"><div class=logo><a class=logo__link href=/choudalao.github.io/ title=臭大佬博客 rel=home><div class="logo__item logo__text"><div class=logo__title>臭大佬博客</div></div></a></div><nav class=menu><button class=menu__btn aria-haspopup=true aria-expanded=false tabindex=0>
+<span class=menu__btn-title tabindex=-1>菜单</span></button><ul class=menu__list><li class=menu__item><a class=menu__link href=/choudalao.github.io/><span class=menu__text>首页</span></a></li><li class=menu__item><a class=menu__link href=/choudalao.github.io/post/><span class=menu__text>归档</span></a></li><li class=menu__item><a class=menu__link href=/choudalao.github.io/about/><span class=menu__text>关于</span></a></li></ul></nav></div></header><div class="wrapper flex"><div class=primary><main class=main role=main><article class=post><header class=post__header><h1 class=post__title>laravel里面的CSRF设置</h1></header><div class="content post__content clearfix"><p>use Closure;
+use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken as BaseVerifier;</p><p>class VerifyCsrfToken extends BaseVerifier {</p><pre><code>/**
  * Handle an incoming request.
  *
  * @param  \Illuminate\Http\Request  $request
@@ -90,12 +14,8 @@ public function handle($request, Closure $next)
     // 禁用CSRF
     return $next($request);
 }
-</code></pre>
-<p>}<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->CSRF的使用有两种方法：<!-- raw HTML omitted --><!-- raw HTML omitted -->第一种<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->在HTML的代码中加入：<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->&lt; input type=&ldquo;hidden&rdquo; name=&quot;_token&quot; value=&quot;{{ csrf_token() }}&quot;/&gt;<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->第二种<!-- raw HTML omitted --><!-- raw HTML omitted -->使用cookie方式。<!-- raw HTML omitted --><!-- raw HTML omitted -->使用cookie方式的CSRF，可以不用在每个页面都加入这个input的hidden标签。<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->使用cookie方式，需要把app\Http\Middleware\VerifyCsrfToken.php修改为：<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->namespace App\Http\Middleware;</p>
-<p>use Closure;
-use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken as BaseVerifier;</p>
-<p>class VerifyCsrfToken extends BaseVerifier {</p>
-<pre><code>/**
+</code></pre><p>}CSRF的使用有两种方法：第一种在HTML的代码中加入：&lt; input type=&ldquo;hidden&rdquo; name="_token" value="{{ csrf_token() }}"/>第二种使用cookie方式。使用cookie方式的CSRF，可以不用在每个页面都加入这个input的hidden标签。使用cookie方式，需要把app\Http\Middleware\VerifyCsrfToken.php修改为：namespace App\Http\Middleware;</p><p>use Closure;
+use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken as BaseVerifier;</p><p>class VerifyCsrfToken extends BaseVerifier {</p><pre><code>/**
  * Handle an incoming request.
  *
  * @param  \Illuminate\Http\Request  $request
@@ -106,12 +26,8 @@ public function handle($request, Closure $next)
 {
     return parent::addCookieToResponse($request, $next($request));
 }
-</code></pre>
-<p>}<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->只对GET的方式提交使用CSRF，对POST方式提交表单禁用CSRF<!-- raw HTML omitted --><!-- raw HTML omitted -->对指定的表单[提交方式]使用CSRF，如：<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->namespace App\Http\Middleware;</p>
-<p>use Closure;
-use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken as BaseVerifier;</p>
-<p>class VerifyCsrfToken extends BaseVerifier {</p>
-<pre><code>/**
+</code></pre><p>}只对GET的方式提交使用CSRF，对POST方式提交表单禁用CSRF对指定的表单[提交方式]使用CSRF，如：namespace App\Http\Middleware;</p><p>use Closure;
+use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken as BaseVerifier;</p><p>class VerifyCsrfToken extends BaseVerifier {</p><pre><code>/**
  * Handle an incoming request.
  *
  * @param  \Illuminate\Http\Request  $request
@@ -132,56 +48,16 @@ public function handle($request, Closure $next)
     }
     throw new TokenMismatchException;
 }
-</code></pre>
-<p>}<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->修改CSRF的cookie名称方法<!-- raw HTML omitted --><!-- raw HTML omitted -->要修改这个名称值，可以到打开这个文件：vendor\laravel\framework\src\Illuminate\Foundation\Http\Middleware\VerifyCsrfToken.php 找到”XSRF-TOKEN“，修改<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->/**</p>
-<ul>
-<li>
-<p>Add the CSRF token to the response cookies.
-*</p>
-</li>
-<li>
-<p>@param  \Illuminate\Http\Request  $request</p>
-</li>
-<li>
-<p>@param  \Symfony\Component\HttpFoundation\Response  $response</p>
-</li>
-<li>
-<p>@return \Symfony\Component\HttpFoundation\Response
+</code></pre><p>}修改CSRF的cookie名称方法要修改这个名称值，可以到打开这个文件：vendor\laravel\framework\src\Illuminate\Foundation\Http\Middleware\VerifyCsrfToken.php 找到”XSRF-TOKEN“，修改/**</p><ul><li><p>Add the CSRF token to the response cookies.
+*</p></li><li><p>@param \Illuminate\Http\Request $request</p></li><li><p>@param \Symfony\Component\HttpFoundation\Response $response</p></li><li><p>@return \Symfony\Component\HttpFoundation\Response
 */
 protected function addCookieToResponse($request, $response)
 {
-$config = config(&lsquo;session&rsquo;);</p>
-<p>$response-&gt;headers-&gt;setCookie(
+$config = config(&lsquo;session&rsquo;);</p><p>$response->headers->setCookie(
 new Cookie(
-&lsquo;XSRF-TOKEN&rsquo;, $request-&gt;session()-&gt;token(), $this-&gt;availableAt(60 * $config[&rsquo;lifetime&rsquo;]),
+&lsquo;XSRF-TOKEN&rsquo;, $request->session()->token(), $this->availableAt(60 * $config[&rsquo;lifetime&rsquo;]),
 $config[&lsquo;path&rsquo;], $config[&lsquo;domain&rsquo;], $config[&lsquo;secure&rsquo;], false, false, $config[&lsquo;same_site&rsquo;] ?? null
 )
-);</p>
-<p>return $response;
-}<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->也可以在app\Http\Middleware\VerifyCsrfToken.php文件中，重写addCookieToResponse()方法做到<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --></p>
-</li>
-</ul>
-
-		</div>
-	</article>
-</main>
-
-
-
-
-			</div>
-			
-		</div>
-		<footer class="footer">
-	<div class="container footer__container flex">
-		
-		<div class="footer__copyright">
-			&copy; 2026 臭大佬博客.
-			<span class="footer__copyright-credits">基于 <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> 引擎和 <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> 主题</span>
-		</div>
-	</div>
-</footer>
-	</div>
-<script async defer src="/js/menu.js"></script>
-</body>
-</html>
+);</p><p>return $response;
+}也可以在app\Http\Middleware\VerifyCsrfToken.php文件中，重写addCookieToResponse()方法做到</p></li></ul></div></article></main></div></div><footer class=footer><div class="container footer__container flex"><div class=footer__copyright>&copy; 2026 臭大佬博客.
+<span class=footer__copyright-credits>基于 <a href=https://gohugo.io/ rel="nofollow noopener" target=_blank>Hugo</a> 引擎和 <a href=https://github.com/Vimux/Mainroad/ rel="nofollow noopener" target=_blank>Mainroad</a> 主题</span></div></div></footer></div><script async defer src=/choudalao.github.io/js/menu.js></script></body></html>

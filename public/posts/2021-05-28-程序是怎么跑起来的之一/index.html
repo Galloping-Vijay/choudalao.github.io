@@ -1,266 +1,63 @@
-<!DOCTYPE html>
-<html class="no-js" lang="en">
-<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>程序是怎么跑起来的之一 - 臭大佬博客</title>
-	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
-	<meta name="description" content="程序是怎么跑起来的学习笔记">
-	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-	<link rel="dns-prefetch" href="//fonts.googleapis.com">
-	<link rel="dns-prefetch" href="//fonts.gstatic.com">
-	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
-
-	<link rel="stylesheet" href="/css/style.css">
-	
-
-	<link rel="shortcut icon" href="/favicon.ico">
-		
-</head>
-<body class="body">
-	<div class="container container--outer">
-		<header class="header">
-	<div class="container header__container">
-		
-	<div class="logo">
-		<a class="logo__link" href="/" title="臭大佬博客" rel="home">
-			<div class="logo__item logo__text">
-					<div class="logo__title">臭大佬博客</div>
-					
-				</div>
-		</a>
-	</div>
-		
-<nav class="menu">
-	<button class="menu__btn" aria-haspopup="true" aria-expanded="false" tabindex="0">
-		<span class="menu__btn-title" tabindex="-1">菜单</span>
-	</button>
-	<ul class="menu__list">
-		<li class="menu__item">
-			<a class="menu__link" href="/">
-				
-				<span class="menu__text">首页</span>
-				
-			</a>
-		</li>
-		<li class="menu__item">
-			<a class="menu__link" href="/post/">
-				
-				<span class="menu__text">归档</span>
-				
-			</a>
-		</li>
-		<li class="menu__item">
-			<a class="menu__link" href="/about/">
-				
-				<span class="menu__text">关于</span>
-				
-			</a>
-		</li>
-	</ul>
-</nav>
-
-	</div>
-</header>
-		<div class="wrapper flex">
-			<div class="primary">
-			
-<main class="main" role="main">
-	<article class="post">
-		<header class="post__header">
-			<h1 class="post__title">程序是怎么跑起来的之一</h1>
-			
-		</header>
-		<div class="content post__content clearfix">
-			<h1 id="cpu-是什么">CPU 是什么</h1>
-<h3 id="程序是什么">程序是什么？</h3>
-<p>指示计算机每一步动作的一组指令</p>
-<h3 id="程序是由什么组成的">程序是由什么组成的？</h3>
-<p>程序是指令和数据的组合体。</p>
-<h3 id="什么是机器语言">什么是机器语言？</h3>
-<p>CPU 能够直接识别和执行的只有机器语言。使用 C、Java 等语言编写的程序，最后都会转化成机器语言。</p>
-<h3 id="内存">内存</h3>
-<p>通常所说的内存指的是计算机的主存储器（main memory），简称主存。主存通过控制芯片等与 CPU 相连，主要负责存储指令和数据。主存由可读写的元素构成，每个字节（1 字节 = 8 位 ）都带有一个地址编号。CPU 可以通过该地址读取主存中的指令和数据，当然也可以写入数据。但有一点需要注意，主存中存储的指令和数据会随着计算机的关机而自动清除。</p>
-<p>正在运行的程序存储在内存中。</p>
-<p>内存地址是指内存中用来表示命令和数据存储位置的数值。</p>
-<p>硬盘和磁盘等媒介上保存的程序被复制到内存后才能运行。内存中存命令和数据的场所，通过地址来标记和指定。地址由整数值表示。</p>
-<h3 id="cpu-的内部结构解析">CPU 的内部结构解析</h3>
-<p>CPU 所负责的就是解释和运行最终转换成机器语言的程序内容。</p>
-<p>CPU 和内存是由许多晶体管组成的电子部件，通常称为 IC（Integrated Circuit，集成电路）。从功能方面来看，CPU的内部由寄存器、控制器、运算器和时钟四个部分构成，各部分之间由电流信号相互连通。 寄存器可用来暂存指令、数据等处理对象，可以将其看作是内存的一种。根据种类的不同，一个 CPU 内部会有20～100 个寄存器。 控制器负责把内存上的指令、数据等读入寄存器，并根据指令的执行结果来控制整个计算机。 运算器负责运算从内存读入寄存器的数据。 时钟负责发出 CPU 开始计时的时钟信号。不过，也有些计算机的时钟位于 CPU 的外部。</p>
-<h4 id="工作流程">工作流程</h4>
-<p>程序启动后，根据时钟信号，控制器会从内存中读取指令和数据。通过对这些指令加以解释和运行，运算器就会对数据进行运算，控制器根据该运算结果来控制计算机。</p>
-<h3 id="cpu-是寄存器的集合体">CPU 是寄存器的集合体</h3>
-<p><img src="https://www.choudalao.com/uploads/20210602/202106021956337pgDuj.png" alt=""></p>
-<p>寄存器中存储的内容既可以是指令也可以是数据。其中，数据分为“用于运算的数值”和“表示内存地址的数值”两种。数据种类不同，存储该数值的寄存器也不同。</p>
-<p>标志寄存器的第一个字节位、第二个字节位和第三个字节位的值为 1 时，表示运算结果分别为正数、零和负数。</p>
-<p><img src="https://www.choudalao.com/uploads/20210602/20210602195902GsLwpz.png" alt=""></p>
-<h4 id="函数的调用机制">函数的调用机制</h4>
-<p>函数调用处理也是通过把程序计数器的值设定成函数的存储地址来实现的。不过，这和条件分支、循环的机制有所不同，因为单纯的跳转指令无法实现函数的调用。函数的调用需要在完成函数内部的处理后，处理流程再返回到函数调用点（函数调用指令的下一个地址）。因此，如果只是跳转到函数的入口地址，处理流程就不知道应该返回至哪里了。</p>
-<p>函数调用使用的是 call 指令，而不是跳转指令。在将函数的入口地址设定到程序计数器之前， call 指令会把调用函数后要执行的指令地址存储在名为栈的主存内。函数处理完毕后，再通过函数的出口来执行 return 命令。 return 命令的功能是把保存在栈中的地址设定到程序计数器中。</p>
-<h4 id="通过地址和索引实现数组">通过地址和索引实现数组</h4>
-<p>数组是指同样长度的数据在内存中进行连续排列的数据构造。用一个数组名来表示全体数据，通过索引来区分数组的各个数据（元素）。</p>
-<p>基址寄存器存储数据的起始地址，变址寄存器存储相对地址，在内存中，读取数组的某个元素，就是基址寄存器＋变址寄存器的值解释为实际查看的内存地址。变址寄存器的值就相当于高级编程语言程序中数组的索引功能。</p>
-<p><img src="https://www.choudalao.com/uploads/20210602/20210602201648LGG08p.png" alt=""></p>
-<h1 id="数据是用二进制数表示的">数据是用二进制数表示的</h1>
-<p>IC 的所有引脚，只有直流电压0V 或 5V两个状态。也就是说，IC 的一个引脚，只能表示两个状态。决定了计算机的信息数据只能用二进制数来处理。由于 1 位（一个引脚）只能表示两个状态，计算机处理信息的最小单位—— 位，就相当于二进制中的一位。位的英文 bit 是二进制数位（binary digit）的缩写。</p>
-<p><img src="https://www.choudalao.com/uploads/20210602/20210602202729zYFymW.png" alt=""></p>
-<p>8 位二进制数被称为一个字节。字节是最基本的信息计量单位。位是最小单位，字节是基本单位。内存和磁盘都使用字节单位来存储和读写数据，使用位单位则无法读写数据。因此，字节是信息的基本单位。</p>
-<p>对于用二进制数表示的信息，计算机不会区分它是数值、文字，还是某种图片的模式等，而是根据编写程序的各位对计算机发出的指示来进行信息的处理（运算）。具体进行何种处理，取决于程序的编写方式。</p>
-<h4 id="二级制数转十进制数">二级制数转十进制数</h4>
-<p>只需将二进制数的各数位的值和位权相乘，然后将相乘的结果相加即可。</p>
-<p><img src="https://www.choudalao.com/uploads/20210602/20210602203155el265e.png" alt=""></p>
-<p>二进制数中表示负数值时，一般会把最高位作为符号来使用，因此我们把这个最高位称为符号位。 符号位是 0 时表示正数 ，符号位是1 时表示负数。</p>
-<p>计算机在做减法运算时，实际上内部是在做加法运算。用加法运算来实现减法运算，为此，在表示负数时就需要使用“二进制的补数”。 补数就是用正数来表示负数，</p>
-<p>为了获得补数，我们需要将二进制数的各数位的数值全部取反 ，然后再将结果加 1。补数求解的变换方法就是“取反＋ 1”。</p>
-<p><img src="https://www.choudalao.com/uploads/20210602/202106022049065zkeBj.png" alt=""></p>
-<p>有一点需要注意，当运算结果为负数时，计算结果的值也是以补数的形式来表示的。比如 3－ 5 这个运算，用 8 位二进制数表示3 时 为 00000011， 而 5 = 00000101 的 补 数 为“取 反＋ 1”， 也 就 是11111011。因此 3－ 5 其实就是 00000011＋ 11111011 的运算。</p>
-<p>0000011 + 11111011 的运算结果为 11111110，最高位变成了1。这就表示结果是一个负数，这点大家应该都能理解。通过求解补数的补数，就可知该值的绝对值。11111110 的补数，取反加 1 后为00000010。这个是 2 的十进制数。因此，11111110 表示的就是－ 2。</p>
-<p><img src="https://www.choudalao.com/uploads/20210602/20210602205814rRhzFJ.png" alt=""></p>
-<h4 id="逻辑右移和算术右移">逻辑右移和算术右移</h4>
-<h5 id="逻辑右移">逻辑右移</h5>
-<p>右移有移位后在最高位补 0 和补 1 两种情况。当二进制数的值表示图形模式而非数值时，移位后需要在最高位补 0。这就称为 逻辑右移</p>
-<h5 id="算术右移">算术右移</h5>
-<p>将二进制数作为带符号的数值进行运算时，移位后要在最高位填充移位前符号位的值（0 或 1）。这就称为算术右移。如果数值是用补数表示的负数值，那么右移后在空出来的最高位补 1，就可以正确地实现 1/2、1/4、1/8 等的数值运算。如果是正数，只需在最高位补 0即可。</p>
-<h5 id="符号扩充">符号扩充</h5>
-<p>不管是正数还是用补数表示的负数，都只需用符号位的值（0 或者 1）填充高位即可。</p>
-<p><img src="https://www.choudalao.com/uploads/20210602/20210602210902T1Kwjn.png" alt=""></p>
-<h3 id="逻辑运算">逻辑运算</h3>
-<p>算术运算是指加减乘除四则运算。 逻辑运算是指对二进制数各数字位的 0 和 1分别进行处理的运算，包括逻辑非（NOT 运算）、逻辑与（AND 运算）、逻辑或（OR 运算）和逻辑异或（XOR 运算 A ）四种。</p>
-<p>逻辑非指的是 0 变成 1、1 变成 0 的取反操作。 逻辑与?指的“两个都是 1”时，运算结果为 1，其他情况下运算结果都为 0 的运算。 逻辑或?指的是“至少有一方是 1”时，运算结果为 1，其他情况下运算结果都是 0 的运算。 逻辑异或?指的是排斥相同数值的运算。</p>
-<h1 id="浮点数">浮点数</h1>
-<p>有一些十进制数的小数无法转换成二进制数，十进制数 0.1，就无法用二进制数正确表示，小数点后面即使有几百位也无法表示。</p>
-<p>双精度浮点数类型用 64 位、 单精度浮点数类型用 32 位来表示全体小数。在 C 语言中，双精度浮点数类型和单精度浮点数类型分别用 double 和 float 来表示。</p>
-<p>浮点数是指用符号、尾数、基数和指数这四部分来表示的小数。
-二进制基数自然就是 2。</p>
-<p><img src="https://www.choudalao.com/uploads/20210602/20210602213310LAiGTy.png" alt="">
-<img src="https://www.choudalao.com/uploads/20210602/20210602213442LDr83O.png" alt=""></p>
-<p>符号部分是指使用一个数据位来表示数值的符号。该数据位是 1时表示负，为 0 时则表示“正或者 0”。</p>
-<p>尾数部分用的是“将小数点前面的值固定为 1 的正则表达式”
-<img src="https://www.choudalao.com/uploads/20210602/20210602215256ofrqAJ.png" alt=""></p>
-<p>指数部分用的则是“EXCESS 系统表现”。
-通过将指数部分表示范围的中间值设为 0，使得负数不需要用符号来表示。也就是说，当指数部分是 8 位单精度浮点数时，最大值 11111111 = 255 的 1/2，即 01111111 = 127（小数部分舍弃表示的是 0。双精度指数部分是 11 位双精度浮点数时，11111111111 =2047 的 1/2，即 01111111111 = 1023（小数部分舍弃）表示的是 0。</p>
-<p><img src="https://www.choudalao.com/uploads/20210602/20210602223859hNLN0e.png" alt=""></p>
-<h5 id="用于确认单精度浮点数表示方法的-c-语言程序">用于确认单精度浮点数表示方法的 C 语言程序</h5>
-<p>test.c 文件</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;stdio.h&gt;</span><span style="color:#75715e">
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;string.h&gt;</span><span style="color:#75715e">
-</span></span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">main</span>()
-</span></span><span style="display:flex;"><span>{
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">float</span> data;
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">long</span> buff;
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">int</span> i;
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">char</span> s[<span style="color:#ae81ff">34</span>];
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 将 0.75 以单精度浮点数的形式存储在变量 date 中。
-</span></span></span><span style="display:flex;"><span>    data <span style="color:#f92672">=</span> (<span style="color:#66d9ef">float</span>)<span style="color:#ae81ff">0.1</span>;
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 把数据复制到 4 字节长度的整数变量 buff 中以逐个提取出每一位。
-</span></span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">memcpy</span>(<span style="color:#f92672">&amp;</span>buff, <span style="color:#f92672">&amp;</span>data, <span style="color:#ae81ff">4</span>);
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 逐一提取出每一位
-</span></span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> (i <span style="color:#f92672">=</span> <span style="color:#ae81ff">33</span>; i <span style="color:#f92672">&gt;=</span> <span style="color:#ae81ff">0</span>; i<span style="color:#f92672">--</span>)
-</span></span><span style="display:flex;"><span>    {
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (i <span style="color:#f92672">==</span> <span style="color:#ae81ff">1</span> <span style="color:#f92672">||</span> i <span style="color:#f92672">==</span> <span style="color:#ae81ff">10</span>)
-</span></span><span style="display:flex;"><span>        {
-</span></span><span style="display:flex;"><span>            <span style="color:#75715e">// 加入破折号来区分符号部分、指数部分和尾数部分。
-</span></span></span><span style="display:flex;"><span>            s[i] <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;-&#39;</span>;
-</span></span><span style="display:flex;"><span>        }
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">else</span>
-</span></span><span style="display:flex;"><span>        {
-</span></span><span style="display:flex;"><span>            <span style="color:#75715e">// 为各个字节赋值 &#39;0&#39; 或者 &#39;1&#39;。
-</span></span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> (buff <span style="color:#f92672">%</span> <span style="color:#ae81ff">2</span> <span style="color:#f92672">==</span> <span style="color:#ae81ff">1</span>)
-</span></span><span style="display:flex;"><span>            {
-</span></span><span style="display:flex;"><span>                s[i] <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;1&#39;</span>;
-</span></span><span style="display:flex;"><span>            }
-</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">else</span>
-</span></span><span style="display:flex;"><span>            {
-</span></span><span style="display:flex;"><span>                s[i] <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;0&#39;</span>;
-</span></span><span style="display:flex;"><span>            }
-</span></span><span style="display:flex;"><span>            buff <span style="color:#f92672">/=</span> <span style="color:#ae81ff">2</span>;
-</span></span><span style="display:flex;"><span>        }
-</span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>    s[<span style="color:#ae81ff">34</span>] <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;\0&#39;</span>;
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 显示结果。
-</span></span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">printf</span>(<span style="color:#e6db74">&#34;%s</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>, s);
-</span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><p>编译</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-c" data-lang="c"><span style="display:flex;"><span>gcc <span style="color:#f92672">-</span>o test test.c
-</span></span></code></pre></div><p>执行</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-c" data-lang="c"><span style="display:flex;"><span>.<span style="color:#f92672">/</span>test
-</span></span></code></pre></div><p>结果</p>
-<pre tabindex="0"><code>root@19d6e902d0ff:/www/wwwroot# ./test
+<!doctype html><html class=no-js lang=en><head><meta charset=UTF-8><meta name=viewport content="width=device-width,initial-scale=1"><title>程序是怎么跑起来的之一 - 臭大佬博客</title><script>(function(e,t){e[t]=e[t].replace("no-js","js")})(document.documentElement,"className")</script><meta name=description content="程序是怎么跑起来的学习笔记"><link rel=preconnect href=https://fonts.gstatic.com crossorigin><link rel=dns-prefetch href=//fonts.googleapis.com><link rel=dns-prefetch href=//fonts.gstatic.com><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700"><link rel=stylesheet href=/choudalao.github.io/css/style.css><link rel="shortcut icon" href=/choudalao.github.io/favicon.ico></head><body class=body><div class="container container--outer"><header class=header><div class="container header__container"><div class=logo><a class=logo__link href=/choudalao.github.io/ title=臭大佬博客 rel=home><div class="logo__item logo__text"><div class=logo__title>臭大佬博客</div></div></a></div><nav class=menu><button class=menu__btn aria-haspopup=true aria-expanded=false tabindex=0>
+<span class=menu__btn-title tabindex=-1>菜单</span></button><ul class=menu__list><li class=menu__item><a class=menu__link href=/choudalao.github.io/><span class=menu__text>首页</span></a></li><li class=menu__item><a class=menu__link href=/choudalao.github.io/post/><span class=menu__text>归档</span></a></li><li class=menu__item><a class=menu__link href=/choudalao.github.io/about/><span class=menu__text>关于</span></a></li></ul></nav></div></header><div class="wrapper flex"><div class=primary><main class=main role=main><article class=post><header class=post__header><h1 class=post__title>程序是怎么跑起来的之一</h1></header><div class="content post__content clearfix"><h1 id=cpu-是什么>CPU 是什么</h1><h3 id=程序是什么>程序是什么？</h3><p>指示计算机每一步动作的一组指令</p><h3 id=程序是由什么组成的>程序是由什么组成的？</h3><p>程序是指令和数据的组合体。</p><h3 id=什么是机器语言>什么是机器语言？</h3><p>CPU 能够直接识别和执行的只有机器语言。使用 C、Java 等语言编写的程序，最后都会转化成机器语言。</p><h3 id=内存>内存</h3><p>通常所说的内存指的是计算机的主存储器（main memory），简称主存。主存通过控制芯片等与 CPU 相连，主要负责存储指令和数据。主存由可读写的元素构成，每个字节（1 字节 = 8 位 ）都带有一个地址编号。CPU 可以通过该地址读取主存中的指令和数据，当然也可以写入数据。但有一点需要注意，主存中存储的指令和数据会随着计算机的关机而自动清除。</p><p>正在运行的程序存储在内存中。</p><p>内存地址是指内存中用来表示命令和数据存储位置的数值。</p><p>硬盘和磁盘等媒介上保存的程序被复制到内存后才能运行。内存中存命令和数据的场所，通过地址来标记和指定。地址由整数值表示。</p><h3 id=cpu-的内部结构解析>CPU 的内部结构解析</h3><p>CPU 所负责的就是解释和运行最终转换成机器语言的程序内容。</p><p>CPU 和内存是由许多晶体管组成的电子部件，通常称为 IC（Integrated Circuit，集成电路）。从功能方面来看，CPU的内部由寄存器、控制器、运算器和时钟四个部分构成，各部分之间由电流信号相互连通。 寄存器可用来暂存指令、数据等处理对象，可以将其看作是内存的一种。根据种类的不同，一个 CPU 内部会有20～100 个寄存器。 控制器负责把内存上的指令、数据等读入寄存器，并根据指令的执行结果来控制整个计算机。 运算器负责运算从内存读入寄存器的数据。 时钟负责发出 CPU 开始计时的时钟信号。不过，也有些计算机的时钟位于 CPU 的外部。</p><h4 id=工作流程>工作流程</h4><p>程序启动后，根据时钟信号，控制器会从内存中读取指令和数据。通过对这些指令加以解释和运行，运算器就会对数据进行运算，控制器根据该运算结果来控制计算机。</p><h3 id=cpu-是寄存器的集合体>CPU 是寄存器的集合体</h3><p><img src=https://www.choudalao.com/uploads/20210602/202106021956337pgDuj.png alt></p><p>寄存器中存储的内容既可以是指令也可以是数据。其中，数据分为“用于运算的数值”和“表示内存地址的数值”两种。数据种类不同，存储该数值的寄存器也不同。</p><p>标志寄存器的第一个字节位、第二个字节位和第三个字节位的值为 1 时，表示运算结果分别为正数、零和负数。</p><p><img src=https://www.choudalao.com/uploads/20210602/20210602195902GsLwpz.png alt></p><h4 id=函数的调用机制>函数的调用机制</h4><p>函数调用处理也是通过把程序计数器的值设定成函数的存储地址来实现的。不过，这和条件分支、循环的机制有所不同，因为单纯的跳转指令无法实现函数的调用。函数的调用需要在完成函数内部的处理后，处理流程再返回到函数调用点（函数调用指令的下一个地址）。因此，如果只是跳转到函数的入口地址，处理流程就不知道应该返回至哪里了。</p><p>函数调用使用的是 call 指令，而不是跳转指令。在将函数的入口地址设定到程序计数器之前， call 指令会把调用函数后要执行的指令地址存储在名为栈的主存内。函数处理完毕后，再通过函数的出口来执行 return 命令。 return 命令的功能是把保存在栈中的地址设定到程序计数器中。</p><h4 id=通过地址和索引实现数组>通过地址和索引实现数组</h4><p>数组是指同样长度的数据在内存中进行连续排列的数据构造。用一个数组名来表示全体数据，通过索引来区分数组的各个数据（元素）。</p><p>基址寄存器存储数据的起始地址，变址寄存器存储相对地址，在内存中，读取数组的某个元素，就是基址寄存器＋变址寄存器的值解释为实际查看的内存地址。变址寄存器的值就相当于高级编程语言程序中数组的索引功能。</p><p><img src=https://www.choudalao.com/uploads/20210602/20210602201648LGG08p.png alt></p><h1 id=数据是用二进制数表示的>数据是用二进制数表示的</h1><p>IC 的所有引脚，只有直流电压0V 或 5V两个状态。也就是说，IC 的一个引脚，只能表示两个状态。决定了计算机的信息数据只能用二进制数来处理。由于 1 位（一个引脚）只能表示两个状态，计算机处理信息的最小单位—— 位，就相当于二进制中的一位。位的英文 bit 是二进制数位（binary digit）的缩写。</p><p><img src=https://www.choudalao.com/uploads/20210602/20210602202729zYFymW.png alt></p><p>8 位二进制数被称为一个字节。字节是最基本的信息计量单位。位是最小单位，字节是基本单位。内存和磁盘都使用字节单位来存储和读写数据，使用位单位则无法读写数据。因此，字节是信息的基本单位。</p><p>对于用二进制数表示的信息，计算机不会区分它是数值、文字，还是某种图片的模式等，而是根据编写程序的各位对计算机发出的指示来进行信息的处理（运算）。具体进行何种处理，取决于程序的编写方式。</p><h4 id=二级制数转十进制数>二级制数转十进制数</h4><p>只需将二进制数的各数位的值和位权相乘，然后将相乘的结果相加即可。</p><p><img src=https://www.choudalao.com/uploads/20210602/20210602203155el265e.png alt></p><p>二进制数中表示负数值时，一般会把最高位作为符号来使用，因此我们把这个最高位称为符号位。 符号位是 0 时表示正数 ，符号位是1 时表示负数。</p><p>计算机在做减法运算时，实际上内部是在做加法运算。用加法运算来实现减法运算，为此，在表示负数时就需要使用“二进制的补数”。 补数就是用正数来表示负数，</p><p>为了获得补数，我们需要将二进制数的各数位的数值全部取反 ，然后再将结果加 1。补数求解的变换方法就是“取反＋ 1”。</p><p><img src=https://www.choudalao.com/uploads/20210602/202106022049065zkeBj.png alt></p><p>有一点需要注意，当运算结果为负数时，计算结果的值也是以补数的形式来表示的。比如 3－ 5 这个运算，用 8 位二进制数表示3 时 为 00000011， 而 5 = 00000101 的 补 数 为“取 反＋ 1”， 也 就 是11111011。因此 3－ 5 其实就是 00000011＋ 11111011 的运算。</p><p>0000011 + 11111011 的运算结果为 11111110，最高位变成了1。这就表示结果是一个负数，这点大家应该都能理解。通过求解补数的补数，就可知该值的绝对值。11111110 的补数，取反加 1 后为00000010。这个是 2 的十进制数。因此，11111110 表示的就是－ 2。</p><p><img src=https://www.choudalao.com/uploads/20210602/20210602205814rRhzFJ.png alt></p><h4 id=逻辑右移和算术右移>逻辑右移和算术右移</h4><h5 id=逻辑右移>逻辑右移</h5><p>右移有移位后在最高位补 0 和补 1 两种情况。当二进制数的值表示图形模式而非数值时，移位后需要在最高位补 0。这就称为 逻辑右移</p><h5 id=算术右移>算术右移</h5><p>将二进制数作为带符号的数值进行运算时，移位后要在最高位填充移位前符号位的值（0 或 1）。这就称为算术右移。如果数值是用补数表示的负数值，那么右移后在空出来的最高位补 1，就可以正确地实现 1/2、1/4、1/8 等的数值运算。如果是正数，只需在最高位补 0即可。</p><h5 id=符号扩充>符号扩充</h5><p>不管是正数还是用补数表示的负数，都只需用符号位的值（0 或者 1）填充高位即可。</p><p><img src=https://www.choudalao.com/uploads/20210602/20210602210902T1Kwjn.png alt></p><h3 id=逻辑运算>逻辑运算</h3><p>算术运算是指加减乘除四则运算。 逻辑运算是指对二进制数各数字位的 0 和 1分别进行处理的运算，包括逻辑非（NOT 运算）、逻辑与（AND 运算）、逻辑或（OR 运算）和逻辑异或（XOR 运算 A ）四种。</p><p>逻辑非指的是 0 变成 1、1 变成 0 的取反操作。 逻辑与?指的“两个都是 1”时，运算结果为 1，其他情况下运算结果都为 0 的运算。 逻辑或?指的是“至少有一方是 1”时，运算结果为 1，其他情况下运算结果都是 0 的运算。 逻辑异或?指的是排斥相同数值的运算。</p><h1 id=浮点数>浮点数</h1><p>有一些十进制数的小数无法转换成二进制数，十进制数 0.1，就无法用二进制数正确表示，小数点后面即使有几百位也无法表示。</p><p>双精度浮点数类型用 64 位、 单精度浮点数类型用 32 位来表示全体小数。在 C 语言中，双精度浮点数类型和单精度浮点数类型分别用 double 和 float 来表示。</p><p>浮点数是指用符号、尾数、基数和指数这四部分来表示的小数。
+二进制基数自然就是 2。</p><p><img src=https://www.choudalao.com/uploads/20210602/20210602213310LAiGTy.png alt>
+<img src=https://www.choudalao.com/uploads/20210602/20210602213442LDr83O.png alt></p><p>符号部分是指使用一个数据位来表示数值的符号。该数据位是 1时表示负，为 0 时则表示“正或者 0”。</p><p>尾数部分用的是“将小数点前面的值固定为 1 的正则表达式”
+<img src=https://www.choudalao.com/uploads/20210602/20210602215256ofrqAJ.png alt></p><p>指数部分用的则是“EXCESS 系统表现”。
+通过将指数部分表示范围的中间值设为 0，使得负数不需要用符号来表示。也就是说，当指数部分是 8 位单精度浮点数时，最大值 11111111 = 255 的 1/2，即 01111111 = 127（小数部分舍弃表示的是 0。双精度指数部分是 11 位双精度浮点数时，11111111111 =2047 的 1/2，即 01111111111 = 1023（小数部分舍弃）表示的是 0。</p><p><img src=https://www.choudalao.com/uploads/20210602/20210602223859hNLN0e.png alt></p><h5 id=用于确认单精度浮点数表示方法的-c-语言程序>用于确认单精度浮点数表示方法的 C 语言程序</h5><p>test.c 文件</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-c data-lang=c><span style=display:flex><span><span style=color:#75715e>#include</span> <span style=color:#75715e>&lt;stdio.h&gt;</span><span style=color:#75715e>
+</span></span></span><span style=display:flex><span><span style=color:#75715e>#include</span> <span style=color:#75715e>&lt;string.h&gt;</span><span style=color:#75715e>
+</span></span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>void</span> <span style=color:#a6e22e>main</span>()
+</span></span><span style=display:flex><span>{
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>float</span> data;
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>unsigned</span> <span style=color:#66d9ef>long</span> buff;
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>int</span> i;
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>char</span> s[<span style=color:#ae81ff>34</span>];
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// 将 0.75 以单精度浮点数的形式存储在变量 date 中。
+</span></span></span><span style=display:flex><span>    data <span style=color:#f92672>=</span> (<span style=color:#66d9ef>float</span>)<span style=color:#ae81ff>0.1</span>;
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// 把数据复制到 4 字节长度的整数变量 buff 中以逐个提取出每一位。
+</span></span></span><span style=display:flex><span>    <span style=color:#a6e22e>memcpy</span>(<span style=color:#f92672>&amp;</span>buff, <span style=color:#f92672>&amp;</span>data, <span style=color:#ae81ff>4</span>);
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// 逐一提取出每一位
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>for</span> (i <span style=color:#f92672>=</span> <span style=color:#ae81ff>33</span>; i <span style=color:#f92672>&gt;=</span> <span style=color:#ae81ff>0</span>; i<span style=color:#f92672>--</span>)
+</span></span><span style=display:flex><span>    {
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>if</span> (i <span style=color:#f92672>==</span> <span style=color:#ae81ff>1</span> <span style=color:#f92672>||</span> i <span style=color:#f92672>==</span> <span style=color:#ae81ff>10</span>)
+</span></span><span style=display:flex><span>        {
+</span></span><span style=display:flex><span>            <span style=color:#75715e>// 加入破折号来区分符号部分、指数部分和尾数部分。
+</span></span></span><span style=display:flex><span>            s[i] <span style=color:#f92672>=</span> <span style=color:#e6db74>&#39;-&#39;</span>;
+</span></span><span style=display:flex><span>        }
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>else</span>
+</span></span><span style=display:flex><span>        {
+</span></span><span style=display:flex><span>            <span style=color:#75715e>// 为各个字节赋值 &#39;0&#39; 或者 &#39;1&#39;。
+</span></span></span><span style=display:flex><span>            <span style=color:#66d9ef>if</span> (buff <span style=color:#f92672>%</span> <span style=color:#ae81ff>2</span> <span style=color:#f92672>==</span> <span style=color:#ae81ff>1</span>)
+</span></span><span style=display:flex><span>            {
+</span></span><span style=display:flex><span>                s[i] <span style=color:#f92672>=</span> <span style=color:#e6db74>&#39;1&#39;</span>;
+</span></span><span style=display:flex><span>            }
+</span></span><span style=display:flex><span>            <span style=color:#66d9ef>else</span>
+</span></span><span style=display:flex><span>            {
+</span></span><span style=display:flex><span>                s[i] <span style=color:#f92672>=</span> <span style=color:#e6db74>&#39;0&#39;</span>;
+</span></span><span style=display:flex><span>            }
+</span></span><span style=display:flex><span>            buff <span style=color:#f92672>/=</span> <span style=color:#ae81ff>2</span>;
+</span></span><span style=display:flex><span>        }
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>    s[<span style=color:#ae81ff>34</span>] <span style=color:#f92672>=</span> <span style=color:#e6db74>&#39;\0&#39;</span>;
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// 显示结果。
+</span></span></span><span style=display:flex><span>    <span style=color:#a6e22e>printf</span>(<span style=color:#e6db74>&#34;%s</span><span style=color:#ae81ff>\n</span><span style=color:#e6db74>&#34;</span>, s);
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>编译</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-c data-lang=c><span style=display:flex><span>gcc <span style=color:#f92672>-</span>o test test.c
+</span></span></code></pre></div><p>执行</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-c data-lang=c><span style=display:flex><span>.<span style=color:#f92672>/</span>test
+</span></span></code></pre></div><p>结果</p><pre tabindex=0><code>root@19d6e902d0ff:/www/wwwroot# ./test
 0-01111011-10011001100110011001101
-</code></pre><h3 id="如何避免计算机计算出错">如何避免计算机计算出错</h3>
-<p>计算机计算出错的原因之一是，采用浮点数来处理小数（另外，也有因“位溢出”而造成计算错误的情况）。</p>
-<h5 id="方法一">方法一</h5>
-<p>把小数转换成整数来计算。</p>
-<h5 id="方法二">方法二</h5>
-<p>BCD（Binary Coded Decimal）也是一种使用二进制表示十进制的方法。</p>
-<h1 id="内存-1">内存</h1>
-<p>内存实际上是一种名为内存 IC 的电子元件。
-内存 IC 中有电源、地址信号、数据信号、控制信号等用于输入输出的大量引脚（IC 的引脚），通过为其指定地址（address），来进行数据的读写。</p>
-<p><img src="https://www.choudalao.com/uploads/20210604/20210604224234zNnF50.png" alt=""></p>
-<p>数据信号引脚有 D0～D7共八个，表示一次可以输入输出 8 位（= 1 字节）的数据。此外，地址信号引脚有 A0～A9 共十个，表示可以指定 0000000000～1111111111 共1024 个地址。而地址用来表示数据的存储场所，因此我们可以得出这个内存 IC 中可以存储 1024 个 1 字节的数据。因为 1024 = 1K，所以该内存 IC 的容量就是 1KB。</p>
-<p>下面让我们继续来看刚才所说的 1KB 的内存 IC。首先，我们假设要往该内存 IC 中写入 1 字节的数据。为了实现该目的，可以给 VCC接入＋５V，给 GND 接入 0V 的电源，并使用 A0～A9 的地址信号来指定数据的存储场所，然后再把数据的值输入给 D0～D7 的数据信号，并把 WR（write = 写入的简写）信号设定成 1。执行完这些操作，就可以在内存 IC 内部写入数据（图 4-2 (a)）了。</p>
-<p>读出数据时，只需通过 A0～A9 的地址信号指定数据的存储场所，然后再将 RD（read = 读出的简写）信号设成 1 即可。执行完这些操作，指定地址中存储的数据就会被输出到 D0～D7 的数据信号引脚（图 4-2(b)）中。另外，像 WR 和 RD 这样可以让 IC 运行的信号称为 控制信号。其中，当 WR 和 RD 同时为 0 时，写入和读出的操作都无法进行。</p>
-<p><img src="https://www.choudalao.com/uploads/20210604/20210604231729Tzn7l3.png" alt=""></p>
-<p>各种类型的变量</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#75715e">// 定义变量
-</span></span></span><span style="display:flex;"><span><span style="color:#a6e22e">char</span> <span style="color:#a6e22e">a</span>;
-</span></span><span style="display:flex;"><span><span style="color:#a6e22e">short</span> <span style="color:#a6e22e">b</span>;
-</span></span><span style="display:flex;"><span><span style="color:#a6e22e">long</span> <span style="color:#a6e22e">c</span>;
-</span></span><span style="display:flex;"><span><span style="color:#75715e">// 给变量赋值
-</span></span></span><span style="display:flex;"><span><span style="color:#a6e22e">a</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">123</span>;
-</span></span><span style="display:flex;"><span><span style="color:#a6e22e">b</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">123</span>;
-</span></span><span style="display:flex;"><span><span style="color:#a6e22e">c</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">123</span>;
-</span></span></code></pre></div><p>这 3 个变量的数据类型分别是，表示 1 字节长度的 char，表示2字节长度的 short，以及表示 4 字节长度的 long 。因此，虽然同样是数据 123，存储时其所占用的内存大小是不一样的。这里，我们假定采用的是将数据低位存储在内存低位地址的低字节序（little endian）方式。</p>
-<p><img src="https://www.choudalao.com/uploads/20210604/20210604232929FvQ1Ax.png" alt=""></p>
-<p>程序中所指定的变量的数据类型的不同，读写的物理内存大小也会随之发生变化。在不同的编程语言中，变量可以指定的数据类型的最大长度也不相同。C 语言中，8 字节（= 64 位）的 double 类型是最大的。</p>
-<h3 id="指针">指针</h3>
-<p>指针也是一种变量，它所表示的不是数据的值，而是存储着数据的内存的地址。</p>
-<p>指针的长度跟系统有关，32位的系统（4字节），指针变量的长度也是32位。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#a6e22e">char</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">d</span>; <span style="color:#75715e">//char 类型的指针 d 的定义
-</span></span></span><span style="display:flex;"><span><span style="color:#a6e22e">short</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">e</span>; <span style="color:#75715e">//short 类型的指针 e 的定义
-</span></span></span><span style="display:flex;"><span><span style="color:#a6e22e">long</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">f</span>; <span style="color:#75715e">//long 类型的指针 f 的定义
+</code></pre><h3 id=如何避免计算机计算出错>如何避免计算机计算出错</h3><p>计算机计算出错的原因之一是，采用浮点数来处理小数（另外，也有因“位溢出”而造成计算错误的情况）。</p><h5 id=方法一>方法一</h5><p>把小数转换成整数来计算。</p><h5 id=方法二>方法二</h5><p>BCD（Binary Coded Decimal）也是一种使用二进制表示十进制的方法。</p><h1 id=内存-1>内存</h1><p>内存实际上是一种名为内存 IC 的电子元件。
+内存 IC 中有电源、地址信号、数据信号、控制信号等用于输入输出的大量引脚（IC 的引脚），通过为其指定地址（address），来进行数据的读写。</p><p><img src=https://www.choudalao.com/uploads/20210604/20210604224234zNnF50.png alt></p><p>数据信号引脚有 D0～D7共八个，表示一次可以输入输出 8 位（= 1 字节）的数据。此外，地址信号引脚有 A0～A9 共十个，表示可以指定 0000000000～1111111111 共1024 个地址。而地址用来表示数据的存储场所，因此我们可以得出这个内存 IC 中可以存储 1024 个 1 字节的数据。因为 1024 = 1K，所以该内存 IC 的容量就是 1KB。</p><p>下面让我们继续来看刚才所说的 1KB 的内存 IC。首先，我们假设要往该内存 IC 中写入 1 字节的数据。为了实现该目的，可以给 VCC接入＋５V，给 GND 接入 0V 的电源，并使用 A0～A9 的地址信号来指定数据的存储场所，然后再把数据的值输入给 D0～D7 的数据信号，并把 WR（write = 写入的简写）信号设定成 1。执行完这些操作，就可以在内存 IC 内部写入数据（图 4-2 (a)）了。</p><p>读出数据时，只需通过 A0～A9 的地址信号指定数据的存储场所，然后再将 RD（read = 读出的简写）信号设成 1 即可。执行完这些操作，指定地址中存储的数据就会被输出到 D0～D7 的数据信号引脚（图 4-2(b)）中。另外，像 WR 和 RD 这样可以让 IC 运行的信号称为 控制信号。其中，当 WR 和 RD 同时为 0 时，写入和读出的操作都无法进行。</p><p><img src=https://www.choudalao.com/uploads/20210604/20210604231729Tzn7l3.png alt></p><p>各种类型的变量</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-php data-lang=php><span style=display:flex><span><span style=color:#75715e>// 定义变量
+</span></span></span><span style=display:flex><span><span style=color:#a6e22e>char</span> <span style=color:#a6e22e>a</span>;
+</span></span><span style=display:flex><span><span style=color:#a6e22e>short</span> <span style=color:#a6e22e>b</span>;
+</span></span><span style=display:flex><span><span style=color:#a6e22e>long</span> <span style=color:#a6e22e>c</span>;
+</span></span><span style=display:flex><span><span style=color:#75715e>// 给变量赋值
+</span></span></span><span style=display:flex><span><span style=color:#a6e22e>a</span> <span style=color:#f92672>=</span> <span style=color:#ae81ff>123</span>;
+</span></span><span style=display:flex><span><span style=color:#a6e22e>b</span> <span style=color:#f92672>=</span> <span style=color:#ae81ff>123</span>;
+</span></span><span style=display:flex><span><span style=color:#a6e22e>c</span> <span style=color:#f92672>=</span> <span style=color:#ae81ff>123</span>;
+</span></span></code></pre></div><p>这 3 个变量的数据类型分别是，表示 1 字节长度的 char，表示2字节长度的 short，以及表示 4 字节长度的 long 。因此，虽然同样是数据 123，存储时其所占用的内存大小是不一样的。这里，我们假定采用的是将数据低位存储在内存低位地址的低字节序（little endian）方式。</p><p><img src=https://www.choudalao.com/uploads/20210604/20210604232929FvQ1Ax.png alt></p><p>程序中所指定的变量的数据类型的不同，读写的物理内存大小也会随之发生变化。在不同的编程语言中，变量可以指定的数据类型的最大长度也不相同。C 语言中，8 字节（= 64 位）的 double 类型是最大的。</p><h3 id=指针>指针</h3><p>指针也是一种变量，它所表示的不是数据的值，而是存储着数据的内存的地址。</p><p>指针的长度跟系统有关，32位的系统（4字节），指针变量的长度也是32位。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-php data-lang=php><span style=display:flex><span><span style=color:#a6e22e>char</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>d</span>; <span style=color:#75715e>//char 类型的指针 d 的定义
+</span></span></span><span style=display:flex><span><span style=color:#a6e22e>short</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>e</span>; <span style=color:#75715e>//short 类型的指针 e 的定义
+</span></span></span><span style=display:flex><span><span style=color:#a6e22e>long</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>f</span>; <span style=color:#75715e>//long 类型的指针 f 的定义
 </span></span></span></code></pre></div><p>在变量名前加一个星号（*），表示指针变量，以上三个指针变量在32位计算机中都是用来存储32位（4字节）的地址变量。前面指定 char（1 字节）、short（2 字节）、long（4 字节）这些数据类型。表示的是从指针存储的地址中一次能够读写的数据字节数。
-假设 d、e、f 的值都是 100。在这种情况下，使用 d 时就能够从编号 100 的地址中读写 1 个字节的数据，使用 e 时就是 2 个字节（100 地址和 101 地址）的数据，使用 f 时就是 4 个字节（100 地址～103 地址）的数据。</p>
-<p><img src="https://www.choudalao.com/uploads/20210605/20210605120949kv6sMJ.png" alt=""></p>
-<h1 id="磁盘">磁盘</h1>
-<p>和内存一样，磁盘也是用于存储数据的。磁盘虽然在物理方面只能以扇区为单位进行读写，但通过在程序中多花一些心思，磁盘也可以以各种形态来使用。</p>
-<p>利用电流来实现存储的内存，同利用磁效应来实现存储的磁盘，还是有差异的。而从存储容量来看，内存是高速高价，而磁盘则是低速廉价。</p>
-<p>扇区是磁盘保存数据的物理单位。</p>
-<h4 id="磁盘缓存">磁盘缓存</h4>
-<p>磁盘缓存是指，把从磁盘中读出的数据存储在内存中，当该数据再次被读取时，不是从磁盘而是直接从内存中高速读出。</p>
-<h4 id="虚拟内存">虚拟内存</h4>
-<p>虚拟内存是指把磁盘的一部分作为假想的内存来使用。这与磁盘缓存是假想的磁盘（实际上是内存）相对，虚拟内存是假想的内存（实际上是磁盘）。</p>
-<p>计算机中主要的存储部件是内存和磁盘。磁盘中存储的程序，必须要加载到内存后才能运行。在磁盘中保存的原始程序是无法直接运行的。这是因为，负责解析和运行程序内容的 CPU，需要通过内部序计数器来指定内存地址，然后才能读出程序 。即使 CPU 可以直接读出并运行磁盘中保存的程序，由于磁盘读取速度慢，程序的运行速度还是会降低。总之，存储在磁盘中的程序需要读入到内存后才能运行。</p>
-<h5 id="栈清理处理">栈清理处理</h5>
-<p>C 语言中，在调用函数后，需要执行栈清理处理指令。 栈清理处理是指，把不需要的数据从接收和传递函数的参数时使用的内存上的栈区域中清理出去。该命令不是程序记述的，而是在程序编译时由编译器自动附加到程序中的。编译器默认将该处理附加在函数调用方。</p>
-<p>在 C 语言中，函数的返回值，是通过寄存器而非栈来返回的。</p>
-<h3 id="磁盘的物理结构">磁盘的物理结构</h3>
-<p>磁盘的物理结构是指磁盘存储数据的形式。</p>
-<p>磁盘是通过把其物理表面划分成多个空间来使用的。划分的方式有 扇区方式和 可变长方式两种，前者是指将磁盘划分为固定长度的空间，后者则是指把磁盘划分为长度可变的空间。</p>
-<p>把磁盘表面分成若干个同心圆的空间就是 磁道?，把磁道按照固定大小（能存储的数据长度相同）划分而成的空间就是 扇区</p>
-<p><img src="https://www.choudalao.com/uploads/20210605/20210605174957KbBqK6.png" alt=""></p>
-
-		</div>
-	</article>
-</main>
-
-
-
-
-			</div>
-			
-		</div>
-		<footer class="footer">
-	<div class="container footer__container flex">
-		
-		<div class="footer__copyright">
-			&copy; 2026 臭大佬博客.
-			<span class="footer__copyright-credits">基于 <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> 引擎和 <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> 主题</span>
-		</div>
-	</div>
-</footer>
-	</div>
-<script async defer src="/js/menu.js"></script>
-</body>
-</html>
+假设 d、e、f 的值都是 100。在这种情况下，使用 d 时就能够从编号 100 的地址中读写 1 个字节的数据，使用 e 时就是 2 个字节（100 地址和 101 地址）的数据，使用 f 时就是 4 个字节（100 地址～103 地址）的数据。</p><p><img src=https://www.choudalao.com/uploads/20210605/20210605120949kv6sMJ.png alt></p><h1 id=磁盘>磁盘</h1><p>和内存一样，磁盘也是用于存储数据的。磁盘虽然在物理方面只能以扇区为单位进行读写，但通过在程序中多花一些心思，磁盘也可以以各种形态来使用。</p><p>利用电流来实现存储的内存，同利用磁效应来实现存储的磁盘，还是有差异的。而从存储容量来看，内存是高速高价，而磁盘则是低速廉价。</p><p>扇区是磁盘保存数据的物理单位。</p><h4 id=磁盘缓存>磁盘缓存</h4><p>磁盘缓存是指，把从磁盘中读出的数据存储在内存中，当该数据再次被读取时，不是从磁盘而是直接从内存中高速读出。</p><h4 id=虚拟内存>虚拟内存</h4><p>虚拟内存是指把磁盘的一部分作为假想的内存来使用。这与磁盘缓存是假想的磁盘（实际上是内存）相对，虚拟内存是假想的内存（实际上是磁盘）。</p><p>计算机中主要的存储部件是内存和磁盘。磁盘中存储的程序，必须要加载到内存后才能运行。在磁盘中保存的原始程序是无法直接运行的。这是因为，负责解析和运行程序内容的 CPU，需要通过内部序计数器来指定内存地址，然后才能读出程序 。即使 CPU 可以直接读出并运行磁盘中保存的程序，由于磁盘读取速度慢，程序的运行速度还是会降低。总之，存储在磁盘中的程序需要读入到内存后才能运行。</p><h5 id=栈清理处理>栈清理处理</h5><p>C 语言中，在调用函数后，需要执行栈清理处理指令。 栈清理处理是指，把不需要的数据从接收和传递函数的参数时使用的内存上的栈区域中清理出去。该命令不是程序记述的，而是在程序编译时由编译器自动附加到程序中的。编译器默认将该处理附加在函数调用方。</p><p>在 C 语言中，函数的返回值，是通过寄存器而非栈来返回的。</p><h3 id=磁盘的物理结构>磁盘的物理结构</h3><p>磁盘的物理结构是指磁盘存储数据的形式。</p><p>磁盘是通过把其物理表面划分成多个空间来使用的。划分的方式有 扇区方式和 可变长方式两种，前者是指将磁盘划分为固定长度的空间，后者则是指把磁盘划分为长度可变的空间。</p><p>把磁盘表面分成若干个同心圆的空间就是 磁道?，把磁道按照固定大小（能存储的数据长度相同）划分而成的空间就是 扇区</p><p><img src=https://www.choudalao.com/uploads/20210605/20210605174957KbBqK6.png alt></p></div></article></main></div></div><footer class=footer><div class="container footer__container flex"><div class=footer__copyright>&copy; 2026 臭大佬博客.
+<span class=footer__copyright-credits>基于 <a href=https://gohugo.io/ rel="nofollow noopener" target=_blank>Hugo</a> 引擎和 <a href=https://github.com/Vimux/Mainroad/ rel="nofollow noopener" target=_blank>Mainroad</a> 主题</span></div></div></footer></div><script async defer src=/choudalao.github.io/js/menu.js></script></body></html>

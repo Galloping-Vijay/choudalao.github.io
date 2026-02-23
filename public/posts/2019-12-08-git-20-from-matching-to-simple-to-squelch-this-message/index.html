@@ -1,130 +1,29 @@
-<!DOCTYPE html>
-<html class="no-js" lang="en">
-<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>Git 2.0 from &#39;matching&#39; to &#39;simple&#39;. To squelch this message - 臭大佬博客</title>
-	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
-	<meta name="description" content="Git 2.0 from &#39;matching&#39; to &#39;simple&#39;. To squelch this message
-and maintain the traditional behavior, use:">
-	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-	<link rel="dns-prefetch" href="//fonts.googleapis.com">
-	<link rel="dns-prefetch" href="//fonts.gstatic.com">
-	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
-
-	<link rel="stylesheet" href="/css/style.css">
-	
-
-	<link rel="shortcut icon" href="/favicon.ico">
-		
-</head>
-<body class="body">
-	<div class="container container--outer">
-		<header class="header">
-	<div class="container header__container">
-		
-	<div class="logo">
-		<a class="logo__link" href="/" title="臭大佬博客" rel="home">
-			<div class="logo__item logo__text">
-					<div class="logo__title">臭大佬博客</div>
-					
-				</div>
-		</a>
-	</div>
-		
-<nav class="menu">
-	<button class="menu__btn" aria-haspopup="true" aria-expanded="false" tabindex="0">
-		<span class="menu__btn-title" tabindex="-1">菜单</span>
-	</button>
-	<ul class="menu__list">
-		<li class="menu__item">
-			<a class="menu__link" href="/">
-				
-				<span class="menu__text">首页</span>
-				
-			</a>
-		</li>
-		<li class="menu__item">
-			<a class="menu__link" href="/post/">
-				
-				<span class="menu__text">归档</span>
-				
-			</a>
-		</li>
-		<li class="menu__item">
-			<a class="menu__link" href="/about/">
-				
-				<span class="menu__text">关于</span>
-				
-			</a>
-		</li>
-	</ul>
-</nav>
-
-	</div>
-</header>
-		<div class="wrapper flex">
-			<div class="primary">
-			
-<main class="main" role="main">
-	<article class="post">
-		<header class="post__header">
-			<h1 class="post__title">Git 2.0 from &#39;matching&#39; to &#39;simple&#39;. To squelch this message</h1>
-			
-		</header>
-		<div class="content post__content clearfix">
-			<h1 id="起因">起因</h1>
-<p>最近在使用git的时候,总是会出现如下提示:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>warning: push.default is unset; its implicit value has changed in
-</span></span><span style="display:flex;"><span>Git 2.0 from <span style="color:#e6db74">&#39;matching&#39;</span> to <span style="color:#e6db74">&#39;simple&#39;</span>. To squelch this message
-</span></span><span style="display:flex;"><span>and maintain the traditional behavior, use:
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>  git config --global push.default matching
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>To squelch this message and adopt the new behavior now, use:
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>  git config --global push.default simple
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>When push.default is set to <span style="color:#e6db74">&#39;matching&#39;</span>, git will push local branches
-</span></span><span style="display:flex;"><span>to the remote branches that already exist with the same name.
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>Since Git 2.0, Git defaults to the more conservative <span style="color:#e6db74">&#39;simple&#39;</span>
-</span></span><span style="display:flex;"><span>behavior, which only pushes the current branch to the corresponding
-</span></span><span style="display:flex;"><span>remote branch that <span style="color:#e6db74">&#39;git pull&#39;</span> uses to update the current branch.
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>See <span style="color:#e6db74">&#39;git help config&#39;</span> and search <span style="color:#66d9ef">for</span> <span style="color:#e6db74">&#39;push.default&#39;</span> <span style="color:#66d9ef">for</span> further information.
-</span></span><span style="display:flex;"><span><span style="color:#f92672">(</span>the <span style="color:#e6db74">&#39;simple&#39;</span> mode was introduced in Git 1.7.11. Use the similar mode
-</span></span><span style="display:flex;"><span><span style="color:#e6db74">&#39;current&#39;</span> instead of <span style="color:#e6db74">&#39;simple&#39;</span> <span style="color:#66d9ef">if</span> you sometimes use older versions of Git<span style="color:#f92672">)</span>
-</span></span></code></pre></div><p><img src="https://www.choudalao.com/uploads/20191208/201912081113129UnAHa.png" alt=""></p>
-<p>#解释
+<!doctype html><html class=no-js lang=en><head><meta charset=UTF-8><meta name=viewport content="width=device-width,initial-scale=1"><title>Git 2.0 from 'matching' to 'simple'. To squelch this message - 臭大佬博客</title><script>(function(e,t){e[t]=e[t].replace("no-js","js")})(document.documentElement,"className")</script><meta name=description content="Git 2.0 from 'matching' to 'simple'. To squelch this message
+and maintain the traditional behavior, use:"><link rel=preconnect href=https://fonts.gstatic.com crossorigin><link rel=dns-prefetch href=//fonts.googleapis.com><link rel=dns-prefetch href=//fonts.gstatic.com><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700"><link rel=stylesheet href=/choudalao.github.io/css/style.css><link rel="shortcut icon" href=/choudalao.github.io/favicon.ico></head><body class=body><div class="container container--outer"><header class=header><div class="container header__container"><div class=logo><a class=logo__link href=/choudalao.github.io/ title=臭大佬博客 rel=home><div class="logo__item logo__text"><div class=logo__title>臭大佬博客</div></div></a></div><nav class=menu><button class=menu__btn aria-haspopup=true aria-expanded=false tabindex=0>
+<span class=menu__btn-title tabindex=-1>菜单</span></button><ul class=menu__list><li class=menu__item><a class=menu__link href=/choudalao.github.io/><span class=menu__text>首页</span></a></li><li class=menu__item><a class=menu__link href=/choudalao.github.io/post/><span class=menu__text>归档</span></a></li><li class=menu__item><a class=menu__link href=/choudalao.github.io/about/><span class=menu__text>关于</span></a></li></ul></nav></div></header><div class="wrapper flex"><div class=primary><main class=main role=main><article class=post><header class=post__header><h1 class=post__title>Git 2.0 from 'matching' to 'simple'. To squelch this message</h1></header><div class="content post__content clearfix"><h1 id=起因>起因</h1><p>最近在使用git的时候,总是会出现如下提示:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-shell data-lang=shell><span style=display:flex><span>warning: push.default is unset; its implicit value has changed in
+</span></span><span style=display:flex><span>Git 2.0 from <span style=color:#e6db74>&#39;matching&#39;</span> to <span style=color:#e6db74>&#39;simple&#39;</span>. To squelch this message
+</span></span><span style=display:flex><span>and maintain the traditional behavior, use:
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  git config --global push.default matching
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>To squelch this message and adopt the new behavior now, use:
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  git config --global push.default simple
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>When push.default is set to <span style=color:#e6db74>&#39;matching&#39;</span>, git will push local branches
+</span></span><span style=display:flex><span>to the remote branches that already exist with the same name.
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Since Git 2.0, Git defaults to the more conservative <span style=color:#e6db74>&#39;simple&#39;</span>
+</span></span><span style=display:flex><span>behavior, which only pushes the current branch to the corresponding
+</span></span><span style=display:flex><span>remote branch that <span style=color:#e6db74>&#39;git pull&#39;</span> uses to update the current branch.
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>See <span style=color:#e6db74>&#39;git help config&#39;</span> and search <span style=color:#66d9ef>for</span> <span style=color:#e6db74>&#39;push.default&#39;</span> <span style=color:#66d9ef>for</span> further information.
+</span></span><span style=display:flex><span><span style=color:#f92672>(</span>the <span style=color:#e6db74>&#39;simple&#39;</span> mode was introduced in Git 1.7.11. Use the similar mode
+</span></span><span style=display:flex><span><span style=color:#e6db74>&#39;current&#39;</span> instead of <span style=color:#e6db74>&#39;simple&#39;</span> <span style=color:#66d9ef>if</span> you sometimes use older versions of Git<span style=color:#f92672>)</span>
+</span></span></code></pre></div><p><img src=https://www.choudalao.com/uploads/20191208/201912081113129UnAHa.png alt></p><p>#解释
 当 push.default 的值设置成 ‘matching’ ，git 将会推送所有本地已存在的同名分支到远程仓库
-从 Git 2.0 开始，git 采用更加保守的值&rsquo;simple&rsquo;，只会推送当前分支到相应的远程仓库，&lsquo;git pull&rsquo; 也将值更新当前分支。</p>
-<p>警告：push.default （默认push）未设置；在Git 2.0 中，push.default 的值从‘matching’改为‘simple’了。消除此警告并保留以前的习惯，输入：
-<code>git config --global push.default matching </code>
-消除此警告并采用新的设置值，输入：<code>git config --global push.default simple </code></p>
-<p>Git 2.0 需要设置 push.default 的值，两者的区别上面也说了，所以我就采用新的保守值吧，输入：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>git config --global push.default simple
-</span></span></code></pre></div>
-		</div>
-	</article>
-</main>
-
-
-
-
-			</div>
-			
-		</div>
-		<footer class="footer">
-	<div class="container footer__container flex">
-		
-		<div class="footer__copyright">
-			&copy; 2026 臭大佬博客.
-			<span class="footer__copyright-credits">基于 <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> 引擎和 <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> 主题</span>
-		</div>
-	</div>
-</footer>
-	</div>
-<script async defer src="/js/menu.js"></script>
-</body>
-</html>
+从 Git 2.0 开始，git 采用更加保守的值&rsquo;simple&rsquo;，只会推送当前分支到相应的远程仓库，&lsquo;git pull&rsquo; 也将值更新当前分支。</p><p>警告：push.default （默认push）未设置；在Git 2.0 中，push.default 的值从‘matching’改为‘simple’了。消除此警告并保留以前的习惯，输入：
+<code>git config --global push.default matching
+</code>消除此警告并采用新的设置值，输入：<code>git config --global push.default simple</code></p><p>Git 2.0 需要设置 push.default 的值，两者的区别上面也说了，所以我就采用新的保守值吧，输入：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-shell data-lang=shell><span style=display:flex><span>git config --global push.default simple
+</span></span></code></pre></div></div></article></main></div></div><footer class=footer><div class="container footer__container flex"><div class=footer__copyright>&copy; 2026 臭大佬博客.
+<span class=footer__copyright-credits>基于 <a href=https://gohugo.io/ rel="nofollow noopener" target=_blank>Hugo</a> 引擎和 <a href=https://github.com/Vimux/Mainroad/ rel="nofollow noopener" target=_blank>Mainroad</a> 主题</span></div></div></footer></div><script async defer src=/choudalao.github.io/js/menu.js></script></body></html>

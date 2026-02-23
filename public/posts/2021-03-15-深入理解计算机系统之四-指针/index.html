@@ -1,186 +1,76 @@
-<!DOCTYPE html>
-<html class="no-js" lang="en">
-<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>深入理解计算机系统之四 -- 指针 - 臭大佬博客</title>
-	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
-	<meta name="description" content="C语言里，变量存放在内存中，而内存其实就是一组有序字节组成的数组，每个字节有唯一的内存地址。指针是一种保存变量地址的变量。">
-	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-	<link rel="dns-prefetch" href="//fonts.googleapis.com">
-	<link rel="dns-prefetch" href="//fonts.gstatic.com">
-	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
-
-	<link rel="stylesheet" href="/css/style.css">
-	
-
-	<link rel="shortcut icon" href="/favicon.ico">
-		
-</head>
-<body class="body">
-	<div class="container container--outer">
-		<header class="header">
-	<div class="container header__container">
-		
-	<div class="logo">
-		<a class="logo__link" href="/" title="臭大佬博客" rel="home">
-			<div class="logo__item logo__text">
-					<div class="logo__title">臭大佬博客</div>
-					
-				</div>
-		</a>
-	</div>
-		
-<nav class="menu">
-	<button class="menu__btn" aria-haspopup="true" aria-expanded="false" tabindex="0">
-		<span class="menu__btn-title" tabindex="-1">菜单</span>
-	</button>
-	<ul class="menu__list">
-		<li class="menu__item">
-			<a class="menu__link" href="/">
-				
-				<span class="menu__text">首页</span>
-				
-			</a>
-		</li>
-		<li class="menu__item">
-			<a class="menu__link" href="/post/">
-				
-				<span class="menu__text">归档</span>
-				
-			</a>
-		</li>
-		<li class="menu__item">
-			<a class="menu__link" href="/about/">
-				
-				<span class="menu__text">关于</span>
-				
-			</a>
-		</li>
-	</ul>
-</nav>
-
-	</div>
-</header>
-		<div class="wrapper flex">
-			<div class="primary">
-			
-<main class="main" role="main">
-	<article class="post">
-		<header class="post__header">
-			<h1 class="post__title">深入理解计算机系统之四 -- 指针</h1>
-			
-		</header>
-		<div class="content post__content clearfix">
-			<p>C语言里，变量存放在内存中，而内存其实就是一组有序字节组成的数组，每个字节有唯一的内存地址。指针是一种保存变量地址的变量。</p>
-<h3 id="指针声明">指针声明</h3>
-<p>每个指针都对应一个类型。这个类型表明该指针指向的是哪一类对象 。以下面的指针声明为例：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#66d9ef">int</span>  <span style="color:#f92672">*</span>ip
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">char</span> <span style="color:#f92672">**</span>cpp
-</span></span></code></pre></div><p>变量 <code>ip</code> 是一个指向 <code>int</code>类型对象的指针，而 <code>cpp</code>指针指向的对象自身就是一个指向<code>char</code>类型对象的指针。通常 ，如果对象类型为<code>T</code>，那么指针的类型为: <code>T*</code>。特殊的<code>void*</code>类型代表通用指针。</p>
-<h3 id="null指针">NULL指针</h3>
-<p>每个指针都有一个值。这个值是某个指定类型的对象的地址。特殊的<code>NULL(O)</code> 值表示该指针没有指向任何地方。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&#34;stdio.h&#34;</span><span style="color:#75715e">
-</span></span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">main</span>()
-</span></span><span style="display:flex;"><span>{
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">int</span> <span style="color:#f92672">*</span>p <span style="color:#f92672">=</span> NULL;
-</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">printf</span>(<span style="color:#e6db74">&#34;p的地址为%p</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>, p);
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>;
-</span></span><span style="display:flex;"><span>}
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e">// p的地址为(nil)
-</span></span></span></code></pre></div><h3 id="数组与指针">数组与指针</h3>
-<p>对于数据类型 <code>T</code> 和整型常数 <code>N</code>, 声明如下，</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#a6e22e">T</span> <span style="color:#a6e22e">A</span>[<span style="color:#a6e22e">N</span>]
-</span></span></code></pre></div><p>起始位置表示为<code>Xa</code>， 这个声明有两个效果。首先，它在内存中分配一个<code>L*N</code>字节的连续区域，这里<code>L</code> 是数据类型: <code>T</code>的大小（单位为字节 ）。其次，它引人了标识符<code>A</code>，可以用<code>A</code>来作为指向数组开头的指针，这个指针的值就是<code>Xa</code>，可以用<code>0~ N-1</code>的整数索引来访问该数组元素。数组元素<code>i</code>会被存放在地址为为<code>Xa+L*i</code>的地方。</p>
-<p>单操作数操作符 ‘<code>&amp;</code>’ 和 ‘<code>*</code>’ 可以产生指针和间接引用指针。也就是，对于一个表示某个对象的表达式 <code>Expr</code>， <code>&amp;Expr</code>是给出该对象地址的一个指针。对于一个表示地址的表达式 <code>AExpr</code>，<code>*AExpr</code> 给出该地址处的值。因此，表达式<code>Expr</code>与<code>*&amp;Expr</code>是 等价的 。可以对数组和指针应用数组下标操作。数组引用 <code>A[i]</code> 等同于表达式<code>* (A+i)</code>。 它计算第个数组元素的地址，然后访问这个内存位置。</p>
-<p>数组与指针紧密联系。一个数组的名字可以像一个指针变量一样引用（但是不能修改）。数组引用（例如 <code>a[3]</code>) 与指针运算和间接引用（例如 <code>* (a+ 3)</code>) 有一样的效果。数组引用和指针运算都需要用对象大小对偏移量进行伸缩 。当我们写表达式 <code>p+ i</code>，这里指针<code>P</code>的值为<code>p</code>，得到的地址计算为<code> P +L*i</code>，这里<code>L</code> 是与 <code>p</code> 相关联的数据类型的大小。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&#34;stdio.h&#34;</span><span style="color:#75715e">
-</span></span></span><span style="display:flex;"><span><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">main</span>()
-</span></span><span style="display:flex;"><span>{
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 声明一个int类型的数组，这个数组有10个元素
-</span></span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">int</span> a[<span style="color:#ae81ff">10</span>] <span style="color:#f92672">=</span> {<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">3</span>, <span style="color:#ae81ff">4</span>, <span style="color:#ae81ff">5</span>, <span style="color:#ae81ff">6</span>, <span style="color:#ae81ff">7</span>, <span style="color:#ae81ff">8</span>, <span style="color:#ae81ff">9</span>, <span style="color:#ae81ff">0</span>};
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 声明int类型的指针变量
-</span></span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">int</span> <span style="color:#f92672">*</span>p;
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">int</span> <span style="color:#f92672">*</span>p1;
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">int</span> <span style="color:#f92672">*</span>p2;
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 声明一个int类型的变量
-</span></span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">int</span> sub;
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 对指针进行初始化，p将指向数组 a 的第 1 个元素 a[0] 
-</span></span></span><span style="display:flex;"><span>    p <span style="color:#f92672">=</span> <span style="color:#f92672">&amp;</span>a[<span style="color:#ae81ff">0</span>];
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 数组类型的变量或表达式的值是该数组第 1 个元素的地址，且数组名所代表的的就是该数组第 1 个元素的地址，所以：p = a;   
-</span></span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">printf</span>(<span style="color:#e6db74">&#34;a的地址为：%p</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>, a);
-</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">printf</span>(<span style="color:#e6db74">&#34;a[0]的地址为：%p</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>, <span style="color:#f92672">&amp;</span>a[<span style="color:#ae81ff">0</span>]);
-</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">printf</span>(<span style="color:#e6db74">&#34;p的地址为：%p</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>, <span style="color:#f92672">&amp;</span>p);
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 打印指针 p 的地址，并不是指针所指向的地方的地址
-</span></span></span><span style="display:flex;"><span>    <span style="color:#75715e">// a的地址为：0x7ffe2ad296d0
-</span></span></span><span style="display:flex;"><span>    <span style="color:#75715e">// a[0]的地址为：0x7ffe2ad296d0
-</span></span></span><span style="display:flex;"><span>    <span style="color:#75715e">// p的地址为：0x7ffe2ad296b8
-</span></span></span><span style="display:flex;"><span>    p1 <span style="color:#f92672">=</span> <span style="color:#f92672">&amp;</span>a[<span style="color:#ae81ff">2</span>];
-</span></span><span style="display:flex;"><span>    p2 <span style="color:#f92672">=</span> <span style="color:#f92672">&amp;</span>a[<span style="color:#ae81ff">8</span>];
-</span></span><span style="display:flex;"><span>    sub <span style="color:#f92672">=</span> p2 <span style="color:#f92672">-</span> p1;
-</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">printf</span>(<span style="color:#e6db74">&#34;sub=%d</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>, sub);
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// sub=6
-</span></span></span><span style="display:flex;"><span>    p <span style="color:#f92672">+=</span> <span style="color:#ae81ff">2</span>;
-</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">printf</span>(<span style="color:#e6db74">&#34;*(p+2)的值为：%d</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>, <span style="color:#f92672">*</span>p);
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// *(p+2)的值为：3
-</span></span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 输出结果为 3，*(p+2)指向了 x[2]
-</span></span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>;
-</span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><p>将指针从一种类型强制转换成另一种类型，只改变它的类型，而不改变它的值。强制类型转换的一个效果是改变指针运算的伸缩 。例如，如果<code>P</code>是一个 <code>char*</code>类型的指针，它的值为<code>p</code>，那么表达式 <code>(int*)(p+7)</code>计算为<code>p+7</code>。（强制类型转换的优先级高于加法。）</p>
-<h3 id="指针与函数">指针与函数</h3>
-<p>指针也可以指向函数 。这提供了一个很强大的存储和向代码传递引用的功能，这些引用可以被程序的某个其他部分调用。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&#34;stdio.h&#34;</span><span style="color:#75715e">
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// 参数为普通的 int 变量
-</span></span></span><span style="display:flex;"><span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">swap1</span>(<span style="color:#66d9ef">int</span> a, <span style="color:#66d9ef">int</span> b)
-</span></span><span style="display:flex;"><span>{
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">int</span> temp;
-</span></span><span style="display:flex;"><span>    temp <span style="color:#f92672">=</span> a;
-</span></span><span style="display:flex;"><span>    a <span style="color:#f92672">=</span> b;
-</span></span><span style="display:flex;"><span>    b <span style="color:#f92672">=</span> temp;
-</span></span><span style="display:flex;"><span>}
-</span></span><span style="display:flex;"><span><span style="color:#75715e">// 参数为指针，接受调用函数传递过来的变量地址作为参数，对所指地址处的内容进行操作
-</span></span></span><span style="display:flex;"><span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">swap2</span>(<span style="color:#66d9ef">int</span> <span style="color:#f92672">*</span>a, <span style="color:#66d9ef">int</span> <span style="color:#f92672">*</span>b)
-</span></span><span style="display:flex;"><span>{
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 最终结果是，地址本身并没有改变，但是这一地址所对应的内存段中的内容发生了变化，即x,y的值发生了变化
-</span></span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">int</span> temp;
-</span></span><span style="display:flex;"><span>    temp <span style="color:#f92672">=</span> <span style="color:#f92672">*</span>a;
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">*</span>a <span style="color:#f92672">=</span> <span style="color:#f92672">*</span>b;
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">*</span>b <span style="color:#f92672">=</span> temp;
-</span></span><span style="display:flex;"><span>}
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">main</span>()
-</span></span><span style="display:flex;"><span>{
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">int</span> x <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>, y <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>;
-</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">swap1</span>(x, y);              <span style="color:#75715e">// 将 x,y 的值本身作为参数传递给了被调函数
-</span></span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">printf</span>(<span style="color:#e6db74">&#34;%d %5d</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>, x, y); <span style="color:#75715e">// 输出结果为：1     2
-</span></span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">swap2</span>(<span style="color:#f92672">&amp;</span>x, <span style="color:#f92672">&amp;</span>y);            <span style="color:#75715e">// 将 x,y 的地址作为参数传递给了被调函数，传递过去的也是一个值，与传值调用不冲突
-</span></span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">printf</span>(<span style="color:#e6db74">&#34;%d %5d</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>, x, y); <span style="color:#75715e">// 输出结果为：2     1
-</span></span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>;
-</span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><p>部分参考：https://www.cnblogs.com/tongye/p/9650573.html</p>
-
-		</div>
-	</article>
-</main>
-
-
-
-
-			</div>
-			
-		</div>
-		<footer class="footer">
-	<div class="container footer__container flex">
-		
-		<div class="footer__copyright">
-			&copy; 2026 臭大佬博客.
-			<span class="footer__copyright-credits">基于 <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> 引擎和 <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> 主题</span>
-		</div>
-	</div>
-</footer>
-	</div>
-<script async defer src="/js/menu.js"></script>
-</body>
-</html>
+<!doctype html><html class=no-js lang=en><head><meta charset=UTF-8><meta name=viewport content="width=device-width,initial-scale=1"><title>深入理解计算机系统之四 -- 指针 - 臭大佬博客</title><script>(function(e,t){e[t]=e[t].replace("no-js","js")})(document.documentElement,"className")</script><meta name=description content="C语言里，变量存放在内存中，而内存其实就是一组有序字节组成的数组，每个字节有唯一的内存地址。指针是一种保存变量地址的变量。"><link rel=preconnect href=https://fonts.gstatic.com crossorigin><link rel=dns-prefetch href=//fonts.googleapis.com><link rel=dns-prefetch href=//fonts.gstatic.com><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700"><link rel=stylesheet href=/choudalao.github.io/css/style.css><link rel="shortcut icon" href=/choudalao.github.io/favicon.ico></head><body class=body><div class="container container--outer"><header class=header><div class="container header__container"><div class=logo><a class=logo__link href=/choudalao.github.io/ title=臭大佬博客 rel=home><div class="logo__item logo__text"><div class=logo__title>臭大佬博客</div></div></a></div><nav class=menu><button class=menu__btn aria-haspopup=true aria-expanded=false tabindex=0>
+<span class=menu__btn-title tabindex=-1>菜单</span></button><ul class=menu__list><li class=menu__item><a class=menu__link href=/choudalao.github.io/><span class=menu__text>首页</span></a></li><li class=menu__item><a class=menu__link href=/choudalao.github.io/post/><span class=menu__text>归档</span></a></li><li class=menu__item><a class=menu__link href=/choudalao.github.io/about/><span class=menu__text>关于</span></a></li></ul></nav></div></header><div class="wrapper flex"><div class=primary><main class=main role=main><article class=post><header class=post__header><h1 class=post__title>深入理解计算机系统之四 -- 指针</h1></header><div class="content post__content clearfix"><p>C语言里，变量存放在内存中，而内存其实就是一组有序字节组成的数组，每个字节有唯一的内存地址。指针是一种保存变量地址的变量。</p><h3 id=指针声明>指针声明</h3><p>每个指针都对应一个类型。这个类型表明该指针指向的是哪一类对象 。以下面的指针声明为例：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-c data-lang=c><span style=display:flex><span><span style=color:#66d9ef>int</span>  <span style=color:#f92672>*</span>ip
+</span></span><span style=display:flex><span><span style=color:#66d9ef>char</span> <span style=color:#f92672>**</span>cpp
+</span></span></code></pre></div><p>变量 <code>ip</code> 是一个指向 <code>int</code>类型对象的指针，而 <code>cpp</code>指针指向的对象自身就是一个指向<code>char</code>类型对象的指针。通常 ，如果对象类型为<code>T</code>，那么指针的类型为: <code>T*</code>。特殊的<code>void*</code>类型代表通用指针。</p><h3 id=null指针>NULL指针</h3><p>每个指针都有一个值。这个值是某个指定类型的对象的地址。特殊的<code>NULL(O)</code> 值表示该指针没有指向任何地方。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-c data-lang=c><span style=display:flex><span><span style=color:#75715e>#include</span> <span style=color:#75715e>&#34;stdio.h&#34;</span><span style=color:#75715e>
+</span></span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>int</span> <span style=color:#a6e22e>main</span>()
+</span></span><span style=display:flex><span>{
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>int</span> <span style=color:#f92672>*</span>p <span style=color:#f92672>=</span> NULL;
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>printf</span>(<span style=color:#e6db74>&#34;p的地址为%p</span><span style=color:#ae81ff>\n</span><span style=color:#e6db74>&#34;</span>, p);
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span> <span style=color:#ae81ff>0</span>;
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>// p的地址为(nil)
+</span></span></span></code></pre></div><h3 id=数组与指针>数组与指针</h3><p>对于数据类型 <code>T</code> 和整型常数 <code>N</code>, 声明如下，</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-php data-lang=php><span style=display:flex><span><span style=color:#a6e22e>T</span> <span style=color:#a6e22e>A</span>[<span style=color:#a6e22e>N</span>]
+</span></span></code></pre></div><p>起始位置表示为<code>Xa</code>， 这个声明有两个效果。首先，它在内存中分配一个<code>L*N</code>字节的连续区域，这里<code>L</code> 是数据类型: <code>T</code>的大小（单位为字节 ）。其次，它引人了标识符<code>A</code>，可以用<code>A</code>来作为指向数组开头的指针，这个指针的值就是<code>Xa</code>，可以用<code>0~ N-1</code>的整数索引来访问该数组元素。数组元素<code>i</code>会被存放在地址为为<code>Xa+L*i</code>的地方。</p><p>单操作数操作符 ‘<code>&</code>’ 和 ‘<code>*</code>’ 可以产生指针和间接引用指针。也就是，对于一个表示某个对象的表达式 <code>Expr</code>， <code>&amp;Expr</code>是给出该对象地址的一个指针。对于一个表示地址的表达式 <code>AExpr</code>，<code>*AExpr</code> 给出该地址处的值。因此，表达式<code>Expr</code>与<code>*&amp;Expr</code>是 等价的 。可以对数组和指针应用数组下标操作。数组引用 <code>A[i]</code> 等同于表达式<code>* (A+i)</code>。 它计算第个数组元素的地址，然后访问这个内存位置。</p><p>数组与指针紧密联系。一个数组的名字可以像一个指针变量一样引用（但是不能修改）。数组引用（例如 <code>a[3]</code>) 与指针运算和间接引用（例如 <code>* (a+ 3)</code>) 有一样的效果。数组引用和指针运算都需要用对象大小对偏移量进行伸缩 。当我们写表达式 <code>p+ i</code>，这里指针<code>P</code>的值为<code>p</code>，得到的地址计算为<code> P +L*i</code>，这里<code>L</code> 是与 <code>p</code> 相关联的数据类型的大小。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-c data-lang=c><span style=display:flex><span><span style=color:#75715e>#include</span> <span style=color:#75715e>&#34;stdio.h&#34;</span><span style=color:#75715e>
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>int</span> <span style=color:#a6e22e>main</span>()
+</span></span><span style=display:flex><span>{
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// 声明一个int类型的数组，这个数组有10个元素
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>int</span> a[<span style=color:#ae81ff>10</span>] <span style=color:#f92672>=</span> {<span style=color:#ae81ff>1</span>, <span style=color:#ae81ff>2</span>, <span style=color:#ae81ff>3</span>, <span style=color:#ae81ff>4</span>, <span style=color:#ae81ff>5</span>, <span style=color:#ae81ff>6</span>, <span style=color:#ae81ff>7</span>, <span style=color:#ae81ff>8</span>, <span style=color:#ae81ff>9</span>, <span style=color:#ae81ff>0</span>};
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// 声明int类型的指针变量
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>int</span> <span style=color:#f92672>*</span>p;
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>int</span> <span style=color:#f92672>*</span>p1;
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>int</span> <span style=color:#f92672>*</span>p2;
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// 声明一个int类型的变量
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>int</span> sub;
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// 对指针进行初始化，p将指向数组 a 的第 1 个元素 a[0] 
+</span></span></span><span style=display:flex><span>    p <span style=color:#f92672>=</span> <span style=color:#f92672>&amp;</span>a[<span style=color:#ae81ff>0</span>];
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// 数组类型的变量或表达式的值是该数组第 1 个元素的地址，且数组名所代表的的就是该数组第 1 个元素的地址，所以：p = a;   
+</span></span></span><span style=display:flex><span>    <span style=color:#a6e22e>printf</span>(<span style=color:#e6db74>&#34;a的地址为：%p</span><span style=color:#ae81ff>\n</span><span style=color:#e6db74>&#34;</span>, a);
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>printf</span>(<span style=color:#e6db74>&#34;a[0]的地址为：%p</span><span style=color:#ae81ff>\n</span><span style=color:#e6db74>&#34;</span>, <span style=color:#f92672>&amp;</span>a[<span style=color:#ae81ff>0</span>]);
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>printf</span>(<span style=color:#e6db74>&#34;p的地址为：%p</span><span style=color:#ae81ff>\n</span><span style=color:#e6db74>&#34;</span>, <span style=color:#f92672>&amp;</span>p);
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// 打印指针 p 的地址，并不是指针所指向的地方的地址
+</span></span></span><span style=display:flex><span>    <span style=color:#75715e>// a的地址为：0x7ffe2ad296d0
+</span></span></span><span style=display:flex><span>    <span style=color:#75715e>// a[0]的地址为：0x7ffe2ad296d0
+</span></span></span><span style=display:flex><span>    <span style=color:#75715e>// p的地址为：0x7ffe2ad296b8
+</span></span></span><span style=display:flex><span>    p1 <span style=color:#f92672>=</span> <span style=color:#f92672>&amp;</span>a[<span style=color:#ae81ff>2</span>];
+</span></span><span style=display:flex><span>    p2 <span style=color:#f92672>=</span> <span style=color:#f92672>&amp;</span>a[<span style=color:#ae81ff>8</span>];
+</span></span><span style=display:flex><span>    sub <span style=color:#f92672>=</span> p2 <span style=color:#f92672>-</span> p1;
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>printf</span>(<span style=color:#e6db74>&#34;sub=%d</span><span style=color:#ae81ff>\n</span><span style=color:#e6db74>&#34;</span>, sub);
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// sub=6
+</span></span></span><span style=display:flex><span>    p <span style=color:#f92672>+=</span> <span style=color:#ae81ff>2</span>;
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>printf</span>(<span style=color:#e6db74>&#34;*(p+2)的值为：%d</span><span style=color:#ae81ff>\n</span><span style=color:#e6db74>&#34;</span>, <span style=color:#f92672>*</span>p);
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// *(p+2)的值为：3
+</span></span></span><span style=display:flex><span>    <span style=color:#75715e>// 输出结果为 3，*(p+2)指向了 x[2]
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span> <span style=color:#ae81ff>0</span>;
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>将指针从一种类型强制转换成另一种类型，只改变它的类型，而不改变它的值。强制类型转换的一个效果是改变指针运算的伸缩 。例如，如果<code>P</code>是一个 <code>char*</code>类型的指针，它的值为<code>p</code>，那么表达式 <code>(int*)(p+7)</code>计算为<code>p+7</code>。（强制类型转换的优先级高于加法。）</p><h3 id=指针与函数>指针与函数</h3><p>指针也可以指向函数 。这提供了一个很强大的存储和向代码传递引用的功能，这些引用可以被程序的某个其他部分调用。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-c data-lang=c><span style=display:flex><span><span style=color:#75715e>#include</span> <span style=color:#75715e>&#34;stdio.h&#34;</span><span style=color:#75715e>
+</span></span></span><span style=display:flex><span><span style=color:#75715e>// 参数为普通的 int 变量
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>void</span> <span style=color:#a6e22e>swap1</span>(<span style=color:#66d9ef>int</span> a, <span style=color:#66d9ef>int</span> b)
+</span></span><span style=display:flex><span>{
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>int</span> temp;
+</span></span><span style=display:flex><span>    temp <span style=color:#f92672>=</span> a;
+</span></span><span style=display:flex><span>    a <span style=color:#f92672>=</span> b;
+</span></span><span style=display:flex><span>    b <span style=color:#f92672>=</span> temp;
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span><span style=color:#75715e>// 参数为指针，接受调用函数传递过来的变量地址作为参数，对所指地址处的内容进行操作
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>void</span> <span style=color:#a6e22e>swap2</span>(<span style=color:#66d9ef>int</span> <span style=color:#f92672>*</span>a, <span style=color:#66d9ef>int</span> <span style=color:#f92672>*</span>b)
+</span></span><span style=display:flex><span>{
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// 最终结果是，地址本身并没有改变，但是这一地址所对应的内存段中的内容发生了变化，即x,y的值发生了变化
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>int</span> temp;
+</span></span><span style=display:flex><span>    temp <span style=color:#f92672>=</span> <span style=color:#f92672>*</span>a;
+</span></span><span style=display:flex><span>    <span style=color:#f92672>*</span>a <span style=color:#f92672>=</span> <span style=color:#f92672>*</span>b;
+</span></span><span style=display:flex><span>    <span style=color:#f92672>*</span>b <span style=color:#f92672>=</span> temp;
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span><span style=color:#66d9ef>int</span> <span style=color:#a6e22e>main</span>()
+</span></span><span style=display:flex><span>{
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>int</span> x <span style=color:#f92672>=</span> <span style=color:#ae81ff>1</span>, y <span style=color:#f92672>=</span> <span style=color:#ae81ff>2</span>;
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>swap1</span>(x, y);              <span style=color:#75715e>// 将 x,y 的值本身作为参数传递给了被调函数
+</span></span></span><span style=display:flex><span>    <span style=color:#a6e22e>printf</span>(<span style=color:#e6db74>&#34;%d %5d</span><span style=color:#ae81ff>\n</span><span style=color:#e6db74>&#34;</span>, x, y); <span style=color:#75715e>// 输出结果为：1     2
+</span></span></span><span style=display:flex><span>    <span style=color:#a6e22e>swap2</span>(<span style=color:#f92672>&amp;</span>x, <span style=color:#f92672>&amp;</span>y);            <span style=color:#75715e>// 将 x,y 的地址作为参数传递给了被调函数，传递过去的也是一个值，与传值调用不冲突
+</span></span></span><span style=display:flex><span>    <span style=color:#a6e22e>printf</span>(<span style=color:#e6db74>&#34;%d %5d</span><span style=color:#ae81ff>\n</span><span style=color:#e6db74>&#34;</span>, x, y); <span style=color:#75715e>// 输出结果为：2     1
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span> <span style=color:#ae81ff>0</span>;
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>部分参考：https://www.cnblogs.com/tongye/p/9650573.html</p></div></article></main></div></div><footer class=footer><div class="container footer__container flex"><div class=footer__copyright>&copy; 2026 臭大佬博客.
+<span class=footer__copyright-credits>基于 <a href=https://gohugo.io/ rel="nofollow noopener" target=_blank>Hugo</a> 引擎和 <a href=https://github.com/Vimux/Mainroad/ rel="nofollow noopener" target=_blank>Mainroad</a> 主题</span></div></div></footer></div><script async defer src=/choudalao.github.io/js/menu.js></script></body></html>

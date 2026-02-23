@@ -1,315 +1,184 @@
-<!DOCTYPE html>
-<html class="no-js" lang="en">
-<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>ElasticSearch  logstash安装并使用logstash-jdbc-input与mysql数据库同步 - 臭大佬博客</title>
-	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
-	<meta name="description" content="ElasticSearch  logstash安装并使用logstash-jdbc-input与mysql数据库同步">
-	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-	<link rel="dns-prefetch" href="//fonts.googleapis.com">
-	<link rel="dns-prefetch" href="//fonts.gstatic.com">
-	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
-
-	<link rel="stylesheet" href="/css/style.css">
-	
-
-	<link rel="shortcut icon" href="/favicon.ico">
-		
-</head>
-<body class="body">
-	<div class="container container--outer">
-		<header class="header">
-	<div class="container header__container">
-		
-	<div class="logo">
-		<a class="logo__link" href="/" title="臭大佬博客" rel="home">
-			<div class="logo__item logo__text">
-					<div class="logo__title">臭大佬博客</div>
-					
-				</div>
-		</a>
-	</div>
-		
-<nav class="menu">
-	<button class="menu__btn" aria-haspopup="true" aria-expanded="false" tabindex="0">
-		<span class="menu__btn-title" tabindex="-1">菜单</span>
-	</button>
-	<ul class="menu__list">
-		<li class="menu__item">
-			<a class="menu__link" href="/">
-				
-				<span class="menu__text">首页</span>
-				
-			</a>
-		</li>
-		<li class="menu__item">
-			<a class="menu__link" href="/post/">
-				
-				<span class="menu__text">归档</span>
-				
-			</a>
-		</li>
-		<li class="menu__item">
-			<a class="menu__link" href="/about/">
-				
-				<span class="menu__text">关于</span>
-				
-			</a>
-		</li>
-	</ul>
-</nav>
-
-	</div>
-</header>
-		<div class="wrapper flex">
-			<div class="primary">
-			
-<main class="main" role="main">
-	<article class="post">
-		<header class="post__header">
-			<h1 class="post__title">ElasticSearch  logstash安装并使用logstash-jdbc-input与mysql数据库同步</h1>
-			
-		</header>
-		<div class="content post__content clearfix">
-			<h1 id="各软件版本及下载地址">各软件版本及下载地址</h1>
-<p>java8
-<a href="https://pan.baidu.com/s/1YYQzYTx3kJ08jhK5lrcmKg">https://pan.baidu.com/s/1YYQzYTx3kJ08jhK5lrcmKg</a> 提取码：ihw1</p>
-<p>elasticsearch-7.10.0-windows-x86_64
-<a href="https://www.elastic.co/cn/downloads/elasticsearch">https://www.elastic.co/cn/downloads/elasticsearch</a></p>
-<p>logstash-5.5.0
-<a href="https://www.elastic.co/downloads/logstash">https://www.elastic.co/downloads/logstash</a></p>
-<p>mysql-connector-java-5.1.36.jar
-<a href="https://repo1.maven.org/maven2/mysql/mysql-connector-java/">https://repo1.maven.org/maven2/mysql/mysql-connector-java/</a></p>
-<p><code>java </code>和 <code>Elasticsearch</code> 安装详见 [https://www.choudalao.com/article/207](在windows下安装 Elasticsearch &ldquo;<a href="https://www.choudalao.com/article/207%22">https://www.choudalao.com/article/207&quot;</a>)</p>
-<h3 id="windows-部署-logstash-概述">Windows 部署 Logstash 概述</h3>
-<p><code>Logstash </code>能够动态地采集、转换和传输数据，不受格式或复杂度的影响。利用<code>Grok</code> 从非结构化数据中派生出结构，从 <code>IP</code> 地址解码出地理坐标，匿名化或排除敏感字段，并简化整体处理过程。</p>
-<p><code>Logstash</code> 常与<code> Elasticsearch</code>、<code>kibana</code> 一起联合使用，三者合称 <code>ELK</code>。</p>
-<p><code>Logstash</code>是<code>ELK</code>的中央数据流引擎，用于从不同目标（文件/数据存储/MQ）收集的不同格式数据，经过过滤后支持输出到不同目的地。</p>
-<p><code>Logstash</code>版本需要与<code>ES</code>匹配，</p>
-<h3 id="安装">安装</h3>
-<p>下载以下两个包
+<!doctype html><html class=no-js lang=en><head><meta charset=UTF-8><meta name=viewport content="width=device-width,initial-scale=1"><title>ElasticSearch logstash安装并使用logstash-jdbc-input与mysql数据库同步 - 臭大佬博客</title><script>(function(e,t){e[t]=e[t].replace("no-js","js")})(document.documentElement,"className")</script><meta name=description content="ElasticSearch  logstash安装并使用logstash-jdbc-input与mysql数据库同步"><link rel=preconnect href=https://fonts.gstatic.com crossorigin><link rel=dns-prefetch href=//fonts.googleapis.com><link rel=dns-prefetch href=//fonts.gstatic.com><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700"><link rel=stylesheet href=/choudalao.github.io/css/style.css><link rel="shortcut icon" href=/choudalao.github.io/favicon.ico></head><body class=body><div class="container container--outer"><header class=header><div class="container header__container"><div class=logo><a class=logo__link href=/choudalao.github.io/ title=臭大佬博客 rel=home><div class="logo__item logo__text"><div class=logo__title>臭大佬博客</div></div></a></div><nav class=menu><button class=menu__btn aria-haspopup=true aria-expanded=false tabindex=0>
+<span class=menu__btn-title tabindex=-1>菜单</span></button><ul class=menu__list><li class=menu__item><a class=menu__link href=/choudalao.github.io/><span class=menu__text>首页</span></a></li><li class=menu__item><a class=menu__link href=/choudalao.github.io/post/><span class=menu__text>归档</span></a></li><li class=menu__item><a class=menu__link href=/choudalao.github.io/about/><span class=menu__text>关于</span></a></li></ul></nav></div></header><div class="wrapper flex"><div class=primary><main class=main role=main><article class=post><header class=post__header><h1 class=post__title>ElasticSearch logstash安装并使用logstash-jdbc-input与mysql数据库同步</h1></header><div class="content post__content clearfix"><h1 id=各软件版本及下载地址>各软件版本及下载地址</h1><p>java8
+<a href=https://pan.baidu.com/s/1YYQzYTx3kJ08jhK5lrcmKg>https://pan.baidu.com/s/1YYQzYTx3kJ08jhK5lrcmKg</a> 提取码：ihw1</p><p>elasticsearch-7.10.0-windows-x86_64
+<a href=https://www.elastic.co/cn/downloads/elasticsearch>https://www.elastic.co/cn/downloads/elasticsearch</a></p><p>logstash-5.5.0
+<a href=https://www.elastic.co/downloads/logstash>https://www.elastic.co/downloads/logstash</a></p><p>mysql-connector-java-5.1.36.jar
+<a href=https://repo1.maven.org/maven2/mysql/mysql-connector-java/>https://repo1.maven.org/maven2/mysql/mysql-connector-java/</a></p><p><code>java </code>和 <code>Elasticsearch</code> 安装详见 [https://www.choudalao.com/article/207](在windows下安装 Elasticsearch &ldquo;<a href=https://www.choudalao.com/article/207%22>https://www.choudalao.com/article/207"</a>)</p><h3 id=windows-部署-logstash-概述>Windows 部署 Logstash 概述</h3><p><code>Logstash </code>能够动态地采集、转换和传输数据，不受格式或复杂度的影响。利用<code>Grok</code> 从非结构化数据中派生出结构，从 <code>IP</code> 地址解码出地理坐标，匿名化或排除敏感字段，并简化整体处理过程。</p><p><code>Logstash</code> 常与<code> Elasticsearch</code>、<code>kibana</code> 一起联合使用，三者合称 <code>ELK</code>。</p><p><code>Logstash</code>是<code>ELK</code>的中央数据流引擎，用于从不同目标（文件/数据存储/MQ）收集的不同格式数据，经过过滤后支持输出到不同目的地。</p><p><code>Logstash</code>版本需要与<code>ES</code>匹配，</p><h3 id=安装>安装</h3><p>下载以下两个包
 logstash-5.5.0
-<a href="https://www.elastic.co/downloads/logstash">https://www.elastic.co/downloads/logstash</a></p>
-<p>mysql-connector-java-5.1.36.jar
-<a href="https://repo1.maven.org/maven2/mysql/mysql-connector-java/">https://repo1.maven.org/maven2/mysql/mysql-connector-java/</a></p>
-<p><strong>注意：网上很多教程让安装 <code>logstash-jdbc-input</code>， 我们安装的是5.X的版本，logstash5.x自带 <code>logstash-jdbc-input</code>，不需要我们去单独安装。</strong></p>
-<p><code>logstash</code>解压后，在根目录下创建一个配置目录，如<code> mysqletc</code></p>
-<p><img src="https://www.choudalao.com/uploads/20201203/20201203155752SAhI57.png" alt=""></p>
-<p>把<code>mysql-connector-java-5.1.36.jar</code>放到这个目录下，然后新建 <code>mysql.conf</code> ，内容如下：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#a6e22e">input</span> {
-</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">jdbc</span> {
-</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># mysql 数据库链接,blog 为数据库名
-</span></span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">jdbc_connection_string</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#34;jdbc:mysql://127.0.0.1:3306/blog&#34;</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># 用户名和密码
-</span></span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">jdbc_user</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#34;root&#34;</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">jdbc_password</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#34;root&#34;</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># 驱动
-</span></span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">jdbc_driver_library</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#34;D:/Program/ES/logstash/mysqletc/mysql-connector-java-5.1.36.jar&#34;</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># 驱动类名
-</span></span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">jdbc_driver_class</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#34;com.mysql.jdbc.Driver&#34;</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#75715e">#启用分页，默认false
-</span></span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">jdbc_paging_enabled</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#34;true&#34;</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#75715e">#页面大小，默认100000
-</span></span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">jdbc_page_size</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#34;50000&#34;</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#75715e">#是否记录上次运行的结果
-</span></span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">record_last_run</span> <span style="color:#f92672">=&gt;</span> <span style="color:#66d9ef">true</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#75715e">#记录上次运行结果的文件位置
-</span></span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">last_run_metadata_path</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#34;&#34;</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#75715e">#是否使用数据库某一列的值，
-</span></span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">use_column_value</span> <span style="color:#f92672">=&gt;</span> <span style="color:#66d9ef">true</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">tracking_column</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#34;id&#34;</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#75715e">#numeric或者timestamp
-</span></span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">tracking_column_type</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#34;numeric&#34;</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#75715e">#如果为true则会清除last_run_metadata_path记录，即重新开始同步数据
-</span></span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">clean_run</span> <span style="color:#f92672">=&gt;</span> <span style="color:#66d9ef">false</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># 执行的sql 文件路径+名称
-</span></span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">statement_filepath</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#34;D:/Program/ES/logstash/mysqletc/test.sql&#34;</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># 执行的sql 
-</span></span></span><span style="display:flex;"><span>        <span style="color:#75715e"># statement =&gt; &#34;SELECT * FROM rawData&#34;
-</span></span></span><span style="display:flex;"><span>        <span style="color:#75715e">#设置监听间隔。可以设置每隔多久监听一次什么的。
-</span></span></span><span style="display:flex;"><span>        <span style="color:#75715e">#官方举例：
-</span></span></span><span style="display:flex;"><span>        <span style="color:#75715e">#* 5 * 1-3 * 一月到三月的每天凌晨5点每分钟执行一次。
-</span></span></span><span style="display:flex;"><span>        <span style="color:#75715e">#0 * * * *   将在每天每小时的第0分钟执行。
-</span></span></span><span style="display:flex;"><span>        <span style="color:#75715e">#0 6 * * *   America/Chicago每天早上6:00（UTC / GMT -5）执行。
-</span></span></span><span style="display:flex;"><span>        <span style="color:#75715e">#* * * * *   分、时、天、月、年，全部为*默认含义为每分钟查询一次
-</span></span></span><span style="display:flex;"><span>        <span style="color:#75715e"># 设置监听间隔   各字段含义（由左至右）分、时、天、月、年，全部为*默认含义为每分钟都更新
-</span></span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">schedule</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#34;* * * * *&#34;</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># 索引类型
-</span></span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">type</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#34;jdbc&#34;</span>
-</span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>}
-</span></span><span style="display:flex;"><span><span style="color:#75715e"># filter插件是logstash的主要功能之一，可以对logstash event进行丰富的处理。如类型转换、删除字段等。
-</span></span></span><span style="display:flex;"><span><span style="color:#a6e22e">filter</span> {
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># json 按照json解析字段内容到指定字段中
-</span></span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">json</span> {
-</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># source 要解析的字段名
-</span></span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">source</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#34;message&#34;</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># 解析后的存储字段
-</span></span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">remove_field</span> <span style="color:#f92672">=&gt;</span> [<span style="color:#e6db74">&#34;message&#34;</span>]
-</span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>}
-</span></span><span style="display:flex;"><span><span style="color:#75715e"># output 负责将数据输出到指定的位置
-</span></span></span><span style="display:flex;"><span><span style="color:#a6e22e">output</span> {
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e">#输出到ES中，基于HTTP实现
-</span></span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">elasticsearch</span> {
-</span></span><span style="display:flex;"><span>        <span style="color:#75715e">#用户节点地址，这里对应我们的ES的IP地址和端口
-</span></span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">hosts</span> <span style="color:#f92672">=&gt;</span> [<span style="color:#e6db74">&#34;localhost:9200&#34;</span>]
-</span></span><span style="display:flex;"><span>        <span style="color:#75715e">#索引名称
-</span></span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">index</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#34;blog&#34;</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#75715e">#自增ID 需要关联的数据库中有有一个id字段，对应索引的id号
-</span></span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">document_id</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#34;%{id}&#34;</span>
-</span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e">#stdout输出到标准输出，一般用于调试
-</span></span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">stdout</span> {
-</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">codec</span> <span style="color:#f92672">=&gt;</span> <span style="color:#a6e22e">json_lines</span>
-</span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><p>如果要配置多个，可以参考如下：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#a6e22e">input</span> {
-</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">stdin</span> {
-</span></span><span style="display:flex;"><span>  }
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">jdbc</span> {
-</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">type</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#34;news_info&#34;</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#75715e">#后面的test对应mysql中的test数据库
-</span></span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">jdbc_connection_string</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#34;jdbc:mysql://127.0.0.1:3306/blog&#34;</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">jdbc_user</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#34;root&#34;</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">jdbc_password</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#34;root&#34;</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">tracking_column</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#34;auto_id&#34;</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">record_last_run</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#34;true&#34;</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">use_column_value</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#34;true&#34;</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#75715e">#代表最后一次数据记录id的值存放的位置，它会自动在bin目录创建news,这个必填不然启动报错
-</span></span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">last_run_metadata_path</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#34;news&#34;</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">clean_run</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#34;false&#34;</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># 这里代表mysql-connector-java-5.1.21.jar放在bin目录
-</span></span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">jdbc_driver_library</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#34;D:/Program/ES/logstash/mysqletc/mysql-connector-java-8.0.22.jar&#34;</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># the name of the driver class for mysql
-</span></span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">jdbc_driver_class</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#34;Java::com.mysql.jdbc.Driver&#34;</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">jdbc_paging_enabled</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#34;true&#34;</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">jdbc_page_size</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#34;500&#34;</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">statement</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#34;select * from wjf_articles&#34;</span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e">#定时字段 各字段含义（由左至右）分、时、天、月、年，全部为*默认含义为每分钟都更新
-</span></span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">schedule</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#34;* * * * *&#34;</span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e">#设定ES索引类型
-</span></span></span><span style="display:flex;"><span>  }
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">jdbc</span> {
-</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">type</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#34;press_info&#34;</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># mysql jdbc connection string to our backup databse 后面的test对应mysql中的test数据库
-</span></span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">jdbc_connection_string</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#34;jdbc:mysql:////127.0.0.1:3306/wjf&#34;</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">jdbc_user</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#34;root&#34;</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">jdbc_password</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#34;root&#34;</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">tracking_column</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#34;auto_id&#34;</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">record_last_run</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#34;true&#34;</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">use_column_value</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#34;true&#34;</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">last_run_metadata_path</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#34;news&#34;</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">clean_run</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#34;false&#34;</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">jdbc_driver_library</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#34;D:/Program/ES/logstash/mysqletc/mysql-connector-java-8.0.22.jar&#34;</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">jdbc_driver_class</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#34;Java::com.mysql.jdbc.Driver&#34;</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">jdbc_paging_enabled</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#34;true&#34;</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">jdbc_page_size</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#34;500&#34;</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">statement</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#34;select * from wjf_articles&#34;</span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e">#定时字段 各字段含义（由左至右）分、时、天、月、年，全部为*默认含义为每分钟都更新
-</span></span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">schedule</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#34;* * * * *&#34;</span>
-</span></span><span style="display:flex;"><span>  }
-</span></span><span style="display:flex;"><span>}
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#a6e22e">filter</span> {
-</span></span><span style="display:flex;"><span><span style="color:#a6e22e">mutate</span> {
-</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">convert</span> <span style="color:#f92672">=&gt;</span> [ <span style="color:#e6db74">&#34;publish_time&#34;</span>, <span style="color:#e6db74">&#34;string&#34;</span> ]
-</span></span><span style="display:flex;"><span> }
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#a6e22e">date</span> {
-</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">timezone</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#34;Europe/Berlin&#34;</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">match</span> <span style="color:#f92672">=&gt;</span> [<span style="color:#e6db74">&#34;publish_time&#34;</span> , <span style="color:#e6db74">&#34;ISO8601&#34;</span>, <span style="color:#e6db74">&#34;yyyy-MM-dd HH:mm:ss&#34;</span>]
-</span></span><span style="display:flex;"><span>}
-</span></span><span style="display:flex;"><span><span style="color:#75715e">#date {
-</span></span></span><span style="display:flex;"><span> <span style="color:#75715e"># match =&gt; [ &#34;publish_time&#34;, &#34;yyyy-MM-dd HH:mm:ss,SSS&#34; ]
-</span></span></span><span style="display:flex;"><span>  <span style="color:#75715e"># remove_field =&gt; [ &#34;publish_time&#34; ]
-</span></span></span><span style="display:flex;"><span>  <span style="color:#75715e"># }
-</span></span></span><span style="display:flex;"><span><span style="color:#a6e22e">json</span> {
-</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">source</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#34;message&#34;</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">remove_field</span> <span style="color:#f92672">=&gt;</span> [<span style="color:#e6db74">&#34;message&#34;</span>]
-</span></span><span style="display:flex;"><span>  }
-</span></span><span style="display:flex;"><span>}
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#a6e22e">output</span> {
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> [<span style="color:#a6e22e">type</span>]<span style="color:#f92672">==</span><span style="color:#e6db74">&#34;news_info&#34;</span> {
-</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">elasticsearch</span> {
-</span></span><span style="display:flex;"><span><span style="color:#75715e">#ESIP地址与端口
-</span></span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">hosts</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#34;127.0.0.1:9200&#34;</span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e">#ES索引名称（自己定义的）
-</span></span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">index</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#34;wantu_news_info&#34;</span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e">#自增ID编号
-</span></span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">document_id</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#34;%{auto_id}&#34;</span>
-</span></span><span style="display:flex;"><span>  }
-</span></span><span style="display:flex;"><span>}
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> [<span style="color:#a6e22e">type</span>]<span style="color:#f92672">==</span><span style="color:#e6db74">&#34;press_info&#34;</span> {
-</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">elasticsearch</span> {
-</span></span><span style="display:flex;"><span><span style="color:#75715e">#ESIP地址与端口
-</span></span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">hosts</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#34;127.0.0.1:9200&#34;</span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e">#ES索引名称（自己定义的）
-</span></span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">index</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#34;wantu_press_info&#34;</span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e">#自增ID编号
-</span></span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">document_id</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#34;%{auto_id}&#34;</span>
-</span></span><span style="display:flex;"><span>  }
-</span></span><span style="display:flex;"><span>}
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><p>新建 <code>test.sql</code> 文件，内容如下</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#a6e22e">SELECT</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#f92672">*</span>
-</span></span><span style="display:flex;"><span><span style="color:#a6e22e">FROM</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">wjf_articles</span>
-</span></span></code></pre></div><h1 id="启动logstash">启动logstash</h1>
-<p>先启动<code>ES</code>和<code>elasticsearch-head</code></p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#75715e">// 到ES的bin目录下执行
-</span></span></span><span style="display:flex;"><span><span style="color:#a6e22e">elasticsearch</span><span style="color:#f92672">.</span><span style="color:#a6e22e">bat</span>
-</span></span></code></pre></div><p><img src="https://www.choudalao.com/uploads/20201203/20201203160815nmn2Nu.png" alt=""></p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#75715e">// 到elasticsearch-head目录下，我的是  D:\Program\ES\elasticsearch-head-master
-</span></span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#a6e22e">npm</span> <span style="color:#a6e22e">run</span> <span style="color:#a6e22e">start</span>
-</span></span></code></pre></div><p><img src="https://www.choudalao.com/uploads/20201203/20201203160627tZIID2.png" alt=""></p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#75715e">// 到logstash目录，进入bin目录，运行如下命令
-</span></span></span><span style="display:flex;"><span><span style="color:#a6e22e">logstash</span> <span style="color:#f92672">-</span><span style="color:#a6e22e">f</span> <span style="color:#f92672">../</span><span style="color:#a6e22e">mysqletc</span><span style="color:#f92672">/</span><span style="color:#a6e22e">mysql</span><span style="color:#f92672">.</span><span style="color:#a6e22e">conf</span>
-</span></span></code></pre></div><p><img src="https://www.choudalao.com/uploads/20201203/20201203160832RJxKGk.png" alt=""></p>
-<h1 id="结果">结果</h1>
-<p><img src="https://www.choudalao.com/uploads/20201203/20201203160904WkLVLY.png" alt=""></p>
-<h1 id="问题">问题</h1>
-<h3 id="问题一">问题一</h3>
-<blockquote>
-<p>logstash-plugin.bat install logstash-input-jdbc
-Cannot find Java 1.5 or higher.</p>
-</blockquote>
-<h3 id="解决方案">解决方案</h3>
-<p>打开<code> logstash-plugin.bat</code>，在最上面加上你的<code>java_home</code>路径</p>
-<p><code>SET JAVA_HOME=D:\Program\java8</code></p>
-<p><img src="https://www.choudalao.com/uploads/20201203/20201203100308oUzjqj.png" alt=""></p>
-
-		</div>
-	</article>
-</main>
-
-
-
-
-			</div>
-			
-		</div>
-		<footer class="footer">
-	<div class="container footer__container flex">
-		
-		<div class="footer__copyright">
-			&copy; 2026 臭大佬博客.
-			<span class="footer__copyright-credits">基于 <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> 引擎和 <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> 主题</span>
-		</div>
-	</div>
-</footer>
-	</div>
-<script async defer src="/js/menu.js"></script>
-</body>
-</html>
+<a href=https://www.elastic.co/downloads/logstash>https://www.elastic.co/downloads/logstash</a></p><p>mysql-connector-java-5.1.36.jar
+<a href=https://repo1.maven.org/maven2/mysql/mysql-connector-java/>https://repo1.maven.org/maven2/mysql/mysql-connector-java/</a></p><p><strong>注意：网上很多教程让安装 <code>logstash-jdbc-input</code>， 我们安装的是5.X的版本，logstash5.x自带 <code>logstash-jdbc-input</code>，不需要我们去单独安装。</strong></p><p><code>logstash</code>解压后，在根目录下创建一个配置目录，如<code> mysqletc</code></p><p><img src=https://www.choudalao.com/uploads/20201203/20201203155752SAhI57.png alt></p><p>把<code>mysql-connector-java-5.1.36.jar</code>放到这个目录下，然后新建 <code>mysql.conf</code> ，内容如下：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-php data-lang=php><span style=display:flex><span><span style=color:#a6e22e>input</span> {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>jdbc</span> {
+</span></span><span style=display:flex><span>        <span style=color:#75715e># mysql 数据库链接,blog 为数据库名
+</span></span></span><span style=display:flex><span>        <span style=color:#a6e22e>jdbc_connection_string</span> <span style=color:#f92672>=&gt;</span> <span style=color:#e6db74>&#34;jdbc:mysql://127.0.0.1:3306/blog&#34;</span>
+</span></span><span style=display:flex><span>        <span style=color:#75715e># 用户名和密码
+</span></span></span><span style=display:flex><span>        <span style=color:#a6e22e>jdbc_user</span> <span style=color:#f92672>=&gt;</span> <span style=color:#e6db74>&#34;root&#34;</span>
+</span></span><span style=display:flex><span>        <span style=color:#a6e22e>jdbc_password</span> <span style=color:#f92672>=&gt;</span> <span style=color:#e6db74>&#34;root&#34;</span>
+</span></span><span style=display:flex><span>        <span style=color:#75715e># 驱动
+</span></span></span><span style=display:flex><span>        <span style=color:#a6e22e>jdbc_driver_library</span> <span style=color:#f92672>=&gt;</span> <span style=color:#e6db74>&#34;D:/Program/ES/logstash/mysqletc/mysql-connector-java-5.1.36.jar&#34;</span>
+</span></span><span style=display:flex><span>        <span style=color:#75715e># 驱动类名
+</span></span></span><span style=display:flex><span>        <span style=color:#a6e22e>jdbc_driver_class</span> <span style=color:#f92672>=&gt;</span> <span style=color:#e6db74>&#34;com.mysql.jdbc.Driver&#34;</span>
+</span></span><span style=display:flex><span>        <span style=color:#75715e>#启用分页，默认false
+</span></span></span><span style=display:flex><span>        <span style=color:#a6e22e>jdbc_paging_enabled</span> <span style=color:#f92672>=&gt;</span> <span style=color:#e6db74>&#34;true&#34;</span>
+</span></span><span style=display:flex><span>        <span style=color:#75715e>#页面大小，默认100000
+</span></span></span><span style=display:flex><span>        <span style=color:#a6e22e>jdbc_page_size</span> <span style=color:#f92672>=&gt;</span> <span style=color:#e6db74>&#34;50000&#34;</span>
+</span></span><span style=display:flex><span>        <span style=color:#75715e>#是否记录上次运行的结果
+</span></span></span><span style=display:flex><span>        <span style=color:#a6e22e>record_last_run</span> <span style=color:#f92672>=&gt;</span> <span style=color:#66d9ef>true</span>
+</span></span><span style=display:flex><span>        <span style=color:#75715e>#记录上次运行结果的文件位置
+</span></span></span><span style=display:flex><span>        <span style=color:#a6e22e>last_run_metadata_path</span> <span style=color:#f92672>=&gt;</span> <span style=color:#e6db74>&#34;&#34;</span>
+</span></span><span style=display:flex><span>        <span style=color:#75715e>#是否使用数据库某一列的值，
+</span></span></span><span style=display:flex><span>        <span style=color:#a6e22e>use_column_value</span> <span style=color:#f92672>=&gt;</span> <span style=color:#66d9ef>true</span>
+</span></span><span style=display:flex><span>        <span style=color:#a6e22e>tracking_column</span> <span style=color:#f92672>=&gt;</span> <span style=color:#e6db74>&#34;id&#34;</span>
+</span></span><span style=display:flex><span>        <span style=color:#75715e>#numeric或者timestamp
+</span></span></span><span style=display:flex><span>        <span style=color:#a6e22e>tracking_column_type</span> <span style=color:#f92672>=&gt;</span> <span style=color:#e6db74>&#34;numeric&#34;</span>
+</span></span><span style=display:flex><span>        <span style=color:#75715e>#如果为true则会清除last_run_metadata_path记录，即重新开始同步数据
+</span></span></span><span style=display:flex><span>        <span style=color:#a6e22e>clean_run</span> <span style=color:#f92672>=&gt;</span> <span style=color:#66d9ef>false</span>
+</span></span><span style=display:flex><span>        <span style=color:#75715e># 执行的sql 文件路径+名称
+</span></span></span><span style=display:flex><span>        <span style=color:#a6e22e>statement_filepath</span> <span style=color:#f92672>=&gt;</span> <span style=color:#e6db74>&#34;D:/Program/ES/logstash/mysqletc/test.sql&#34;</span>
+</span></span><span style=display:flex><span>        <span style=color:#75715e># 执行的sql 
+</span></span></span><span style=display:flex><span>        <span style=color:#75715e># statement =&gt; &#34;SELECT * FROM rawData&#34;
+</span></span></span><span style=display:flex><span>        <span style=color:#75715e>#设置监听间隔。可以设置每隔多久监听一次什么的。
+</span></span></span><span style=display:flex><span>        <span style=color:#75715e>#官方举例：
+</span></span></span><span style=display:flex><span>        <span style=color:#75715e>#* 5 * 1-3 * 一月到三月的每天凌晨5点每分钟执行一次。
+</span></span></span><span style=display:flex><span>        <span style=color:#75715e>#0 * * * *   将在每天每小时的第0分钟执行。
+</span></span></span><span style=display:flex><span>        <span style=color:#75715e>#0 6 * * *   America/Chicago每天早上6:00（UTC / GMT -5）执行。
+</span></span></span><span style=display:flex><span>        <span style=color:#75715e>#* * * * *   分、时、天、月、年，全部为*默认含义为每分钟查询一次
+</span></span></span><span style=display:flex><span>        <span style=color:#75715e># 设置监听间隔   各字段含义（由左至右）分、时、天、月、年，全部为*默认含义为每分钟都更新
+</span></span></span><span style=display:flex><span>        <span style=color:#a6e22e>schedule</span> <span style=color:#f92672>=&gt;</span> <span style=color:#e6db74>&#34;* * * * *&#34;</span>
+</span></span><span style=display:flex><span>        <span style=color:#75715e># 索引类型
+</span></span></span><span style=display:flex><span>        <span style=color:#a6e22e>type</span> <span style=color:#f92672>=&gt;</span> <span style=color:#e6db74>&#34;jdbc&#34;</span>
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span><span style=color:#75715e># filter插件是logstash的主要功能之一，可以对logstash event进行丰富的处理。如类型转换、删除字段等。
+</span></span></span><span style=display:flex><span><span style=color:#a6e22e>filter</span> {
+</span></span><span style=display:flex><span>    <span style=color:#75715e># json 按照json解析字段内容到指定字段中
+</span></span></span><span style=display:flex><span>    <span style=color:#a6e22e>json</span> {
+</span></span><span style=display:flex><span>        <span style=color:#75715e># source 要解析的字段名
+</span></span></span><span style=display:flex><span>        <span style=color:#a6e22e>source</span> <span style=color:#f92672>=&gt;</span> <span style=color:#e6db74>&#34;message&#34;</span>
+</span></span><span style=display:flex><span>        <span style=color:#75715e># 解析后的存储字段
+</span></span></span><span style=display:flex><span>        <span style=color:#a6e22e>remove_field</span> <span style=color:#f92672>=&gt;</span> [<span style=color:#e6db74>&#34;message&#34;</span>]
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span><span style=color:#75715e># output 负责将数据输出到指定的位置
+</span></span></span><span style=display:flex><span><span style=color:#a6e22e>output</span> {
+</span></span><span style=display:flex><span>    <span style=color:#75715e>#输出到ES中，基于HTTP实现
+</span></span></span><span style=display:flex><span>    <span style=color:#a6e22e>elasticsearch</span> {
+</span></span><span style=display:flex><span>        <span style=color:#75715e>#用户节点地址，这里对应我们的ES的IP地址和端口
+</span></span></span><span style=display:flex><span>        <span style=color:#a6e22e>hosts</span> <span style=color:#f92672>=&gt;</span> [<span style=color:#e6db74>&#34;localhost:9200&#34;</span>]
+</span></span><span style=display:flex><span>        <span style=color:#75715e>#索引名称
+</span></span></span><span style=display:flex><span>        <span style=color:#a6e22e>index</span> <span style=color:#f92672>=&gt;</span> <span style=color:#e6db74>&#34;blog&#34;</span>
+</span></span><span style=display:flex><span>        <span style=color:#75715e>#自增ID 需要关联的数据库中有有一个id字段，对应索引的id号
+</span></span></span><span style=display:flex><span>        <span style=color:#a6e22e>document_id</span> <span style=color:#f92672>=&gt;</span> <span style=color:#e6db74>&#34;%{id}&#34;</span>
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>    <span style=color:#75715e>#stdout输出到标准输出，一般用于调试
+</span></span></span><span style=display:flex><span>    <span style=color:#a6e22e>stdout</span> {
+</span></span><span style=display:flex><span>        <span style=color:#a6e22e>codec</span> <span style=color:#f92672>=&gt;</span> <span style=color:#a6e22e>json_lines</span>
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>如果要配置多个，可以参考如下：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-php data-lang=php><span style=display:flex><span><span style=color:#a6e22e>input</span> {
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>stdin</span> {
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>jdbc</span> {
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>type</span> <span style=color:#f92672>=&gt;</span> <span style=color:#e6db74>&#34;news_info&#34;</span>
+</span></span><span style=display:flex><span>  <span style=color:#75715e>#后面的test对应mysql中的test数据库
+</span></span></span><span style=display:flex><span>  <span style=color:#a6e22e>jdbc_connection_string</span> <span style=color:#f92672>=&gt;</span> <span style=color:#e6db74>&#34;jdbc:mysql://127.0.0.1:3306/blog&#34;</span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>jdbc_user</span> <span style=color:#f92672>=&gt;</span> <span style=color:#e6db74>&#34;root&#34;</span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>jdbc_password</span> <span style=color:#f92672>=&gt;</span> <span style=color:#e6db74>&#34;root&#34;</span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>tracking_column</span> <span style=color:#f92672>=&gt;</span> <span style=color:#e6db74>&#34;auto_id&#34;</span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>record_last_run</span> <span style=color:#f92672>=&gt;</span> <span style=color:#e6db74>&#34;true&#34;</span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>use_column_value</span> <span style=color:#f92672>=&gt;</span> <span style=color:#e6db74>&#34;true&#34;</span>
+</span></span><span style=display:flex><span>  <span style=color:#75715e>#代表最后一次数据记录id的值存放的位置，它会自动在bin目录创建news,这个必填不然启动报错
+</span></span></span><span style=display:flex><span>  <span style=color:#a6e22e>last_run_metadata_path</span> <span style=color:#f92672>=&gt;</span> <span style=color:#e6db74>&#34;news&#34;</span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>clean_run</span> <span style=color:#f92672>=&gt;</span> <span style=color:#e6db74>&#34;false&#34;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#75715e># 这里代表mysql-connector-java-5.1.21.jar放在bin目录
+</span></span></span><span style=display:flex><span>  <span style=color:#a6e22e>jdbc_driver_library</span> <span style=color:#f92672>=&gt;</span> <span style=color:#e6db74>&#34;D:/Program/ES/logstash/mysqletc/mysql-connector-java-8.0.22.jar&#34;</span>
+</span></span><span style=display:flex><span>  <span style=color:#75715e># the name of the driver class for mysql
+</span></span></span><span style=display:flex><span>  <span style=color:#a6e22e>jdbc_driver_class</span> <span style=color:#f92672>=&gt;</span> <span style=color:#e6db74>&#34;Java::com.mysql.jdbc.Driver&#34;</span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>jdbc_paging_enabled</span> <span style=color:#f92672>=&gt;</span> <span style=color:#e6db74>&#34;true&#34;</span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>jdbc_page_size</span> <span style=color:#f92672>=&gt;</span> <span style=color:#e6db74>&#34;500&#34;</span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>statement</span> <span style=color:#f92672>=&gt;</span> <span style=color:#e6db74>&#34;select * from wjf_articles&#34;</span>
+</span></span><span style=display:flex><span><span style=color:#75715e>#定时字段 各字段含义（由左至右）分、时、天、月、年，全部为*默认含义为每分钟都更新
+</span></span></span><span style=display:flex><span>  <span style=color:#a6e22e>schedule</span> <span style=color:#f92672>=&gt;</span> <span style=color:#e6db74>&#34;* * * * *&#34;</span>
+</span></span><span style=display:flex><span><span style=color:#75715e>#设定ES索引类型
+</span></span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>jdbc</span> {
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>type</span> <span style=color:#f92672>=&gt;</span> <span style=color:#e6db74>&#34;press_info&#34;</span>
+</span></span><span style=display:flex><span>  <span style=color:#75715e># mysql jdbc connection string to our backup databse 后面的test对应mysql中的test数据库
+</span></span></span><span style=display:flex><span>  <span style=color:#a6e22e>jdbc_connection_string</span> <span style=color:#f92672>=&gt;</span> <span style=color:#e6db74>&#34;jdbc:mysql:////127.0.0.1:3306/wjf&#34;</span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>jdbc_user</span> <span style=color:#f92672>=&gt;</span> <span style=color:#e6db74>&#34;root&#34;</span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>jdbc_password</span> <span style=color:#f92672>=&gt;</span> <span style=color:#e6db74>&#34;root&#34;</span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>tracking_column</span> <span style=color:#f92672>=&gt;</span> <span style=color:#e6db74>&#34;auto_id&#34;</span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>record_last_run</span> <span style=color:#f92672>=&gt;</span> <span style=color:#e6db74>&#34;true&#34;</span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>use_column_value</span> <span style=color:#f92672>=&gt;</span> <span style=color:#e6db74>&#34;true&#34;</span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>last_run_metadata_path</span> <span style=color:#f92672>=&gt;</span> <span style=color:#e6db74>&#34;news&#34;</span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>clean_run</span> <span style=color:#f92672>=&gt;</span> <span style=color:#e6db74>&#34;false&#34;</span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>jdbc_driver_library</span> <span style=color:#f92672>=&gt;</span> <span style=color:#e6db74>&#34;D:/Program/ES/logstash/mysqletc/mysql-connector-java-8.0.22.jar&#34;</span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>jdbc_driver_class</span> <span style=color:#f92672>=&gt;</span> <span style=color:#e6db74>&#34;Java::com.mysql.jdbc.Driver&#34;</span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>jdbc_paging_enabled</span> <span style=color:#f92672>=&gt;</span> <span style=color:#e6db74>&#34;true&#34;</span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>jdbc_page_size</span> <span style=color:#f92672>=&gt;</span> <span style=color:#e6db74>&#34;500&#34;</span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>statement</span> <span style=color:#f92672>=&gt;</span> <span style=color:#e6db74>&#34;select * from wjf_articles&#34;</span>
+</span></span><span style=display:flex><span><span style=color:#75715e>#定时字段 各字段含义（由左至右）分、时、天、月、年，全部为*默认含义为每分钟都更新
+</span></span></span><span style=display:flex><span>  <span style=color:#a6e22e>schedule</span> <span style=color:#f92672>=&gt;</span> <span style=color:#e6db74>&#34;* * * * *&#34;</span>
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>filter</span> {
+</span></span><span style=display:flex><span><span style=color:#a6e22e>mutate</span> {
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>convert</span> <span style=color:#f92672>=&gt;</span> [ <span style=color:#e6db74>&#34;publish_time&#34;</span>, <span style=color:#e6db74>&#34;string&#34;</span> ]
+</span></span><span style=display:flex><span> }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>date</span> {
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>timezone</span> <span style=color:#f92672>=&gt;</span> <span style=color:#e6db74>&#34;Europe/Berlin&#34;</span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>match</span> <span style=color:#f92672>=&gt;</span> [<span style=color:#e6db74>&#34;publish_time&#34;</span> , <span style=color:#e6db74>&#34;ISO8601&#34;</span>, <span style=color:#e6db74>&#34;yyyy-MM-dd HH:mm:ss&#34;</span>]
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span><span style=color:#75715e>#date {
+</span></span></span><span style=display:flex><span> <span style=color:#75715e># match =&gt; [ &#34;publish_time&#34;, &#34;yyyy-MM-dd HH:mm:ss,SSS&#34; ]
+</span></span></span><span style=display:flex><span>  <span style=color:#75715e># remove_field =&gt; [ &#34;publish_time&#34; ]
+</span></span></span><span style=display:flex><span>  <span style=color:#75715e># }
+</span></span></span><span style=display:flex><span><span style=color:#a6e22e>json</span> {
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>source</span> <span style=color:#f92672>=&gt;</span> <span style=color:#e6db74>&#34;message&#34;</span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>remove_field</span> <span style=color:#f92672>=&gt;</span> [<span style=color:#e6db74>&#34;message&#34;</span>]
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>output</span> {
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>if</span> [<span style=color:#a6e22e>type</span>]<span style=color:#f92672>==</span><span style=color:#e6db74>&#34;news_info&#34;</span> {
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>elasticsearch</span> {
+</span></span><span style=display:flex><span><span style=color:#75715e>#ESIP地址与端口
+</span></span></span><span style=display:flex><span>  <span style=color:#a6e22e>hosts</span> <span style=color:#f92672>=&gt;</span> <span style=color:#e6db74>&#34;127.0.0.1:9200&#34;</span>
+</span></span><span style=display:flex><span><span style=color:#75715e>#ES索引名称（自己定义的）
+</span></span></span><span style=display:flex><span>  <span style=color:#a6e22e>index</span> <span style=color:#f92672>=&gt;</span> <span style=color:#e6db74>&#34;wantu_news_info&#34;</span>
+</span></span><span style=display:flex><span><span style=color:#75715e>#自增ID编号
+</span></span></span><span style=display:flex><span>  <span style=color:#a6e22e>document_id</span> <span style=color:#f92672>=&gt;</span> <span style=color:#e6db74>&#34;%{auto_id}&#34;</span>
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>if</span> [<span style=color:#a6e22e>type</span>]<span style=color:#f92672>==</span><span style=color:#e6db74>&#34;press_info&#34;</span> {
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>elasticsearch</span> {
+</span></span><span style=display:flex><span><span style=color:#75715e>#ESIP地址与端口
+</span></span></span><span style=display:flex><span>  <span style=color:#a6e22e>hosts</span> <span style=color:#f92672>=&gt;</span> <span style=color:#e6db74>&#34;127.0.0.1:9200&#34;</span>
+</span></span><span style=display:flex><span><span style=color:#75715e>#ES索引名称（自己定义的）
+</span></span></span><span style=display:flex><span>  <span style=color:#a6e22e>index</span> <span style=color:#f92672>=&gt;</span> <span style=color:#e6db74>&#34;wantu_press_info&#34;</span>
+</span></span><span style=display:flex><span><span style=color:#75715e>#自增ID编号
+</span></span></span><span style=display:flex><span>  <span style=color:#a6e22e>document_id</span> <span style=color:#f92672>=&gt;</span> <span style=color:#e6db74>&#34;%{auto_id}&#34;</span>
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>新建 <code>test.sql</code> 文件，内容如下</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-php data-lang=php><span style=display:flex><span><span style=color:#a6e22e>SELECT</span>
+</span></span><span style=display:flex><span>	<span style=color:#f92672>*</span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>FROM</span>
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>wjf_articles</span>
+</span></span></code></pre></div><h1 id=启动logstash>启动logstash</h1><p>先启动<code>ES</code>和<code>elasticsearch-head</code></p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-php data-lang=php><span style=display:flex><span><span style=color:#75715e>// 到ES的bin目录下执行
+</span></span></span><span style=display:flex><span><span style=color:#a6e22e>elasticsearch</span><span style=color:#f92672>.</span><span style=color:#a6e22e>bat</span>
+</span></span></code></pre></div><p><img src=https://www.choudalao.com/uploads/20201203/20201203160815nmn2Nu.png alt></p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-php data-lang=php><span style=display:flex><span><span style=color:#75715e>// 到elasticsearch-head目录下，我的是  D:\Program\ES\elasticsearch-head-master
+</span></span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>npm</span> <span style=color:#a6e22e>run</span> <span style=color:#a6e22e>start</span>
+</span></span></code></pre></div><p><img src=https://www.choudalao.com/uploads/20201203/20201203160627tZIID2.png alt></p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-php data-lang=php><span style=display:flex><span><span style=color:#75715e>// 到logstash目录，进入bin目录，运行如下命令
+</span></span></span><span style=display:flex><span><span style=color:#a6e22e>logstash</span> <span style=color:#f92672>-</span><span style=color:#a6e22e>f</span> <span style=color:#f92672>../</span><span style=color:#a6e22e>mysqletc</span><span style=color:#f92672>/</span><span style=color:#a6e22e>mysql</span><span style=color:#f92672>.</span><span style=color:#a6e22e>conf</span>
+</span></span></code></pre></div><p><img src=https://www.choudalao.com/uploads/20201203/20201203160832RJxKGk.png alt></p><h1 id=结果>结果</h1><p><img src=https://www.choudalao.com/uploads/20201203/20201203160904WkLVLY.png alt></p><h1 id=问题>问题</h1><h3 id=问题一>问题一</h3><blockquote><p>logstash-plugin.bat install logstash-input-jdbc
+Cannot find Java 1.5 or higher.</p></blockquote><h3 id=解决方案>解决方案</h3><p>打开<code> logstash-plugin.bat</code>，在最上面加上你的<code>java_home</code>路径</p><p><code>SET JAVA_HOME=D:\Program\java8</code></p><p><img src=https://www.choudalao.com/uploads/20201203/20201203100308oUzjqj.png alt></p></div></article></main></div></div><footer class=footer><div class="container footer__container flex"><div class=footer__copyright>&copy; 2026 臭大佬博客.
+<span class=footer__copyright-credits>基于 <a href=https://gohugo.io/ rel="nofollow noopener" target=_blank>Hugo</a> 引擎和 <a href=https://github.com/Vimux/Mainroad/ rel="nofollow noopener" target=_blank>Mainroad</a> 主题</span></div></div></footer></div><script async defer src=/choudalao.github.io/js/menu.js></script></body></html>

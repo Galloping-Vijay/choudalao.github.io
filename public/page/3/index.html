@@ -1,379 +1,130 @@
-<!DOCTYPE html>
-<html class="no-js" lang="en">
-<head>
-	<meta name="generator" content="Hugo 0.156.0"><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>臭大佬博客</title>
-	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
-	<meta name="description" content="技术博客">
-	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-	<link rel="dns-prefetch" href="//fonts.googleapis.com">
-	<link rel="dns-prefetch" href="//fonts.gstatic.com">
-	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
-
-	<link rel="stylesheet" href="/css/style.css">
-	
-	<link rel="alternate" type="application/rss+xml" href="/index.xml" title="臭大佬博客">
-
-	<link rel="shortcut icon" href="/favicon.ico">
-		
-</head>
-<body class="body">
-	<div class="container container--outer">
-		<header class="header">
-	<div class="container header__container">
-		
-	<div class="logo">
-		<a class="logo__link" href="/" title="臭大佬博客" rel="home">
-			<div class="logo__item logo__text">
-					<div class="logo__title">臭大佬博客</div>
-					
-				</div>
-		</a>
-	</div>
-		
-<nav class="menu">
-	<button class="menu__btn" aria-haspopup="true" aria-expanded="false" tabindex="0">
-		<span class="menu__btn-title" tabindex="-1">菜单</span>
-	</button>
-	<ul class="menu__list">
-		<li class="menu__item">
-			<a class="menu__link" href="/">
-				
-				<span class="menu__text">首页</span>
-				
-			</a>
-		</li>
-		<li class="menu__item">
-			<a class="menu__link" href="/post/">
-				
-				<span class="menu__text">归档</span>
-				
-			</a>
-		</li>
-		<li class="menu__item">
-			<a class="menu__link" href="/about/">
-				
-				<span class="menu__text">关于</span>
-				
-			</a>
-		</li>
-	</ul>
-</nav>
-
-	</div>
-</header>
-		<div class="wrapper flex">
-			<div class="primary">
-			
-<main class="main list" role="main">
-	<article class="list__item post">
-	
-	<header class="list__header">
-		<h2 class="list__title post__title">
-			<a href="/posts/2024-03-27-redis%E7%9A%84stream%E6%93%8D%E4%BD%9C/" rel="bookmark">
-			Redis的Stream操作
-			</a>
-		</h2>
-		
-	</header>
-	<div class="content list__excerpt post__content clearfix">
-		<h1 id="介绍">介绍</h1>
-<h1 id="基本操作">基本操作</h1>
-<h3 id="添加">添加</h3>
-<p>*号表示服务器自动生成ID，后面顺序跟着一堆key/value,<code>stream-name</code>表示Stream名</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">XADD</span> <span style="color:#a6e22e">stream</span><span style="color:#f92672">-</span><span style="color:#a6e22e">name</span> <span style="color:#f92672">*</span> <span style="color:#a6e22e">name</span> <span style="color:#a6e22e">boy</span> <span style="color:#a6e22e">age</span> <span style="color:#ae81ff">20</span>
-</span></span></code></pre></div><h3 id="获取列表">获取列表</h3>
-<p>~~ 获取消息列表，会自动过滤已经删除的消息
--表示最小值, +表示最大值~~</p>
-	</div>
-</article><article class="list__item post">
-	
-	<header class="list__header">
-		<h2 class="list__title post__title">
-			<a href="/posts/2024-02-19-pprof%E4%BB%8B%E7%BB%8D/" rel="bookmark">
-			pprof介绍
-			</a>
-		</h2>
-		
-	</header>
-	<div class="content list__excerpt post__content clearfix">
-		<h1 id="gin中使用">Gin中使用</h1>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">import</span> (
-</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;net/http&#34;</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">_</span> <span style="color:#e6db74">&#34;net/http/pprof&#34;</span>
-</span></span><span style="display:flex;"><span>	)
-</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">r</span>.<span style="color:#a6e22e">GET</span>(<span style="color:#e6db74">&#34;/debug/pprof/*any&#34;</span>, <span style="color:#a6e22e">gin</span>.<span style="color:#a6e22e">WrapH</span>(<span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">DefaultServeMux</span>))
-</span></span></code></pre></div><h2 id="浏览器查看">浏览器查看</h2>
-<p>浏览器中输入地址localhost/debug/pprof
+<!doctype html><html class=no-js lang=en><head><meta name=generator content="Hugo 0.156.0"><meta charset=UTF-8><meta name=viewport content="width=device-width,initial-scale=1"><title>臭大佬博客</title><script>(function(e,t){e[t]=e[t].replace("no-js","js")})(document.documentElement,"className")</script><meta name=description content="技术博客"><link rel=preconnect href=https://fonts.gstatic.com crossorigin><link rel=dns-prefetch href=//fonts.googleapis.com><link rel=dns-prefetch href=//fonts.gstatic.com><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700"><link rel=stylesheet href=/choudalao.github.io/css/style.css><link rel=alternate type=application/rss+xml href=/choudalao.github.io/index.xml title=臭大佬博客><link rel="shortcut icon" href=/choudalao.github.io/favicon.ico></head><body class=body><div class="container container--outer"><header class=header><div class="container header__container"><div class=logo><a class=logo__link href=/choudalao.github.io/ title=臭大佬博客 rel=home><div class="logo__item logo__text"><div class=logo__title>臭大佬博客</div></div></a></div><nav class=menu><button class=menu__btn aria-haspopup=true aria-expanded=false tabindex=0>
+<span class=menu__btn-title tabindex=-1>菜单</span></button><ul class=menu__list><li class=menu__item><a class=menu__link href=/choudalao.github.io/><span class=menu__text>首页</span></a></li><li class=menu__item><a class=menu__link href=/choudalao.github.io/post/><span class=menu__text>归档</span></a></li><li class=menu__item><a class=menu__link href=/choudalao.github.io/about/><span class=menu__text>关于</span></a></li></ul></nav></div></header><div class="wrapper flex"><div class=primary><main class="main list" role=main><article class="list__item post"><header class=list__header><h2 class="list__title post__title"><a href=/choudalao.github.io/posts/2024-03-27-redis%E7%9A%84stream%E6%93%8D%E4%BD%9C/ rel=bookmark>Redis的Stream操作</a></h2></header><div class="content list__excerpt post__content clearfix"><h1 id=介绍>介绍</h1><h1 id=基本操作>基本操作</h1><h3 id=添加>添加</h3><p>*号表示服务器自动生成ID，后面顺序跟着一堆key/value,<code>stream-name</code>表示Stream名</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#a6e22e>XADD</span> <span style=color:#a6e22e>stream</span><span style=color:#f92672>-</span><span style=color:#a6e22e>name</span> <span style=color:#f92672>*</span> <span style=color:#a6e22e>name</span> <span style=color:#a6e22e>boy</span> <span style=color:#a6e22e>age</span> <span style=color:#ae81ff>20</span>
+</span></span></code></pre></div><h3 id=获取列表>获取列表</h3><p>~~ 获取消息列表，会自动过滤已经删除的消息
+-表示最小值, +表示最大值~~</p></div></article><article class="list__item post"><header class=list__header><h2 class="list__title post__title"><a href=/choudalao.github.io/posts/2024-02-19-pprof%E4%BB%8B%E7%BB%8D/ rel=bookmark>pprof介绍</a></h2></header><div class="content list__excerpt post__content clearfix"><h1 id=gin中使用>Gin中使用</h1><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#f92672>import</span> (
+</span></span><span style=display:flex><span>	<span style=color:#e6db74>&#34;net/http&#34;</span>
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>_</span> <span style=color:#e6db74>&#34;net/http/pprof&#34;</span>
+</span></span><span style=display:flex><span>	)
+</span></span></code></pre></div><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#a6e22e>r</span>.<span style=color:#a6e22e>GET</span>(<span style=color:#e6db74>&#34;/debug/pprof/*any&#34;</span>, <span style=color:#a6e22e>gin</span>.<span style=color:#a6e22e>WrapH</span>(<span style=color:#a6e22e>http</span>.<span style=color:#a6e22e>DefaultServeMux</span>))
+</span></span></code></pre></div><h2 id=浏览器查看>浏览器查看</h2><p>浏览器中输入地址localhost/debug/pprof
 profiles下分别是block(阻塞情况)、goroutine数量、heap(堆)、mutex(锁)和threadcreate(创建的物理线程)
-这里是调用Go底层的runtime.MemStats结构体获取，该结构体相关字段解释如下:</p>
-	</div>
-</article><article class="list__item post">
-	
-	<header class="list__header">
-		<h2 class="list__title post__title">
-			<a href="/posts/2024-02-16-%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84%E5%AE%B9%E5%99%A8%E6%A3%80%E6%B5%8B%E8%84%9A%E6%9C%AC/" rel="bookmark">
-			一个简单的容器检测脚本
-			</a>
-		</h2>
-		
-	</header>
-	<div class="content list__excerpt post__content clearfix">
-		<h1 id="代码">代码</h1>
-<h3 id="imtimersh定时器检测">imTimer.sh:定时器检测</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">#</span>!<span style="color:#f92672">/</span><span style="color:#a6e22e">bin</span><span style="color:#f92672">/</span><span style="color:#a6e22e">bash</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#a6e22e">while</span> <span style="color:#66d9ef">true</span>
-</span></span><span style="display:flex;"><span><span style="color:#a6e22e">do</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#960050;background-color:#1e0010">#</span> <span style="color:#a6e22e">检测脚本</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">restart</span>.<span style="color:#a6e22e">sh</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">sleep</span> <span style="color:#ae81ff">5</span>
-</span></span><span style="display:flex;"><span><span style="color:#a6e22e">done</span>
-</span></span></code></pre></div><h3 id="restartsh检测和重启代码">restart.sh:检测和重启代码</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">#</span>!<span style="color:#f92672">/</span><span style="color:#a6e22e">bin</span><span style="color:#f92672">/</span><span style="color:#a6e22e">bash</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#a6e22e">env</span>=<span style="color:#e6db74">&#34;prod&#34;</span>
-</span></span><span style="display:flex;"><span><span style="color:#a6e22e">httpUrl</span>=<span style="color:#e6db74">&#34;http://127.0.0.1:3200/system/state&#34;</span>
-</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">#</span> <span style="color:#a6e22e">项目</span>
-</span></span><span style="display:flex;"><span><span style="color:#a6e22e">objName</span>=<span style="color:#e6db74">&#34;im&#34;</span>
-</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">#</span> <span style="color:#a6e22e">设置镜像名</span>
-</span></span><span style="display:flex;"><span><span style="color:#a6e22e">imagesName</span>=<span style="color:#e6db74">&#34;${objName}&#34;</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#a6e22e">containerName</span>=<span style="color:#960050;background-color:#1e0010">$</span>{<span style="color:#a6e22e">objName</span>}
-</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">#</span> <span style="color:#a6e22e">当前时间</span>
-</span></span><span style="display:flex;"><span><span style="color:#a6e22e">currentTime</span>=<span style="color:#960050;background-color:#1e0010">$</span>(<span style="color:#a6e22e">date</span> <span style="color:#f92672">+</span><span style="color:#e6db74">&#34;%Y%m%d%H%M%S&#34;</span>)
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">#</span> <span style="color:#a6e22e">检测容器是否可以访问</span>
-</span></span><span style="display:flex;"><span><span style="color:#a6e22e">response</span>=<span style="color:#960050;background-color:#1e0010">$</span>(<span style="color:#a6e22e">curl</span> <span style="color:#f92672">--</span><span style="color:#a6e22e">write</span><span style="color:#f92672">-</span><span style="color:#a6e22e">out</span> <span style="color:#f92672">%</span>{<span style="color:#a6e22e">http_code</span>} <span style="color:#f92672">--</span><span style="color:#a6e22e">silent</span> <span style="color:#f92672">--</span><span style="color:#a6e22e">output</span> <span style="color:#f92672">/</span><span style="color:#a6e22e">dev</span><span style="color:#f92672">/</span><span style="color:#a6e22e">null</span> <span style="color:#960050;background-color:#1e0010">$</span>{<span style="color:#a6e22e">httpUrl</span>})
-</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">#</span> <span style="color:#a6e22e">查看进程是否存在</span>
-</span></span><span style="display:flex;"><span><span style="color:#a6e22e">exist</span>=<span style="color:#960050;background-color:#1e0010">$</span>(<span style="color:#a6e22e">docker</span> <span style="color:#a6e22e">inspect</span> <span style="color:#f92672">--</span><span style="color:#a6e22e">format</span> <span style="color:#960050;background-color:#1e0010">&#39;</span>{{.<span style="color:#a6e22e">State</span>.<span style="color:#a6e22e">Running</span>}}<span style="color:#960050;background-color:#1e0010">&#39;</span> <span style="color:#960050;background-color:#1e0010">$</span>{<span style="color:#a6e22e">containerName</span>})
-</span></span><span style="display:flex;"><span><span style="color:#a6e22e">echo</span> <span style="color:#e6db74">&#34;时间 ${currentTime}&#34;</span>
-</span></span><span style="display:flex;"><span><span style="color:#a6e22e">echo</span> <span style="color:#e6db74">&#34;容器 ${containerName} 状态:${exist}&#34;</span>
-</span></span><span style="display:flex;"><span><span style="color:#a6e22e">echo</span> <span style="color:#e6db74">&#34;地址 ${httpUrl}  状态:${response}&#34;</span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> [ <span style="color:#e6db74">&#34;${exist}&#34;</span> <span style="color:#f92672">!=</span> <span style="color:#e6db74">&#34;true&#34;</span> ] <span style="color:#f92672">||</span> [ <span style="color:#e6db74">&#34;$response&#34;</span> <span style="color:#f92672">-</span><span style="color:#a6e22e">ne</span> <span style="color:#ae81ff">200</span> ]; <span style="color:#a6e22e">then</span>
-</span></span><span style="display:flex;"><span><span style="color:#a6e22e">echo</span> <span style="color:#e6db74">&#34;容器 ${containerName} 执行重启&#34;</span>
-</span></span><span style="display:flex;"><span><span style="color:#a6e22e">docker</span> <span style="color:#a6e22e">start</span> <span style="color:#960050;background-color:#1e0010">$</span>{<span style="color:#a6e22e">containerName</span>}
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#a6e22e">logFile</span>=<span style="color:#960050;background-color:#1e0010">$</span>{<span style="color:#a6e22e">containerName</span>}<span style="color:#f92672">-</span><span style="color:#e6db74">&#34;${currentTime}&#34;</span>.<span style="color:#a6e22e">log</span>
-</span></span><span style="display:flex;"><span><span style="color:#a6e22e">echo</span> <span style="color:#e6db74">&#34;写入 ${logFile} 日志&#34;</span>
-</span></span><span style="display:flex;"><span> <span style="color:#a6e22e">docker</span> <span style="color:#a6e22e">logs</span> <span style="color:#f92672">-</span><span style="color:#a6e22e">f</span> <span style="color:#960050;background-color:#1e0010">$</span>{<span style="color:#a6e22e">containerName</span>} &gt; <span style="color:#f92672">/</span><span style="color:#a6e22e">wwwlogs</span><span style="color:#f92672">/</span><span style="color:#960050;background-color:#1e0010">$</span>{<span style="color:#a6e22e">objName</span>}<span style="color:#f92672">/</span><span style="color:#a6e22e">temp</span><span style="color:#f92672">/</span><span style="color:#960050;background-color:#1e0010">$</span>{<span style="color:#a6e22e">logFile</span>} <span style="color:#f92672">&amp;</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#a6e22e">fi</span>
-</span></span></code></pre></div><h3 id="执行">执行</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">nohup</span> <span style="color:#a6e22e">imTimer</span>.<span style="color:#a6e22e">sh</span> <span style="color:#f92672">&amp;</span>
-</span></span></code></pre></div><h3 id="查看和杀死进程">查看和杀死进程</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">pgrep</span> <span style="color:#f92672">-</span><span style="color:#a6e22e">f</span> <span style="color:#a6e22e">imTimer</span>.<span style="color:#a6e22e">sh</span>
-</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span> <span style="color:#a6e22e">kill</span> &lt;<span style="color:#a6e22e">PID</span>&gt;
-</span></span></code></pre></div><h5 id="查看占用高的进程">查看占用高的进程</h5>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">top</span>
-</span></span></code></pre></div><h5 id="查看是哪个程序">查看是哪个程序</h5>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">ps</span> <span style="color:#f92672">-</span><span style="color:#a6e22e">ef</span> | <span style="color:#a6e22e">grep</span> &lt;<span style="color:#a6e22e">PID</span>&gt;
-</span></span></code></pre></div>
-	</div>
-</article><article class="list__item post">
-	
-	<header class="list__header">
-		<h2 class="list__title post__title">
-			<a href="/posts/2024-01-04-go-%E4%BB%A3%E7%A0%81%E6%A3%80%E6%B5%8B/" rel="bookmark">
-			go 代码检测
-			</a>
-		</h2>
-		
-	</header>
-	<div class="content list__excerpt post__content clearfix">
-		<p>Go 代码检测通常指的是对代码进行静态分析，以找出潜在的错误、不符合规范的编码习惯以及性能上的优化点。</p>
-<h1 id="go-vet">Go Vet</h1>
-<p>已包含在 Go 标准库中，无需额外安装。go vet 是 Go 语言提供的静态代码分析工具，用于检查 Go 源代码中潜在的常见错误和可疑构造。它旨在捕获那些编译器不会报错但可能导致程序运行时出现问题的代码片段。</p>
-	</div>
-</article><article class="list__item post">
-	
-	<header class="list__header">
-		<h2 class="list__title post__title">
-			<a href="/posts/2024-01-01-jmeter-%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8/" rel="bookmark">
-			JMeter 简单使用
-			</a>
-		</h2>
-		
-	</header>
-	<div class="content list__excerpt post__content clearfix">
-		<h1 id="jmeter-简介">JMeter 简介</h1>
-<p>Apache JMeter 是一款流行的性能测试工具，可以用来模拟用户行为并对系统进行压力测试。</p>
-<h1 id="安装">安装</h1>
-<p>官方网站：http://jmeter.apache.org/</p>
-<p>在window下解压后， 运行 “bin/jmeter.bat”</p>
-	</div>
-</article><article class="list__item post">
-	
-	<header class="list__header">
-		<h2 class="list__title post__title">
-			<a href="/posts/2023-10-16-golang-%E5%B0%86%E5%9B%BE%E7%89%87%E7%94%9F%E6%88%90base64/" rel="bookmark">
-			golang 将图片生成Base64
-			</a>
-		</h2>
-		
-	</header>
-	<div class="content list__excerpt post__content clearfix">
-		<h1 id="代码">代码</h1>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> (
-</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;encoding/base64&#34;</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;errors&#34;</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;fmt&#34;</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;io&#34;</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;io/ioutil&#34;</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;net/http&#34;</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;os&#34;</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;strings&#34;</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;time&#34;</span>
-</span></span><span style="display:flex;"><span>)
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e">// GetUrlImgBase64 golang 将图片生成Base64</span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">GetUrlImgBase64</span>(<span style="color:#a6e22e">path</span> <span style="color:#66d9ef">string</span>) (<span style="color:#a6e22e">baseImg</span> <span style="color:#66d9ef">string</span>, <span style="color:#a6e22e">err</span> <span style="color:#66d9ef">error</span>) {
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">imgByte</span> <span style="color:#f92672">:=</span> []<span style="color:#66d9ef">byte</span>{}
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">strings</span>.<span style="color:#a6e22e">Contains</span>(<span style="color:#a6e22e">path</span>, <span style="color:#e6db74">&#34;http&#34;</span>) {
-</span></span><span style="display:flex;"><span>		<span style="color:#75715e">//获取网络图片</span>
-</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">client</span> <span style="color:#f92672">:=</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">Client</span>{
-</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">Timeout</span>: <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Second</span> <span style="color:#f92672">*</span> <span style="color:#ae81ff">5</span>, <span style="color:#75715e">//超时时间</span>
-</span></span><span style="display:flex;"><span>		}
-</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">bodyImg</span> <span style="color:#a6e22e">io</span>.<span style="color:#a6e22e">Reader</span>
-</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">request</span>, <span style="color:#a6e22e">er</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">NewRequest</span>(<span style="color:#e6db74">&#34;GET&#34;</span>, <span style="color:#a6e22e">path</span>, <span style="color:#a6e22e">bodyImg</span>)
-</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">er</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
-</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">err</span> = <span style="color:#a6e22e">errors</span>.<span style="color:#a6e22e">New</span>(<span style="color:#e6db74">&#34;获取网络图片失败&#34;</span>)
-</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">return</span>
-</span></span><span style="display:flex;"><span>		}
-</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">respImg</span>, <span style="color:#a6e22e">_</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">client</span>.<span style="color:#a6e22e">Do</span>(<span style="color:#a6e22e">request</span>)
-</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">respImg</span>.<span style="color:#a6e22e">Body</span>.<span style="color:#a6e22e">Close</span>()
-</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">imgByte</span>, <span style="color:#a6e22e">_</span> = <span style="color:#a6e22e">ioutil</span>.<span style="color:#a6e22e">ReadAll</span>(<span style="color:#a6e22e">respImg</span>.<span style="color:#a6e22e">Body</span>)
-</span></span><span style="display:flex;"><span>	} <span style="color:#66d9ef">else</span> {
-</span></span><span style="display:flex;"><span>		<span style="color:#75715e">//获取本地文件</span>
-</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">file</span>, <span style="color:#a6e22e">er</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Open</span>(<span style="color:#a6e22e">path</span>)
-</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">er</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
-</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">err</span> = <span style="color:#a6e22e">errors</span>.<span style="color:#a6e22e">New</span>(<span style="color:#e6db74">&#34;获取本地图片失败&#34;</span>)
-</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">return</span>
-</span></span><span style="display:flex;"><span>		}
-</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">file</span>.<span style="color:#a6e22e">Close</span>()
-</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">imgByte</span>, <span style="color:#a6e22e">_</span> = <span style="color:#a6e22e">ioutil</span>.<span style="color:#a6e22e">ReadAll</span>(<span style="color:#a6e22e">file</span>)
-</span></span><span style="display:flex;"><span>	}
-</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// 判断文件类型，生成一个前缀，拼接base64后可以直接粘贴到浏览器打开，不需要可以不用下面代码</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#75715e">//取图片类型</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">mimeType</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">DetectContentType</span>(<span style="color:#a6e22e">imgByte</span>)
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">switch</span> <span style="color:#a6e22e">mimeType</span> {
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">case</span> <span style="color:#e6db74">&#34;image/jpeg&#34;</span>:
-</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">baseImg</span> = <span style="color:#e6db74">&#34;data:image/jpeg;base64,&#34;</span> <span style="color:#f92672">+</span> <span style="color:#a6e22e">base64</span>.<span style="color:#a6e22e">StdEncoding</span>.<span style="color:#a6e22e">EncodeToString</span>(<span style="color:#a6e22e">imgByte</span>)
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">case</span> <span style="color:#e6db74">&#34;image/png&#34;</span>:
-</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">baseImg</span> = <span style="color:#e6db74">&#34;data:image/png;base64,&#34;</span> <span style="color:#f92672">+</span> <span style="color:#a6e22e">base64</span>.<span style="color:#a6e22e">StdEncoding</span>.<span style="color:#a6e22e">EncodeToString</span>(<span style="color:#a6e22e">imgByte</span>)
-</span></span><span style="display:flex;"><span>	}
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span>
-</span></span><span style="display:flex;"><span>}
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">i</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">GetUrlImgBase64</span>(<span style="color:#e6db74">&#34;./avatar.jpg&#34;</span>)
-</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// i, err := GetUrlImgBase64(&#34;https://www.choudalao.com/images/config/avatar.jpg&#34;)</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
-</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;err :%v\n&#34;</span>, <span style="color:#a6e22e">err</span>)
-</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">return</span>
-</span></span><span style="display:flex;"><span>	}
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;i: %v\n&#34;</span>, <span style="color:#a6e22e">i</span>)
-</span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div>
-	</div>
-</article><article class="list__item post">
-	
-	<header class="list__header">
-		<h2 class="list__title post__title">
-			<a href="/posts/2023-09-14-%E5%AE%B9%E5%99%A8%E6%A3%80%E6%B5%8B%E5%8F%8A%E8%87%AA%E5%90%AF%E5%8A%A8/" rel="bookmark">
-			容器检测及自启动
-			</a>
-		</h2>
-		
-	</header>
-	<div class="content list__excerpt post__content clearfix">
-		<h1 id="场景">场景</h1>
-<p>目前还没有上 k8s, 当容器意外停止时(如容器里面的go服务抛出panic),服务就不能用了,可能会影响正常的业务,这时候,就需要有个监测的脚本,去检测容器是否正常,如果停止,需要启动它.</p>
-	</div>
-</article><article class="list__item post">
-	
-	<header class="list__header">
-		<h2 class="list__title post__title">
-			<a href="/posts/2023-09-04-%E5%88%A9%E7%94%A8kind%E5%9C%A8win10-wsl2-%E4%B8%AD%E6%90%AD%E5%BB%BA-k8s-%E7%8E%AF%E5%A2%83/" rel="bookmark">
-			利用kind在WIN10 WSL2 中搭建 K8s 环境
-			</a>
-		</h2>
-		
-	</header>
-	<div class="content list__excerpt post__content clearfix">
-		<p>利用<code>kind</code>在<code>WIN10</code> <code>WSL2</code> 中搭建 <code>K8s</code> 环境</p>
-<h2 id="安装kubectl">安装kubectl</h2>
-<p>在<code>Ubuntu</code>上安装<code>kubectl</code>，您可以按照以下步骤进行操作：
-打开终端，并使用以下命令下载kubectl的最新版本：</p>
-	</div>
-</article><article class="list__item post">
-	
-	<header class="list__header">
-		<h2 class="list__title post__title">
-			<a href="/posts/2023-08-12-%E6%B8%B8%E6%88%8F%E6%8E%92%E8%A1%8C%E6%A6%9C/" rel="bookmark">
-			游戏排行榜
-			</a>
-		</h2>
-		
-	</header>
-	<div class="content list__excerpt post__content clearfix">
-		<h1 id="问题">问题</h1>
-<p>一场游戏活动，很多用户一起参与，每个用户都能参与多次，现在要获取得分排行榜，当点数相同的情况下，先出点数的用户赢,同时同一用户相同点数的多条记录,取最先的那条.</p>
-	</div>
-</article><article class="list__item post">
-	
-	<header class="list__header">
-		<h2 class="list__title post__title">
-			<a href="/posts/2023-08-08-gin%E6%A1%86%E6%9E%B6body%E5%8F%82%E6%95%B0%E5%8F%AA%E8%83%BD%E8%AF%BB%E5%8F%96%E4%B8%80%E6%AC%A1%E9%97%AE%E9%A2%98/" rel="bookmark">
-			Gin框架，body参数只能读取一次问题
-			</a>
-		</h2>
-		
-	</header>
-	<div class="content list__excerpt post__content clearfix">
-		<h1 id="原因">原因</h1>
-<p>在使用gin框架的时候，发现请求的body数据只允许读取一次。
-读取第二次BindJSON这一步报错：EOF。</p>
-<h1 id="解决方法">解决方法</h1>
-<p>调用完压回去</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">funName</span>(<span style="color:#a6e22e">c</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">gin</span>.<span style="color:#a6e22e">Context</span>) {
-</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">data</span>,<span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">ctx</span>.<span style="color:#a6e22e">GetRawData</span>()
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span>{
-</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">err</span>.<span style="color:#a6e22e">Error</span>())
-</span></span><span style="display:flex;"><span>        }
-</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;data: %v\n&#34;</span>,string(<span style="color:#a6e22e">data</span>)) 
-</span></span><span style="display:flex;"><span>        
-</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">ctx</span>.<span style="color:#a6e22e">Request</span>.<span style="color:#a6e22e">Body</span> = <span style="color:#a6e22e">ioutil</span>.<span style="color:#a6e22e">NopCloser</span>(<span style="color:#a6e22e">bytes</span>.<span style="color:#a6e22e">NewBuffer</span>(<span style="color:#a6e22e">data</span>)) <span style="color:#75715e">// 关键点</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">ctx</span>.<span style="color:#a6e22e">Next</span>()
-</span></span><span style="display:flex;"><span>    }
-</span></span></code></pre></div>
-	</div>
-</article>
-</main>
-
-<div class="pagination">
-	<a class="pagination__item pagination__item--prev btn" href="/page/2/">«</a>
-	<span class="pagination__item pagination__item--current">3/35</span>
-	<a class="pagination__item pagination__item--next btn" href="/page/4/">»</a>
-</div>
-
-			</div>
-			
-		</div>
-		<footer class="footer">
-	<div class="container footer__container flex">
-		
-		<div class="footer__copyright">
-			&copy; 2026 臭大佬博客.
-			<span class="footer__copyright-credits">基于 <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> 引擎和 <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> 主题</span>
-		</div>
-	</div>
-</footer>
-	</div>
-<script async defer src="/js/menu.js"></script>
-</body>
-</html>
+这里是调用Go底层的runtime.MemStats结构体获取，该结构体相关字段解释如下:</p></div></article><article class="list__item post"><header class=list__header><h2 class="list__title post__title"><a href=/choudalao.github.io/posts/2024-02-16-%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84%E5%AE%B9%E5%99%A8%E6%A3%80%E6%B5%8B%E8%84%9A%E6%9C%AC/ rel=bookmark>一个简单的容器检测脚本</a></h2></header><div class="content list__excerpt post__content clearfix"><h1 id=代码>代码</h1><h3 id=imtimersh定时器检测>imTimer.sh:定时器检测</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#960050;background-color:#1e0010>#</span>!<span style=color:#f92672>/</span><span style=color:#a6e22e>bin</span><span style=color:#f92672>/</span><span style=color:#a6e22e>bash</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>while</span> <span style=color:#66d9ef>true</span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>do</span>
+</span></span><span style=display:flex><span>	<span style=color:#960050;background-color:#1e0010>#</span> <span style=color:#a6e22e>检测脚本</span>
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>restart</span>.<span style=color:#a6e22e>sh</span>
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>sleep</span> <span style=color:#ae81ff>5</span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>done</span>
+</span></span></code></pre></div><h3 id=restartsh检测和重启代码>restart.sh:检测和重启代码</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#960050;background-color:#1e0010>#</span>!<span style=color:#f92672>/</span><span style=color:#a6e22e>bin</span><span style=color:#f92672>/</span><span style=color:#a6e22e>bash</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>env</span>=<span style=color:#e6db74>&#34;prod&#34;</span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>httpUrl</span>=<span style=color:#e6db74>&#34;http://127.0.0.1:3200/system/state&#34;</span>
+</span></span><span style=display:flex><span><span style=color:#960050;background-color:#1e0010>#</span> <span style=color:#a6e22e>项目</span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>objName</span>=<span style=color:#e6db74>&#34;im&#34;</span>
+</span></span><span style=display:flex><span><span style=color:#960050;background-color:#1e0010>#</span> <span style=color:#a6e22e>设置镜像名</span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>imagesName</span>=<span style=color:#e6db74>&#34;${objName}&#34;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>containerName</span>=<span style=color:#960050;background-color:#1e0010>$</span>{<span style=color:#a6e22e>objName</span>}
+</span></span><span style=display:flex><span><span style=color:#960050;background-color:#1e0010>#</span> <span style=color:#a6e22e>当前时间</span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>currentTime</span>=<span style=color:#960050;background-color:#1e0010>$</span>(<span style=color:#a6e22e>date</span> <span style=color:#f92672>+</span><span style=color:#e6db74>&#34;%Y%m%d%H%M%S&#34;</span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#960050;background-color:#1e0010>#</span> <span style=color:#a6e22e>检测容器是否可以访问</span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>response</span>=<span style=color:#960050;background-color:#1e0010>$</span>(<span style=color:#a6e22e>curl</span> <span style=color:#f92672>--</span><span style=color:#a6e22e>write</span><span style=color:#f92672>-</span><span style=color:#a6e22e>out</span> <span style=color:#f92672>%</span>{<span style=color:#a6e22e>http_code</span>} <span style=color:#f92672>--</span><span style=color:#a6e22e>silent</span> <span style=color:#f92672>--</span><span style=color:#a6e22e>output</span> <span style=color:#f92672>/</span><span style=color:#a6e22e>dev</span><span style=color:#f92672>/</span><span style=color:#a6e22e>null</span> <span style=color:#960050;background-color:#1e0010>$</span>{<span style=color:#a6e22e>httpUrl</span>})
+</span></span><span style=display:flex><span><span style=color:#960050;background-color:#1e0010>#</span> <span style=color:#a6e22e>查看进程是否存在</span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>exist</span>=<span style=color:#960050;background-color:#1e0010>$</span>(<span style=color:#a6e22e>docker</span> <span style=color:#a6e22e>inspect</span> <span style=color:#f92672>--</span><span style=color:#a6e22e>format</span> <span style=color:#960050;background-color:#1e0010>&#39;</span>{{.<span style=color:#a6e22e>State</span>.<span style=color:#a6e22e>Running</span>}}<span style=color:#960050;background-color:#1e0010>&#39;</span> <span style=color:#960050;background-color:#1e0010>$</span>{<span style=color:#a6e22e>containerName</span>})
+</span></span><span style=display:flex><span><span style=color:#a6e22e>echo</span> <span style=color:#e6db74>&#34;时间 ${currentTime}&#34;</span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>echo</span> <span style=color:#e6db74>&#34;容器 ${containerName} 状态:${exist}&#34;</span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>echo</span> <span style=color:#e6db74>&#34;地址 ${httpUrl}  状态:${response}&#34;</span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>if</span> [ <span style=color:#e6db74>&#34;${exist}&#34;</span> <span style=color:#f92672>!=</span> <span style=color:#e6db74>&#34;true&#34;</span> ] <span style=color:#f92672>||</span> [ <span style=color:#e6db74>&#34;$response&#34;</span> <span style=color:#f92672>-</span><span style=color:#a6e22e>ne</span> <span style=color:#ae81ff>200</span> ]; <span style=color:#a6e22e>then</span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>echo</span> <span style=color:#e6db74>&#34;容器 ${containerName} 执行重启&#34;</span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>docker</span> <span style=color:#a6e22e>start</span> <span style=color:#960050;background-color:#1e0010>$</span>{<span style=color:#a6e22e>containerName</span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>logFile</span>=<span style=color:#960050;background-color:#1e0010>$</span>{<span style=color:#a6e22e>containerName</span>}<span style=color:#f92672>-</span><span style=color:#e6db74>&#34;${currentTime}&#34;</span>.<span style=color:#a6e22e>log</span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>echo</span> <span style=color:#e6db74>&#34;写入 ${logFile} 日志&#34;</span>
+</span></span><span style=display:flex><span> <span style=color:#a6e22e>docker</span> <span style=color:#a6e22e>logs</span> <span style=color:#f92672>-</span><span style=color:#a6e22e>f</span> <span style=color:#960050;background-color:#1e0010>$</span>{<span style=color:#a6e22e>containerName</span>} &gt; <span style=color:#f92672>/</span><span style=color:#a6e22e>wwwlogs</span><span style=color:#f92672>/</span><span style=color:#960050;background-color:#1e0010>$</span>{<span style=color:#a6e22e>objName</span>}<span style=color:#f92672>/</span><span style=color:#a6e22e>temp</span><span style=color:#f92672>/</span><span style=color:#960050;background-color:#1e0010>$</span>{<span style=color:#a6e22e>logFile</span>} <span style=color:#f92672>&amp;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>fi</span>
+</span></span></code></pre></div><h3 id=执行>执行</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#a6e22e>nohup</span> <span style=color:#a6e22e>imTimer</span>.<span style=color:#a6e22e>sh</span> <span style=color:#f92672>&amp;</span>
+</span></span></code></pre></div><h3 id=查看和杀死进程>查看和杀死进程</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#a6e22e>pgrep</span> <span style=color:#f92672>-</span><span style=color:#a6e22e>f</span> <span style=color:#a6e22e>imTimer</span>.<span style=color:#a6e22e>sh</span>
+</span></span></code></pre></div><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-go data-lang=go><span style=display:flex><span> <span style=color:#a6e22e>kill</span> &lt;<span style=color:#a6e22e>PID</span>&gt;
+</span></span></code></pre></div><h5 id=查看占用高的进程>查看占用高的进程</h5><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#a6e22e>top</span>
+</span></span></code></pre></div><h5 id=查看是哪个程序>查看是哪个程序</h5><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#a6e22e>ps</span> <span style=color:#f92672>-</span><span style=color:#a6e22e>ef</span> | <span style=color:#a6e22e>grep</span> &lt;<span style=color:#a6e22e>PID</span>&gt;
+</span></span></code></pre></div></div></article><article class="list__item post"><header class=list__header><h2 class="list__title post__title"><a href=/choudalao.github.io/posts/2024-01-04-go-%E4%BB%A3%E7%A0%81%E6%A3%80%E6%B5%8B/ rel=bookmark>go 代码检测</a></h2></header><div class="content list__excerpt post__content clearfix"><p>Go 代码检测通常指的是对代码进行静态分析，以找出潜在的错误、不符合规范的编码习惯以及性能上的优化点。</p><h1 id=go-vet>Go Vet</h1><p>已包含在 Go 标准库中，无需额外安装。go vet 是 Go 语言提供的静态代码分析工具，用于检查 Go 源代码中潜在的常见错误和可疑构造。它旨在捕获那些编译器不会报错但可能导致程序运行时出现问题的代码片段。</p></div></article><article class="list__item post"><header class=list__header><h2 class="list__title post__title"><a href=/choudalao.github.io/posts/2024-01-01-jmeter-%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8/ rel=bookmark>JMeter 简单使用</a></h2></header><div class="content list__excerpt post__content clearfix"><h1 id=jmeter-简介>JMeter 简介</h1><p>Apache JMeter 是一款流行的性能测试工具，可以用来模拟用户行为并对系统进行压力测试。</p><h1 id=安装>安装</h1><p>官方网站：http://jmeter.apache.org/</p><p>在window下解压后， 运行 “bin/jmeter.bat”</p></div></article><article class="list__item post"><header class=list__header><h2 class="list__title post__title"><a href=/choudalao.github.io/posts/2023-10-16-golang-%E5%B0%86%E5%9B%BE%E7%89%87%E7%94%9F%E6%88%90base64/ rel=bookmark>golang 将图片生成Base64</a></h2></header><div class="content list__excerpt post__content clearfix"><h1 id=代码>代码</h1><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#f92672>package</span> <span style=color:#a6e22e>main</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#f92672>import</span> (
+</span></span><span style=display:flex><span>	<span style=color:#e6db74>&#34;encoding/base64&#34;</span>
+</span></span><span style=display:flex><span>	<span style=color:#e6db74>&#34;errors&#34;</span>
+</span></span><span style=display:flex><span>	<span style=color:#e6db74>&#34;fmt&#34;</span>
+</span></span><span style=display:flex><span>	<span style=color:#e6db74>&#34;io&#34;</span>
+</span></span><span style=display:flex><span>	<span style=color:#e6db74>&#34;io/ioutil&#34;</span>
+</span></span><span style=display:flex><span>	<span style=color:#e6db74>&#34;net/http&#34;</span>
+</span></span><span style=display:flex><span>	<span style=color:#e6db74>&#34;os&#34;</span>
+</span></span><span style=display:flex><span>	<span style=color:#e6db74>&#34;strings&#34;</span>
+</span></span><span style=display:flex><span>	<span style=color:#e6db74>&#34;time&#34;</span>
+</span></span><span style=display:flex><span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>// GetUrlImgBase64 golang 将图片生成Base64</span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>GetUrlImgBase64</span>(<span style=color:#a6e22e>path</span> <span style=color:#66d9ef>string</span>) (<span style=color:#a6e22e>baseImg</span> <span style=color:#66d9ef>string</span>, <span style=color:#a6e22e>err</span> <span style=color:#66d9ef>error</span>) {
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>imgByte</span> <span style=color:#f92672>:=</span> []<span style=color:#66d9ef>byte</span>{}
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>if</span> <span style=color:#a6e22e>strings</span>.<span style=color:#a6e22e>Contains</span>(<span style=color:#a6e22e>path</span>, <span style=color:#e6db74>&#34;http&#34;</span>) {
+</span></span><span style=display:flex><span>		<span style=color:#75715e>//获取网络图片</span>
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>client</span> <span style=color:#f92672>:=</span> <span style=color:#f92672>&amp;</span><span style=color:#a6e22e>http</span>.<span style=color:#a6e22e>Client</span>{
+</span></span><span style=display:flex><span>			<span style=color:#a6e22e>Timeout</span>: <span style=color:#a6e22e>time</span>.<span style=color:#a6e22e>Second</span> <span style=color:#f92672>*</span> <span style=color:#ae81ff>5</span>, <span style=color:#75715e>//超时时间</span>
+</span></span><span style=display:flex><span>		}
+</span></span><span style=display:flex><span>		<span style=color:#66d9ef>var</span> <span style=color:#a6e22e>bodyImg</span> <span style=color:#a6e22e>io</span>.<span style=color:#a6e22e>Reader</span>
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>request</span>, <span style=color:#a6e22e>er</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>http</span>.<span style=color:#a6e22e>NewRequest</span>(<span style=color:#e6db74>&#34;GET&#34;</span>, <span style=color:#a6e22e>path</span>, <span style=color:#a6e22e>bodyImg</span>)
+</span></span><span style=display:flex><span>		<span style=color:#66d9ef>if</span> <span style=color:#a6e22e>er</span> <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nil</span> {
+</span></span><span style=display:flex><span>			<span style=color:#a6e22e>err</span> = <span style=color:#a6e22e>errors</span>.<span style=color:#a6e22e>New</span>(<span style=color:#e6db74>&#34;获取网络图片失败&#34;</span>)
+</span></span><span style=display:flex><span>			<span style=color:#66d9ef>return</span>
+</span></span><span style=display:flex><span>		}
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>respImg</span>, <span style=color:#a6e22e>_</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>client</span>.<span style=color:#a6e22e>Do</span>(<span style=color:#a6e22e>request</span>)
+</span></span><span style=display:flex><span>		<span style=color:#66d9ef>defer</span> <span style=color:#a6e22e>respImg</span>.<span style=color:#a6e22e>Body</span>.<span style=color:#a6e22e>Close</span>()
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>imgByte</span>, <span style=color:#a6e22e>_</span> = <span style=color:#a6e22e>ioutil</span>.<span style=color:#a6e22e>ReadAll</span>(<span style=color:#a6e22e>respImg</span>.<span style=color:#a6e22e>Body</span>)
+</span></span><span style=display:flex><span>	} <span style=color:#66d9ef>else</span> {
+</span></span><span style=display:flex><span>		<span style=color:#75715e>//获取本地文件</span>
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>file</span>, <span style=color:#a6e22e>er</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>os</span>.<span style=color:#a6e22e>Open</span>(<span style=color:#a6e22e>path</span>)
+</span></span><span style=display:flex><span>		<span style=color:#66d9ef>if</span> <span style=color:#a6e22e>er</span> <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nil</span> {
+</span></span><span style=display:flex><span>			<span style=color:#a6e22e>err</span> = <span style=color:#a6e22e>errors</span>.<span style=color:#a6e22e>New</span>(<span style=color:#e6db74>&#34;获取本地图片失败&#34;</span>)
+</span></span><span style=display:flex><span>			<span style=color:#66d9ef>return</span>
+</span></span><span style=display:flex><span>		}
+</span></span><span style=display:flex><span>		<span style=color:#66d9ef>defer</span> <span style=color:#a6e22e>file</span>.<span style=color:#a6e22e>Close</span>()
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>imgByte</span>, <span style=color:#a6e22e>_</span> = <span style=color:#a6e22e>ioutil</span>.<span style=color:#a6e22e>ReadAll</span>(<span style=color:#a6e22e>file</span>)
+</span></span><span style=display:flex><span>	}
+</span></span><span style=display:flex><span>	<span style=color:#75715e>// 判断文件类型，生成一个前缀，拼接base64后可以直接粘贴到浏览器打开，不需要可以不用下面代码</span>
+</span></span><span style=display:flex><span>	<span style=color:#75715e>//取图片类型</span>
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>mimeType</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>http</span>.<span style=color:#a6e22e>DetectContentType</span>(<span style=color:#a6e22e>imgByte</span>)
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>switch</span> <span style=color:#a6e22e>mimeType</span> {
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>case</span> <span style=color:#e6db74>&#34;image/jpeg&#34;</span>:
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>baseImg</span> = <span style=color:#e6db74>&#34;data:image/jpeg;base64,&#34;</span> <span style=color:#f92672>+</span> <span style=color:#a6e22e>base64</span>.<span style=color:#a6e22e>StdEncoding</span>.<span style=color:#a6e22e>EncodeToString</span>(<span style=color:#a6e22e>imgByte</span>)
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>case</span> <span style=color:#e6db74>&#34;image/png&#34;</span>:
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>baseImg</span> = <span style=color:#e6db74>&#34;data:image/png;base64,&#34;</span> <span style=color:#f92672>+</span> <span style=color:#a6e22e>base64</span>.<span style=color:#a6e22e>StdEncoding</span>.<span style=color:#a6e22e>EncodeToString</span>(<span style=color:#a6e22e>imgByte</span>)
+</span></span><span style=display:flex><span>	}
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>return</span>
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>main</span>() {
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>i</span>, <span style=color:#a6e22e>err</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>GetUrlImgBase64</span>(<span style=color:#e6db74>&#34;./avatar.jpg&#34;</span>)
+</span></span><span style=display:flex><span>	<span style=color:#75715e>// i, err := GetUrlImgBase64(&#34;https://www.choudalao.com/images/config/avatar.jpg&#34;)</span>
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>if</span> <span style=color:#a6e22e>err</span> <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nil</span> {
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Printf</span>(<span style=color:#e6db74>&#34;err :%v\n&#34;</span>, <span style=color:#a6e22e>err</span>)
+</span></span><span style=display:flex><span>		<span style=color:#66d9ef>return</span>
+</span></span><span style=display:flex><span>	}
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Printf</span>(<span style=color:#e6db74>&#34;i: %v\n&#34;</span>, <span style=color:#a6e22e>i</span>)
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div></div></article><article class="list__item post"><header class=list__header><h2 class="list__title post__title"><a href=/choudalao.github.io/posts/2023-09-14-%E5%AE%B9%E5%99%A8%E6%A3%80%E6%B5%8B%E5%8F%8A%E8%87%AA%E5%90%AF%E5%8A%A8/ rel=bookmark>容器检测及自启动</a></h2></header><div class="content list__excerpt post__content clearfix"><h1 id=场景>场景</h1><p>目前还没有上 k8s, 当容器意外停止时(如容器里面的go服务抛出panic),服务就不能用了,可能会影响正常的业务,这时候,就需要有个监测的脚本,去检测容器是否正常,如果停止,需要启动它.</p></div></article><article class="list__item post"><header class=list__header><h2 class="list__title post__title"><a href=/choudalao.github.io/posts/2023-09-04-%E5%88%A9%E7%94%A8kind%E5%9C%A8win10-wsl2-%E4%B8%AD%E6%90%AD%E5%BB%BA-k8s-%E7%8E%AF%E5%A2%83/ rel=bookmark>利用kind在WIN10 WSL2 中搭建 K8s 环境</a></h2></header><div class="content list__excerpt post__content clearfix"><p>利用<code>kind</code>在<code>WIN10</code> <code>WSL2</code> 中搭建 <code>K8s</code> 环境</p><h2 id=安装kubectl>安装kubectl</h2><p>在<code>Ubuntu</code>上安装<code>kubectl</code>，您可以按照以下步骤进行操作：
+打开终端，并使用以下命令下载kubectl的最新版本：</p></div></article><article class="list__item post"><header class=list__header><h2 class="list__title post__title"><a href=/choudalao.github.io/posts/2023-08-12-%E6%B8%B8%E6%88%8F%E6%8E%92%E8%A1%8C%E6%A6%9C/ rel=bookmark>游戏排行榜</a></h2></header><div class="content list__excerpt post__content clearfix"><h1 id=问题>问题</h1><p>一场游戏活动，很多用户一起参与，每个用户都能参与多次，现在要获取得分排行榜，当点数相同的情况下，先出点数的用户赢,同时同一用户相同点数的多条记录,取最先的那条.</p></div></article><article class="list__item post"><header class=list__header><h2 class="list__title post__title"><a href=/choudalao.github.io/posts/2023-08-08-gin%E6%A1%86%E6%9E%B6body%E5%8F%82%E6%95%B0%E5%8F%AA%E8%83%BD%E8%AF%BB%E5%8F%96%E4%B8%80%E6%AC%A1%E9%97%AE%E9%A2%98/ rel=bookmark>Gin框架，body参数只能读取一次问题</a></h2></header><div class="content list__excerpt post__content clearfix"><h1 id=原因>原因</h1><p>在使用gin框架的时候，发现请求的body数据只允许读取一次。
+读取第二次BindJSON这一步报错：EOF。</p><h1 id=解决方法>解决方法</h1><p>调用完压回去</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>funName</span>(<span style=color:#a6e22e>c</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>gin</span>.<span style=color:#a6e22e>Context</span>) {
+</span></span><span style=display:flex><span>        <span style=color:#a6e22e>data</span>,<span style=color:#a6e22e>err</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>ctx</span>.<span style=color:#a6e22e>GetRawData</span>()
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>if</span> <span style=color:#a6e22e>err</span> <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nil</span>{
+</span></span><span style=display:flex><span>            <span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span>(<span style=color:#a6e22e>err</span>.<span style=color:#a6e22e>Error</span>())
+</span></span><span style=display:flex><span>        }
+</span></span><span style=display:flex><span>        <span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Printf</span>(<span style=color:#e6db74>&#34;data: %v\n&#34;</span>,string(<span style=color:#a6e22e>data</span>)) 
+</span></span><span style=display:flex><span>        
+</span></span><span style=display:flex><span>        <span style=color:#a6e22e>ctx</span>.<span style=color:#a6e22e>Request</span>.<span style=color:#a6e22e>Body</span> = <span style=color:#a6e22e>ioutil</span>.<span style=color:#a6e22e>NopCloser</span>(<span style=color:#a6e22e>bytes</span>.<span style=color:#a6e22e>NewBuffer</span>(<span style=color:#a6e22e>data</span>)) <span style=color:#75715e>// 关键点</span>
+</span></span><span style=display:flex><span>        <span style=color:#a6e22e>ctx</span>.<span style=color:#a6e22e>Next</span>()
+</span></span><span style=display:flex><span>    }
+</span></span></code></pre></div></div></article></main><div class=pagination><a class="pagination__item pagination__item--prev btn" href=/choudalao.github.io/page/2/>«</a>
+<span class="pagination__item pagination__item--current">3/35</span>
+<a class="pagination__item pagination__item--next btn" href=/choudalao.github.io/page/4/>»</a></div></div></div><footer class=footer><div class="container footer__container flex"><div class=footer__copyright>&copy; 2026 臭大佬博客.
+<span class=footer__copyright-credits>基于 <a href=https://gohugo.io/ rel="nofollow noopener" target=_blank>Hugo</a> 引擎和 <a href=https://github.com/Vimux/Mainroad/ rel="nofollow noopener" target=_blank>Mainroad</a> 主题</span></div></div></footer></div><script async defer src=/choudalao.github.io/js/menu.js></script></body></html>

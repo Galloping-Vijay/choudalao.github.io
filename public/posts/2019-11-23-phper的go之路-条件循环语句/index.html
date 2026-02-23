@@ -1,236 +1,102 @@
-<!DOCTYPE html>
-<html class="no-js" lang="en">
-<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>PHPer的Go之路 -- 条件循环语句 - 臭大佬博客</title>
-	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
-	<meta name="description" content="介绍Go的条件循环语句">
-	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-	<link rel="dns-prefetch" href="//fonts.googleapis.com">
-	<link rel="dns-prefetch" href="//fonts.gstatic.com">
-	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
-
-	<link rel="stylesheet" href="/css/style.css">
-	
-
-	<link rel="shortcut icon" href="/favicon.ico">
-		
-</head>
-<body class="body">
-	<div class="container container--outer">
-		<header class="header">
-	<div class="container header__container">
-		
-	<div class="logo">
-		<a class="logo__link" href="/" title="臭大佬博客" rel="home">
-			<div class="logo__item logo__text">
-					<div class="logo__title">臭大佬博客</div>
-					
-				</div>
-		</a>
-	</div>
-		
-<nav class="menu">
-	<button class="menu__btn" aria-haspopup="true" aria-expanded="false" tabindex="0">
-		<span class="menu__btn-title" tabindex="-1">菜单</span>
-	</button>
-	<ul class="menu__list">
-		<li class="menu__item">
-			<a class="menu__link" href="/">
-				
-				<span class="menu__text">首页</span>
-				
-			</a>
-		</li>
-		<li class="menu__item">
-			<a class="menu__link" href="/post/">
-				
-				<span class="menu__text">归档</span>
-				
-			</a>
-		</li>
-		<li class="menu__item">
-			<a class="menu__link" href="/about/">
-				
-				<span class="menu__text">关于</span>
-				
-			</a>
-		</li>
-	</ul>
-</nav>
-
-	</div>
-</header>
-		<div class="wrapper flex">
-			<div class="primary">
-			
-<main class="main" role="main">
-	<article class="post">
-		<header class="post__header">
-			<h1 class="post__title">PHPer的Go之路 -- 条件循环语句</h1>
-			
-		</header>
-		<div class="content post__content clearfix">
-			<h1 id="if--else-if--else-">if &hellip; else if &hellip; else &hellip;</h1>
-<p>Go的if和php不同之处在于以下几点：</p>
-<ul>
-<li>条件语句不需要使用圆括号将条件包含起来 ()；</li>
-<li>无论语句体内有几条语句，花括号 {} 都是必须存在的；</li>
-<li>左花括号 { 必须与 if 或者 else 处于同一行；</li>
-<li>Go中不能写成elseif,只有else if(需要分开)</li>
-</ul>
-<p>栗子:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> <span style="color:#e6db74">&#34;fmt&#34;</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
-</span></span><span style="display:flex;"><span>	<span style="color:#75715e">/* 定义局部变量 */</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">a</span> <span style="color:#66d9ef">int</span> = <span style="color:#ae81ff">300</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">b</span> <span style="color:#66d9ef">int</span> = <span style="color:#ae81ff">200</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#75715e">/* 判断条件 */</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">a</span> <span style="color:#f92672">==</span> <span style="color:#ae81ff">100</span> {
-</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;a 值为 : %d\n&#34;</span>, <span style="color:#a6e22e">a</span> );
-</span></span><span style="display:flex;"><span>	}<span style="color:#66d9ef">else</span> <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">b</span> <span style="color:#f92672">==</span> <span style="color:#ae81ff">200</span> {
-</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;b 值为 : %d\n&#34;</span>, <span style="color:#a6e22e">b</span> );
-</span></span><span style="display:flex;"><span>	}<span style="color:#66d9ef">else</span> {
-</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;都不对 \n&#34;</span>, );
-</span></span><span style="display:flex;"><span>	}
-</span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><p><img src="https://www.choudalao.com/uploads/20191123/20191123130235DEs3lo.png" alt=""></p>
-<h1 id="switchcase">switch&hellip;case&hellip;</h1>
-<p>switch 默认<strong>情况下 case 最后自带 break 语句</strong>，匹配成功后就不会执行其他 case，**如果我们需要执行后面的 case，可以使用 fallthrough **。使用 fallthrough 会强制执行后面的 case 语句，fallthrough 不会判断下一条 case 的表达式结果是否为 true。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> <span style="color:#e6db74">&#34;fmt&#34;</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">score</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">85</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#75715e">//条件型</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">switch</span> {
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">case</span> <span style="color:#a6e22e">score</span> <span style="color:#f92672">&gt;=</span> <span style="color:#ae81ff">90</span>:
-</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;级别: A&#34;</span>)
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">case</span> <span style="color:#a6e22e">score</span> <span style="color:#f92672">&gt;=</span> <span style="color:#ae81ff">80</span> <span style="color:#f92672">&amp;&amp;</span> <span style="color:#a6e22e">score</span> &lt; <span style="color:#ae81ff">90</span>:
-</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;级别: B&#34;</span>)
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">case</span> <span style="color:#a6e22e">score</span> <span style="color:#f92672">&gt;=</span> <span style="color:#ae81ff">70</span> <span style="color:#f92672">&amp;&amp;</span> <span style="color:#a6e22e">score</span> &lt; <span style="color:#ae81ff">80</span>:
-</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;级别: C&#34;</span>)
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">case</span> <span style="color:#a6e22e">score</span> <span style="color:#f92672">&gt;=</span> <span style="color:#ae81ff">60</span> <span style="color:#f92672">&amp;&amp;</span> <span style="color:#a6e22e">score</span> &lt; <span style="color:#ae81ff">70</span>:
-</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;级别: D&#34;</span>)
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">default</span>:
-</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;级别: F&#34;</span>)
-</span></span><span style="display:flex;"><span>	}
-</span></span><span style="display:flex;"><span>	<span style="color:#75715e">//等值</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">switch</span> <span style="color:#a6e22e">score</span> {
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">case</span> <span style="color:#ae81ff">80</span>, <span style="color:#ae81ff">90</span>:
-</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;值可能为80或者90&#34;</span>)
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">case</span> <span style="color:#ae81ff">85</span>:
-</span></span><span style="display:flex;"><span>		<span style="color:#75715e">//执行下一条</span>
-</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">fallthrough</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">case</span> <span style="color:#ae81ff">50</span>:
-</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;必须执行&#34;</span>)
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">default</span>:
-</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;默认执行&#34;</span>)
-</span></span><span style="display:flex;"><span>	}
-</span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><p><img src="https://www.choudalao.com/uploads/20191123/20191123132119WP7RQu.png" alt=""></p>
-<p>注意:</p>
-<ul>
-<li>和条件语句一样，左花括号 { 必须与 switch 处于同一行；</li>
-<li>单个 case 中，可以出现多个结果选项（通过逗号分隔）；</li>
-<li>与其它语言不同，Go 语言不需要用 break 来明确退出一个 case；</li>
-<li>只有在 case 中明确添加 fallthrough 关键字，才会继续执行紧跟的下一个 case；</li>
-<li>可以不设定 switch 之后的条件表达式，在这种情况下，整个 switch 结构与多个 if&hellip;else&hellip; 的逻辑作用等同。</li>
-</ul>
-<h1 id="for循环">for循环</h1>
-<p>for 循环是一个循环控制结构，可以执行指定次数的循环。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>	<span style="color:#a6e22e">a</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">0</span>;
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">a</span>; <span style="color:#a6e22e">i</span> <span style="color:#f92672">&lt;=</span> <span style="color:#ae81ff">10</span>; <span style="color:#a6e22e">i</span><span style="color:#f92672">++</span> {
-</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">a</span> <span style="color:#f92672">+=</span> <span style="color:#a6e22e">i</span>
-</span></span><span style="display:flex;"><span>	}
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;a : %d\n&#34;</span>, <span style="color:#a6e22e">a</span>)
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">sum</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">1</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// sun小于等于10就累加,这样写也可以，更像 While 语句形式</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">sum</span> <span style="color:#f92672">&lt;=</span> <span style="color:#ae81ff">10</span> {
-</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">sum</span> <span style="color:#f92672">+=</span> <span style="color:#a6e22e">sum</span>
-</span></span><span style="display:flex;"><span>	}
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;sum : %d\n&#34;</span>, <span style="color:#a6e22e">sum</span>)
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">numbers</span> <span style="color:#f92672">:=</span> [<span style="color:#ae81ff">6</span>]<span style="color:#66d9ef">int</span>{<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">3</span>, <span style="color:#ae81ff">5</span>}
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span>,<span style="color:#a6e22e">x</span><span style="color:#f92672">:=</span> <span style="color:#66d9ef">range</span> <span style="color:#a6e22e">numbers</span> {
-</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;第 %d 位 x 的值 = %d\n&#34;</span>, <span style="color:#a6e22e">i</span>,<span style="color:#a6e22e">x</span>)
-</span></span><span style="display:flex;"><span>	}
-</span></span><span style="display:flex;"><span>	<span style="color:#75715e">//死循环</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#75715e">/*for {
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e">		sum++ // 无限循环下去
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e">	}*/</span>
-</span></span></code></pre></div><p><img src="https://www.choudalao.com/uploads/20191123/20191123133711OA2MQ4.png" alt=""></p>
-<p>注意:</p>
-<ul>
-<li>和条件语句、分支语句一样，左花括号 { 必须与 for 处于同一行；</li>
-<li>不支持 whie 和 do-while 结构的循环语句；</li>
-<li>可以通过 for-range 结构对可迭代集合进行遍历；</li>
-<li>支持基于条件判断进行循环迭代；</li>
-<li>与 PHP 一样，都允许在循环条件中定义和初始化变量，且支持多重赋值；</li>
-<li>Go 语言的 for 循环同样支持 continue 和 break 来控制循环。</li>
-</ul>
-<h1 id="break-与-continue">break 与 continue</h1>
-<p>和 PHP 一样，Go 语言支持在循环语句中通过 break 语句跳出循环，通过 continue 语句进入下一个循环。
-Go 语言的 break 和 contine 与 PHP 的不同之处在于支持与标签结合跳转到指定的标签语句，从而改变这两个语句的默认跳转逻辑，标签语句通过标签+「:」进行声明：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">bcTest</span>() {
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">arr</span> <span style="color:#f92672">:=</span> [][]<span style="color:#66d9ef">int</span>{{<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">3</span>}, {<span style="color:#ae81ff">4</span>, <span style="color:#ae81ff">5</span>, <span style="color:#ae81ff">6</span>}, {<span style="color:#ae81ff">7</span>, <span style="color:#ae81ff">8</span>, <span style="color:#ae81ff">9</span>}}
-</span></span><span style="display:flex;"><span><span style="color:#a6e22e">ITERATOR1</span>:
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">0</span>; <span style="color:#a6e22e">i</span> &lt; <span style="color:#ae81ff">3</span>; <span style="color:#a6e22e">i</span><span style="color:#f92672">++</span> {
-</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">j</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">0</span>; <span style="color:#a6e22e">j</span> &lt; <span style="color:#ae81ff">3</span>; <span style="color:#a6e22e">j</span><span style="color:#f92672">++</span> {
-</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">num</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">arr</span>[<span style="color:#a6e22e">i</span>][<span style="color:#a6e22e">j</span>]
-</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">j</span> &gt; <span style="color:#ae81ff">2</span> {
-</span></span><span style="display:flex;"><span>				<span style="color:#66d9ef">break</span> <span style="color:#a6e22e">ITERATOR1</span>
-</span></span><span style="display:flex;"><span>			}<span style="color:#66d9ef">else</span> <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">num</span> <span style="color:#f92672">==</span> <span style="color:#ae81ff">2</span> {
-</span></span><span style="display:flex;"><span>				<span style="color:#66d9ef">continue</span>
-</span></span><span style="display:flex;"><span>			}
-</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">num</span>)
-</span></span><span style="display:flex;"><span>		}
-</span></span><span style="display:flex;"><span>	}
-</span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><p><img src="https://www.choudalao.com/uploads/20191123/20191123134750y1UwQK.png" alt=""></p>
-<h1 id="goto">goto</h1>
-<p>goto 语句的语义非常简单，就是跳转到本函数内的某个标签</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">arr</span> <span style="color:#f92672">:=</span> [][]<span style="color:#66d9ef">int</span>{{<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">2</span>,<span style="color:#ae81ff">3</span>},{<span style="color:#ae81ff">4</span>,<span style="color:#ae81ff">5</span>,<span style="color:#ae81ff">6</span>},{<span style="color:#ae81ff">7</span>,<span style="color:#ae81ff">8</span>,<span style="color:#ae81ff">9</span>}}
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">0</span>; <span style="color:#a6e22e">i</span> &lt; <span style="color:#ae81ff">3</span>; <span style="color:#a6e22e">i</span><span style="color:#f92672">++</span> {
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> <span style="color:#a6e22e">j</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">0</span>; <span style="color:#a6e22e">j</span> &lt; <span style="color:#ae81ff">3</span>; <span style="color:#a6e22e">j</span><span style="color:#f92672">++</span> {
-</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">num</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">arr</span>[<span style="color:#a6e22e">i</span>][<span style="color:#a6e22e">j</span>]
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">j</span> &gt; <span style="color:#ae81ff">1</span> {
-</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">goto</span> <span style="color:#a6e22e">EXIT</span>
-</span></span><span style="display:flex;"><span>        }
-</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">num</span>)
-</span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#a6e22e">EXIT</span>:
-</span></span><span style="display:flex;"><span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;Exit.&#34;</span>)
-</span></span></code></pre></div><p><img src="https://www.choudalao.com/uploads/20191123/20191123135026zk4zwN.png" alt=""></p>
-
-		</div>
-	</article>
-</main>
-
-
-
-
-			</div>
-			
-		</div>
-		<footer class="footer">
-	<div class="container footer__container flex">
-		
-		<div class="footer__copyright">
-			&copy; 2026 臭大佬博客.
-			<span class="footer__copyright-credits">基于 <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> 引擎和 <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> 主题</span>
-		</div>
-	</div>
-</footer>
-	</div>
-<script async defer src="/js/menu.js"></script>
-</body>
-</html>
+<!doctype html><html class=no-js lang=en><head><meta charset=UTF-8><meta name=viewport content="width=device-width,initial-scale=1"><title>PHPer的Go之路 -- 条件循环语句 - 臭大佬博客</title><script>(function(e,t){e[t]=e[t].replace("no-js","js")})(document.documentElement,"className")</script><meta name=description content="介绍Go的条件循环语句"><link rel=preconnect href=https://fonts.gstatic.com crossorigin><link rel=dns-prefetch href=//fonts.googleapis.com><link rel=dns-prefetch href=//fonts.gstatic.com><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700"><link rel=stylesheet href=/choudalao.github.io/css/style.css><link rel="shortcut icon" href=/choudalao.github.io/favicon.ico></head><body class=body><div class="container container--outer"><header class=header><div class="container header__container"><div class=logo><a class=logo__link href=/choudalao.github.io/ title=臭大佬博客 rel=home><div class="logo__item logo__text"><div class=logo__title>臭大佬博客</div></div></a></div><nav class=menu><button class=menu__btn aria-haspopup=true aria-expanded=false tabindex=0>
+<span class=menu__btn-title tabindex=-1>菜单</span></button><ul class=menu__list><li class=menu__item><a class=menu__link href=/choudalao.github.io/><span class=menu__text>首页</span></a></li><li class=menu__item><a class=menu__link href=/choudalao.github.io/post/><span class=menu__text>归档</span></a></li><li class=menu__item><a class=menu__link href=/choudalao.github.io/about/><span class=menu__text>关于</span></a></li></ul></nav></div></header><div class="wrapper flex"><div class=primary><main class=main role=main><article class=post><header class=post__header><h1 class=post__title>PHPer的Go之路 -- 条件循环语句</h1></header><div class="content post__content clearfix"><h1 id=if--else-if--else->if &mldr; else if &mldr; else &mldr;</h1><p>Go的if和php不同之处在于以下几点：</p><ul><li>条件语句不需要使用圆括号将条件包含起来 ()；</li><li>无论语句体内有几条语句，花括号 {} 都是必须存在的；</li><li>左花括号 { 必须与 if 或者 else 处于同一行；</li><li>Go中不能写成elseif,只有else if(需要分开)</li></ul><p>栗子:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#f92672>package</span> <span style=color:#a6e22e>main</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#f92672>import</span> <span style=color:#e6db74>&#34;fmt&#34;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>main</span>() {
+</span></span><span style=display:flex><span>	<span style=color:#75715e>/* 定义局部变量 */</span>
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>var</span> <span style=color:#a6e22e>a</span> <span style=color:#66d9ef>int</span> = <span style=color:#ae81ff>300</span>
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>var</span> <span style=color:#a6e22e>b</span> <span style=color:#66d9ef>int</span> = <span style=color:#ae81ff>200</span>
+</span></span><span style=display:flex><span>	<span style=color:#75715e>/* 判断条件 */</span>
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>if</span> <span style=color:#a6e22e>a</span> <span style=color:#f92672>==</span> <span style=color:#ae81ff>100</span> {
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Printf</span>(<span style=color:#e6db74>&#34;a 值为 : %d\n&#34;</span>, <span style=color:#a6e22e>a</span> );
+</span></span><span style=display:flex><span>	}<span style=color:#66d9ef>else</span> <span style=color:#66d9ef>if</span> <span style=color:#a6e22e>b</span> <span style=color:#f92672>==</span> <span style=color:#ae81ff>200</span> {
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Printf</span>(<span style=color:#e6db74>&#34;b 值为 : %d\n&#34;</span>, <span style=color:#a6e22e>b</span> );
+</span></span><span style=display:flex><span>	}<span style=color:#66d9ef>else</span> {
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Printf</span>(<span style=color:#e6db74>&#34;都不对 \n&#34;</span>, );
+</span></span><span style=display:flex><span>	}
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p><img src=https://www.choudalao.com/uploads/20191123/20191123130235DEs3lo.png alt></p><h1 id=switchcase>switch&mldr;case&mldr;</h1><p>switch 默认<strong>情况下 case 最后自带 break 语句</strong>，匹配成功后就不会执行其他 case，**如果我们需要执行后面的 case，可以使用 fallthrough **。使用 fallthrough 会强制执行后面的 case 语句，fallthrough 不会判断下一条 case 的表达式结果是否为 true。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#f92672>package</span> <span style=color:#a6e22e>main</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#f92672>import</span> <span style=color:#e6db74>&#34;fmt&#34;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>main</span>() {
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>score</span> <span style=color:#f92672>:=</span> <span style=color:#ae81ff>85</span>
+</span></span><span style=display:flex><span>	<span style=color:#75715e>//条件型</span>
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>switch</span> {
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>case</span> <span style=color:#a6e22e>score</span> <span style=color:#f92672>&gt;=</span> <span style=color:#ae81ff>90</span>:
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span>(<span style=color:#e6db74>&#34;级别: A&#34;</span>)
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>case</span> <span style=color:#a6e22e>score</span> <span style=color:#f92672>&gt;=</span> <span style=color:#ae81ff>80</span> <span style=color:#f92672>&amp;&amp;</span> <span style=color:#a6e22e>score</span> &lt; <span style=color:#ae81ff>90</span>:
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span>(<span style=color:#e6db74>&#34;级别: B&#34;</span>)
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>case</span> <span style=color:#a6e22e>score</span> <span style=color:#f92672>&gt;=</span> <span style=color:#ae81ff>70</span> <span style=color:#f92672>&amp;&amp;</span> <span style=color:#a6e22e>score</span> &lt; <span style=color:#ae81ff>80</span>:
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span>(<span style=color:#e6db74>&#34;级别: C&#34;</span>)
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>case</span> <span style=color:#a6e22e>score</span> <span style=color:#f92672>&gt;=</span> <span style=color:#ae81ff>60</span> <span style=color:#f92672>&amp;&amp;</span> <span style=color:#a6e22e>score</span> &lt; <span style=color:#ae81ff>70</span>:
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span>(<span style=color:#e6db74>&#34;级别: D&#34;</span>)
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>default</span>:
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span>(<span style=color:#e6db74>&#34;级别: F&#34;</span>)
+</span></span><span style=display:flex><span>	}
+</span></span><span style=display:flex><span>	<span style=color:#75715e>//等值</span>
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>switch</span> <span style=color:#a6e22e>score</span> {
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>case</span> <span style=color:#ae81ff>80</span>, <span style=color:#ae81ff>90</span>:
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span>(<span style=color:#e6db74>&#34;值可能为80或者90&#34;</span>)
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>case</span> <span style=color:#ae81ff>85</span>:
+</span></span><span style=display:flex><span>		<span style=color:#75715e>//执行下一条</span>
+</span></span><span style=display:flex><span>		<span style=color:#66d9ef>fallthrough</span>
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>case</span> <span style=color:#ae81ff>50</span>:
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span>(<span style=color:#e6db74>&#34;必须执行&#34;</span>)
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>default</span>:
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span>(<span style=color:#e6db74>&#34;默认执行&#34;</span>)
+</span></span><span style=display:flex><span>	}
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p><img src=https://www.choudalao.com/uploads/20191123/20191123132119WP7RQu.png alt></p><p>注意:</p><ul><li>和条件语句一样，左花括号 { 必须与 switch 处于同一行；</li><li>单个 case 中，可以出现多个结果选项（通过逗号分隔）；</li><li>与其它语言不同，Go 语言不需要用 break 来明确退出一个 case；</li><li>只有在 case 中明确添加 fallthrough 关键字，才会继续执行紧跟的下一个 case；</li><li>可以不设定 switch 之后的条件表达式，在这种情况下，整个 switch 结构与多个 if&mldr;else&mldr; 的逻辑作用等同。</li></ul><h1 id=for循环>for循环</h1><p>for 循环是一个循环控制结构，可以执行指定次数的循环。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-go data-lang=go><span style=display:flex><span>	<span style=color:#a6e22e>a</span> <span style=color:#f92672>:=</span> <span style=color:#ae81ff>0</span>;
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>for</span> <span style=color:#a6e22e>i</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>a</span>; <span style=color:#a6e22e>i</span> <span style=color:#f92672>&lt;=</span> <span style=color:#ae81ff>10</span>; <span style=color:#a6e22e>i</span><span style=color:#f92672>++</span> {
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>a</span> <span style=color:#f92672>+=</span> <span style=color:#a6e22e>i</span>
+</span></span><span style=display:flex><span>	}
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Printf</span>(<span style=color:#e6db74>&#34;a : %d\n&#34;</span>, <span style=color:#a6e22e>a</span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>sum</span> <span style=color:#f92672>:=</span> <span style=color:#ae81ff>1</span>
+</span></span><span style=display:flex><span>	<span style=color:#75715e>// sun小于等于10就累加,这样写也可以，更像 While 语句形式</span>
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>for</span> <span style=color:#a6e22e>sum</span> <span style=color:#f92672>&lt;=</span> <span style=color:#ae81ff>10</span> {
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>sum</span> <span style=color:#f92672>+=</span> <span style=color:#a6e22e>sum</span>
+</span></span><span style=display:flex><span>	}
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Printf</span>(<span style=color:#e6db74>&#34;sum : %d\n&#34;</span>, <span style=color:#a6e22e>sum</span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>numbers</span> <span style=color:#f92672>:=</span> [<span style=color:#ae81ff>6</span>]<span style=color:#66d9ef>int</span>{<span style=color:#ae81ff>1</span>, <span style=color:#ae81ff>2</span>, <span style=color:#ae81ff>3</span>, <span style=color:#ae81ff>5</span>}
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>for</span> <span style=color:#a6e22e>i</span>,<span style=color:#a6e22e>x</span><span style=color:#f92672>:=</span> <span style=color:#66d9ef>range</span> <span style=color:#a6e22e>numbers</span> {
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Printf</span>(<span style=color:#e6db74>&#34;第 %d 位 x 的值 = %d\n&#34;</span>, <span style=color:#a6e22e>i</span>,<span style=color:#a6e22e>x</span>)
+</span></span><span style=display:flex><span>	}
+</span></span><span style=display:flex><span>	<span style=color:#75715e>//死循环</span>
+</span></span><span style=display:flex><span>	<span style=color:#75715e>/*for {
+</span></span></span><span style=display:flex><span><span style=color:#75715e>		sum++ // 无限循环下去
+</span></span></span><span style=display:flex><span><span style=color:#75715e>	}*/</span>
+</span></span></code></pre></div><p><img src=https://www.choudalao.com/uploads/20191123/20191123133711OA2MQ4.png alt></p><p>注意:</p><ul><li>和条件语句、分支语句一样，左花括号 { 必须与 for 处于同一行；</li><li>不支持 whie 和 do-while 结构的循环语句；</li><li>可以通过 for-range 结构对可迭代集合进行遍历；</li><li>支持基于条件判断进行循环迭代；</li><li>与 PHP 一样，都允许在循环条件中定义和初始化变量，且支持多重赋值；</li><li>Go 语言的 for 循环同样支持 continue 和 break 来控制循环。</li></ul><h1 id=break-与-continue>break 与 continue</h1><p>和 PHP 一样，Go 语言支持在循环语句中通过 break 语句跳出循环，通过 continue 语句进入下一个循环。
+Go 语言的 break 和 contine 与 PHP 的不同之处在于支持与标签结合跳转到指定的标签语句，从而改变这两个语句的默认跳转逻辑，标签语句通过标签+「:」进行声明：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>bcTest</span>() {
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>arr</span> <span style=color:#f92672>:=</span> [][]<span style=color:#66d9ef>int</span>{{<span style=color:#ae81ff>1</span>, <span style=color:#ae81ff>2</span>, <span style=color:#ae81ff>3</span>}, {<span style=color:#ae81ff>4</span>, <span style=color:#ae81ff>5</span>, <span style=color:#ae81ff>6</span>}, {<span style=color:#ae81ff>7</span>, <span style=color:#ae81ff>8</span>, <span style=color:#ae81ff>9</span>}}
+</span></span><span style=display:flex><span><span style=color:#a6e22e>ITERATOR1</span>:
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>for</span> <span style=color:#a6e22e>i</span> <span style=color:#f92672>:=</span> <span style=color:#ae81ff>0</span>; <span style=color:#a6e22e>i</span> &lt; <span style=color:#ae81ff>3</span>; <span style=color:#a6e22e>i</span><span style=color:#f92672>++</span> {
+</span></span><span style=display:flex><span>		<span style=color:#66d9ef>for</span> <span style=color:#a6e22e>j</span> <span style=color:#f92672>:=</span> <span style=color:#ae81ff>0</span>; <span style=color:#a6e22e>j</span> &lt; <span style=color:#ae81ff>3</span>; <span style=color:#a6e22e>j</span><span style=color:#f92672>++</span> {
+</span></span><span style=display:flex><span>			<span style=color:#a6e22e>num</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>arr</span>[<span style=color:#a6e22e>i</span>][<span style=color:#a6e22e>j</span>]
+</span></span><span style=display:flex><span>			<span style=color:#66d9ef>if</span> <span style=color:#a6e22e>j</span> &gt; <span style=color:#ae81ff>2</span> {
+</span></span><span style=display:flex><span>				<span style=color:#66d9ef>break</span> <span style=color:#a6e22e>ITERATOR1</span>
+</span></span><span style=display:flex><span>			}<span style=color:#66d9ef>else</span> <span style=color:#66d9ef>if</span> <span style=color:#a6e22e>num</span> <span style=color:#f92672>==</span> <span style=color:#ae81ff>2</span> {
+</span></span><span style=display:flex><span>				<span style=color:#66d9ef>continue</span>
+</span></span><span style=display:flex><span>			}
+</span></span><span style=display:flex><span>			<span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span>(<span style=color:#a6e22e>num</span>)
+</span></span><span style=display:flex><span>		}
+</span></span><span style=display:flex><span>	}
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p><img src=https://www.choudalao.com/uploads/20191123/20191123134750y1UwQK.png alt></p><h1 id=goto>goto</h1><p>goto 语句的语义非常简单，就是跳转到本函数内的某个标签</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#a6e22e>arr</span> <span style=color:#f92672>:=</span> [][]<span style=color:#66d9ef>int</span>{{<span style=color:#ae81ff>1</span>,<span style=color:#ae81ff>2</span>,<span style=color:#ae81ff>3</span>},{<span style=color:#ae81ff>4</span>,<span style=color:#ae81ff>5</span>,<span style=color:#ae81ff>6</span>},{<span style=color:#ae81ff>7</span>,<span style=color:#ae81ff>8</span>,<span style=color:#ae81ff>9</span>}}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>for</span> <span style=color:#a6e22e>i</span> <span style=color:#f92672>:=</span> <span style=color:#ae81ff>0</span>; <span style=color:#a6e22e>i</span> &lt; <span style=color:#ae81ff>3</span>; <span style=color:#a6e22e>i</span><span style=color:#f92672>++</span> {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>for</span> <span style=color:#a6e22e>j</span> <span style=color:#f92672>:=</span> <span style=color:#ae81ff>0</span>; <span style=color:#a6e22e>j</span> &lt; <span style=color:#ae81ff>3</span>; <span style=color:#a6e22e>j</span><span style=color:#f92672>++</span> {
+</span></span><span style=display:flex><span>        <span style=color:#a6e22e>num</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>arr</span>[<span style=color:#a6e22e>i</span>][<span style=color:#a6e22e>j</span>]
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>if</span> <span style=color:#a6e22e>j</span> &gt; <span style=color:#ae81ff>1</span> {
+</span></span><span style=display:flex><span>            <span style=color:#66d9ef>goto</span> <span style=color:#a6e22e>EXIT</span>
+</span></span><span style=display:flex><span>        }
+</span></span><span style=display:flex><span>        <span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span>(<span style=color:#a6e22e>num</span>)
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>EXIT</span>:
+</span></span><span style=display:flex><span><span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span>(<span style=color:#e6db74>&#34;Exit.&#34;</span>)
+</span></span></code></pre></div><p><img src=https://www.choudalao.com/uploads/20191123/20191123135026zk4zwN.png alt></p></div></article></main></div></div><footer class=footer><div class="container footer__container flex"><div class=footer__copyright>&copy; 2026 臭大佬博客.
+<span class=footer__copyright-credits>基于 <a href=https://gohugo.io/ rel="nofollow noopener" target=_blank>Hugo</a> 引擎和 <a href=https://github.com/Vimux/Mainroad/ rel="nofollow noopener" target=_blank>Mainroad</a> 主题</span></div></div></footer></div><script async defer src=/choudalao.github.io/js/menu.js></script></body></html>
