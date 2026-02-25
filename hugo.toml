@@ -15,8 +15,30 @@ ignoreLogs = ['warning-goldmark-raw-html']
 # 参数配置
 [params]
 author = "臭大佬"
-description = "技术博客"
-keywords = "技术, 博客, 编程"
+description = "专注于技术分享的博客，涵盖 PHP、Go、Python、MySQL、Redis、Linux 等技术领域"
+keywords = "技术, 博客, 编程, PHP, Go, Python, MySQL, Redis, Linux"
+
+# 侧边栏配置
+[params.sidebar]
+  home = "right"
+  list = "right"
+  single = "right"
+  widgets = ["categories", "recent", "taglist"]
+
+# 分类小部件
+[params.widgets.categories]
+  enabled = true
+  limit = 15
+
+# 最新文章小部件
+[params.widgets.recent]
+  enabled = true
+  limit = 8
+
+# 标签云小部件
+[params.widgets.taglist]
+  enabled = true
+  limit = 30
 
 # 菜单
 [[menu.main]]
@@ -26,13 +48,30 @@ url = "/"
 weight = 1
 
 [[menu.main]]
+identifier = "categories"
+name = "分类"
+url = "/categories/"
+weight = 2
+
+[[menu.main]]
+identifier = "tags"
+name = "标签"
+url = "/tags/"
+weight = 3
+
+[[menu.main]]
 identifier = "archives"
 name = "归档"
 url = "/posts/"
-weight = 2
+weight = 4
 
 [[menu.main]]
 identifier = "about"
 name = "关于"
 url = "/about/"
-weight = 3
+weight = 5
+
+# 分类索引页
+[taxonomies]
+  category = "categories"
+  tag = "tags"
