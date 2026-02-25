@@ -196,7 +196,22 @@ profiles下分别是block(阻塞情况)、goroutine数量、heap(堆)、mutex(�
 &lt;p&gt;Apache JMeter 是一款流行的性能测试工具，可以用来模拟用户行为并对系统进行压力测试。&lt;/p&gt;
 &lt;h1 id="安装"&gt;安装&lt;/h1&gt;
 &lt;p&gt;官方网站：http://jmeter.apache.org/&lt;/p&gt;
-&lt;p&gt;在window下解压后， 运行 “bin/jmeter.bat”&lt;/p&gt;</description></item><item><title>golang 将图片生成Base64</title><link>https://galloping-vijay.github.io/choudalao.github.io/posts/2023-10-16-golang-%E5%B0%86%E5%9B%BE%E7%89%87%E7%94%9F%E6%88%90base64/</link><pubDate>Mon, 16 Oct 2023 17:17:08 +0800</pubDate><guid>https://galloping-vijay.github.io/choudalao.github.io/posts/2023-10-16-golang-%E5%B0%86%E5%9B%BE%E7%89%87%E7%94%9F%E6%88%90base64/</guid><description>&lt;h1 id="代码"&gt;代码&lt;/h1&gt;
+&lt;p&gt;在window下解压后， 运行 “bin/jmeter.bat”&lt;/p&gt;</description></item><item><title>关于</title><link>https://galloping-vijay.github.io/choudalao.github.io/about/</link><pubDate>Mon, 01 Jan 2024 00:00:00 +0800</pubDate><guid>https://galloping-vijay.github.io/choudalao.github.io/about/</guid><description>&lt;h1 id="关于"&gt;关于&lt;/h1&gt;
+&lt;p&gt;欢迎来到臭大佬博客！&lt;/p&gt;
+&lt;p&gt;这是一个基于 Hugo 构建的个人技术博客，主要分享编程、技术、工具等相关内容。&lt;/p&gt;
+&lt;h2 id="博客简介"&gt;博客简介&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;作者&lt;/strong&gt;: 臭大佬&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;技术栈&lt;/strong&gt;: Hugo + Mainroad 主题&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;托管&lt;/strong&gt;: GitHub Pages&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="联系方式"&gt;联系方式&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;GitHub: &lt;a href="https://github.com/Galloping-Vijay"&gt;Galloping-Vijay&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;博客: &lt;a href="https://galloping-vijay.github.io/choudalao.github.io/"&gt;臭大佬博客&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="开源协议"&gt;开源协议&lt;/h2&gt;
+&lt;p&gt;本博客内容采用 CC BY-NC-SA 4.0 协议授权，转载请注明出处。&lt;/p&gt;</description></item><item><title>golang 将图片生成Base64</title><link>https://galloping-vijay.github.io/choudalao.github.io/posts/2023-10-16-golang-%E5%B0%86%E5%9B%BE%E7%89%87%E7%94%9F%E6%88%90base64/</link><pubDate>Mon, 16 Oct 2023 17:17:08 +0800</pubDate><guid>https://galloping-vijay.github.io/choudalao.github.io/posts/2023-10-16-golang-%E5%B0%86%E5%9B%BE%E7%89%87%E7%94%9F%E6%88%90base64/</guid><description>&lt;h1 id="代码"&gt;代码&lt;/h1&gt;
 &lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-go" data-lang="go"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;package&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;main&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;import&lt;/span&gt; (
