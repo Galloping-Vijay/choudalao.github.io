@@ -2,9 +2,15 @@ github.com/CaiJimmy/hugo-theme-stack/v4 v4.0.0-beta.7 h1:E+WNMJsBkIS3r80GKA6SdTC
 github.com/CaiJimmy/hugo-theme-stack/v4 v4.0.0-beta.7/go.mod h1:6SWZIQIut6uVjxhLraexYzgtdNDrod0xnfM/to6D/1I=
 github.com/Vimux/mainroad v0.0.0-20240906135647-13e04b3694ea h1:vQavAKtJR8eC1leDFjpiASqs19Gy7AGjktQRW+rBWHk=
 github.com/Vimux/mainroad v0.0.0-20240906135647-13e04b3694ea/go.mod h1:13Sfg07PTbKTuzennbP0eC0Od7pbpfaxVcTQZWKRZeU=
+github.com/adityatelange/hugo-PaperMod v0.0.0-20260125152547-3bb0ca281fd1 h1:nS0GAIWJZIxy1YWwGce18ePQHB7v1Y1sxUTOOrBAIeA=
+github.com/adityatelange/hugo-PaperMod v0.0.0-20260125152547-3bb0ca281fd1/go.mod h1:HCHxNMKYdGafUYjVV3ICiAqznZK2yH0iI53jqcDFDdQ=
 github.com/hugo-sid/hugo-blog-awesome v1.21.0 h1:cxoeQgJePACmvPKqodDCLyme3iVAeGHm/l+iqyntGL4=
 github.com/hugo-sid/hugo-blog-awesome v1.21.0/go.mod h1:3XVERF66wgQpTsruOajS5Swr+uvyTzov1acafNaqm1E=
+github.com/jpanther/congo v1.6.4 h1:Pf84RN3jXMYVbeZIyPCb5krSDIjvuwbo7sv5fCGwbAE=
+github.com/jpanther/congo v1.6.4/go.mod h1:fFwW7KKbofyaZgwLJdh6h1L51UZrSyymQgk31rclcuQ=
 github.com/olOwOlo/hugo-theme-even v4.1.0+incompatible h1:vac90+azWrNgGvanS7mN2ztvJl9P5IHFvPSS+EAbYRA=
 github.com/olOwOlo/hugo-theme-even v4.1.0+incompatible/go.mod h1:fi8rrW+HLHpDEjP9Hft6Mx5ZFQRnofQuVHgavM0ruyo=
+github.com/reuixiy/hugo-theme-meme v5.0.0+incompatible h1:S/aBbLHQTcsLXQrh0xf/vUN1gdsgApFE74JZBtVfZtY=
+github.com/reuixiy/hugo-theme-meme v5.0.0+incompatible/go.mod h1:t+xPvEmNNin6n1dGhQagjz1hCUIAgxGobMvbQfICAW4=
 github.com/xianmin/hugo-theme-jane v0.0.0-20250519002000-b4aac7720efc h1:ZAFeRqVv0S0JpK3Ps+nN1J27lL6k94DEv4ZUazQy3BI=
 github.com/xianmin/hugo-theme-jane v0.0.0-20250519002000-b4aac7720efc/go.mod h1:04zjVhTvlaWLQlbqhS0xLLLz9WhEAVkcDMt/+IQRABY=

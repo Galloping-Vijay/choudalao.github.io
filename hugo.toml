@@ -17,6 +17,7 @@ ignoreLogs = ['warning-goldmark-raw-html']
 author = "臭大佬"
 description = "专注于技术分享的博客，涵盖 PHP、Go、Python、MySQL、Redis、Linux 等技术领域"
 keywords = "技术, 博客, 编程, PHP, Go, Python, MySQL, Redis, Linux"
+customCSS = ["/choudalao.github.io/css/custom.css"]
 
 # 侧边栏配置
 [params.sidebar]
