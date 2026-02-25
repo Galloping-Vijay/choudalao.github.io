@@ -32,15 +32,10 @@ jobs:
       - name: Build
         run: hugo --minify
 
-      - name: Prepare deploy directory
-        run: |
-          mkdir -p deploy
-          cp -r public/* deploy/
-
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./deploy
+          path: ./public
 
   deploy:
     environment:
