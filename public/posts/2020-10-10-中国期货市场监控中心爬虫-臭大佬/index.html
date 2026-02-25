@@ -1,0 +1,992 @@
+<!doctype html><html class=no-js lang=en><head><meta charset=UTF-8><meta name=viewport content="width=device-width,initial-scale=1"><title>中国期货市场监控中心爬虫 | 臭大佬 - 臭大佬博客</title><script>(function(e,t){e[t]=e[t].replace("no-js","js")})(document.documentElement,"className")</script><meta name=description content="中国期货市场监控中心爬虫，模拟登陆、自动识别验证码，爬取指定日期的数据。"><link rel=preconnect href=https://fonts.gstatic.com crossorigin><link rel=dns-prefetch href=//fonts.googleapis.com><link rel=dns-prefetch href=//fonts.gstatic.com><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700"><link rel=stylesheet href=/choudalao.github.io/css/style.css><link rel="shortcut icon" href=/choudalao.github.io/favicon.ico></head><body class=body><div class="container container--outer"><header class=header><div class="container header__container"><div class=logo><a class=logo__link href=/choudalao.github.io/ title=臭大佬博客 rel=home><div class="logo__item logo__text"><div class=logo__title>臭大佬博客</div></div></a></div><nav class=menu><button class=menu__btn aria-haspopup=true aria-expanded=false tabindex=0>
+<span class=menu__btn-title tabindex=-1>菜单</span></button><ul class=menu__list><li class=menu__item><a class=menu__link href=/choudalao.github.io/><span class=menu__text>首页</span></a></li><li class=menu__item><a class=menu__link href=/choudalao.github.io/categories/><span class=menu__text>分类</span></a></li><li class=menu__item><a class=menu__link href=/choudalao.github.io/tags/><span class=menu__text>标签</span></a></li><li class=menu__item><a class=menu__link href=/choudalao.github.io/posts/><span class=menu__text>归档</span></a></li><li class=menu__item><a class=menu__link href=/choudalao.github.io/about/><span class=menu__text>关于</span></a></li></ul></nav></div></header><div class="wrapper flex"><div class=primary><main class=main role=main><article class=post><header class=post__header><h1 class=post__title>中国期货市场监控中心爬虫 | 臭大佬</h1></header><div class="content post__content clearfix"><h1 id=实现功能>实现功能</h1><ol><li>验证码自动识别</li><li>模拟登陆</li><li>多用户数据下载</li><li>excel处理</li><li>数据库操作</li></ol><h1 id=梗概>梗概</h1><p>炒期货的朋友是不是也有这样的体验，打开中国期货市场监控中心网站，手动登陆到每个帐户，然后在帐户上进行下载数据（逐日盯市），再通过EXCEL宏等统计制作成树状图的形式。</p><p>这样操作有许多缺点和不足的地方，比如：</p><ul><li>工作量比较大；</li><li>不能统计一定时间内的数据；</li><li>不能统一管理和数据分析；</li><li>多个账号无法对比分析。</li></ul><p>因此，写了个爬虫和后台，爬虫每天自动登录中国期货市场监控中心，自动下载逐日盯市的表格数据，然后队列处理数据，写入到自己的后台，就可以分析每个账号一段时间操作的净值、盈亏比等了。</p><h1 id=分析>分析</h1><p>在写爬虫前，我们先手动操作一遍，分析一下流程。</p><p>打开登录页，登录页面有验证码，在实现的时候需要自动识别</p><p><img src=https://www.choudalao.com/uploads/20201010/20201010235156QORnV8.png alt></p><p>手动登录后，进入的第一个页面是今天的逐笔对冲，</p><p><img src=https://www.choudalao.com/uploads/20201011/20201011103008Ge9GuJ.png alt></p><p>我们要的是逐日盯市，而且不一定是今天的数据，打开F12，切换到逐日盯市页面，</p><p><img src=https://www.choudalao.com/uploads/20201011/20201011103337Ir5k1Z.png alt></p><p>从 Network 中可以看到如下信息；</p><p>Request URL: <a href=https://investorservice.cfmmc.com/customer/setParameter.do>https://investorservice.cfmmc.com/customer/setParameter.do</a>
+Request Method: POST
+org.apache.struts.taglib.html.TOKEN: 08424ad1b28fabecccd7bf5161108b13
+tradeDate: 2020-10-09
+byType: date</p><p><img src=https://www.choudalao.com/uploads/20201011/20201011103501vG8EW0.png alt></p><p><img src=https://www.choudalao.com/uploads/20201011/20201011103836xKiCOw.png alt></p><p>从上面可以看到接口和参数，
+org.apache.struts.taglib.html.TOKEN：是登录页面中的一个 input，经测试，不传似乎没什么影响，
+tradeDate：查询的日期，
+byType：trade为默认值，trade时是逐笔对冲，date是逐日盯市。</p><p>另外，返回的并不是接口形式的数据，而是一个页面，</p><p>有了接口和参数，我们就可以抓取指定日期的逐日盯市了。</p><p>思路其实很简单，获取用户账号密码，模拟登陆，切换到逐日盯市，下载数据，然后处理excel文件，写到数据库，后台对数据进行分析。
+<img src=https://www.choudalao.com/uploads/20201011/5f82762d3a20b.png alt></p><h1 id=技术点>技术点</h1><ol><li>自动识别验证码</li><li>模拟登陆</li><li>excel处理</li><li>数据库写入</li></ol><p>整个流程下来，技术点基本就上面几个。</p><p>这个验证码看似很普通，但Google的开源工具Tesseract-OCR识别率太低了，基本识别不了，于是找了BAT大厂的识别接口，依次封装成接口，方便调用：</p><ul><li>Tesseract-OCR</li><li>腾讯文字识别API</li><li>百度文字识别API</li><li>百度文字识别SDK</li></ul><p>由于阿里的文档只看到python2的，所以就忽略了。识别率自上而下越来越高，腾讯的有点坑，识别率不算高，每天免费次数少，超过还扣费，然后一直给你发欠费邮件，百度SDK识别率是最好的，一般都是5次以内，而且每月免费5000次好像。</p><h1 id=代码>代码</h1><p>后台我是用<a href=https://github.com/Galloping-Vijay/laravel-wjfcms title=laravel-wjfcms>laravel-wjfcms</a>写的，这里只展示python爬虫部分的代码，代码微调一下就可以跑起来了。</p><p>目录结构如下：</p><p><img src=https://www.choudalao.com/uploads/20201011/2020101111142120WK8F.png alt></p><p>config.yaml是数据库配置文件，格式如下：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-python data-lang=python><span style=display:flex><span>mysql_config:
+</span></span><span style=display:flex><span>  host: <span style=color:#e6db74>&#39;xxx&#39;</span>
+</span></span><span style=display:flex><span>  port: <span style=color:#ae81ff>3306</span>
+</span></span><span style=display:flex><span>  user: <span style=color:#e6db74>&#39;root&#39;</span>
+</span></span><span style=display:flex><span>  password: <span style=color:#e6db74>&#39;sss&#39;</span>
+</span></span><span style=display:flex><span>  db: <span style=color:#e6db74>&#39;qihuo&#39;</span>
+</span></span><span style=display:flex><span>  charset: <span style=color:#e6db74>&#39;utf8&#39;</span>
+</span></span></code></pre></div><p>登录用户表大概有以下几个字段，根据自己的情况去修改：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-python data-lang=python><span style=display:flex><span>CREATE TABLE <span style=color:#960050;background-color:#1e0010>`</span>wjf_transaction_users<span style=color:#960050;background-color:#1e0010>`</span> (
+</span></span><span style=display:flex><span>  <span style=color:#960050;background-color:#1e0010>`</span>id<span style=color:#960050;background-color:#1e0010>`</span> bigint(<span style=color:#ae81ff>20</span>) unsigned NOT NULL AUTO_INCREMENT COMMENT <span style=color:#e6db74>&#39;交易用户表&#39;</span>,
+</span></span><span style=display:flex><span>  <span style=color:#960050;background-color:#1e0010>`</span>admin_id<span style=color:#960050;background-color:#1e0010>`</span> tinyint(<span style=color:#ae81ff>4</span>) NOT NULL DEFAULT <span style=color:#e6db74>&#39;0&#39;</span> COMMENT <span style=color:#e6db74>&#39;交易账号对应的管理账号&#39;</span>,
+</span></span><span style=display:flex><span>  <span style=color:#960050;background-color:#1e0010>`</span>username<span style=color:#960050;background-color:#1e0010>`</span> varchar(<span style=color:#ae81ff>100</span>) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT <span style=color:#e6db74>&#39;&#39;</span> COMMENT <span style=color:#e6db74>&#39;用户名&#39;</span>,
+</span></span><span style=display:flex><span>  <span style=color:#960050;background-color:#1e0010>`</span>password<span style=color:#960050;background-color:#1e0010>`</span> varchar(<span style=color:#ae81ff>100</span>) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT <span style=color:#e6db74>&#39;&#39;</span> COMMENT <span style=color:#e6db74>&#39;密码&#39;</span>,
+</span></span><span style=display:flex><span>  <span style=color:#960050;background-color:#1e0010>`</span>status<span style=color:#960050;background-color:#1e0010>`</span> tinyint(<span style=color:#ae81ff>4</span>) NOT NULL DEFAULT <span style=color:#e6db74>&#39;2&#39;</span> COMMENT <span style=color:#e6db74>&#39;状态，1：已验证，2：待验证，3：验证失败&#39;</span>,
+</span></span><span style=display:flex><span>  <span style=color:#960050;background-color:#1e0010>`</span>created_at<span style=color:#960050;background-color:#1e0010>`</span> timestamp NULL DEFAULT NULL,
+</span></span><span style=display:flex><span>  <span style=color:#960050;background-color:#1e0010>`</span>updated_at<span style=color:#960050;background-color:#1e0010>`</span> timestamp NULL DEFAULT NULL,
+</span></span><span style=display:flex><span>  <span style=color:#960050;background-color:#1e0010>`</span>deleted_at<span style=color:#960050;background-color:#1e0010>`</span> timestamp NULL DEFAULT NULL,
+</span></span><span style=display:flex><span>  PRIMARY KEY (<span style=color:#960050;background-color:#1e0010>`</span>id<span style=color:#960050;background-color:#1e0010>`</span>) USING BTREE,
+</span></span><span style=display:flex><span>  KEY <span style=color:#960050;background-color:#1e0010>`</span>wjf_transaction_users_admin_id_index<span style=color:#960050;background-color:#1e0010>`</span> (<span style=color:#960050;background-color:#1e0010>`</span>admin_id<span style=color:#960050;background-color:#1e0010>`</span>) USING BTREE
+</span></span><span style=display:flex><span>) ENGINE<span style=color:#f92672>=</span>InnoDB DEFAULT CHARSET<span style=color:#f92672>=</span>utf8mb4 COLLATE<span style=color:#f92672>=</span>utf8mb4_unicode_ci ROW_FORMAT<span style=color:#f92672>=</span>COMPACT;
+</span></span></code></pre></div><p>识别接口代码
+<img src=https://www.choudalao.com/uploads/20201011/20201011114631xEEdlc.png alt></p><p>百度API地址：https://ai.baidu.com/ai-doc/OCR/3k3h7yeqa
+baiduBce.py</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-python data-lang=python><span style=display:flex><span><span style=color:#75715e># -*- coding:utf8 -*-</span>
+</span></span><span style=display:flex><span><span style=color:#e6db74>&#34;&#34;&#34;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>Author: gallopingvijay
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>Email: 1937832819@qq.com
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>Website: https://www.choudalao.com
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>&#34;&#34;&#34;</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>from</span> aip <span style=color:#f92672>import</span> AipOcr
+</span></span><span style=display:flex><span><span style=color:#e6db74>&#34;&#34;&#34; 你的 APPID AK SK &#34;&#34;&#34;</span>
+</span></span><span style=display:flex><span>APP_ID <span style=color:#f92672>=</span> <span style=color:#e6db74>&#39;xxx&#39;</span>
+</span></span><span style=display:flex><span>API_KEY <span style=color:#f92672>=</span> <span style=color:#e6db74>&#39;xxxx&#39;</span>
+</span></span><span style=display:flex><span>SECRET_KEY <span style=color:#f92672>=</span> <span style=color:#e6db74>&#39;xxxx&#39;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 需要安装扩展</span>
+</span></span><span style=display:flex><span><span style=color:#75715e># pip install baidu-aip</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>class</span> <span style=color:#a6e22e>BaiduBce</span>():
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>__init__</span>(self):
+</span></span><span style=display:flex><span>        self<span style=color:#f92672>.</span>options <span style=color:#f92672>=</span> {}
+</span></span><span style=display:flex><span>        self<span style=color:#f92672>.</span>setOptions()
+</span></span><span style=display:flex><span>        self<span style=color:#f92672>.</span>client <span style=color:#f92672>=</span> AipOcr(APP_ID, API_KEY, SECRET_KEY)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>dealImg</span>(self, image, type<span style=color:#f92672>=</span><span style=color:#ae81ff>1</span>, is_local<span style=color:#f92672>=</span><span style=color:#66d9ef>False</span>):
+</span></span><span style=display:flex><span>        <span style=color:#e6db74>&#39;&#39;&#39;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>        识别
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>        :param image:图片地址或者url
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>        :param type:识别接口类型
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>        :param is_local:是否为本地，False：远程，True,本地
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>        :return:
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>        &#39;&#39;&#39;</span>
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>if</span> type <span style=color:#f92672>==</span> <span style=color:#ae81ff>1</span>:  <span style=color:#75715e># 通用文字识别</span>
+</span></span><span style=display:flex><span>            <span style=color:#66d9ef>if</span> is_local <span style=color:#f92672>is</span> <span style=color:#66d9ef>False</span>:
+</span></span><span style=display:flex><span>                res <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>client<span style=color:#f92672>.</span>basicGeneralUrl(image)
+</span></span><span style=display:flex><span>            <span style=color:#66d9ef>else</span>:
+</span></span><span style=display:flex><span>                res <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>client<span style=color:#f92672>.</span>basicGeneral(self<span style=color:#f92672>.</span>get_file_content(image),
+</span></span><span style=display:flex><span>                                               self<span style=color:#f92672>.</span>options)
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>elif</span> type <span style=color:#f92672>==</span> <span style=color:#ae81ff>2</span>:  <span style=color:#75715e># 通用文字识别（高精度版）</span>
+</span></span><span style=display:flex><span>            <span style=color:#66d9ef>if</span> is_local <span style=color:#f92672>is</span> <span style=color:#66d9ef>True</span>:
+</span></span><span style=display:flex><span>                res <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>client<span style=color:#f92672>.</span>basicAccurate(self<span style=color:#f92672>.</span>get_file_content(image))
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>elif</span> type <span style=color:#f92672>==</span> <span style=color:#ae81ff>3</span>:  <span style=color:#75715e># 网络图片文字识别</span>
+</span></span><span style=display:flex><span>            <span style=color:#66d9ef>if</span> is_local <span style=color:#f92672>is</span> <span style=color:#66d9ef>False</span>:
+</span></span><span style=display:flex><span>                res <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>client<span style=color:#f92672>.</span>webImageUrl(image)
+</span></span><span style=display:flex><span>            <span style=color:#66d9ef>else</span>:
+</span></span><span style=display:flex><span>                res <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>client<span style=color:#f92672>.</span>webImage(self<span style=color:#f92672>.</span>get_file_content(image))
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>else</span>:
+</span></span><span style=display:flex><span>            <span style=color:#66d9ef>if</span> is_local <span style=color:#f92672>is</span> <span style=color:#66d9ef>False</span>:
+</span></span><span style=display:flex><span>                res <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>client<span style=color:#f92672>.</span>basicGeneralUrl(image)
+</span></span><span style=display:flex><span>            <span style=color:#66d9ef>else</span>:
+</span></span><span style=display:flex><span>                res <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>client<span style=color:#f92672>.</span>basicGeneral(self<span style=color:#f92672>.</span>get_file_content(image),
+</span></span><span style=display:flex><span>                                               self<span style=color:#f92672>.</span>options)
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>return</span> res[<span style=color:#e6db74>&#39;words_result&#39;</span>][<span style=color:#ae81ff>0</span>][<span style=color:#e6db74>&#39;words&#39;</span>]
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>get_file_content</span>(self, filePath):
+</span></span><span style=display:flex><span>        <span style=color:#e6db74>&#39;&#39;&#39;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>        读取图片
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>        &#39;&#39;&#39;</span>
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>with</span> open(filePath, <span style=color:#e6db74>&#39;rb&#39;</span>) <span style=color:#66d9ef>as</span> fp:
+</span></span><span style=display:flex><span>            <span style=color:#66d9ef>return</span> fp<span style=color:#f92672>.</span>read()
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>setOptions</span>(self,
+</span></span><span style=display:flex><span>                   language_type<span style=color:#f92672>=</span><span style=color:#e6db74>&#39;CHN_ENG&#39;</span>,
+</span></span><span style=display:flex><span>                   detect_direction<span style=color:#f92672>=</span><span style=color:#e6db74>&#39;false&#39;</span>,
+</span></span><span style=display:flex><span>                   detect_language<span style=color:#f92672>=</span><span style=color:#e6db74>&#39;false&#39;</span>,
+</span></span><span style=display:flex><span>                   probability<span style=color:#f92672>=</span><span style=color:#e6db74>&#39;false&#39;</span>):
+</span></span><span style=display:flex><span>        <span style=color:#e6db74>&#39;&#39;&#39;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>        如果有可选参数
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>        :param language_type:
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>        :param detect_direction:
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>        :param detect_language:
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>        :param probability:
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>        :return:
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>        &#39;&#39;&#39;</span>
+</span></span><span style=display:flex><span>        options <span style=color:#f92672>=</span> {}
+</span></span><span style=display:flex><span>        options[<span style=color:#e6db74>&#34;language_type&#34;</span>] <span style=color:#f92672>=</span> language_type
+</span></span><span style=display:flex><span>        options[<span style=color:#e6db74>&#34;detect_direction&#34;</span>] <span style=color:#f92672>=</span> detect_direction
+</span></span><span style=display:flex><span>        options[<span style=color:#e6db74>&#34;detect_language&#34;</span>] <span style=color:#f92672>=</span> detect_language
+</span></span><span style=display:flex><span>        options[<span style=color:#e6db74>&#34;probability&#34;</span>] <span style=color:#f92672>=</span> probability
+</span></span><span style=display:flex><span>        self<span style=color:#f92672>.</span>options <span style=color:#f92672>=</span> options
+</span></span></code></pre></div><p>baiduImg.py</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-python data-lang=python><span style=display:flex><span><span style=color:#75715e># encoding:utf-8</span>
+</span></span><span style=display:flex><span><span style=color:#e6db74>&#34;&#34;&#34;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>Author: gallopingvijay
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>Email: 1937832819@qq.com
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>Website: https://www.choudalao.com
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>&#34;&#34;&#34;</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>import</span> requests
+</span></span><span style=display:flex><span><span style=color:#f92672>import</span> base64
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>CLIENT_ID <span style=color:#f92672>=</span> <span style=color:#e6db74>&#39;xxxx&#39;</span>
+</span></span><span style=display:flex><span>CLIENT_SECRET <span style=color:#f92672>=</span> <span style=color:#e6db74>&#39;xxxx&#39;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>class</span> <span style=color:#a6e22e>BaiduImg</span>():
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>__init__</span>(self):
+</span></span><span style=display:flex><span>        self<span style=color:#f92672>.</span>base_url <span style=color:#f92672>=</span> <span style=color:#e6db74>&#39;https://aip.baidubce.com&#39;</span>
+</span></span><span style=display:flex><span>        self<span style=color:#f92672>.</span>token <span style=color:#f92672>=</span> <span style=color:#e6db74>&#39;&#39;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>dealImg</span>(self, path, type<span style=color:#f92672>=</span><span style=color:#ae81ff>1</span>):
+</span></span><span style=display:flex><span>        self<span style=color:#f92672>.</span>getToken()
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>if</span> type <span style=color:#f92672>==</span> <span style=color:#ae81ff>1</span>:
+</span></span><span style=display:flex><span>            <span style=color:#75715e># 通用文字识别</span>
+</span></span><span style=display:flex><span>            request_url <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>base_url <span style=color:#f92672>+</span> <span style=color:#e6db74>&#34;/rest/2.0/ocr/v1/general_basic&#34;</span>
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>elif</span> type <span style=color:#f92672>==</span> <span style=color:#ae81ff>2</span>:
+</span></span><span style=display:flex><span>            <span style=color:#75715e># 位置信息版</span>
+</span></span><span style=display:flex><span>            request_url <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>base_url <span style=color:#f92672>+</span> <span style=color:#e6db74>&#34;/rest/2.0/ocr/v1/general&#34;</span>
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>elif</span> type <span style=color:#f92672>==</span> <span style=color:#ae81ff>3</span>:
+</span></span><span style=display:flex><span>            request_url <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>base_url <span style=color:#f92672>+</span> <span style=color:#e6db74>&#34;/rest/2.0/ocr/v1/accurate_basic&#34;</span>
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>elif</span> type <span style=color:#f92672>==</span> <span style=color:#ae81ff>4</span>:
+</span></span><span style=display:flex><span>            request_url <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>base_url <span style=color:#f92672>+</span> <span style=color:#e6db74>&#34;/rest/2.0/ocr/v1/accurate&#34;</span>
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>else</span>:
+</span></span><span style=display:flex><span>            request_url <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>base_url <span style=color:#f92672>+</span> <span style=color:#e6db74>&#34;/rest/2.0/ocr/v1/general_basic&#34;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>if</span> isinstance(path, bytes):
+</span></span><span style=display:flex><span>            s <span style=color:#f92672>=</span> path
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>else</span>:
+</span></span><span style=display:flex><span>            <span style=color:#75715e># 二进制方式打开图片文件</span>
+</span></span><span style=display:flex><span>            f <span style=color:#f92672>=</span> open(path, <span style=color:#e6db74>&#39;rb&#39;</span>)
+</span></span><span style=display:flex><span>            s <span style=color:#f92672>=</span> f<span style=color:#f92672>.</span>read()
+</span></span><span style=display:flex><span>        img <span style=color:#f92672>=</span> base64<span style=color:#f92672>.</span>b64encode(s)
+</span></span><span style=display:flex><span>        params <span style=color:#f92672>=</span> {<span style=color:#e6db74>&#34;image&#34;</span>: img}
+</span></span><span style=display:flex><span>        access_token <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>token
+</span></span><span style=display:flex><span>        request_url <span style=color:#f92672>=</span> request_url <span style=color:#f92672>+</span> <span style=color:#e6db74>&#34;?access_token=&#34;</span> <span style=color:#f92672>+</span> access_token
+</span></span><span style=display:flex><span>        headers <span style=color:#f92672>=</span> {<span style=color:#e6db74>&#39;content-type&#39;</span>: <span style=color:#e6db74>&#39;application/x-www-form-urlencoded&#39;</span>}
+</span></span><span style=display:flex><span>        response <span style=color:#f92672>=</span> requests<span style=color:#f92672>.</span>post(request_url, data<span style=color:#f92672>=</span>params, headers<span style=color:#f92672>=</span>headers)
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>if</span> response:
+</span></span><span style=display:flex><span>            res <span style=color:#f92672>=</span> response<span style=color:#f92672>.</span>json()
+</span></span><span style=display:flex><span>            <span style=color:#66d9ef>if</span> <span style=color:#e6db74>&#39;error_msg&#39;</span> <span style=color:#f92672>in</span> res:
+</span></span><span style=display:flex><span>                <span style=color:#66d9ef>return</span> res[<span style=color:#e6db74>&#39;error_msg&#39;</span>]
+</span></span><span style=display:flex><span>            <span style=color:#66d9ef>else</span>:
+</span></span><span style=display:flex><span>                <span style=color:#66d9ef>return</span> res[<span style=color:#e6db74>&#39;words_result&#39;</span>][<span style=color:#ae81ff>0</span>][<span style=color:#e6db74>&#39;words&#39;</span>]
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>getToken</span>(self):
+</span></span><span style=display:flex><span>        <span style=color:#75715e># client_id 为官网获取的AK， client_secret 为官网获取的SK</span>
+</span></span><span style=display:flex><span>        host <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>base_url <span style=color:#f92672>+</span> <span style=color:#e6db74>&#39;/oauth/2.0/token?grant_type=client_credentials&amp;client_id=&#39;</span> <span style=color:#f92672>+</span> str(
+</span></span><span style=display:flex><span>            CLIENT_ID) <span style=color:#f92672>+</span> <span style=color:#e6db74>&#39;&amp;client_secret=&#39;</span> <span style=color:#f92672>+</span> str(CLIENT_SECRET)
+</span></span><span style=display:flex><span>        response <span style=color:#f92672>=</span> requests<span style=color:#f92672>.</span>get(host)
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>if</span> response:
+</span></span><span style=display:flex><span>            data <span style=color:#f92672>=</span> response<span style=color:#f92672>.</span>json()
+</span></span><span style=display:flex><span>            self<span style=color:#f92672>.</span>token <span style=color:#f92672>=</span> data[<span style=color:#e6db74>&#39;access_token&#39;</span>]
+</span></span><span style=display:flex><span>            print(data[<span style=color:#e6db74>&#39;access_token&#39;</span>])
+</span></span><span style=display:flex><span>            <span style=color:#75715e># return data[&#39;access_token&#39;]</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>test</span>(self):
+</span></span><span style=display:flex><span>        print(<span style=color:#ae81ff>11</span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># if __name__ == &#39;__main__&#39;:</span>
+</span></span><span style=display:flex><span><span style=color:#75715e>#     path = &#39;../code_img/veriCode (1).do&#39;</span>
+</span></span><span style=display:flex><span><span style=color:#75715e>#     baidu = BaiduImg()</span>
+</span></span><span style=display:flex><span><span style=color:#75715e>#     res = baidu.dealImg(path, 3)</span>
+</span></span><span style=display:flex><span><span style=color:#75715e>#     print(res)</span>
+</span></span></code></pre></div><p>tx.py</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-python data-lang=python><span style=display:flex><span><span style=color:#e6db74>&#34;&#34;&#34;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>Author: gallopingvijay
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>Email: 1937832819@qq.com
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>Website: https://www.choudalao.com
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>&#34;&#34;&#34;</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>from</span> tencentcloud.common <span style=color:#f92672>import</span> credential
+</span></span><span style=display:flex><span><span style=color:#f92672>from</span> tencentcloud.common.profile.client_profile <span style=color:#f92672>import</span> ClientProfile
+</span></span><span style=display:flex><span><span style=color:#f92672>from</span> tencentcloud.common.profile.http_profile <span style=color:#f92672>import</span> HttpProfile
+</span></span><span style=display:flex><span><span style=color:#f92672>from</span> tencentcloud.common.exception.tencent_cloud_sdk_exception <span style=color:#f92672>import</span> TencentCloudSDKException
+</span></span><span style=display:flex><span><span style=color:#f92672>from</span> tencentcloud.ocr.v20181119 <span style=color:#f92672>import</span> ocr_client, models
+</span></span><span style=display:flex><span><span style=color:#f92672>import</span> json
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>def</span> <span style=color:#a6e22e>get_code</span>(path):
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>try</span>:
+</span></span><span style=display:flex><span>        cred <span style=color:#f92672>=</span> credential<span style=color:#f92672>.</span>Credential(
+</span></span><span style=display:flex><span>            <span style=color:#e6db74>&#34;xxxx&#34;</span>, <span style=color:#e6db74>&#34;xxxx&#34;</span>)
+</span></span><span style=display:flex><span>        httpProfile <span style=color:#f92672>=</span> HttpProfile()
+</span></span><span style=display:flex><span>        httpProfile<span style=color:#f92672>.</span>endpoint <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;ocr.tencentcloudapi.com&#34;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>        clientProfile <span style=color:#f92672>=</span> ClientProfile()
+</span></span><span style=display:flex><span>        clientProfile<span style=color:#f92672>.</span>httpProfile <span style=color:#f92672>=</span> httpProfile
+</span></span><span style=display:flex><span>        client <span style=color:#f92672>=</span> ocr_client<span style=color:#f92672>.</span>OcrClient(cred, <span style=color:#e6db74>&#34;ap-guangzhou&#34;</span>, clientProfile)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>        req <span style=color:#f92672>=</span> models<span style=color:#f92672>.</span>GeneralBasicOCRRequest()
+</span></span><span style=display:flex><span>        params <span style=color:#f92672>=</span> <span style=color:#e6db74>&#39;{</span><span style=color:#ae81ff>\&#34;</span><span style=color:#e6db74>ImageUrl</span><span style=color:#ae81ff>\&#34;</span><span style=color:#e6db74>:</span><span style=color:#ae81ff>\&#34;</span><span style=color:#e6db74>&#39;</span> <span style=color:#f92672>+</span> path <span style=color:#f92672>+</span> <span style=color:#e6db74>&#39;</span><span style=color:#ae81ff>\&#34;</span><span style=color:#e6db74>}&#39;</span>
+</span></span><span style=display:flex><span>        req<span style=color:#f92672>.</span>from_json_string(params)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>        resp <span style=color:#f92672>=</span> client<span style=color:#f92672>.</span>GeneralBasicOCR(req)
+</span></span><span style=display:flex><span>        res <span style=color:#f92672>=</span> resp<span style=color:#f92672>.</span>to_json_string()
+</span></span><span style=display:flex><span>        res_json <span style=color:#f92672>=</span> json<span style=color:#f92672>.</span>loads(res)
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>if</span> res_json[<span style=color:#e6db74>&#39;TextDetections&#39;</span>][<span style=color:#ae81ff>0</span>][<span style=color:#e6db74>&#39;DetectedText&#39;</span>] <span style=color:#f92672>is</span> <span style=color:#f92672>not</span> <span style=color:#66d9ef>None</span>:
+</span></span><span style=display:flex><span>            code <span style=color:#f92672>=</span> res_json[<span style=color:#e6db74>&#39;TextDetections&#39;</span>][<span style=color:#ae81ff>0</span>][<span style=color:#e6db74>&#39;DetectedText&#39;</span>]
+</span></span><span style=display:flex><span>            <span style=color:#75715e># print(res_json[&#39;TextDetections&#39;][0][&#39;DetectedText&#39;])</span>
+</span></span><span style=display:flex><span>            <span style=color:#66d9ef>return</span> code
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>except</span> TencentCloudSDKException <span style=color:#66d9ef>as</span> err:
+</span></span><span style=display:flex><span>        print(err)
+</span></span></code></pre></div><p>cfmmc.py</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-python data-lang=python><span style=display:flex><span><span style=color:#75715e># -*- coding:utf8 -*-</span>
+</span></span><span style=display:flex><span><span style=color:#e6db74>&#34;&#34;&#34;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>Author: gallopingvijay
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>Email: 1937832819@qq.com
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>Website: https://www.choudalao.com
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>&#34;&#34;&#34;</span>
+</span></span><span style=display:flex><span><span style=color:#75715e># python3</span>
+</span></span><span style=display:flex><span><span style=color:#75715e># from shibie import baiduImg</span>
+</span></span><span style=display:flex><span><span style=color:#75715e># from shibie import tx</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>from</span> datetime <span style=color:#f92672>import</span> datetime
+</span></span><span style=display:flex><span><span style=color:#f92672>import</span> time
+</span></span><span style=display:flex><span><span style=color:#f92672>import</span> pytesseract
+</span></span><span style=display:flex><span><span style=color:#f92672>from</span> shibie <span style=color:#f92672>import</span> baiduBce
+</span></span><span style=display:flex><span><span style=color:#f92672>import</span> os
+</span></span><span style=display:flex><span><span style=color:#f92672>import</span> pymysql
+</span></span><span style=display:flex><span><span style=color:#75715e># from io import BytesIO</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>from</span> requests <span style=color:#f92672>import</span> session
+</span></span><span style=display:flex><span><span style=color:#f92672>from</span> PIL <span style=color:#f92672>import</span> Image
+</span></span><span style=display:flex><span><span style=color:#f92672>import</span> PIL.ImageOps
+</span></span><span style=display:flex><span><span style=color:#f92672>import</span> yaml
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 跟域名</span>
+</span></span><span style=display:flex><span>BASE_URL <span style=color:#f92672>=</span> <span style=color:#e6db74>&#39;https://investorservice.cfmmc.com&#39;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>class</span> <span style=color:#a6e22e>Cfmmc</span>(object):
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>__init__</span>(self, username<span style=color:#f92672>=</span><span style=color:#66d9ef>None</span>, max_gap<span style=color:#f92672>=</span><span style=color:#ae81ff>2</span>, code_num<span style=color:#f92672>=</span><span style=color:#ae81ff>10</span>):
+</span></span><span style=display:flex><span>		<span style=color:#e6db74>&#39;&#39;&#39;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>		初始化
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>		:param username:用户名，为None时，查询所有用户
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>		:param max_gap:从什么时候开始抓取数据，2表示从两天前开始
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>		:param code_num:验证码识别次数
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>		:return:
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>		&#39;&#39;&#39;</span>
+</span></span><span style=display:flex><span>        <span style=color:#75715e># 配置</span>
+</span></span><span style=display:flex><span>        self<span style=color:#f92672>.</span>configs <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>get_config()
+</span></span><span style=display:flex><span>        <span style=color:#75715e># 数据库</span>
+</span></span><span style=display:flex><span>        self<span style=color:#f92672>.</span>conn <span style=color:#f92672>=</span> pymysql<span style=color:#f92672>.</span>connect(
+</span></span><span style=display:flex><span>            host<span style=color:#f92672>=</span>self<span style=color:#f92672>.</span>configs[<span style=color:#e6db74>&#39;mysql_config&#39;</span>][<span style=color:#e6db74>&#39;host&#39;</span>],
+</span></span><span style=display:flex><span>            port<span style=color:#f92672>=</span>self<span style=color:#f92672>.</span>configs[<span style=color:#e6db74>&#39;mysql_config&#39;</span>][<span style=color:#e6db74>&#39;port&#39;</span>],
+</span></span><span style=display:flex><span>            user<span style=color:#f92672>=</span>self<span style=color:#f92672>.</span>configs[<span style=color:#e6db74>&#39;mysql_config&#39;</span>][<span style=color:#e6db74>&#39;user&#39;</span>],
+</span></span><span style=display:flex><span>            password<span style=color:#f92672>=</span>self<span style=color:#f92672>.</span>configs[<span style=color:#e6db74>&#39;mysql_config&#39;</span>][<span style=color:#e6db74>&#39;password&#39;</span>],
+</span></span><span style=display:flex><span>            db<span style=color:#f92672>=</span>self<span style=color:#f92672>.</span>configs[<span style=color:#e6db74>&#39;mysql_config&#39;</span>][<span style=color:#e6db74>&#39;db&#39;</span>],
+</span></span><span style=display:flex><span>            charset<span style=color:#f92672>=</span>self<span style=color:#f92672>.</span>configs[<span style=color:#e6db74>&#39;mysql_config&#39;</span>][<span style=color:#e6db74>&#39;charset&#39;</span>]
+</span></span><span style=display:flex><span>        )
+</span></span><span style=display:flex><span>        <span style=color:#75715e># 创建一个游标</span>
+</span></span><span style=display:flex><span>        self<span style=color:#f92672>.</span>cursor <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>conn<span style=color:#f92672>.</span>cursor()
+</span></span><span style=display:flex><span>        <span style=color:#75715e># 账号</span>
+</span></span><span style=display:flex><span>        self<span style=color:#f92672>.</span>users <span style=color:#f92672>=</span> ()
+</span></span><span style=display:flex><span>        <span style=color:#75715e># 指定的用户名</span>
+</span></span><span style=display:flex><span>        self<span style=color:#f92672>.</span>username <span style=color:#f92672>=</span> username
+</span></span><span style=display:flex><span>        <span style=color:#75715e># 查询区间，从今天往前数的天数</span>
+</span></span><span style=display:flex><span>        self<span style=color:#f92672>.</span>max_gap <span style=color:#f92672>=</span> max_gap
+</span></span><span style=display:flex><span>        <span style=color:#75715e># 验证码执行次数</span>
+</span></span><span style=display:flex><span>        self<span style=color:#f92672>.</span>code_num <span style=color:#f92672>=</span> code_num
+</span></span><span style=display:flex><span>        <span style=color:#75715e># 消息通知</span>
+</span></span><span style=display:flex><span>        self<span style=color:#f92672>.</span>msg <span style=color:#f92672>=</span> <span style=color:#e6db74>&#39;&#39;</span>
+</span></span><span style=display:flex><span>        <span style=color:#75715e># 客户账号状态</span>
+</span></span><span style=display:flex><span>        self<span style=color:#f92672>.</span>user_status <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span>
+</span></span><span style=display:flex><span>        <span style=color:#75715e># 运行时间</span>
+</span></span><span style=display:flex><span>        self<span style=color:#f92672>.</span>run_time <span style=color:#f92672>=</span> time<span style=color:#f92672>.</span>strftime(
+</span></span><span style=display:flex><span>            <span style=color:#e6db74>&#39;%Y-%m-</span><span style=color:#e6db74>%d</span><span style=color:#e6db74> %H:%M:%S&#39;</span>, time<span style=color:#f92672>.</span>localtime(time<span style=color:#f92672>.</span>time()))
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>pymysql_action</span>(self, sql):
+</span></span><span style=display:flex><span>        <span style=color:#75715e># 执行 SQL 语句</span>
+</span></span><span style=display:flex><span>        self<span style=color:#f92672>.</span>cursor<span style=color:#f92672>.</span>execute(sql)
+</span></span><span style=display:flex><span>        <span style=color:#75715e># 提交</span>
+</span></span><span style=display:flex><span>        self<span style=color:#f92672>.</span>conn<span style=color:#f92672>.</span>commit()
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>get_config</span>(self):
+</span></span><span style=display:flex><span>        <span style=color:#e6db74>&#39;&#39;&#39;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>        获取config.yaml配置
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>        :return:configs
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>        &#39;&#39;&#39;</span>
+</span></span><span style=display:flex><span>        <span style=color:#75715e># 获取当前文件的Realpath</span>
+</span></span><span style=display:flex><span>        fileNamePath <span style=color:#f92672>=</span> os<span style=color:#f92672>.</span>path<span style=color:#f92672>.</span>split(os<span style=color:#f92672>.</span>path<span style=color:#f92672>.</span>realpath(__file__))[<span style=color:#ae81ff>0</span>]
+</span></span><span style=display:flex><span>        <span style=color:#75715e># 读取文件</span>
+</span></span><span style=display:flex><span>        yamlPath <span style=color:#f92672>=</span> os<span style=color:#f92672>.</span>path<span style=color:#f92672>.</span>join(fileNamePath, <span style=color:#e6db74>&#39;config.yaml&#39;</span>)
+</span></span><span style=display:flex><span>        <span style=color:#75715e># 加上 ,encoding=&#39;utf-8&#39;，处理配置文件中含中文出现乱码的情况。</span>
+</span></span><span style=display:flex><span>        file <span style=color:#f92672>=</span> open(yamlPath, <span style=color:#e6db74>&#39;r&#39;</span>, encoding<span style=color:#f92672>=</span><span style=color:#e6db74>&#39;utf-8&#39;</span>)
+</span></span><span style=display:flex><span>        <span style=color:#75715e># 读取文件</span>
+</span></span><span style=display:flex><span>        cont <span style=color:#f92672>=</span> file<span style=color:#f92672>.</span>read()
+</span></span><span style=display:flex><span>        <span style=color:#75715e># 返回配置</span>
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>return</span> yaml<span style=color:#f92672>.</span>safe_load(cont)
+</span></span><span style=display:flex><span>		
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>def</span> <span style=color:#a6e22e>file_path</span>(self, path, file):
+</span></span><span style=display:flex><span>        <span style=color:#e6db74>&#39;&#39;&#39;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>        返回文件路径
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>        :param path:路径
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>        :param file:文件名
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>        :return:
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>        &#39;&#39;&#39;</span>
+</span></span><span style=display:flex><span>        <span style=color:#75715e># 是否存在目录</span>
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>if</span> <span style=color:#f92672>not</span> os<span style=color:#f92672>.</span>path<span style=color:#f92672>.</span>exists(path):
+</span></span><span style=display:flex><span>            os<span style=color:#f92672>.</span>makedirs(path)
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>return</span> path<span style=color:#f92672>+</span><span style=color:#e6db74>&#39;/&#39;</span> <span style=color:#f92672>+</span> file
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>reg_img</span>(self, file_obj):
+</span></span><span style=display:flex><span>        <span style=color:#e6db74>&#39;&#39;&#39;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>        OCR识别图片
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>        :param file_obj:文件
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>        :return:
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>        &#39;&#39;&#39;</span>
+</span></span><span style=display:flex><span>        pytesseract<span style=color:#f92672>.</span>pytesseract<span style=color:#f92672>.</span>tesseract_cmd <span style=color:#f92672>=</span> <span style=color:#e6db74>r</span><span style=color:#e6db74>&#34;D:\Program Files\Tesseract-OCR\tesseract.exe&#34;</span>
+</span></span><span style=display:flex><span>        im <span style=color:#f92672>=</span> Image<span style=color:#f92672>.</span>open(file_obj)
+</span></span><span style=display:flex><span>        im <span style=color:#f92672>=</span> im<span style=color:#f92672>.</span>convert(<span style=color:#e6db74>&#39;L&#39;</span>)
+</span></span><span style=display:flex><span>        binary_image <span style=color:#f92672>=</span> im<span style=color:#f92672>.</span>point([<span style=color:#ae81ff>0</span> <span style=color:#66d9ef>if</span> i <span style=color:#f92672>&lt;</span> <span style=color:#ae81ff>210</span> <span style=color:#66d9ef>else</span> <span style=color:#ae81ff>1</span> <span style=color:#66d9ef>for</span> i <span style=color:#f92672>in</span> range(<span style=color:#ae81ff>256</span>)], <span style=color:#e6db74>&#39;1&#39;</span>)
+</span></span><span style=display:flex><span>        im1 <span style=color:#f92672>=</span> binary_image<span style=color:#f92672>.</span>convert(<span style=color:#e6db74>&#39;L&#39;</span>)
+</span></span><span style=display:flex><span>        im2 <span style=color:#f92672>=</span> PIL<span style=color:#f92672>.</span>ImageOps<span style=color:#f92672>.</span>invert(im1)
+</span></span><span style=display:flex><span>        im3 <span style=color:#f92672>=</span> im2<span style=color:#f92672>.</span>convert(<span style=color:#e6db74>&#39;1&#39;</span>)
+</span></span><span style=display:flex><span>        im4 <span style=color:#f92672>=</span> im3<span style=color:#f92672>.</span>convert(<span style=color:#e6db74>&#39;L&#39;</span>)
+</span></span><span style=display:flex><span>        res <span style=color:#f92672>=</span> pytesseract<span style=color:#f92672>.</span>image_to_string(im4)
+</span></span><span style=display:flex><span>        <span style=color:#75715e># print(res)</span>
+</span></span><span style=display:flex><span>        <span style=color:#75715e># im4.show()</span>
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>return</span> res
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>get_download_url</span>(self, content, key<span style=color:#f92672>=</span><span style=color:#e6db74>&#39;下载&#39;</span>):
+</span></span><span style=display:flex><span>        <span style=color:#e6db74>&#39;&#39;&#39;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>        获取下载链接
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>        :param content:内容
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>        :param key:key
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>        :return:
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>        &#39;&#39;&#39;</span>
+</span></span><span style=display:flex><span>        a <span style=color:#f92672>=</span> content<span style=color:#f92672>.</span>split(key)[<span style=color:#ae81ff>0</span>]
+</span></span><span style=display:flex><span>        b <span style=color:#f92672>=</span> a<span style=color:#f92672>.</span>split(<span style=color:#e6db74>&#39;&lt;div id=&#34;waitBody&#34;&gt;&#39;</span>)[<span style=color:#ae81ff>1</span>]
+</span></span><span style=display:flex><span>        c <span style=color:#f92672>=</span> b<span style=color:#f92672>.</span>split(<span style=color:#e6db74>&#39;&lt;a href=&#34;&#39;</span>)[<span style=color:#ae81ff>1</span>]
+</span></span><span style=display:flex><span>        d <span style=color:#f92672>=</span> c<span style=color:#f92672>.</span>split(<span style=color:#e6db74>&#39;&#34; target=&#34;_blank&#34;&gt;&#39;</span>)[<span style=color:#ae81ff>0</span>]
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>return</span> BASE_URL <span style=color:#f92672>+</span> d
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>flag_filter</span>(self, content, flag):
+</span></span><span style=display:flex><span>        <span style=color:#e6db74>&#39;&#39;&#39;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>        匹配内容
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>        :param content:内容
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>        :param key:key
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>        :return:
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>        &#39;&#39;&#39;</span>
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>if</span> len(content<span style=color:#f92672>.</span>split(flag)) <span style=color:#f92672>&lt;</span> <span style=color:#ae81ff>2</span>:
+</span></span><span style=display:flex><span>            <span style=color:#66d9ef>return</span> <span style=color:#e6db74>&#39;&#39;</span>
+</span></span><span style=display:flex><span>        result <span style=color:#f92672>=</span> content<span style=color:#f92672>.</span>split(flag)[<span style=color:#ae81ff>1</span>]<span style=color:#f92672>.</span>split(<span style=color:#e6db74>&#39;&#34;&#39;</span>)[<span style=color:#ae81ff>0</span>]
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>return</span> result
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>get_day</span>(self, gap<span style=color:#f92672>=</span><span style=color:#ae81ff>1</span>):
+</span></span><span style=display:flex><span>        <span style=color:#e6db74>&#39;&#39;&#39;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>        返回年月日时间，并过滤周末周六
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>        :param gap:间隔数
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>        :return:
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>        &#39;&#39;&#39;</span>
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>if</span> gap <span style=color:#f92672>&gt;=</span> self<span style=color:#f92672>.</span>max_gap:
+</span></span><span style=display:flex><span>            <span style=color:#66d9ef>return</span> <span style=color:#66d9ef>False</span>
+</span></span><span style=display:flex><span>        <span style=color:#75715e># 时间戳</span>
+</span></span><span style=display:flex><span>        day <span style=color:#f92672>=</span> time<span style=color:#f92672>.</span>time() <span style=color:#f92672>-</span> <span style=color:#ae81ff>86400</span> <span style=color:#f92672>*</span> (gap <span style=color:#f92672>-</span> <span style=color:#ae81ff>1</span>)
+</span></span><span style=display:flex><span>        <span style=color:#75715e># 输出年月日</span>
+</span></span><span style=display:flex><span>        ymd <span style=color:#f92672>=</span> time<span style=color:#f92672>.</span>strftime(<span style=color:#e6db74>&#39;%Y-%m-</span><span style=color:#e6db74>%d</span><span style=color:#e6db74>&#39;</span>, time<span style=color:#f92672>.</span>localtime(day))
+</span></span><span style=display:flex><span>        <span style=color:#75715e># 获取星期几 数字1-7代表周一到周日</span>
+</span></span><span style=display:flex><span>        week <span style=color:#f92672>=</span> datetime<span style=color:#f92672>.</span>strptime(ymd, <span style=color:#e6db74>&#39;%Y-%m-</span><span style=color:#e6db74>%d</span><span style=color:#e6db74>&#39;</span>)<span style=color:#f92672>.</span>isoweekday()
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>if</span> week <span style=color:#f92672>&gt;</span> <span style=color:#ae81ff>5</span>:
+</span></span><span style=display:flex><span>            print(<span style=color:#e6db74>&#39;...&#39;</span> <span style=color:#f92672>+</span> ymd <span style=color:#f92672>+</span> <span style=color:#e6db74>&#39;是周&#39;</span> <span style=color:#f92672>+</span> str(week))
+</span></span><span style=display:flex><span>            <span style=color:#66d9ef>return</span> <span style=color:#66d9ef>True</span>
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>return</span> ymd
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>get_dingshi_data</span>(self, ss, user_id, header, token<span style=color:#f92672>=</span><span style=color:#e6db74>&#39;&#39;</span>):
+</span></span><span style=display:flex><span>        <span style=color:#e6db74>&#39;&#39;&#39;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>        处理逐日盯市页面
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>        :param ss:request.session
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>        :param user_id:用户id
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>        :param header:header
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>        :param token:token
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>        :return:
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>        &#39;&#39;&#39;</span>
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>for</span> i <span style=color:#f92672>in</span> range(<span style=color:#ae81ff>1</span>, self<span style=color:#f92672>.</span>max_gap):
+</span></span><span style=display:flex><span>            <span style=color:#75715e># 获取时间</span>
+</span></span><span style=display:flex><span>            ymd <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>get_day(i)
+</span></span><span style=display:flex><span>            <span style=color:#66d9ef>if</span> ymd <span style=color:#f92672>is</span> <span style=color:#66d9ef>False</span>:  <span style=color:#75715e># 说明循环完了</span>
+</span></span><span style=display:flex><span>                <span style=color:#66d9ef>return</span> <span style=color:#66d9ef>True</span>
+</span></span><span style=display:flex><span>            <span style=color:#66d9ef>elif</span> ymd <span style=color:#f92672>is</span> <span style=color:#66d9ef>True</span>:  <span style=color:#75715e># 说明是周末跳过</span>
+</span></span><span style=display:flex><span>                <span style=color:#66d9ef>continue</span>
+</span></span><span style=display:flex><span>            post_data <span style=color:#f92672>=</span> {
+</span></span><span style=display:flex><span>                <span style=color:#e6db74>&#34;org.apache.struts.taglib.html.TOKEN&#34;</span>: token,
+</span></span><span style=display:flex><span>                <span style=color:#e6db74>&#34;tradeDate&#34;</span>: ymd,
+</span></span><span style=display:flex><span>                <span style=color:#e6db74>&#34;byType&#34;</span>: <span style=color:#e6db74>&#39;data&#39;</span>,
+</span></span><span style=display:flex><span>            }
+</span></span><span style=display:flex><span>            dingshi_url <span style=color:#f92672>=</span> BASE_URL<span style=color:#f92672>+</span><span style=color:#e6db74>&#39;/customer/setParameter.do&#39;</span>
+</span></span><span style=display:flex><span>            dingshi_html <span style=color:#f92672>=</span> ss<span style=color:#f92672>.</span>post(dingshi_url,
+</span></span><span style=display:flex><span>                                   data<span style=color:#f92672>=</span>post_data,
+</span></span><span style=display:flex><span>                                   headers<span style=color:#f92672>=</span>header,
+</span></span><span style=display:flex><span>                                   timeout<span style=color:#f92672>=</span><span style=color:#ae81ff>5</span>)
+</span></span><span style=display:flex><span>            dingshi_html_code <span style=color:#f92672>=</span> dingshi_html<span style=color:#f92672>.</span>content<span style=color:#f92672>.</span>decode()
+</span></span><span style=display:flex><span>            <span style=color:#75715e># #看看html内容对不对</span>
+</span></span><span style=display:flex><span>            <span style=color:#75715e># with open(&#39;./other/yemian.html&#39;, &#39;w+&#39;,</span>
+</span></span><span style=display:flex><span>            <span style=color:#75715e>#           encoding=&#39;utf-8&#39;) as files:</span>
+</span></span><span style=display:flex><span>            <span style=color:#75715e>#     files.write(dingshi_html_code)</span>
+</span></span><span style=display:flex><span>            <span style=color:#66d9ef>if</span> <span style=color:#e6db74>&#39;(逐日盯市)&#39;</span> <span style=color:#f92672>in</span> dingshi_html_code:
+</span></span><span style=display:flex><span>                <span style=color:#75715e># 找到下载按钮</span>
+</span></span><span style=display:flex><span>                <span style=color:#66d9ef>if</span> <span style=color:#e6db74>&#39;下载&#39;</span> <span style=color:#f92672>in</span> dingshi_html_code:
+</span></span><span style=display:flex><span>                    download_url <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>get_download_url(
+</span></span><span style=display:flex><span>                        dingshi_html_code, <span style=color:#e6db74>&#39;下载&#39;</span>)
+</span></span><span style=display:flex><span>                    xls_res <span style=color:#f92672>=</span> ss<span style=color:#f92672>.</span>get(download_url, headers<span style=color:#f92672>=</span>header)
+</span></span><span style=display:flex><span>                    <span style=color:#75715e># 下载文件</span>
+</span></span><span style=display:flex><span>                    file_name <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>file_path(
+</span></span><span style=display:flex><span>                        <span style=color:#e6db74>&#39;./exel&#39;</span>, user_id <span style=color:#f92672>+</span> <span style=color:#e6db74>&#39;_&#39;</span> <span style=color:#f92672>+</span> ymd <span style=color:#f92672>+</span> <span style=color:#e6db74>&#39;.xls&#39;</span>)
+</span></span><span style=display:flex><span>                    <span style=color:#75715e># 判断文件是否存在</span>
+</span></span><span style=display:flex><span>                    <span style=color:#66d9ef>if</span> os<span style=color:#f92672>.</span>path<span style=color:#f92672>.</span>exists(file_name) <span style=color:#f92672>is</span> <span style=color:#66d9ef>True</span>:
+</span></span><span style=display:flex><span>                        text <span style=color:#f92672>=</span> <span style=color:#e6db74>&#39;...&#39;</span> <span style=color:#f92672>+</span> file_name <span style=color:#f92672>+</span> <span style=color:#e6db74>&#39;已存在，&#39;</span>
+</span></span><span style=display:flex><span>                        print(text)
+</span></span><span style=display:flex><span>                        self<span style=color:#f92672>.</span>msg <span style=color:#f92672>+=</span> text
+</span></span><span style=display:flex><span>                        <span style=color:#66d9ef>continue</span>
+</span></span><span style=display:flex><span>                    print(<span style=color:#e6db74>&#39;...准备下载&#39;</span> <span style=color:#f92672>+</span> file_name <span style=color:#f92672>+</span> <span style=color:#e6db74>&#39;的数据&#39;</span>)
+</span></span><span style=display:flex><span>                    <span style=color:#66d9ef>with</span> open(file_name, <span style=color:#e6db74>&#34;wb&#34;</span>) <span style=color:#66d9ef>as</span> xls_file:
+</span></span><span style=display:flex><span>                        xls_file<span style=color:#f92672>.</span>write(xls_res<span style=color:#f92672>.</span>content)
+</span></span><span style=display:flex><span>                <span style=color:#66d9ef>else</span>:
+</span></span><span style=display:flex><span>                    text <span style=color:#f92672>=</span> ymd<span style=color:#f92672>+</span><span style=color:#e6db74>&#39;...不包含下载按钮，&#39;</span>
+</span></span><span style=display:flex><span>                    print(text)
+</span></span><span style=display:flex><span>                    self<span style=color:#f92672>.</span>msg <span style=color:#f92672>+=</span> text
+</span></span><span style=display:flex><span>                    <span style=color:#66d9ef>continue</span>
+</span></span><span style=display:flex><span>            <span style=color:#66d9ef>else</span>:
+</span></span><span style=display:flex><span>                print(<span style=color:#e6db74>&#39;...不是追日盯市页面&#39;</span>)
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>return</span> <span style=color:#66d9ef>True</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>main</span>(self, user_id, passwd):
+</span></span><span style=display:flex><span>        <span style=color:#e6db74>&#39;&#39;&#39;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>        处理逐日盯市页面
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>        :param user_id:用户id
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>        :param passwd:passwd
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>        :return:
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>        &#39;&#39;&#39;</span>
+</span></span><span style=display:flex><span>        header <span style=color:#f92672>=</span> {
+</span></span><span style=display:flex><span>            <span style=color:#e6db74>&#39;Connection&#39;</span>:
+</span></span><span style=display:flex><span>            <span style=color:#e6db74>&#39;keep-alive&#39;</span>,
+</span></span><span style=display:flex><span>            <span style=color:#e6db74>&#39;User-Agent&#39;</span>:
+</span></span><span style=display:flex><span>            <span style=color:#e6db74>&#34;Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36&#34;</span>,
+</span></span><span style=display:flex><span>        }
+</span></span><span style=display:flex><span>        url <span style=color:#f92672>=</span> BASE_URL<span style=color:#f92672>+</span><span style=color:#e6db74>&#34;/login.do&#34;</span>
+</span></span><span style=display:flex><span>        token_flag <span style=color:#f92672>=</span> <span style=color:#e6db74>&#39;name=&#34;org.apache.struts.taglib.html.TOKEN&#34; value=&#34;&#39;</span>
+</span></span><span style=display:flex><span>        veri_code_flag <span style=color:#f92672>=</span> <span style=color:#e6db74>&#39;src=&#34;/veriCode.do?t=&#39;</span>
+</span></span><span style=display:flex><span>        ss <span style=color:#f92672>=</span> session()
+</span></span><span style=display:flex><span>        res <span style=color:#f92672>=</span> ss<span style=color:#f92672>.</span>get(url, headers<span style=color:#f92672>=</span>header)
+</span></span><span style=display:flex><span>        content <span style=color:#f92672>=</span> res<span style=color:#f92672>.</span>content<span style=color:#f92672>.</span>decode()
+</span></span><span style=display:flex><span>        token <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>flag_filter(content, token_flag)
+</span></span><span style=display:flex><span>        veri_code_url <span style=color:#f92672>=</span> BASE_URL<span style=color:#f92672>+</span><span style=color:#e6db74>&#39;/veriCode.do?t=&#39;</span> <span style=color:#f92672>+</span> self<span style=color:#f92672>.</span>flag_filter(
+</span></span><span style=display:flex><span>            content, veri_code_flag)
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>for</span> i <span style=color:#f92672>in</span> range(self<span style=color:#f92672>.</span>code_num):
+</span></span><span style=display:flex><span>            print(<span style=color:#e6db74>f</span><span style=color:#e6db74>&#39;...第</span><span style=color:#e6db74>{</span>i <span style=color:#f92672>+</span> <span style=color:#ae81ff>1</span><span style=color:#e6db74>}</span><span style=color:#e6db74>次尝试&#39;</span>)
+</span></span><span style=display:flex><span>            <span style=color:#66d9ef>try</span>:
+</span></span><span style=display:flex><span>                <span style=color:#75715e># OCR识别</span>
+</span></span><span style=display:flex><span>                <span style=color:#75715e># tmp_file = BytesIO()</span>
+</span></span><span style=display:flex><span>                <span style=color:#75715e># tmp_file.write(ss.get(veri_code_url).content)</span>
+</span></span><span style=display:flex><span>                <span style=color:#75715e># veri_code = reg_img(tmp_file)</span>
+</span></span><span style=display:flex><span>                <span style=color:#75715e># 百度API</span>
+</span></span><span style=display:flex><span>                <span style=color:#75715e># veri_code = baiduImg.BaiduImg().dealImg(path, type)</span>
+</span></span><span style=display:flex><span>                <span style=color:#75715e># 腾讯API</span>
+</span></span><span style=display:flex><span>                <span style=color:#75715e># veri_code = tx.get_code(veri_code_url)</span>
+</span></span><span style=display:flex><span>                <span style=color:#75715e># 百度接口</span>
+</span></span><span style=display:flex><span>                tmp_file <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>file_path(<span style=color:#e6db74>&#39;./code_img&#39;</span>, <span style=color:#e6db74>&#39;logo_code.jpg&#39;</span>)
+</span></span><span style=display:flex><span>                req_res <span style=color:#f92672>=</span> ss<span style=color:#f92672>.</span>get(veri_code_url)<span style=color:#f92672>.</span>content
+</span></span><span style=display:flex><span>                open(tmp_file, <span style=color:#e6db74>&#39;wb&#39;</span>)<span style=color:#f92672>.</span>write(req_res)
+</span></span><span style=display:flex><span>                veri_code <span style=color:#f92672>=</span> baiduBce<span style=color:#f92672>.</span>BaiduBce()<span style=color:#f92672>.</span>dealImg(tmp_file, <span style=color:#ae81ff>2</span>, <span style=color:#66d9ef>True</span>)
+</span></span><span style=display:flex><span>                <span style=color:#66d9ef>if</span> veri_code <span style=color:#f92672>and</span> len(veri_code) <span style=color:#f92672>&gt;=</span> <span style=color:#ae81ff>5</span>:
+</span></span><span style=display:flex><span>                    veri_code <span style=color:#f92672>=</span> <span style=color:#e6db74>&#39;&#39;</span><span style=color:#f92672>.</span>join(filter(str<span style=color:#f92672>.</span>isalnum, veri_code))
+</span></span><span style=display:flex><span>                    print(<span style=color:#e6db74>&#39;...识别得到:&#39;</span> <span style=color:#f92672>+</span> veri_code)
+</span></span><span style=display:flex><span>                    post_data <span style=color:#f92672>=</span> {
+</span></span><span style=display:flex><span>                        <span style=color:#e6db74>&#34;org.apache.struts.taglib.html.TOKEN&#34;</span>: token,
+</span></span><span style=display:flex><span>                        <span style=color:#e6db74>&#34;showSaveCookies&#34;</span>: <span style=color:#e6db74>&#39;&#39;</span>,
+</span></span><span style=display:flex><span>                        <span style=color:#e6db74>&#34;userID&#34;</span>: user_id,
+</span></span><span style=display:flex><span>                        <span style=color:#e6db74>&#34;password&#34;</span>: passwd,
+</span></span><span style=display:flex><span>                        <span style=color:#e6db74>&#34;vericode&#34;</span>: veri_code,
+</span></span><span style=display:flex><span>                    }
+</span></span><span style=display:flex><span>                    content2 <span style=color:#f92672>=</span> ss<span style=color:#f92672>.</span>post(url,
+</span></span><span style=display:flex><span>                                       data<span style=color:#f92672>=</span>post_data,
+</span></span><span style=display:flex><span>                                       headers<span style=color:#f92672>=</span>header,
+</span></span><span style=display:flex><span>                                       timeout<span style=color:#f92672>=</span><span style=color:#ae81ff>5</span>)
+</span></span><span style=display:flex><span>                    res <span style=color:#f92672>=</span> content2<span style=color:#f92672>.</span>content<span style=color:#f92672>.</span>decode()
+</span></span><span style=display:flex><span>                    <span style=color:#66d9ef>if</span> <span style=color:#e6db74>&#34;验证码错误&#34;</span> <span style=color:#f92672>in</span> res:  <span style=color:#75715e># 验证码验证失败</span>
+</span></span><span style=display:flex><span>                        print(<span style=color:#e6db74>&#39;...验证码不匹配&#39;</span>)
+</span></span><span style=display:flex><span>                    <span style=color:#66d9ef>elif</span> (<span style=color:#e6db74>&#34;用户名或密码错误&#34;</span> <span style=color:#f92672>in</span> res) <span style=color:#f92672>or</span> (<span style=color:#e6db74>&#34;您错误尝试超过3次&#34;</span> <span style=color:#f92672>in</span> res):  <span style=color:#75715e># 账号密码不通过</span>
+</span></span><span style=display:flex><span>                        text <span style=color:#f92672>=</span> <span style=color:#e6db74>&#39;...账号密码错误，数据库修改为验证不通过，&#39;</span>
+</span></span><span style=display:flex><span>                        print(text)
+</span></span><span style=display:flex><span>                        self<span style=color:#f92672>.</span>msg <span style=color:#f92672>+=</span> text
+</span></span><span style=display:flex><span>                        print(text)
+</span></span><span style=display:flex><span>                        <span style=color:#75715e># 账号密码错误，数据库修改为验证不通过</span>
+</span></span><span style=display:flex><span>                        update_sql <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;UPDATE `wjf_transaction_users` SET status=3,updated_at=&#39;</span><span style=color:#e6db74>{0}</span><span style=color:#e6db74>&#39; WHERE username=&#39;</span><span style=color:#e6db74>{1}</span><span style=color:#e6db74>&#39;&#34;</span><span style=color:#f92672>.</span>format(
+</span></span><span style=display:flex><span>                            self<span style=color:#f92672>.</span>run_time, user_id)
+</span></span><span style=display:flex><span>                        self<span style=color:#f92672>.</span>pymysql_action(update_sql)
+</span></span><span style=display:flex><span>                        <span style=color:#66d9ef>break</span>
+</span></span><span style=display:flex><span>                    <span style=color:#66d9ef>elif</span> <span style=color:#e6db74>&#34;登录超时，请重新登录&#34;</span> <span style=color:#f92672>in</span> res:
+</span></span><span style=display:flex><span>                        text <span style=color:#f92672>=</span> <span style=color:#e6db74>&#39;...登录超时，重新登录，&#39;</span>
+</span></span><span style=display:flex><span>                        print(text)
+</span></span><span style=display:flex><span>                        self<span style=color:#f92672>.</span>msg <span style=color:#f92672>+=</span> text
+</span></span><span style=display:flex><span>                        print(text)
+</span></span><span style=display:flex><span>                        <span style=color:#66d9ef>break</span>
+</span></span><span style=display:flex><span>                    <span style=color:#75715e># elif &#34;资金安全特别提示&#34;:  # 如有这这几个字表示登录失败</span>
+</span></span><span style=display:flex><span>                    <span style=color:#75715e>#     text = &#39;...登录失败，&#39;</span>
+</span></span><span style=display:flex><span>                    <span style=color:#75715e>#     print(text)</span>
+</span></span><span style=display:flex><span>                    <span style=color:#75715e>#     self.msg += text</span>
+</span></span><span style=display:flex><span>                    <span style=color:#75715e>#     print(text)</span>
+</span></span><span style=display:flex><span>                    <span style=color:#75715e>#     break</span>
+</span></span><span style=display:flex><span>                    <span style=color:#66d9ef>else</span>:
+</span></span><span style=display:flex><span>                        <span style=color:#75715e># 如果客户账号非正常状态，更新为正常</span>
+</span></span><span style=display:flex><span>                        <span style=color:#66d9ef>if</span> self<span style=color:#f92672>.</span>user_status <span style=color:#f92672>!=</span> <span style=color:#ae81ff>1</span>:
+</span></span><span style=display:flex><span>                            update_sql <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;UPDATE `wjf_transaction_users` SET status=1,updated_at=&#39;</span><span style=color:#e6db74>{0}</span><span style=color:#e6db74>&#39; WHERE username=&#39;</span><span style=color:#e6db74>{1}</span><span style=color:#e6db74>&#39;&#34;</span><span style=color:#f92672>.</span>format(
+</span></span><span style=display:flex><span>                                self<span style=color:#f92672>.</span>run_time, user_id)
+</span></span><span style=display:flex><span>                            self<span style=color:#f92672>.</span>pymysql_action(update_sql)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>                        <span style=color:#75715e># 获取页面cookie</span>
+</span></span><span style=display:flex><span>                        cookie_dict <span style=color:#f92672>=</span> dict(ss<span style=color:#f92672>.</span>cookies)
+</span></span><span style=display:flex><span>                        cookie <span style=color:#f92672>=</span> <span style=color:#e6db74>&#39;WMONID=&#39;</span> <span style=color:#f92672>+</span> cookie_dict[
+</span></span><span style=display:flex><span>                            <span style=color:#e6db74>&#39;WMONID&#39;</span>] <span style=color:#f92672>+</span> <span style=color:#e6db74>&#39;;JSESSIONID=&#39;</span> <span style=color:#f92672>+</span> cookie_dict[<span style=color:#e6db74>&#39;JSESSIONID&#39;</span>]
+</span></span><span style=display:flex><span>                        header[<span style=color:#e6db74>&#39;Cookie&#39;</span>] <span style=color:#f92672>=</span> cookie
+</span></span><span style=display:flex><span>                        <span style=color:#75715e># 进入逐日盯市页面</span>
+</span></span><span style=display:flex><span>                        res <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>get_dingshi_data(
+</span></span><span style=display:flex><span>                            ss, user_id, header, token)
+</span></span><span style=display:flex><span>                        <span style=color:#66d9ef>if</span> res <span style=color:#f92672>is</span> <span style=color:#66d9ef>True</span>:
+</span></span><span style=display:flex><span>                            <span style=color:#66d9ef>break</span>
+</span></span><span style=display:flex><span>                time<span style=color:#f92672>.</span>sleep(<span style=color:#ae81ff>1</span>)
+</span></span><span style=display:flex><span>                veri_code_url <span style=color:#f92672>=</span> BASE_URL<span style=color:#f92672>+</span><span style=color:#e6db74>&#34;/veriCode.do?t=&#34;</span> <span style=color:#f92672>+</span> str(
+</span></span><span style=display:flex><span>                    int(time<span style=color:#f92672>.</span>time() <span style=color:#f92672>*</span> <span style=color:#ae81ff>1000</span>))
+</span></span><span style=display:flex><span>            <span style=color:#66d9ef>except</span> <span style=color:#a6e22e>Exception</span> <span style=color:#66d9ef>as</span> e:
+</span></span><span style=display:flex><span>                print(e)
+</span></span><span style=display:flex><span>        text <span style=color:#f92672>=</span> <span style=color:#e6db74>&#39;...&#39;</span> <span style=color:#f92672>+</span> user_id <span style=color:#f92672>+</span> <span style=color:#e6db74>&#39;处理结束。&#39;</span>
+</span></span><span style=display:flex><span>        print(text)
+</span></span><span style=display:flex><span>        self<span style=color:#f92672>.</span>msg <span style=color:#f92672>+=</span> text
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>get_users</span>(self):
+</span></span><span style=display:flex><span>        <span style=color:#e6db74>&#39;&#39;&#39;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>        获取用户
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>        :param username:当指定用户是，查询指定的用户
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>        &#39;&#39;&#39;</span>
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>if</span> self<span style=color:#f92672>.</span>username <span style=color:#f92672>is</span> <span style=color:#66d9ef>None</span>:
+</span></span><span style=display:flex><span>            users_sql <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;SELECT username,password,status FROM `wjf_transaction_users` WHERE `deleted_at` is NULL&#34;</span>
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>else</span>:
+</span></span><span style=display:flex><span>            users_sql <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;SELECT username,password,status FROM `wjf_transaction_users` WHERE `deleted_at` is NULL AND `username`=&#34;</span><span style=color:#f92672>+</span>self<span style=color:#f92672>.</span>username
+</span></span><span style=display:flex><span>        <span style=color:#75715e># password 其实有加密的，这里忽略</span>
+</span></span><span style=display:flex><span>        self<span style=color:#f92672>.</span>pymysql_action(users_sql)
+</span></span><span style=display:flex><span>        self<span style=color:#f92672>.</span>users <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>cursor<span style=color:#f92672>.</span>fetchall()
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>return</span> self<span style=color:#f92672>.</span>users
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>run</span>(self):
+</span></span><span style=display:flex><span>        <span style=color:#e6db74>&#39;&#39;&#39;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>        入口文件，支持多用户
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>        &#39;&#39;&#39;</span>
+</span></span><span style=display:flex><span>        self<span style=color:#f92672>.</span>users <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>get_users()
+</span></span><span style=display:flex><span>        default_max_gap <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>max_gap
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>for</span> user <span style=color:#f92672>in</span> self<span style=color:#f92672>.</span>users:
+</span></span><span style=display:flex><span>            self<span style=color:#f92672>.</span>msg <span style=color:#f92672>=</span> <span style=color:#e6db74>&#39;&#39;</span>
+</span></span><span style=display:flex><span>            <span style=color:#75715e># 账号密码必须</span>
+</span></span><span style=display:flex><span>            <span style=color:#66d9ef>if</span> user[<span style=color:#ae81ff>0</span>] <span style=color:#f92672>is</span> <span style=color:#66d9ef>None</span> <span style=color:#f92672>or</span> user[<span style=color:#ae81ff>0</span>] <span style=color:#f92672>==</span> <span style=color:#e6db74>&#39;&#39;</span>:
+</span></span><span style=display:flex><span>                text <span style=color:#f92672>=</span> <span style=color:#e6db74>&#39;...账号为空，&#39;</span>
+</span></span><span style=display:flex><span>                print(text)
+</span></span><span style=display:flex><span>                <span style=color:#66d9ef>continue</span>
+</span></span><span style=display:flex><span>            <span style=color:#66d9ef>if</span> user[<span style=color:#ae81ff>1</span>] <span style=color:#f92672>is</span> <span style=color:#66d9ef>None</span> <span style=color:#f92672>or</span> user[<span style=color:#ae81ff>1</span>] <span style=color:#f92672>==</span> <span style=color:#e6db74>&#39;&#39;</span>:
+</span></span><span style=display:flex><span>                text <span style=color:#f92672>=</span> <span style=color:#e6db74>f</span><span style=color:#e6db74>&#39;...</span><span style=color:#e6db74>{</span>user[<span style=color:#ae81ff>0</span>]<span style=color:#e6db74>}</span><span style=color:#e6db74>的密码为空，&#39;</span>
+</span></span><span style=display:flex><span>                print(text)
+</span></span><span style=display:flex><span>                self<span style=color:#f92672>.</span>msg <span style=color:#f92672>+=</span> text
+</span></span><span style=display:flex><span>                <span style=color:#66d9ef>continue</span>
+</span></span><span style=display:flex><span>            <span style=color:#75715e># 获取客户账号状态</span>
+</span></span><span style=display:flex><span>            self<span style=color:#f92672>.</span>user_status <span style=color:#f92672>=</span> user[<span style=color:#ae81ff>2</span>]
+</span></span><span style=display:flex><span>            <span style=color:#66d9ef>if</span> default_max_gap <span style=color:#f92672>==</span> <span style=color:#ae81ff>2</span>:
+</span></span><span style=display:flex><span>                <span style=color:#75715e># 如果是默认天数，那就按照数据库状态来，如果status为1：表示已验证，只抓取2天的数据，否则就抓取180天的，max_gap</span>
+</span></span><span style=display:flex><span>                <span style=color:#66d9ef>if</span> self<span style=color:#f92672>.</span>user_status <span style=color:#f92672>!=</span> <span style=color:#ae81ff>1</span>:
+</span></span><span style=display:flex><span>                    self<span style=color:#f92672>.</span>max_gap <span style=color:#f92672>=</span> <span style=color:#ae81ff>180</span>
+</span></span><span style=display:flex><span>            text <span style=color:#f92672>=</span> <span style=color:#e6db74>f</span><span style=color:#e6db74>&#39;账号</span><span style=color:#e6db74>{</span>user[<span style=color:#ae81ff>0</span>]<span style=color:#e6db74>}</span><span style=color:#e6db74>开始执行，&#39;</span>
+</span></span><span style=display:flex><span>            print(text)
+</span></span><span style=display:flex><span>            self<span style=color:#f92672>.</span>msg <span style=color:#f92672>=</span> text
+</span></span><span style=display:flex><span>            self<span style=color:#f92672>.</span>main(user[<span style=color:#ae81ff>0</span>], user[<span style=color:#ae81ff>1</span>])
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>__del__</span>(self):
+</span></span><span style=display:flex><span>        <span style=color:#75715e># 关闭游标</span>
+</span></span><span style=display:flex><span>        self<span style=color:#f92672>.</span>cursor<span style=color:#f92672>.</span>close()
+</span></span><span style=display:flex><span>        <span style=color:#75715e># 关闭数据库连接</span>
+</span></span><span style=display:flex><span>        self<span style=color:#f92672>.</span>conn<span style=color:#f92672>.</span>close()
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>if</span> __name__ <span style=color:#f92672>==</span> <span style=color:#e6db74>&#39;__main__&#39;</span>:
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#39;&#39;&#39;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>    模拟登陆 中国期货市场监控中心，抓取逐日盯市数据
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>    &#39;&#39;&#39;</span>
+</span></span><span style=display:flex><span>    obj <span style=color:#f92672>=</span> Cfmmc()
+</span></span><span style=display:flex><span>    res <span style=color:#f92672>=</span> obj<span style=color:#f92672>.</span>run()
+</span></span></code></pre></div><p>excel.py（数据库操作部分，根据实际情况修改）</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-python data-lang=python><span style=display:flex><span><span style=color:#75715e># -*- coding:utf8 -*-</span>
+</span></span><span style=display:flex><span><span style=color:#e6db74>&#34;&#34;&#34;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>Author: gallopingvijay
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>Email: 1937832819@qq.com
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>Website: https://www.choudalao.com
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>&#34;&#34;&#34;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#f92672>import</span> xlrd
+</span></span><span style=display:flex><span><span style=color:#f92672>import</span> pymysql
+</span></span><span style=display:flex><span><span style=color:#f92672>import</span> time
+</span></span><span style=display:flex><span><span style=color:#f92672>from</span> itertools <span style=color:#f92672>import</span> groupby
+</span></span><span style=display:flex><span><span style=color:#f92672>import</span> os
+</span></span><span style=display:flex><span><span style=color:#f92672>import</span> yaml
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>class</span> <span style=color:#a6e22e>Excel</span>(object):
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>__init__</span>(self):
+</span></span><span style=display:flex><span>        <span style=color:#75715e># 配置</span>
+</span></span><span style=display:flex><span>        self<span style=color:#f92672>.</span>configs <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>get_config()
+</span></span><span style=display:flex><span>        self<span style=color:#f92672>.</span>conn <span style=color:#f92672>=</span> pymysql<span style=color:#f92672>.</span>connect(
+</span></span><span style=display:flex><span>            host<span style=color:#f92672>=</span>self<span style=color:#f92672>.</span>configs[<span style=color:#e6db74>&#39;mysql_config&#39;</span>][<span style=color:#e6db74>&#39;host&#39;</span>],
+</span></span><span style=display:flex><span>            port<span style=color:#f92672>=</span>self<span style=color:#f92672>.</span>configs[<span style=color:#e6db74>&#39;mysql_config&#39;</span>][<span style=color:#e6db74>&#39;port&#39;</span>],
+</span></span><span style=display:flex><span>            user<span style=color:#f92672>=</span>self<span style=color:#f92672>.</span>configs[<span style=color:#e6db74>&#39;mysql_config&#39;</span>][<span style=color:#e6db74>&#39;user&#39;</span>],
+</span></span><span style=display:flex><span>            password<span style=color:#f92672>=</span>self<span style=color:#f92672>.</span>configs[<span style=color:#e6db74>&#39;mysql_config&#39;</span>][<span style=color:#e6db74>&#39;password&#39;</span>],
+</span></span><span style=display:flex><span>            db<span style=color:#f92672>=</span>self<span style=color:#f92672>.</span>configs[<span style=color:#e6db74>&#39;mysql_config&#39;</span>][<span style=color:#e6db74>&#39;db&#39;</span>],
+</span></span><span style=display:flex><span>            charset<span style=color:#f92672>=</span>self<span style=color:#f92672>.</span>configs[<span style=color:#e6db74>&#39;mysql_config&#39;</span>][<span style=color:#e6db74>&#39;charset&#39;</span>]
+</span></span><span style=display:flex><span>        )
+</span></span><span style=display:flex><span>        <span style=color:#75715e># 创建一个游标</span>
+</span></span><span style=display:flex><span>        self<span style=color:#f92672>.</span>cursor <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>conn<span style=color:#f92672>.</span>cursor()
+</span></span><span style=display:flex><span>        <span style=color:#75715e># 存储数据的字典</span>
+</span></span><span style=display:flex><span>        self<span style=color:#f92672>.</span>dict <span style=color:#f92672>=</span> {}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>get_config</span>(self):
+</span></span><span style=display:flex><span>        <span style=color:#e6db74>&#39;&#39;&#39;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>        获取config.yaml配置
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>        :return:
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>        &#39;&#39;&#39;</span>
+</span></span><span style=display:flex><span>        <span style=color:#75715e># 获取当前文件的Realpath</span>
+</span></span><span style=display:flex><span>        fileNamePath <span style=color:#f92672>=</span> os<span style=color:#f92672>.</span>path<span style=color:#f92672>.</span>split(os<span style=color:#f92672>.</span>path<span style=color:#f92672>.</span>realpath(__file__))[<span style=color:#ae81ff>0</span>]
+</span></span><span style=display:flex><span>        <span style=color:#75715e># 读取文件</span>
+</span></span><span style=display:flex><span>        yamlPath <span style=color:#f92672>=</span> os<span style=color:#f92672>.</span>path<span style=color:#f92672>.</span>join(fileNamePath, <span style=color:#e6db74>&#39;config.yaml&#39;</span>)
+</span></span><span style=display:flex><span>        <span style=color:#75715e># 加上 ,encoding=&#39;utf-8&#39;，处理配置文件中含中文出现乱码的情况。</span>
+</span></span><span style=display:flex><span>        file <span style=color:#f92672>=</span> open(yamlPath, <span style=color:#e6db74>&#39;r&#39;</span>, encoding<span style=color:#f92672>=</span><span style=color:#e6db74>&#39;utf-8&#39;</span>)
+</span></span><span style=display:flex><span>        <span style=color:#75715e># 读取文件</span>
+</span></span><span style=display:flex><span>        cont <span style=color:#f92672>=</span> file<span style=color:#f92672>.</span>read()
+</span></span><span style=display:flex><span>        <span style=color:#75715e># 返回配置</span>
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>return</span> yaml<span style=color:#f92672>.</span>safe_load(cont)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>pymysql_action</span>(self, sql):
+</span></span><span style=display:flex><span>        <span style=color:#75715e># 创建一个游标</span>
+</span></span><span style=display:flex><span>        <span style=color:#75715e># 执行 SQL 语句</span>
+</span></span><span style=display:flex><span>        self<span style=color:#f92672>.</span>cursor<span style=color:#f92672>.</span>execute(sql)
+</span></span><span style=display:flex><span>        <span style=color:#75715e># 提交</span>
+</span></span><span style=display:flex><span>        self<span style=color:#f92672>.</span>conn<span style=color:#f92672>.</span>commit()
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>del_null</span>(self, list):
+</span></span><span style=display:flex><span>        <span style=color:#e6db74>&#39;&#39;&#39;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>        清理空数据
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>        :param list:
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>        :return:
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>        &#39;&#39;&#39;</span>
+</span></span><span style=display:flex><span>        list <span style=color:#f92672>=</span> [i <span style=color:#66d9ef>for</span> i <span style=color:#f92672>in</span> list <span style=color:#66d9ef>if</span> i <span style=color:#f92672>!=</span> <span style=color:#e6db74>&#39;&#39;</span>]
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>return</span> list
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>filter_field</span>(self, field, typeof<span style=color:#f92672>=</span><span style=color:#e6db74>&#39;string&#39;</span>):
+</span></span><span style=display:flex><span>        <span style=color:#e6db74>&#39;&#39;&#39;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>        处理每一个写入数据库的值
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>        :param field: 字段值
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>        :param typeof: 类型：string,decimal(四舍五入保留两位),num
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>        :return:
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>        &#39;&#39;&#39;</span>
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>if</span> field <span style=color:#f92672>==</span> <span style=color:#e6db74>&#39;--&#39;</span> <span style=color:#f92672>or</span> field <span style=color:#f92672>==</span> <span style=color:#e6db74>&#39;&#39;</span>:
+</span></span><span style=display:flex><span>            field <span style=color:#f92672>=</span> <span style=color:#e6db74>&#39;0&#39;</span>
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>elif</span> typeof <span style=color:#f92672>==</span> <span style=color:#e6db74>&#39;decimal&#39;</span>:
+</span></span><span style=display:flex><span>            field <span style=color:#f92672>=</span> round(float(field), <span style=color:#ae81ff>2</span>)
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>elif</span> typeof <span style=color:#f92672>==</span> <span style=color:#e6db74>&#39;num&#39;</span>:
+</span></span><span style=display:flex><span>            field <span style=color:#f92672>=</span> int(field)
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>else</span>:
+</span></span><span style=display:flex><span>            field <span style=color:#f92672>=</span> str(field)
+</span></span><span style=display:flex><span>            field <span style=color:#f92672>=</span> field<span style=color:#f92672>.</span>lstrip()<span style=color:#f92672>.</span>rstrip()
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>return</span> field
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>deal_excel</span>(self, path):
+</span></span><span style=display:flex><span>        workbook <span style=color:#f92672>=</span> xlrd<span style=color:#f92672>.</span>open_workbook(path)
+</span></span><span style=display:flex><span>        <span style=color:#75715e># 获取所有sheet</span>
+</span></span><span style=display:flex><span>        sheet_name <span style=color:#f92672>=</span> workbook<span style=color:#f92672>.</span>sheet_names()[<span style=color:#ae81ff>0</span>]
+</span></span><span style=display:flex><span>        <span style=color:#75715e># 根据sheet索引或者名称获取sheet内容</span>
+</span></span><span style=display:flex><span>        sheet <span style=color:#f92672>=</span> workbook<span style=color:#f92672>.</span>sheet_by_index(<span style=color:#ae81ff>0</span>)  <span style=color:#75715e># sheet索引从0开始</span>
+</span></span><span style=display:flex><span>        <span style=color:#75715e># sheet的名称，行数，列数</span>
+</span></span><span style=display:flex><span>        nrows <span style=color:#f92672>=</span> sheet<span style=color:#f92672>.</span>nrows
+</span></span><span style=display:flex><span>        <span style=color:#75715e># ncols = sheet.ncols</span>
+</span></span><span style=display:flex><span>        <span style=color:#75715e># 获取整行和整列的值（数组）</span>
+</span></span><span style=display:flex><span>        <span style=color:#75715e># rows = sheet.row_values(2)  # 获取第2行内容</span>
+</span></span><span style=display:flex><span>        <span style=color:#75715e># cols = sheet.col_values(3) # 获取第3列内容</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>if</span> sheet_name <span style=color:#f92672>!=</span> <span style=color:#e6db74>&#39;客户交易结算日报&#39;</span>:
+</span></span><span style=display:flex><span>            print(<span style=color:#e6db74>&#39;...不是需要的数据&#39;</span>)
+</span></span><span style=display:flex><span>            exit()
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>        ding_shi <span style=color:#f92672>=</span> <span style=color:#66d9ef>False</span>  <span style=color:#75715e># 如果是逐日盯市，才写入数据库</span>
+</span></span><span style=display:flex><span>        cny_i <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span>  <span style=color:#75715e># cny 期货期权账户出入金明细（单位：人民币）开始</span>
+</span></span><span style=display:flex><span>        usd_i <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span>  <span style=color:#75715e># 期货期权账户出入金明细（单位：美元）</span>
+</span></span><span style=display:flex><span>        deal_row_i <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span>  <span style=color:#75715e># 期货成交汇总 开始的行号</span>
+</span></span><span style=display:flex><span>        position_row_i <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span>  <span style=color:#75715e># 期货持仓汇总 开始的行号</span>
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>for</span> i <span style=color:#f92672>in</span> range(nrows):
+</span></span><span style=display:flex><span>            <span style=color:#66d9ef>try</span>:
+</span></span><span style=display:flex><span>                rows <span style=color:#f92672>=</span> sheet<span style=color:#f92672>.</span>row_values(i)  <span style=color:#75715e># 获取第i行内容</span>
+</span></span><span style=display:flex><span>                deal_rows <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>del_null(rows)
+</span></span><span style=display:flex><span>                <span style=color:#66d9ef>if</span> len(deal_rows) <span style=color:#f92672>&lt;</span> <span style=color:#ae81ff>1</span>:
+</span></span><span style=display:flex><span>                    <span style=color:#75715e># print(f&#39;第{i + 1}行没有数据&#39;)</span>
+</span></span><span style=display:flex><span>                    <span style=color:#66d9ef>continue</span>
+</span></span><span style=display:flex><span>                <span style=color:#66d9ef>if</span> <span style=color:#e6db74>&#39;客户交易结算日报(逐日盯市)&#39;</span> <span style=color:#f92672>in</span> deal_rows:
+</span></span><span style=display:flex><span>                    ding_shi <span style=color:#f92672>=</span> <span style=color:#66d9ef>True</span>
+</span></span><span style=display:flex><span>                <span style=color:#66d9ef>if</span> i <span style=color:#f92672>&gt;</span> <span style=color:#ae81ff>4</span> <span style=color:#f92672>and</span> ding_shi <span style=color:#f92672>is</span> <span style=color:#66d9ef>False</span>:  <span style=color:#75715e># 表头不是逐日盯市，不处理</span>
+</span></span><span style=display:flex><span>                    print(<span style=color:#e6db74>&#39;...不是逐日盯市表格，不处理&#39;</span>)
+</span></span><span style=display:flex><span>                    <span style=color:#66d9ef>break</span>
+</span></span><span style=display:flex><span>                <span style=color:#75715e># 客户期货期权内部资金账户</span>
+</span></span><span style=display:flex><span>                <span style=color:#66d9ef>if</span> <span style=color:#e6db74>&#39;客户期货期权内部资金账户&#39;</span> <span style=color:#f92672>in</span> deal_rows:
+</span></span><span style=display:flex><span>                    self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;fund_account&#39;</span>] <span style=color:#f92672>=</span> deal_rows[<span style=color:#ae81ff>1</span>]
+</span></span><span style=display:flex><span>                    self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;deal_time&#39;</span>] <span style=color:#f92672>=</span> deal_rows[<span style=color:#ae81ff>3</span>]
+</span></span><span style=display:flex><span>                    self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;created_at&#39;</span>] <span style=color:#f92672>=</span> time<span style=color:#f92672>.</span>strftime(
+</span></span><span style=display:flex><span>                        <span style=color:#e6db74>&#39;%Y-%m-</span><span style=color:#e6db74>%d</span><span style=color:#e6db74> %H:%M:%S&#39;</span>, time<span style=color:#f92672>.</span>localtime(time<span style=color:#f92672>.</span>time()))
+</span></span><span style=display:flex><span>                    timeArray <span style=color:#f92672>=</span> time<span style=color:#f92672>.</span>strptime(
+</span></span><span style=display:flex><span>                        self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;deal_time&#39;</span>], <span style=color:#e6db74>&#34;%Y-%m-</span><span style=color:#e6db74>%d</span><span style=color:#e6db74>&#34;</span>)
+</span></span><span style=display:flex><span>                    self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;deal_time_stamp&#39;</span>] <span style=color:#f92672>=</span> int(time<span style=color:#f92672>.</span>mktime(timeArray))
+</span></span><span style=display:flex><span>                    self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;out_money_cny&#39;</span>] <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;enter_money_cny&#39;</span>] <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;out_money_usd&#39;</span>] <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>dict[
+</span></span><span style=display:flex><span>                        <span style=color:#e6db74>&#39;enter_money_usd&#39;</span>] <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span>
+</span></span><span style=display:flex><span>                    self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;exchange_name&#39;</span>] <span style=color:#f92672>=</span> <span style=color:#e6db74>&#39;&#39;</span>
+</span></span><span style=display:flex><span>                    self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;transaction_fees&#39;</span>] <span style=color:#f92672>=</span> <span style=color:#e6db74>&#39;0.00&#39;</span>
+</span></span><span style=display:flex><span>                    self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;reporting_fee&#39;</span>] <span style=color:#f92672>=</span> <span style=color:#e6db74>&#39;0.00&#39;</span>
+</span></span><span style=display:flex><span>                    self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;position_buy_position&#39;</span>] <span style=color:#f92672>=</span> <span style=color:#e6db74>&#39;0.00&#39;</span>
+</span></span><span style=display:flex><span>                    self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;position_sell_position&#39;</span>] <span style=color:#f92672>=</span> <span style=color:#e6db74>&#39;0.00&#39;</span>
+</span></span><span style=display:flex><span>                    self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;position_profit_loss&#39;</span>] <span style=color:#f92672>=</span> <span style=color:#e6db74>&#39;0.00&#39;</span>
+</span></span><span style=display:flex><span>                    self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;position_trading_margin&#39;</span>] <span style=color:#f92672>=</span> <span style=color:#e6db74>&#39;0.00&#39;</span>
+</span></span><span style=display:flex><span>                    self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;deal_num&#39;</span>] <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span>
+</span></span><span style=display:flex><span>                    self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;deal_turnover&#39;</span>] <span style=color:#f92672>=</span> <span style=color:#e6db74>&#39;0.00&#39;</span>
+</span></span><span style=display:flex><span>                    self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;deal_fee&#39;</span>] <span style=color:#f92672>=</span> <span style=color:#e6db74>&#39;0.00&#39;</span>
+</span></span><span style=display:flex><span>                    self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;deal_profit_loss&#39;</span>] <span style=color:#f92672>=</span> <span style=color:#e6db74>&#39;0.00&#39;</span>
+</span></span><span style=display:flex><span>                <span style=color:#66d9ef>if</span> <span style=color:#e6db74>&#39;客户名称&#39;</span> <span style=color:#f92672>in</span> deal_rows:
+</span></span><span style=display:flex><span>                    self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;admin_name&#39;</span>] <span style=color:#f92672>=</span> deal_rows[<span style=color:#ae81ff>1</span>]<span style=color:#f92672>.</span>strip()
+</span></span><span style=display:flex><span>                    self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;query_time&#39;</span>] <span style=color:#f92672>=</span> deal_rows[<span style=color:#ae81ff>3</span>]
+</span></span><span style=display:flex><span>                    <span style=color:#75715e># 获取用户的后台id</span>
+</span></span><span style=display:flex><span>                    admin_sql <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;SELECT admin_id FROM `wjf_transaction_users` WHERE `admin_name` = &#39;</span><span style=color:#e6db74>{0}</span><span style=color:#e6db74>&#39; LIMIT 1&#34;</span><span style=color:#f92672>.</span>format(
+</span></span><span style=display:flex><span>                        self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;admin_name&#39;</span>])
+</span></span><span style=display:flex><span>                    self<span style=color:#f92672>.</span>cursor<span style=color:#f92672>.</span>execute(admin_sql)
+</span></span><span style=display:flex><span>                    first_data <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>cursor<span style=color:#f92672>.</span>fetchone()
+</span></span><span style=display:flex><span>                    <span style=color:#66d9ef>if</span> first_data <span style=color:#f92672>is</span> <span style=color:#66d9ef>None</span>:
+</span></span><span style=display:flex><span>                        print(<span style=color:#e6db74>&#39;没有客户名称为&#39;</span> <span style=color:#f92672>+</span> str(self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;admin_name&#39;</span>]) <span style=color:#f92672>+</span> <span style=color:#e6db74>&#39;的数据&#39;</span>)
+</span></span><span style=display:flex><span>                        <span style=color:#66d9ef>break</span>
+</span></span><span style=display:flex><span>                    self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;admin_id&#39;</span>] <span style=color:#f92672>=</span> first_data[<span style=color:#ae81ff>0</span>]
+</span></span><span style=display:flex><span>                    <span style=color:#75715e># 如果数据库存在该用户的该天数据，就跳过</span>
+</span></span><span style=display:flex><span>                    summary_sql <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;SELECT id FROM `wjf_summary_datas` WHERE `admin_id` = &#39;</span><span style=color:#e6db74>{0}</span><span style=color:#e6db74>&#39; and `deal_time_stamp` = &#39;</span><span style=color:#e6db74>{1}</span><span style=color:#e6db74>&#39;LIMIT 1&#34;</span><span style=color:#f92672>.</span>format(
+</span></span><span style=display:flex><span>                        self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;admin_id&#39;</span>], self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;deal_time_stamp&#39;</span>])
+</span></span><span style=display:flex><span>                    self<span style=color:#f92672>.</span>cursor<span style=color:#f92672>.</span>execute(summary_sql)
+</span></span><span style=display:flex><span>                    summary_data <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>cursor<span style=color:#f92672>.</span>fetchone()
+</span></span><span style=display:flex><span>                    <span style=color:#66d9ef>if</span> summary_data <span style=color:#f92672>is</span> <span style=color:#f92672>not</span> <span style=color:#66d9ef>None</span>:
+</span></span><span style=display:flex><span>                        print(
+</span></span><span style=display:flex><span>                            <span style=color:#e6db74>&#39;客户:&#39;</span> <span style=color:#f92672>+</span> str(self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;admin_name&#39;</span>]) <span style=color:#f92672>+</span> str(self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;deal_time&#39;</span>]) <span style=color:#f92672>+</span> <span style=color:#e6db74>&#39;的数据已存在&#39;</span>)
+</span></span><span style=display:flex><span>                        <span style=color:#66d9ef>break</span>
+</span></span><span style=display:flex><span>                <span style=color:#66d9ef>if</span> <span style=color:#e6db74>&#39;期货公司名称&#39;</span> <span style=color:#f92672>in</span> deal_rows:
+</span></span><span style=display:flex><span>                    self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;futures_company&#39;</span>] <span style=color:#f92672>=</span> deal_rows[<span style=color:#ae81ff>1</span>]
+</span></span><span style=display:flex><span>                <span style=color:#66d9ef>if</span> <span style=color:#e6db74>&#39;上日结存&#39;</span> <span style=color:#f92672>in</span> deal_rows:
+</span></span><span style=display:flex><span>                    self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;previous_day_balance&#39;</span>] <span style=color:#f92672>=</span> deal_rows[<span style=color:#ae81ff>1</span>]
+</span></span><span style=display:flex><span>                    self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;customer_rights&#39;</span>] <span style=color:#f92672>=</span> deal_rows[<span style=color:#ae81ff>3</span>]
+</span></span><span style=display:flex><span>                <span style=color:#66d9ef>if</span> <span style=color:#e6db74>&#39;当日存取合计&#39;</span> <span style=color:#f92672>in</span> deal_rows:
+</span></span><span style=display:flex><span>                    self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;total_access_for_the_day&#39;</span>] <span style=color:#f92672>=</span> deal_rows[<span style=color:#ae81ff>1</span>]
+</span></span><span style=display:flex><span>                    self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;actual_monetary_funds&#39;</span>] <span style=color:#f92672>=</span> deal_rows[<span style=color:#ae81ff>3</span>]
+</span></span><span style=display:flex><span>                <span style=color:#66d9ef>if</span> <span style=color:#e6db74>&#39;当日盈亏&#39;</span> <span style=color:#f92672>in</span> deal_rows:
+</span></span><span style=display:flex><span>                    self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;profit_loss_day&#39;</span>] <span style=color:#f92672>=</span> deal_rows[<span style=color:#ae81ff>1</span>]
+</span></span><span style=display:flex><span>                    self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;not_currency_credit_amount&#39;</span>] <span style=color:#f92672>=</span> deal_rows[<span style=color:#ae81ff>3</span>]
+</span></span><span style=display:flex><span>                <span style=color:#66d9ef>if</span> <span style=color:#e6db74>&#39;当日总权利金&#39;</span> <span style=color:#f92672>in</span> deal_rows:
+</span></span><span style=display:flex><span>                    self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;total_royalties_of_the_day&#39;</span>] <span style=color:#f92672>=</span> deal_rows[<span style=color:#ae81ff>1</span>]
+</span></span><span style=display:flex><span>                    self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;currency_credit_amount&#39;</span>] <span style=color:#f92672>=</span> deal_rows[<span style=color:#ae81ff>3</span>]
+</span></span><span style=display:flex><span>                <span style=color:#66d9ef>if</span> <span style=color:#e6db74>&#39;当日手续费&#39;</span> <span style=color:#f92672>in</span> deal_rows:
+</span></span><span style=display:flex><span>                    self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;day_handling_fee&#39;</span>] <span style=color:#f92672>=</span> deal_rows[<span style=color:#ae81ff>1</span>]
+</span></span><span style=display:flex><span>                    self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;frozen_funds&#39;</span>] <span style=color:#f92672>=</span> deal_rows[<span style=color:#ae81ff>3</span>]
+</span></span><span style=display:flex><span>                <span style=color:#66d9ef>if</span> <span style=color:#e6db74>&#39;当日结存&#39;</span> <span style=color:#f92672>in</span> deal_rows:
+</span></span><span style=display:flex><span>                    self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;day_balance&#39;</span>] <span style=color:#f92672>=</span> deal_rows[<span style=color:#ae81ff>1</span>]
+</span></span><span style=display:flex><span>                    self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;margin_occupation&#39;</span>] <span style=color:#f92672>=</span> deal_rows[<span style=color:#ae81ff>3</span>]
+</span></span><span style=display:flex><span>                <span style=color:#66d9ef>if</span> <span style=color:#e6db74>&#39;可用资金&#39;</span> <span style=color:#f92672>in</span> deal_rows:
+</span></span><span style=display:flex><span>                    self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;available_funds&#39;</span>] <span style=color:#f92672>=</span> deal_rows[<span style=color:#ae81ff>1</span>]
+</span></span><span style=display:flex><span>                <span style=color:#66d9ef>if</span> <span style=color:#e6db74>&#39;风险度&#39;</span> <span style=color:#f92672>in</span> deal_rows:
+</span></span><span style=display:flex><span>                    self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;risk&#39;</span>] <span style=color:#f92672>=</span> deal_rows[<span style=color:#ae81ff>1</span>]
+</span></span><span style=display:flex><span>                <span style=color:#66d9ef>if</span> <span style=color:#e6db74>&#39;追加保证金&#39;</span> <span style=color:#f92672>in</span> deal_rows:
+</span></span><span style=display:flex><span>                    self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;margin_call&#39;</span>] <span style=color:#f92672>=</span> deal_rows[<span style=color:#ae81ff>1</span>]
+</span></span><span style=display:flex><span>                <span style=color:#75715e># 期货期权账户出入金明细（单位：人民币 开始</span>
+</span></span><span style=display:flex><span>                <span style=color:#66d9ef>if</span> <span style=color:#e6db74>&#39;期货期权账户出入金明细（单位：人民币）&#39;</span> <span style=color:#f92672>in</span> deal_rows:
+</span></span><span style=display:flex><span>                    cny_i <span style=color:#f92672>=</span> i
+</span></span><span style=display:flex><span>                <span style=color:#66d9ef>if</span> <span style=color:#e6db74>&#39;合计&#39;</span> <span style=color:#f92672>in</span> deal_rows <span style=color:#f92672>and</span> (cny_i <span style=color:#f92672>&gt;</span> <span style=color:#ae81ff>0</span>):
+</span></span><span style=display:flex><span>                    self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;out_money_cny&#39;</span>] <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>filter_field(
+</span></span><span style=display:flex><span>                        deal_rows[<span style=color:#ae81ff>1</span>], <span style=color:#e6db74>&#39;decimal&#39;</span>)
+</span></span><span style=display:flex><span>                    self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;enter_money_cny&#39;</span>] <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>filter_field(
+</span></span><span style=display:flex><span>                        deal_rows[<span style=color:#ae81ff>2</span>], <span style=color:#e6db74>&#39;decimal&#39;</span>)
+</span></span><span style=display:flex><span>                    cny_i <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span>
+</span></span><span style=display:flex><span>                <span style=color:#75715e># 期货期权账户出入金明细（单位：美元）</span>
+</span></span><span style=display:flex><span>                <span style=color:#66d9ef>if</span> <span style=color:#e6db74>&#39;期货期权账户出入金明细（单位：美元）&#39;</span> <span style=color:#f92672>in</span> deal_rows:
+</span></span><span style=display:flex><span>                    usd_i <span style=color:#f92672>=</span> i
+</span></span><span style=display:flex><span>                <span style=color:#66d9ef>if</span> <span style=color:#e6db74>&#39;合计&#39;</span> <span style=color:#f92672>in</span> deal_rows <span style=color:#f92672>and</span> (usd_i <span style=color:#f92672>&gt;</span> <span style=color:#ae81ff>0</span>):
+</span></span><span style=display:flex><span>                    usd_i <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span>
+</span></span><span style=display:flex><span>                    self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;out_money_usd&#39;</span>] <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>filter_field(
+</span></span><span style=display:flex><span>                        deal_rows[<span style=color:#ae81ff>1</span>], <span style=color:#e6db74>&#39;decimal&#39;</span>)
+</span></span><span style=display:flex><span>                    self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;enter_money_usd&#39;</span>] <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>filter_field(
+</span></span><span style=display:flex><span>                        deal_rows[<span style=color:#ae81ff>2</span>], <span style=color:#e6db74>&#39;decimal&#39;</span>)
+</span></span><span style=display:flex><span>                <span style=color:#75715e># 期货成交汇总 开始</span>
+</span></span><span style=display:flex><span>                <span style=color:#66d9ef>if</span> <span style=color:#e6db74>&#39;期货成交汇总&#39;</span> <span style=color:#f92672>in</span> deal_rows:  <span style=color:#75715e># 期货成交汇总 开始</span>
+</span></span><span style=display:flex><span>                    deal_row_i <span style=color:#f92672>=</span> i
+</span></span><span style=display:flex><span>                <span style=color:#66d9ef>if</span> <span style=color:#e6db74>&#39;合约&#39;</span> <span style=color:#f92672>in</span> deal_rows:
+</span></span><span style=display:flex><span>                    <span style=color:#66d9ef>continue</span>
+</span></span><span style=display:flex><span>                <span style=color:#66d9ef>if</span> (<span style=color:#e6db74>&#39;合计&#39;</span> <span style=color:#f92672>in</span> deal_rows) <span style=color:#f92672>and</span> (deal_row_i <span style=color:#f92672>&gt;</span> <span style=color:#ae81ff>0</span>) <span style=color:#f92672>and</span> (position_row_i <span style=color:#f92672>&lt;=</span> <span style=color:#ae81ff>0</span>):  <span style=color:#75715e># 期货成交汇总 结束</span>
+</span></span><span style=display:flex><span>                    deal_row_i <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span>
+</span></span><span style=display:flex><span>                    self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;deal_num&#39;</span>] <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>filter_field(
+</span></span><span style=display:flex><span>                        deal_rows[<span style=color:#ae81ff>1</span>], <span style=color:#e6db74>&#39;num&#39;</span>)
+</span></span><span style=display:flex><span>                    self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;deal_turnover&#39;</span>] <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>filter_field(
+</span></span><span style=display:flex><span>                        deal_rows[<span style=color:#ae81ff>2</span>], <span style=color:#e6db74>&#39;decimal&#39;</span>)
+</span></span><span style=display:flex><span>                    self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;deal_fee&#39;</span>] <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>filter_field(
+</span></span><span style=display:flex><span>                        deal_rows[<span style=color:#ae81ff>3</span>], <span style=color:#e6db74>&#39;decimal&#39;</span>)
+</span></span><span style=display:flex><span>                    self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;deal_profit_loss&#39;</span>] <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>filter_field(
+</span></span><span style=display:flex><span>                        deal_rows[<span style=color:#ae81ff>4</span>], <span style=color:#e6db74>&#39;decimal&#39;</span>)
+</span></span><span style=display:flex><span>                <span style=color:#66d9ef>if</span> i <span style=color:#f92672>&gt;</span> deal_row_i <span style=color:#f92672>and</span> deal_row_i <span style=color:#f92672>&gt;</span> <span style=color:#ae81ff>0</span>:  <span style=color:#75715e># 成交汇总</span>
+</span></span><span style=display:flex><span>                    deal_rows<span style=color:#f92672>.</span>append(self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;admin_name&#39;</span>])
+</span></span><span style=display:flex><span>                    deal_rows<span style=color:#f92672>.</span>append(self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;query_time&#39;</span>])
+</span></span><span style=display:flex><span>                    deal_rows<span style=color:#f92672>.</span>append(self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;deal_time&#39;</span>])
+</span></span><span style=display:flex><span>                    deal_rows<span style=color:#f92672>.</span>append(self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;created_at&#39;</span>])
+</span></span><span style=display:flex><span>                    <span style=color:#75715e># 合约中提取交易所code</span>
+</span></span><span style=display:flex><span>                    contract <span style=color:#f92672>=</span> deal_rows[<span style=color:#ae81ff>0</span>]
+</span></span><span style=display:flex><span>                    contract_list <span style=color:#f92672>=</span> [<span style=color:#e6db74>&#39;&#39;</span><span style=color:#f92672>.</span>join(list(g)) <span style=color:#66d9ef>for</span> k, g <span style=color:#f92672>in</span> groupby(
+</span></span><span style=display:flex><span>                        contract, key<span style=color:#f92672>=</span><span style=color:#66d9ef>lambda</span> x: x<span style=color:#f92672>.</span>isdigit())]
+</span></span><span style=display:flex><span>                    exchange_code <span style=color:#f92672>=</span> contract_list[<span style=color:#ae81ff>0</span>]
+</span></span><span style=display:flex><span>                    exchange_num <span style=color:#f92672>=</span> contract_list[<span style=color:#ae81ff>1</span>]
+</span></span><span style=display:flex><span>                    deal_rows<span style=color:#f92672>.</span>append(exchange_code)
+</span></span><span style=display:flex><span>                    deal_rows<span style=color:#f92672>.</span>append(exchange_num)
+</span></span><span style=display:flex><span>                    <span style=color:#75715e># 字符串转数字，以免数据库保存报错</span>
+</span></span><span style=display:flex><span>                    deal_rows[<span style=color:#ae81ff>0</span>] <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>filter_field(deal_rows[<span style=color:#ae81ff>0</span>])
+</span></span><span style=display:flex><span>                    deal_rows[<span style=color:#ae81ff>1</span>] <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>filter_field(deal_rows[<span style=color:#ae81ff>1</span>])
+</span></span><span style=display:flex><span>                    deal_rows[<span style=color:#ae81ff>2</span>] <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>filter_field(deal_rows[<span style=color:#ae81ff>2</span>])
+</span></span><span style=display:flex><span>                    deal_rows[<span style=color:#ae81ff>3</span>] <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>filter_field(deal_rows[<span style=color:#ae81ff>3</span>], <span style=color:#e6db74>&#39;decimal&#39;</span>)
+</span></span><span style=display:flex><span>                    deal_rows[<span style=color:#ae81ff>4</span>] <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>filter_field(deal_rows[<span style=color:#ae81ff>4</span>], <span style=color:#e6db74>&#39;num&#39;</span>)
+</span></span><span style=display:flex><span>                    deal_rows[<span style=color:#ae81ff>5</span>] <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>filter_field(deal_rows[<span style=color:#ae81ff>5</span>], <span style=color:#e6db74>&#39;decimal&#39;</span>)
+</span></span><span style=display:flex><span>                    deal_rows[<span style=color:#ae81ff>8</span>] <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>filter_field(deal_rows[<span style=color:#ae81ff>8</span>], <span style=color:#e6db74>&#39;decimal&#39;</span>)
+</span></span><span style=display:flex><span>                    deal_rows[<span style=color:#ae81ff>6</span>] <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>filter_field(deal_rows[<span style=color:#ae81ff>6</span>])
+</span></span><span style=display:flex><span>                    deal_rows[<span style=color:#ae81ff>7</span>] <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>filter_field(deal_rows[<span style=color:#ae81ff>7</span>])
+</span></span><span style=display:flex><span>                    deal_rows[<span style=color:#ae81ff>9</span>] <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>filter_field(deal_rows[<span style=color:#ae81ff>9</span>])
+</span></span><span style=display:flex><span>                    deal_rows[<span style=color:#ae81ff>10</span>] <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>filter_field(deal_rows[<span style=color:#ae81ff>10</span>])
+</span></span><span style=display:flex><span>                    deal_rows[<span style=color:#ae81ff>11</span>] <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>filter_field(deal_rows[<span style=color:#ae81ff>11</span>])
+</span></span><span style=display:flex><span>                    deal_rows[<span style=color:#ae81ff>12</span>] <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>filter_field(deal_rows[<span style=color:#ae81ff>12</span>])
+</span></span><span style=display:flex><span>                    deal_rows[<span style=color:#ae81ff>13</span>] <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>filter_field(deal_rows[<span style=color:#ae81ff>13</span>])
+</span></span><span style=display:flex><span>                    deal_rows[<span style=color:#ae81ff>14</span>] <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>filter_field(deal_rows[<span style=color:#ae81ff>14</span>])
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>                    sql <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;INSERT INTO wjf_deal_datas(contract,buy_sell,speculation,final_price,num,turnover,open_flat,fee,profit_loss,admin_name,query_time,deal_time,created_at,exchange_code,exchange_num,admin_id,deal_time_stamp)VALUES(&#39;</span><span style=color:#e6db74>{0}</span><span style=color:#e6db74>&#39;,&#39;</span><span style=color:#e6db74>{1}</span><span style=color:#e6db74>&#39;,&#39;</span><span style=color:#e6db74>{2}</span><span style=color:#e6db74>&#39;,&#39;</span><span style=color:#e6db74>{3}</span><span style=color:#e6db74>&#39;,&#39;</span><span style=color:#e6db74>{4}</span><span style=color:#e6db74>&#39;,&#39;</span><span style=color:#e6db74>{5}</span><span style=color:#e6db74>&#39;,&#39;</span><span style=color:#e6db74>{6}</span><span style=color:#e6db74>&#39;,&#39;</span><span style=color:#e6db74>{7}</span><span style=color:#e6db74>&#39;,&#39;</span><span style=color:#e6db74>{8}</span><span style=color:#e6db74>&#39;,&#39;</span><span style=color:#e6db74>{9}</span><span style=color:#e6db74>&#39;,&#39;</span><span style=color:#e6db74>{10}</span><span style=color:#e6db74>&#39;,&#39;</span><span style=color:#e6db74>{11}</span><span style=color:#e6db74>&#39;,&#39;</span><span style=color:#e6db74>{12}</span><span style=color:#e6db74>&#39;,&#39;</span><span style=color:#e6db74>{13}</span><span style=color:#e6db74>&#39;,&#39;</span><span style=color:#e6db74>{14}</span><span style=color:#e6db74>&#39;,&#39;</span><span style=color:#e6db74>{15}</span><span style=color:#e6db74>&#39;,&#39;</span><span style=color:#e6db74>{16}</span><span style=color:#e6db74>&#39;);&#34;</span><span style=color:#f92672>.</span>format(
+</span></span><span style=display:flex><span>                        deal_rows[<span style=color:#ae81ff>0</span>], deal_rows[<span style=color:#ae81ff>1</span>], deal_rows[<span style=color:#ae81ff>2</span>], deal_rows[<span style=color:#ae81ff>3</span>], deal_rows[<span style=color:#ae81ff>4</span>], deal_rows[<span style=color:#ae81ff>5</span>],
+</span></span><span style=display:flex><span>                        deal_rows[<span style=color:#ae81ff>6</span>], deal_rows[<span style=color:#ae81ff>7</span>], deal_rows[<span style=color:#ae81ff>8</span>], deal_rows[<span style=color:#ae81ff>9</span>], deal_rows[<span style=color:#ae81ff>10</span>], deal_rows[<span style=color:#ae81ff>11</span>],
+</span></span><span style=display:flex><span>                        deal_rows[<span style=color:#ae81ff>12</span>], deal_rows[<span style=color:#ae81ff>13</span>], deal_rows[<span style=color:#ae81ff>14</span>], self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;admin_id&#39;</span>],
+</span></span><span style=display:flex><span>                        self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;deal_time_stamp&#39;</span>])
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>                    self<span style=color:#f92672>.</span>pymysql_action(sql)
+</span></span><span style=display:flex><span>                    <span style=color:#75715e># print(&#34;...&#34; + str(i + 1) + &#34;行期货成交写入完成&#34;)</span>
+</span></span><span style=display:flex><span>                <span style=color:#66d9ef>if</span> <span style=color:#e6db74>&#39;期货持仓汇总&#39;</span> <span style=color:#f92672>in</span> deal_rows:  <span style=color:#75715e># 期货持仓汇总 开始</span>
+</span></span><span style=display:flex><span>                    position_row_i <span style=color:#f92672>=</span> i
+</span></span><span style=display:flex><span>                    deal_row_i <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span>
+</span></span><span style=display:flex><span>                <span style=color:#66d9ef>if</span> (<span style=color:#e6db74>&#39;合计&#39;</span> <span style=color:#f92672>in</span> deal_rows) <span style=color:#f92672>and</span> (deal_row_i <span style=color:#f92672>==</span> <span style=color:#ae81ff>0</span>) <span style=color:#f92672>and</span> (position_row_i <span style=color:#f92672>&gt;</span> <span style=color:#ae81ff>0</span>):  <span style=color:#75715e># 期货持仓汇总 结束</span>
+</span></span><span style=display:flex><span>                    position_row_i <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span>
+</span></span><span style=display:flex><span>                    self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;position_buy_position&#39;</span>] <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>filter_field(
+</span></span><span style=display:flex><span>                        deal_rows[<span style=color:#ae81ff>1</span>], <span style=color:#e6db74>&#39;decimal&#39;</span>)
+</span></span><span style=display:flex><span>                    self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;position_sell_position&#39;</span>] <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>filter_field(
+</span></span><span style=display:flex><span>                        deal_rows[<span style=color:#ae81ff>2</span>], <span style=color:#e6db74>&#39;decimal&#39;</span>)
+</span></span><span style=display:flex><span>                    self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;position_profit_loss&#39;</span>] <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>filter_field(
+</span></span><span style=display:flex><span>                        deal_rows[<span style=color:#ae81ff>3</span>], <span style=color:#e6db74>&#39;decimal&#39;</span>)
+</span></span><span style=display:flex><span>                    self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;position_trading_margin&#39;</span>] <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>filter_field(
+</span></span><span style=display:flex><span>                        deal_rows[<span style=color:#ae81ff>4</span>], <span style=color:#e6db74>&#39;decimal&#39;</span>)
+</span></span><span style=display:flex><span>                    <span style=color:#75715e># 写入汇总数据</span>
+</span></span><span style=display:flex><span>                    summary_sql <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;INSERT INTO wjf_summary_datas(admin_id,admin_name,query_time,deal_time,deal_time_stamp,fund_account,futures_company,previous_day_balance,customer_rights,total_access_for_the_day,actual_monetary_funds,profit_loss_day,not_currency_credit_amount,total_royalties_of_the_day,currency_credit_amount,day_handling_fee,frozen_funds,day_balance,margin_occupation,available_funds,risk,margin_call,out_money_cny,enter_money_cny,out_money_usd,enter_money_usd,exchange_name,transaction_fees,reporting_fee,deal_num,deal_turnover,deal_fee,deal_profit_loss,position_buy_position,position_sell_position,position_profit_loss,position_trading_margin,created_at)VALUES(&#39;</span><span style=color:#e6db74>{0}</span><span style=color:#e6db74>&#39;,&#39;</span><span style=color:#e6db74>{1}</span><span style=color:#e6db74>&#39;,&#39;</span><span style=color:#e6db74>{2}</span><span style=color:#e6db74>&#39;,&#39;</span><span style=color:#e6db74>{3}</span><span style=color:#e6db74>&#39;,&#39;</span><span style=color:#e6db74>{4}</span><span style=color:#e6db74>&#39;,&#39;</span><span style=color:#e6db74>{5}</span><span style=color:#e6db74>&#39;,&#39;</span><span style=color:#e6db74>{6}</span><span style=color:#e6db74>&#39;,&#39;</span><span style=color:#e6db74>{7}</span><span style=color:#e6db74>&#39;,&#39;</span><span style=color:#e6db74>{8}</span><span style=color:#e6db74>&#39;,&#39;</span><span style=color:#e6db74>{9}</span><span style=color:#e6db74>&#39;,&#39;</span><span style=color:#e6db74>{10}</span><span style=color:#e6db74>&#39;,&#39;</span><span style=color:#e6db74>{11}</span><span style=color:#e6db74>&#39;,</span><span style=color:#e6db74>{12}</span><span style=color:#e6db74>,&#39;</span><span style=color:#e6db74>{13}</span><span style=color:#e6db74>&#39;,&#39;</span><span style=color:#e6db74>{14}</span><span style=color:#e6db74>&#39;,&#39;</span><span style=color:#e6db74>{15}</span><span style=color:#e6db74>&#39;,&#39;</span><span style=color:#e6db74>{16}</span><span style=color:#e6db74>&#39;,&#39;</span><span style=color:#e6db74>{17}</span><span style=color:#e6db74>&#39;,&#39;</span><span style=color:#e6db74>{18}</span><span style=color:#e6db74>&#39;,&#39;</span><span style=color:#e6db74>{19}</span><span style=color:#e6db74>&#39;,&#39;</span><span style=color:#e6db74>{20}</span><span style=color:#e6db74>&#39;,&#39;</span><span style=color:#e6db74>{21}</span><span style=color:#e6db74>&#39;,&#39;</span><span style=color:#e6db74>{22}</span><span style=color:#e6db74>&#39;,&#39;</span><span style=color:#e6db74>{23}</span><span style=color:#e6db74>&#39;,&#39;</span><span style=color:#e6db74>{24}</span><span style=color:#e6db74>&#39;,&#39;</span><span style=color:#e6db74>{25}</span><span style=color:#e6db74>&#39;,&#39;</span><span style=color:#e6db74>{26}</span><span style=color:#e6db74>&#39;,&#39;</span><span style=color:#e6db74>{27}</span><span style=color:#e6db74>&#39;,&#39;</span><span style=color:#e6db74>{28}</span><span style=color:#e6db74>&#39;,&#39;</span><span style=color:#e6db74>{29}</span><span style=color:#e6db74>&#39;,&#39;</span><span style=color:#e6db74>{30}</span><span style=color:#e6db74>&#39;,&#39;</span><span style=color:#e6db74>{31}</span><span style=color:#e6db74>&#39;,&#39;</span><span style=color:#e6db74>{32}</span><span style=color:#e6db74>&#39;,&#39;</span><span style=color:#e6db74>{33}</span><span style=color:#e6db74>&#39;,&#39;</span><span style=color:#e6db74>{34}</span><span style=color:#e6db74>&#39;,&#39;</span><span style=color:#e6db74>{35}</span><span style=color:#e6db74>&#39;,&#39;</span><span style=color:#e6db74>{36}</span><span style=color:#e6db74>&#39;,&#39;</span><span style=color:#e6db74>{37}</span><span style=color:#e6db74>&#39;);&#34;</span><span style=color:#f92672>.</span>format(
+</span></span><span style=display:flex><span>                        self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;admin_id&#39;</span>], self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;admin_name&#39;</span>], self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;query_time&#39;</span>], self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;deal_time&#39;</span>],
+</span></span><span style=display:flex><span>                        self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;deal_time_stamp&#39;</span>], self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;fund_account&#39;</span>], self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;futures_company&#39;</span>],
+</span></span><span style=display:flex><span>                        self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;previous_day_balance&#39;</span>], self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;customer_rights&#39;</span>],
+</span></span><span style=display:flex><span>                        self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;total_access_for_the_day&#39;</span>],
+</span></span><span style=display:flex><span>                        self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;actual_monetary_funds&#39;</span>], self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;profit_loss_day&#39;</span>],
+</span></span><span style=display:flex><span>                        self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;not_currency_credit_amount&#39;</span>], self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;total_royalties_of_the_day&#39;</span>],
+</span></span><span style=display:flex><span>                        self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;currency_credit_amount&#39;</span>], self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;day_handling_fee&#39;</span>], self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;frozen_funds&#39;</span>],
+</span></span><span style=display:flex><span>                        self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;day_balance&#39;</span>], self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;margin_occupation&#39;</span>], self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;available_funds&#39;</span>],
+</span></span><span style=display:flex><span>                        self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;risk&#39;</span>], self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;margin_call&#39;</span>], self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;out_money_cny&#39;</span>],
+</span></span><span style=display:flex><span>                        self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;enter_money_cny&#39;</span>], self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;out_money_usd&#39;</span>], self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;enter_money_usd&#39;</span>],
+</span></span><span style=display:flex><span>                        self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;exchange_name&#39;</span>], self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;transaction_fees&#39;</span>], self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;reporting_fee&#39;</span>],
+</span></span><span style=display:flex><span>                        self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;deal_num&#39;</span>], self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;deal_turnover&#39;</span>], self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;deal_fee&#39;</span>],
+</span></span><span style=display:flex><span>                        self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;deal_profit_loss&#39;</span>], self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;position_buy_position&#39;</span>],
+</span></span><span style=display:flex><span>                        self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;position_sell_position&#39;</span>], self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;position_profit_loss&#39;</span>],
+</span></span><span style=display:flex><span>                        self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;position_trading_margin&#39;</span>], self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;created_at&#39;</span>])
+</span></span><span style=display:flex><span>                    self<span style=color:#f92672>.</span>pymysql_action(summary_sql)
+</span></span><span style=display:flex><span>                    print(<span style=color:#e6db74>&#34;...&#34;</span> <span style=color:#f92672>+</span> <span style=color:#e6db74>&#34;汇总合计写入完成&#34;</span>)
+</span></span><span style=display:flex><span>                    <span style=color:#66d9ef>break</span>
+</span></span><span style=display:flex><span>                <span style=color:#66d9ef>if</span> (i <span style=color:#f92672>&gt;</span> position_row_i) <span style=color:#f92672>and</span> (position_row_i <span style=color:#f92672>&gt;</span> <span style=color:#ae81ff>0</span>):  <span style=color:#75715e># 期货持仓汇总</span>
+</span></span><span style=display:flex><span>                    rows<span style=color:#f92672>.</span>append(self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;admin_name&#39;</span>])
+</span></span><span style=display:flex><span>                    rows<span style=color:#f92672>.</span>append(self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;query_time&#39;</span>])
+</span></span><span style=display:flex><span>                    rows<span style=color:#f92672>.</span>append(self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;deal_time&#39;</span>])
+</span></span><span style=display:flex><span>                    rows<span style=color:#f92672>.</span>append(self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;created_at&#39;</span>])
+</span></span><span style=display:flex><span>                    <span style=color:#75715e># 合约中提取交易所code</span>
+</span></span><span style=display:flex><span>                    contract <span style=color:#f92672>=</span> rows[<span style=color:#ae81ff>0</span>]
+</span></span><span style=display:flex><span>                    contract_list <span style=color:#f92672>=</span> [<span style=color:#e6db74>&#39;&#39;</span><span style=color:#f92672>.</span>join(list(g)) <span style=color:#66d9ef>for</span> k, g <span style=color:#f92672>in</span> groupby(
+</span></span><span style=display:flex><span>                        contract, key<span style=color:#f92672>=</span><span style=color:#66d9ef>lambda</span> x: x<span style=color:#f92672>.</span>isdigit())]
+</span></span><span style=display:flex><span>                    exchange_code <span style=color:#f92672>=</span> contract_list[<span style=color:#ae81ff>0</span>]
+</span></span><span style=display:flex><span>                    exchange_num <span style=color:#f92672>=</span> contract_list[<span style=color:#ae81ff>1</span>]
+</span></span><span style=display:flex><span>                    rows<span style=color:#f92672>.</span>append(exchange_code)
+</span></span><span style=display:flex><span>                    rows<span style=color:#f92672>.</span>append(exchange_num)
+</span></span><span style=display:flex><span>                    <span style=color:#75715e># 字符串转数字，以免数据库保存报错</span>
+</span></span><span style=display:flex><span>                    rows[<span style=color:#ae81ff>1</span>] <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>filter_field(rows[<span style=color:#ae81ff>1</span>], <span style=color:#e6db74>&#39;int&#39;</span>)
+</span></span><span style=display:flex><span>                    rows[<span style=color:#ae81ff>2</span>] <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>filter_field(rows[<span style=color:#ae81ff>2</span>], <span style=color:#e6db74>&#39;decimal&#39;</span>)
+</span></span><span style=display:flex><span>                    rows[<span style=color:#ae81ff>3</span>] <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>filter_field(rows[<span style=color:#ae81ff>3</span>], <span style=color:#e6db74>&#39;int&#39;</span>)
+</span></span><span style=display:flex><span>                    rows[<span style=color:#ae81ff>4</span>] <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>filter_field(rows[<span style=color:#ae81ff>4</span>], <span style=color:#e6db74>&#39;decimal&#39;</span>)
+</span></span><span style=display:flex><span>                    rows[<span style=color:#ae81ff>5</span>] <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>filter_field(rows[<span style=color:#ae81ff>5</span>], <span style=color:#e6db74>&#39;decimal&#39;</span>)
+</span></span><span style=display:flex><span>                    rows[<span style=color:#ae81ff>6</span>] <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>filter_field(rows[<span style=color:#ae81ff>6</span>], <span style=color:#e6db74>&#39;decimal&#39;</span>)
+</span></span><span style=display:flex><span>                    rows[<span style=color:#ae81ff>7</span>] <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>filter_field(rows[<span style=color:#ae81ff>7</span>], <span style=color:#e6db74>&#39;decimal&#39;</span>)
+</span></span><span style=display:flex><span>                    rows[<span style=color:#ae81ff>8</span>] <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>filter_field(rows[<span style=color:#ae81ff>8</span>], <span style=color:#e6db74>&#39;decimal&#39;</span>)
+</span></span><span style=display:flex><span>                    rows[<span style=color:#ae81ff>0</span>] <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>filter_field(rows[<span style=color:#ae81ff>0</span>])
+</span></span><span style=display:flex><span>                    rows[<span style=color:#ae81ff>9</span>] <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>filter_field(rows[<span style=color:#ae81ff>9</span>])
+</span></span><span style=display:flex><span>                    rows[<span style=color:#ae81ff>10</span>] <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>filter_field(rows[<span style=color:#ae81ff>10</span>])
+</span></span><span style=display:flex><span>                    rows[<span style=color:#ae81ff>11</span>] <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>filter_field(rows[<span style=color:#ae81ff>11</span>])
+</span></span><span style=display:flex><span>                    rows[<span style=color:#ae81ff>12</span>] <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>filter_field(rows[<span style=color:#ae81ff>12</span>])
+</span></span><span style=display:flex><span>                    rows[<span style=color:#ae81ff>13</span>] <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>filter_field(rows[<span style=color:#ae81ff>13</span>])
+</span></span><span style=display:flex><span>                    rows[<span style=color:#ae81ff>14</span>] <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>filter_field(rows[<span style=color:#ae81ff>14</span>])
+</span></span><span style=display:flex><span>                    rows[<span style=color:#ae81ff>15</span>] <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>filter_field(rows[<span style=color:#ae81ff>15</span>])
+</span></span><span style=display:flex><span>                    sql <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;INSERT INTO wjf_position_datas(contract,buy_position,buy_average_price,sell_position,sell_average_price,settlement_price_yesterday,settlement_price_today,profit_loss,trading_margin,speculation,admin_name,query_time,deal_time,created_at,exchange_code,exchange_num,admin_id,deal_time_stamp)VALUES(&#39;</span><span style=color:#e6db74>{0}</span><span style=color:#e6db74>&#39;,&#39;</span><span style=color:#e6db74>{1}</span><span style=color:#e6db74>&#39;,&#39;</span><span style=color:#e6db74>{2}</span><span style=color:#e6db74>&#39;,&#39;</span><span style=color:#e6db74>{3}</span><span style=color:#e6db74>&#39;,&#39;</span><span style=color:#e6db74>{4}</span><span style=color:#e6db74>&#39;,&#39;</span><span style=color:#e6db74>{5}</span><span style=color:#e6db74>&#39;,&#39;</span><span style=color:#e6db74>{6}</span><span style=color:#e6db74>&#39;,&#39;</span><span style=color:#e6db74>{7}</span><span style=color:#e6db74>&#39;,&#39;</span><span style=color:#e6db74>{8}</span><span style=color:#e6db74>&#39;,&#39;</span><span style=color:#e6db74>{9}</span><span style=color:#e6db74>&#39;,&#39;</span><span style=color:#e6db74>{10}</span><span style=color:#e6db74>&#39;,&#39;</span><span style=color:#e6db74>{11}</span><span style=color:#e6db74>&#39;,&#39;</span><span style=color:#e6db74>{12}</span><span style=color:#e6db74>&#39;,&#39;</span><span style=color:#e6db74>{13}</span><span style=color:#e6db74>&#39;,&#39;</span><span style=color:#e6db74>{14}</span><span style=color:#e6db74>&#39;,&#39;</span><span style=color:#e6db74>{15}</span><span style=color:#e6db74>&#39;,&#39;</span><span style=color:#e6db74>{16}</span><span style=color:#e6db74>&#39;,&#39;</span><span style=color:#e6db74>{17}</span><span style=color:#e6db74>&#39;);&#34;</span><span style=color:#f92672>.</span>format(
+</span></span><span style=display:flex><span>                        rows[<span style=color:#ae81ff>0</span>], rows[<span style=color:#ae81ff>1</span>], rows[<span style=color:#ae81ff>2</span>], rows[<span style=color:#ae81ff>3</span>], rows[<span style=color:#ae81ff>4</span>], rows[<span style=color:#ae81ff>5</span>], rows[<span style=color:#ae81ff>6</span>], rows[<span style=color:#ae81ff>7</span>], rows[<span style=color:#ae81ff>8</span>], rows[<span style=color:#ae81ff>9</span>],
+</span></span><span style=display:flex><span>                        rows[<span style=color:#ae81ff>10</span>], rows[<span style=color:#ae81ff>11</span>], rows[<span style=color:#ae81ff>12</span>], rows[<span style=color:#ae81ff>13</span>], rows[<span style=color:#ae81ff>14</span>], rows[<span style=color:#ae81ff>15</span>], self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;admin_id&#39;</span>],
+</span></span><span style=display:flex><span>                        self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;deal_time_stamp&#39;</span>])
+</span></span><span style=display:flex><span>                    self<span style=color:#f92672>.</span>pymysql_action(sql)
+</span></span><span style=display:flex><span>                    <span style=color:#75715e># print(&#34;...&#34; + str(i + 1) + &#34;行期货持仓写入完成&#34;)</span>
+</span></span><span style=display:flex><span>                <span style=color:#75715e># 当没有期货持仓汇总数据的时候，最后额数据在这里写入，如果有期货持仓汇总，不会执行到这里</span>
+</span></span><span style=display:flex><span>                <span style=color:#66d9ef>if</span> nrows<span style=color:#f92672>-</span><span style=color:#ae81ff>1</span> <span style=color:#f92672>==</span> i:
+</span></span><span style=display:flex><span>                    print(<span style=color:#e6db74>&#39;...没有期货持仓汇总，在最后一行写入汇总数据&#39;</span>)
+</span></span><span style=display:flex><span>                    <span style=color:#75715e># 写入汇总数据</span>
+</span></span><span style=display:flex><span>                    summary_sql <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;INSERT INTO wjf_summary_datas(admin_id,admin_name,query_time,deal_time,deal_time_stamp,fund_account,futures_company,previous_day_balance,customer_rights,total_access_for_the_day,actual_monetary_funds,profit_loss_day,not_currency_credit_amount,total_royalties_of_the_day,currency_credit_amount,day_handling_fee,frozen_funds,day_balance,margin_occupation,available_funds,risk,margin_call,out_money_cny,enter_money_cny,out_money_usd,enter_money_usd,exchange_name,transaction_fees,reporting_fee,deal_num,deal_turnover,deal_fee,deal_profit_loss,position_buy_position,position_sell_position,position_profit_loss,position_trading_margin,created_at)VALUES(&#39;</span><span style=color:#e6db74>{0}</span><span style=color:#e6db74>&#39;,&#39;</span><span style=color:#e6db74>{1}</span><span style=color:#e6db74>&#39;,&#39;</span><span style=color:#e6db74>{2}</span><span style=color:#e6db74>&#39;,&#39;</span><span style=color:#e6db74>{3}</span><span style=color:#e6db74>&#39;,&#39;</span><span style=color:#e6db74>{4}</span><span style=color:#e6db74>&#39;,&#39;</span><span style=color:#e6db74>{5}</span><span style=color:#e6db74>&#39;,&#39;</span><span style=color:#e6db74>{6}</span><span style=color:#e6db74>&#39;,&#39;</span><span style=color:#e6db74>{7}</span><span style=color:#e6db74>&#39;,&#39;</span><span style=color:#e6db74>{8}</span><span style=color:#e6db74>&#39;,&#39;</span><span style=color:#e6db74>{9}</span><span style=color:#e6db74>&#39;,&#39;</span><span style=color:#e6db74>{10}</span><span style=color:#e6db74>&#39;,&#39;</span><span style=color:#e6db74>{11}</span><span style=color:#e6db74>&#39;,</span><span style=color:#e6db74>{12}</span><span style=color:#e6db74>,&#39;</span><span style=color:#e6db74>{13}</span><span style=color:#e6db74>&#39;,&#39;</span><span style=color:#e6db74>{14}</span><span style=color:#e6db74>&#39;,&#39;</span><span style=color:#e6db74>{15}</span><span style=color:#e6db74>&#39;,&#39;</span><span style=color:#e6db74>{16}</span><span style=color:#e6db74>&#39;,&#39;</span><span style=color:#e6db74>{17}</span><span style=color:#e6db74>&#39;,&#39;</span><span style=color:#e6db74>{18}</span><span style=color:#e6db74>&#39;,&#39;</span><span style=color:#e6db74>{19}</span><span style=color:#e6db74>&#39;,&#39;</span><span style=color:#e6db74>{20}</span><span style=color:#e6db74>&#39;,&#39;</span><span style=color:#e6db74>{21}</span><span style=color:#e6db74>&#39;,&#39;</span><span style=color:#e6db74>{22}</span><span style=color:#e6db74>&#39;,&#39;</span><span style=color:#e6db74>{23}</span><span style=color:#e6db74>&#39;,&#39;</span><span style=color:#e6db74>{24}</span><span style=color:#e6db74>&#39;,&#39;</span><span style=color:#e6db74>{25}</span><span style=color:#e6db74>&#39;,&#39;</span><span style=color:#e6db74>{26}</span><span style=color:#e6db74>&#39;,&#39;</span><span style=color:#e6db74>{27}</span><span style=color:#e6db74>&#39;,&#39;</span><span style=color:#e6db74>{28}</span><span style=color:#e6db74>&#39;,&#39;</span><span style=color:#e6db74>{29}</span><span style=color:#e6db74>&#39;,&#39;</span><span style=color:#e6db74>{30}</span><span style=color:#e6db74>&#39;,&#39;</span><span style=color:#e6db74>{31}</span><span style=color:#e6db74>&#39;,&#39;</span><span style=color:#e6db74>{32}</span><span style=color:#e6db74>&#39;,&#39;</span><span style=color:#e6db74>{33}</span><span style=color:#e6db74>&#39;,&#39;</span><span style=color:#e6db74>{34}</span><span style=color:#e6db74>&#39;,&#39;</span><span style=color:#e6db74>{35}</span><span style=color:#e6db74>&#39;,&#39;</span><span style=color:#e6db74>{36}</span><span style=color:#e6db74>&#39;,&#39;</span><span style=color:#e6db74>{37}</span><span style=color:#e6db74>&#39;);&#34;</span><span style=color:#f92672>.</span>format(
+</span></span><span style=display:flex><span>                        self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;admin_id&#39;</span>], self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;admin_name&#39;</span>], self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;query_time&#39;</span>], self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;deal_time&#39;</span>],
+</span></span><span style=display:flex><span>                        self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;deal_time_stamp&#39;</span>], self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;fund_account&#39;</span>], self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;futures_company&#39;</span>],
+</span></span><span style=display:flex><span>                        self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;previous_day_balance&#39;</span>], self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;customer_rights&#39;</span>],
+</span></span><span style=display:flex><span>                        self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;total_access_for_the_day&#39;</span>],
+</span></span><span style=display:flex><span>                        self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;actual_monetary_funds&#39;</span>], self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;profit_loss_day&#39;</span>],
+</span></span><span style=display:flex><span>                        self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;not_currency_credit_amount&#39;</span>], self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;total_royalties_of_the_day&#39;</span>],
+</span></span><span style=display:flex><span>                        self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;currency_credit_amount&#39;</span>], self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;day_handling_fee&#39;</span>], self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;frozen_funds&#39;</span>],
+</span></span><span style=display:flex><span>                        self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;day_balance&#39;</span>], self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;margin_occupation&#39;</span>], self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;available_funds&#39;</span>],
+</span></span><span style=display:flex><span>                        self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;risk&#39;</span>], self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;margin_call&#39;</span>], self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;out_money_cny&#39;</span>],
+</span></span><span style=display:flex><span>                        self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;enter_money_cny&#39;</span>], self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;out_money_usd&#39;</span>], self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;enter_money_usd&#39;</span>],
+</span></span><span style=display:flex><span>                        self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;exchange_name&#39;</span>], self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;transaction_fees&#39;</span>], self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;reporting_fee&#39;</span>],
+</span></span><span style=display:flex><span>                        self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;deal_num&#39;</span>], self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;deal_turnover&#39;</span>], self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;deal_fee&#39;</span>],
+</span></span><span style=display:flex><span>                        self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;deal_profit_loss&#39;</span>], self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;position_buy_position&#39;</span>],
+</span></span><span style=display:flex><span>                        self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;position_sell_position&#39;</span>], self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;position_profit_loss&#39;</span>],
+</span></span><span style=display:flex><span>                        self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;position_trading_margin&#39;</span>], self<span style=color:#f92672>.</span>dict[<span style=color:#e6db74>&#39;created_at&#39;</span>])
+</span></span><span style=display:flex><span>                    self<span style=color:#f92672>.</span>pymysql_action(summary_sql)
+</span></span><span style=display:flex><span>                    print(<span style=color:#e6db74>&#34;...&#34;</span> <span style=color:#f92672>+</span> <span style=color:#e6db74>&#34;汇总合计写入完成&#34;</span>)
+</span></span><span style=display:flex><span>            <span style=color:#66d9ef>except</span> <span style=color:#a6e22e>Exception</span> <span style=color:#66d9ef>as</span> e:
+</span></span><span style=display:flex><span>                print(<span style=color:#e6db74>&#39;......&#39;</span> <span style=color:#f92672>+</span> str(i <span style=color:#f92672>+</span> <span style=color:#ae81ff>1</span>) <span style=color:#f92672>+</span> <span style=color:#e6db74>&#34;行有异常抛出:&#34;</span>)
+</span></span><span style=display:flex><span>                print(e)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>get_files</span>(self, path):
+</span></span><span style=display:flex><span>        <span style=color:#e6db74>&#39;&#39;&#39;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>        获取所有excel文件
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>        :param path:路径
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>        :return:
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>        &#39;&#39;&#39;</span>
+</span></span><span style=display:flex><span>        files <span style=color:#f92672>=</span> os<span style=color:#f92672>.</span>listdir(path)
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>if</span> len(files) <span style=color:#f92672>&lt;</span> <span style=color:#ae81ff>1</span>:
+</span></span><span style=display:flex><span>            print(<span style=color:#e6db74>&#39;没有文件&#39;</span>)
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>else</span>:
+</span></span><span style=display:flex><span>            <span style=color:#66d9ef>for</span> file <span style=color:#f92672>in</span> files:
+</span></span><span style=display:flex><span>                file_path <span style=color:#f92672>=</span> path <span style=color:#f92672>+</span> file
+</span></span><span style=display:flex><span>                <span style=color:#75715e># 判断后缀</span>
+</span></span><span style=display:flex><span>                <span style=color:#66d9ef>if</span> <span style=color:#e6db74>&#39;.xls&#39;</span> <span style=color:#f92672>in</span> file:
+</span></span><span style=display:flex><span>                    print(<span style=color:#e6db74>&#39;开始读取文件：&#39;</span> <span style=color:#f92672>+</span> file_path)
+</span></span><span style=display:flex><span>                    self<span style=color:#f92672>.</span>deal_excel(file_path)
+</span></span><span style=display:flex><span>                <span style=color:#75715e># 删除文件</span>
+</span></span><span style=display:flex><span>                <span style=color:#66d9ef>try</span>:
+</span></span><span style=display:flex><span>                    print(<span style=color:#e6db74>&#39;删除文件：&#39;</span> <span style=color:#f92672>+</span> file_path)
+</span></span><span style=display:flex><span>                    os<span style=color:#f92672>.</span>remove(file_path)
+</span></span><span style=display:flex><span>                <span style=color:#66d9ef>except</span> <span style=color:#a6e22e>Exception</span> <span style=color:#66d9ef>as</span> e:
+</span></span><span style=display:flex><span>                    print(e)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>test</span>(self):
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>for</span> i <span style=color:#f92672>in</span> range(<span style=color:#ae81ff>5</span>):
+</span></span><span style=display:flex><span>            <span style=color:#66d9ef>try</span>:
+</span></span><span style=display:flex><span>                <span style=color:#66d9ef>if</span> i <span style=color:#f92672>==</span> <span style=color:#ae81ff>3</span>:
+</span></span><span style=display:flex><span>                    <span style=color:#66d9ef>continue</span>
+</span></span><span style=display:flex><span>                print(i)
+</span></span><span style=display:flex><span>            <span style=color:#66d9ef>except</span> <span style=color:#a6e22e>Exception</span> <span style=color:#66d9ef>as</span> e:
+</span></span><span style=display:flex><span>                print(e)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>__del__</span>(self):
+</span></span><span style=display:flex><span>        <span style=color:#75715e># 关闭游标</span>
+</span></span><span style=display:flex><span>        self<span style=color:#f92672>.</span>cursor<span style=color:#f92672>.</span>close()
+</span></span><span style=display:flex><span>        <span style=color:#75715e># 关闭数据库连接</span>
+</span></span><span style=display:flex><span>        self<span style=color:#f92672>.</span>conn<span style=color:#f92672>.</span>close()
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>if</span> __name__ <span style=color:#f92672>==</span> <span style=color:#e6db74>&#39;__main__&#39;</span>:
+</span></span><span style=display:flex><span>    path <span style=color:#f92672>=</span> <span style=color:#e6db74>&#39;./exel/&#39;</span>
+</span></span><span style=display:flex><span>    obj <span style=color:#f92672>=</span> Excel()
+</span></span><span style=display:flex><span>    obj<span style=color:#f92672>.</span>get_files(path)
+</span></span></code></pre></div><h1 id=总结>总结</h1><p><code>cfmmc.py</code>模拟登录获取数据，<code>excel.py</code>文件处理表格数据，结合定时任务及队列，可以实现自动化处理数据。</p><p>如果您需要一个可视化的界面，管理和分析爬取到的数据，让数据更有价值。可以查看<a href=https://www.choudalao.com/article/243 title=期货市场监控后台管理系统>期货市场监控后台管理系统</a>。</p></div></article></main></div><aside class=sidebar><div class="widget-categories widget"><h4 class=widget__title>分类</h4><div class=widget__content><ul class=widget__list><li class=widget__item><a class=widget__link href=/choudalao.github.io/categories/ai/>AI</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/categories/go/>Go</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/categories/linux/>Linux</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/categories/mysql/>MYSQL</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/categories/php/>Php</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/categories/python/>Python</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/categories/%E4%B8%AA%E4%BA%BA/>个人</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/categories/%E5%85%B6%E4%BB%96/>其他</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/categories/%E5%89%8D%E7%AB%AF/>前端</a></li></ul></div></div><div class="widget-recent widget"><h4 class=widget__title>近期文章</h4><div class=widget__content><ul class=widget__list><li class=widget__item><a class=widget__link href=/choudalao.github.io/posts/2025-04-19-cline%E4%B8%AD%E4%BD%BF%E7%94%A8-mysql-mcp-%E6%9C%8D%E5%8A%A1/>Cline中使用 MySql MCP 服务</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/posts/2020-09-03-%E5%9F%BA%E4%BA%8Elaravel%E5%8F%8Alayui%E5%BC%80%E5%8F%91%E7%9A%84%E5%90%8E%E5%8F%B0%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F-laravel-wjfcms/>基于laravel及layui开发的后台管理系统 -- laravel-wjfcms</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/posts/2020-06-02-%E8%85%BE%E8%AE%AF%E4%BA%91%E4%BA%A7%E5%93%81%E5%A4%A7%E4%BF%83/>腾讯云产品大促</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/posts/2019-09-21-git%E6%93%8D%E4%BD%9C/>Git操作</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/posts/2026-01-29-openclaw-%E5%AE%89%E8%A3%85%E5%8F%8A%E4%BD%BF%E7%94%A8/>openclaw 安装及使用</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/posts/2026-01-28-mise-%E5%AE%89%E8%A3%85%E5%8F%8A%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/>mise 安装及使用指南</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/posts/2026-01-26-%E7%94%A8-obsidian-%E6%89%93%E9%80%A0ai%E7%AC%94%E8%AE%B0/>用 Obsidian 打造AI笔记</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/posts/2026-01-22-claude-%E5%AE%98%E6%96%B9-skill-creator-%E4%BB%8B%E7%BB%8D%E5%8F%8A%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/>Claude 官方 Skill-Creator 介绍及使用指南</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/posts/2026-01-22-%E9%80%9A%E8%BF%87qq%E9%82%AE%E7%AE%B1%E4%BB%A3%E6%94%B6gmail%E9%82%AE%E4%BB%B6/>通过QQ邮箱代收Gmail邮件</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/posts/2026-01-19-%E8%A7%A3%E5%86%B3-wsl2-windows-hosts-%E5%BC%80%E5%90%AF-vpn-%E5%90%8E%E6%97%A0%E6%B3%95%E8%AE%BF%E9%97%AE%E6%9C%AC%E5%9C%B0-web-%E6%9C%8D%E5%8A%A1%E7%9A%84%E9%97%AE%E9%A2%98/>解决 WSL2 + Windows Hosts + 开启 VPN 后无法访问本地 Web 服务的问题</a></li></ul></div></div><div class="widget-taglist widget"><h4 class=widget__title>标签</h4><div class=widget__content><a class="widget-taglist__link widget__link btn" href=/choudalao.github.io/tags/php/ title=Php>Php</a>
+<a class="widget-taglist__link widget__link btn" href=/choudalao.github.io/tags/%E5%85%B3%E4%BA%8E/ title=关于>关于</a></div></div></aside></div><footer class=footer><div class="container footer__container flex"><div class=footer__copyright>&copy; 2026 臭大佬博客.
+<span class=footer__copyright-credits>基于 <a href=https://gohugo.io/ rel="nofollow noopener" target=_blank>Hugo</a> 引擎和 <a href=https://github.com/Vimux/Mainroad/ rel="nofollow noopener" target=_blank>Mainroad</a> 主题</span></div></div></footer></div><script async defer src=/choudalao.github.io/js/menu.js></script></body></html>

@@ -1,0 +1,275 @@
+<!doctype html><html class=no-js lang=en><head><meta charset=UTF-8><meta name=viewport content="width=device-width,initial-scale=1"><title>归档 - 臭大佬博客</title><script>(function(e,t){e[t]=e[t].replace("no-js","js")})(document.documentElement,"className")</script><meta name=description content><link rel=preconnect href=https://fonts.gstatic.com crossorigin><link rel=dns-prefetch href=//fonts.googleapis.com><link rel=dns-prefetch href=//fonts.gstatic.com><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700"><link rel=stylesheet href=/choudalao.github.io/css/style.css><link rel=alternate type=application/rss+xml href=/choudalao.github.io/posts/index.xml title=臭大佬博客><link rel="shortcut icon" href=/choudalao.github.io/favicon.ico></head><body class=body><div class="container container--outer"><header class=header><div class="container header__container"><div class=logo><a class=logo__link href=/choudalao.github.io/ title=臭大佬博客 rel=home><div class="logo__item logo__text"><div class=logo__title>臭大佬博客</div></div></a></div><nav class=menu><button class=menu__btn aria-haspopup=true aria-expanded=false tabindex=0>
+<span class=menu__btn-title tabindex=-1>菜单</span></button><ul class=menu__list><li class=menu__item><a class=menu__link href=/choudalao.github.io/><span class=menu__text>首页</span></a></li><li class=menu__item><a class=menu__link href=/choudalao.github.io/categories/><span class=menu__text>分类</span></a></li><li class=menu__item><a class=menu__link href=/choudalao.github.io/tags/><span class=menu__text>标签</span></a></li><li class=menu__item><a class=menu__link href=/choudalao.github.io/posts/><span class=menu__text>归档</span></a></li><li class=menu__item><a class=menu__link href=/choudalao.github.io/about/><span class=menu__text>关于</span></a></li></ul></nav></div></header><div class="wrapper flex"><div class=primary><main class="main list" role=main><header class=main__header><h1 class=main__title>归档</h1></header><article class="list__item post"><header class=list__header><h2 class="list__title post__title"><a href=/choudalao.github.io/posts/2019-10-16-laravel%E5%88%9B%E5%BB%BA%E8%A1%A8%E5%8D%95%E8%AF%B7%E6%B1%82%E9%AA%8C%E8%AF%81/ rel=bookmark>laravel创建表单请求验证</a></h2></header><div class="content list__excerpt post__content clearfix"><h1 id=创建验证器>创建验证器</h1><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-php data-lang=php><span style=display:flex><span><span style=color:#f92672>&lt;?</span><span style=color:#a6e22e>php</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>namespace</span> <span style=color:#a6e22e>App\Http\Requests\Api</span>;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>use</span> <span style=color:#a6e22e>App\Http\Requests\BaseRequest</span>;
+</span></span><span style=display:flex><span><span style=color:#66d9ef>use</span> <span style=color:#a6e22e>App\Models\Hostpool</span>;
+</span></span><span style=display:flex><span><span style=color:#66d9ef>use</span> <span style=color:#a6e22e>App\Models\Ssl</span>;
+</span></span><span style=display:flex><span><span style=color:#66d9ef>use</span> <span style=color:#a6e22e>App\Models\User</span>;
+</span></span><span style=display:flex><span><span style=color:#66d9ef>use</span> <span style=color:#a6e22e>Illuminate\Foundation\Http\FormRequest</span>;
+</span></span><span style=display:flex><span><span style=color:#66d9ef>use</span> <span style=color:#a6e22e>Illuminate\Validation\Rule</span>;
+</span></span><span style=display:flex><span><span style=color:#66d9ef>use</span> <span style=color:#a6e22e>App\Models\HostpoolDomainrules</span>;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>class</span> <span style=color:#a6e22e>SslRequest</span> <span style=color:#66d9ef>extends</span> <span style=color:#a6e22e>BaseRequest</span>
+</span></span><span style=display:flex><span>{
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>/**
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>     * Get the validation rules that apply to the request.
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>     *
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>     * @return array
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>     */</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>public</span> <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>rules</span>()
+</span></span><span style=display:flex><span>    {
+</span></span><span style=display:flex><span>        $rules <span style=color:#f92672>=</span> [];
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>if</span> ($this<span style=color:#f92672>-&gt;</span><span style=color:#a6e22e>isMethod</span>(<span style=color:#e6db74>&#39;post&#39;</span>)) {
+</span></span><span style=display:flex><span>            $rules <span style=color:#f92672>=</span> [
+</span></span><span style=display:flex><span>                <span style=color:#e6db74>&#39;hostpool_id&#39;</span> <span style=color:#f92672>=&gt;</span> [<span style=color:#e6db74>&#39;required&#39;</span>, <span style=color:#66d9ef>function</span> ($attribute, $value, $fail) {
+</span></span><span style=display:flex><span>                    $info <span style=color:#f92672>=</span> <span style=color:#a6e22e>Hostpool</span><span style=color:#f92672>::</span><span style=color:#a6e22e>find</span>($value);
+</span></span><span style=display:flex><span>                    <span style=color:#66d9ef>if</span> (<span style=color:#f92672>!</span>$info) {
+</span></span><span style=display:flex><span>                        $fail(<span style=color:#e6db74>&#39;该实例不存在&#39;</span>);
+</span></span><span style=display:flex><span>                        <span style=color:#66d9ef>return</span> <span style=color:#66d9ef>false</span>;
+</span></span><span style=display:flex><span>                    }
+</span></span><span style=display:flex><span>                    $this<span style=color:#f92672>-&gt;</span><span style=color:#a6e22e>merge</span>([<span style=color:#e6db74>&#39;user_id&#39;</span> <span style=color:#f92672>=&gt;</span> $info<span style=color:#f92672>-&gt;</span><span style=color:#a6e22e>user_id</span>]);
+</span></span><span style=display:flex><span>                }],
+</span></span><span style=display:flex><span>                <span style=color:#e6db74>&#39;name&#39;</span> <span style=color:#f92672>=&gt;</span> <span style=color:#e6db74>&#39;required&#39;</span>,
+</span></span><span style=display:flex><span>                <span style=color:#e6db74>&#39;crt&#39;</span> <span style=color:#f92672>=&gt;</span> <span style=color:#e6db74>&#39;required&#39;</span>,
+</span></span><span style=display:flex><span>                <span style=color:#e6db74>&#39;key&#39;</span> <span style=color:#f92672>=&gt;</span> <span style=color:#e6db74>&#39;required&#39;</span>,
+</span></span><span style=display:flex><span>            ];
+</span></span><span style=display:flex><span>        } <span style=color:#66d9ef>elseif</span> ($this<span style=color:#f92672>-&gt;</span><span style=color:#a6e22e>isMethod</span>(<span style=color:#e6db74>&#39;patch&#39;</span>)) {
+</span></span><span style=display:flex><span>            $rules <span style=color:#f92672>=</span> [
+</span></span><span style=display:flex><span>                <span style=color:#e6db74>&#39;id&#39;</span> <span style=color:#f92672>=&gt;</span> [<span style=color:#e6db74>&#39;required&#39;</span>],
+</span></span><span style=display:flex><span>                <span style=color:#e6db74>&#39;hostpool_id&#39;</span> <span style=color:#f92672>=&gt;</span> [<span style=color:#66d9ef>function</span> ($attribute, $value, $fail) {
+</span></span><span style=display:flex><span>                    $info <span style=color:#f92672>=</span> <span style=color:#a6e22e>Hostpool</span><span style=color:#f92672>::</span><span style=color:#a6e22e>find</span>($value);
+</span></span><span style=display:flex><span>                    <span style=color:#66d9ef>if</span> (<span style=color:#f92672>!</span>$info) {
+</span></span><span style=display:flex><span>                        $fail(<span style=color:#e6db74>&#39;该实例不存在&#39;</span>);
+</span></span><span style=display:flex><span>                        <span style=color:#66d9ef>return</span> <span style=color:#66d9ef>false</span>;
+</span></span><span style=display:flex><span>                    }
+</span></span><span style=display:flex><span>                    $this<span style=color:#f92672>-&gt;</span><span style=color:#a6e22e>merge</span>([<span style=color:#e6db74>&#39;user_id&#39;</span> <span style=color:#f92672>=&gt;</span> $info<span style=color:#f92672>-&gt;</span><span style=color:#a6e22e>user_id</span>]);
+</span></span><span style=display:flex><span>                }],
+</span></span><span style=display:flex><span>                <span style=color:#e6db74>&#39;name&#39;</span> <span style=color:#f92672>=&gt;</span> <span style=color:#e6db74>&#39;required&#39;</span>,
+</span></span><span style=display:flex><span>                <span style=color:#e6db74>&#39;crt&#39;</span> <span style=color:#f92672>=&gt;</span> <span style=color:#e6db74>&#39;required&#39;</span>,
+</span></span><span style=display:flex><span>                <span style=color:#e6db74>&#39;key&#39;</span> <span style=color:#f92672>=&gt;</span> <span style=color:#e6db74>&#39;required&#39;</span>,
+</span></span><span style=display:flex><span>            ];
+</span></span><span style=display:flex><span>        }
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>return</span> $rules;
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>/**
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>     * Description:
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>     * User: Vijay &lt;1937832819@qq.com&gt;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>     * Date: 2019/11/26
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>     * Time: 13:58
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>     * @return array
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>     */</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>public</span> <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>messages</span>()
+</span></span><span style=display:flex><span>    {
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>return</span> [
+</span></span><span style=display:flex><span>            <span style=color:#e6db74>&#39;id.required&#39;</span> <span style=color:#f92672>=&gt;</span> <span style=color:#e6db74>&#39;修改时，id必填&#39;</span>,
+</span></span><span style=display:flex><span>            <span style=color:#e6db74>&#39;name.required&#39;</span> <span style=color:#f92672>=&gt;</span> <span style=color:#e6db74>&#39;证书名称必填&#39;</span>,
+</span></span><span style=display:flex><span>            <span style=color:#e6db74>&#39;crt.required&#39;</span> <span style=color:#f92672>=&gt;</span> <span style=color:#e6db74>&#39;证书内容必填&#39;</span>,
+</span></span><span style=display:flex><span>            <span style=color:#e6db74>&#39;key.required&#39;</span> <span style=color:#f92672>=&gt;</span> <span style=color:#e6db74>&#39;证书密钥必填&#39;</span>,
+</span></span><span style=display:flex><span>            <span style=color:#e6db74>&#39;hostpool_id.unique&#39;</span> <span style=color:#f92672>=&gt;</span> <span style=color:#e6db74>&#39;所属实例ID不能重复&#39;</span>,
+</span></span><span style=display:flex><span>        ];
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>/**
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>     * Description:
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>     * User: Vijay &lt;1937832819@qq.com&gt;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>     * Date: 2019/11/26
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>     * Time: 13:58
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>     * @return array
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>     */</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>public</span> <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>attributes</span>()
+</span></span><span style=display:flex><span>    {
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>return</span> [
+</span></span><span style=display:flex><span>            <span style=color:#e6db74>&#39;id&#39;</span> <span style=color:#f92672>=&gt;</span> <span style=color:#e6db74>&#39;ID&#39;</span>,
+</span></span><span style=display:flex><span>            <span style=color:#e6db74>&#39;hostpool_id&#39;</span> <span style=color:#f92672>=&gt;</span> <span style=color:#e6db74>&#39;所属实例ID&#39;</span>,
+</span></span><span style=display:flex><span>            <span style=color:#e6db74>&#39;name&#39;</span> <span style=color:#f92672>=&gt;</span> <span style=color:#e6db74>&#39;证书名称&#39;</span>,
+</span></span><span style=display:flex><span>            <span style=color:#e6db74>&#39;crt&#39;</span> <span style=color:#f92672>=&gt;</span> <span style=color:#e6db74>&#39;证书内容&#39;</span>,
+</span></span><span style=display:flex><span>            <span style=color:#e6db74>&#39;key&#39;</span> <span style=color:#f92672>=&gt;</span> <span style=color:#e6db74>&#39;证书密钥&#39;</span>,
+</span></span><span style=display:flex><span>        ];
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span> <span style=color:#e6db74>/**
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>     * Description:验证后操作
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>     * User: Vijay &lt;1937832819@qq.com&gt;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>     * Date: 2020/01/02
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>     * Time: 17:29
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>     * @param \Illuminate\Contracts\Validation\Validator $validator
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>     */</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>public</span> <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>withValidator</span>(<span style=color:#a6e22e>\Illuminate\Contracts\Validation\Validator</span> $validator)
+</span></span><span style=display:flex><span>    {
+</span></span><span style=display:flex><span>        $validator<span style=color:#f92672>-&gt;</span><span style=color:#a6e22e>after</span>(<span style=color:#66d9ef>function</span> ($validator) {
+</span></span><span style=display:flex><span>            $query <span style=color:#f92672>=</span> <span style=color:#a6e22e>HostpoolDomainrulesCache</span><span style=color:#f92672>::</span><span style=color:#a6e22e>query</span>()
+</span></span><span style=display:flex><span>                <span style=color:#f92672>-&gt;</span><span style=color:#a6e22e>where</span>(<span style=color:#e6db74>&#39;hostpool_id&#39;</span>, $this<span style=color:#f92672>-&gt;</span><span style=color:#a6e22e>hostpool_id</span>)<span style=color:#a6e22e>；</span>
+</span></span><span style=display:flex><span>            $isset <span style=color:#f92672>=</span> $query<span style=color:#f92672>-&gt;</span><span style=color:#a6e22e>first</span>();
+</span></span><span style=display:flex><span>            <span style=color:#66d9ef>if</span> ($isset) {
+</span></span><span style=display:flex><span>                $validator<span style=color:#f92672>-&gt;</span><span style=color:#a6e22e>errors</span>()
+</span></span><span style=display:flex><span>                    <span style=color:#f92672>-&gt;</span><span style=color:#a6e22e>add</span>(<span style=color:#e6db74>&#39;rules&#39;</span>, <span style=color:#e6db74>&#39;规则错误&#39;</span>);
+</span></span><span style=display:flex><span>            }
+</span></span><span style=display:flex><span>        });
+</span></span><span style=display:flex><span>    }
+</span></span></code></pre></div><h1 id=父类>父类</h1><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-php data-lang=php><span style=display:flex><span><span style=color:#f92672>&lt;?</span><span style=color:#a6e22e>php</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>namespace</span> <span style=color:#a6e22e>App\Http\Requests</span>;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>use</span> <span style=color:#a6e22e>Illuminate\Contracts\Validation\Validator</span>;
+</span></span><span style=display:flex><span><span style=color:#66d9ef>use</span> <span style=color:#a6e22e>Illuminate\Foundation\Http\FormRequest</span>;
+</span></span><span style=display:flex><span><span style=color:#66d9ef>use</span> <span style=color:#a6e22e>Illuminate\Http\Exceptions\HttpResponseException</span>;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>class</span> <span style=color:#a6e22e>BaseRequest</span> <span style=color:#66d9ef>extends</span> <span style=color:#a6e22e>FormRequest</span>
+</span></span><span style=display:flex><span>{
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>/**
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>     * Determine if the user is authorized to make this request.
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>     *
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>     * @return bool
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>     */</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>public</span> <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>authorize</span>()
+</span></span><span style=display:flex><span>    {
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>return</span> <span style=color:#66d9ef>true</span>;
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>/**
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>     * Get the validation rules that apply to the request.
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>     *
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>     * @return array
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>     */</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>public</span> <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>rules</span>()
+</span></span><span style=display:flex><span>    {
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>return</span> [
+</span></span><span style=display:flex><span>            <span style=color:#75715e>//
+</span></span></span><span style=display:flex><span>        ];
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>/**
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>     * Description:返回错误相应
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>     * User: Vijay &lt;1937832819@qq.com&gt;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>     * Date: 2019/11/19
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>     * Time: 16:43
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>     * @param string $msg
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>     * @param null $data
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>     */</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>protected</span> <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>getFailedResponse</span>($msg <span style=color:#f92672>=</span> <span style=color:#e6db74>&#39;&#39;</span>, $data <span style=color:#f92672>=</span> <span style=color:#66d9ef>null</span>, $http_code <span style=color:#f92672>=</span> <span style=color:#ae81ff>200</span>)
+</span></span><span style=display:flex><span>    {
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>throw</span> (<span style=color:#66d9ef>new</span> <span style=color:#a6e22e>HttpResponseException</span>(<span style=color:#a6e22e>response</span>()<span style=color:#f92672>-&gt;</span><span style=color:#a6e22e>json</span>([
+</span></span><span style=display:flex><span>            <span style=color:#e6db74>&#39;data&#39;</span> <span style=color:#f92672>=&gt;</span> $data,
+</span></span><span style=display:flex><span>            <span style=color:#e6db74>&#39;status&#39;</span> <span style=color:#f92672>=&gt;</span> <span style=color:#66d9ef>false</span>,
+</span></span><span style=display:flex><span>            <span style=color:#e6db74>&#39;message&#39;</span> <span style=color:#f92672>=&gt;</span> $msg,
+</span></span><span style=display:flex><span>            <span style=color:#e6db74>&#39;meta&#39;</span> <span style=color:#f92672>=&gt;</span> <span style=color:#66d9ef>null</span>
+</span></span><span style=display:flex><span>        ], $http_code)));
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>/**
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>     * Description:返回错误信息
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>     * User: Vijay &lt;1937832819@qq.com&gt;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>     * Date: 2019/11/19
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>     * Time: 16:24
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>     * @param Validator $validator
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>     * @throws \Illuminate\Validation\ValidationException
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>     */</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>protected</span> <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>failedValidation</span>(<span style=color:#a6e22e>Validator</span> $validator)
+</span></span><span style=display:flex><span>    {
+</span></span><span style=display:flex><span>        $this<span style=color:#f92672>-&gt;</span><span style=color:#a6e22e>getFailedResponse</span>($validator<span style=color:#f92672>-&gt;</span><span style=color:#a6e22e>errors</span>()<span style=color:#f92672>-&gt;</span><span style=color:#a6e22e>first</span>());
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h1 id=调用>调用</h1><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-php data-lang=php><span style=display:flex><span> <span style=color:#66d9ef>public</span> <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>store</span>(<span style=color:#a6e22e>SslRequest</span> $request)
+</span></span><span style=display:flex><span> {
+</span></span><span style=display:flex><span> <span style=color:#75715e>//......
+</span></span></span><span style=display:flex><span> }
+</span></span></code></pre></div></div></article><article class="list__item post"><header class=list__header><h2 class="list__title post__title"><a href=/choudalao.github.io/posts/2019-10-16-javascript%E8%8E%B7%E5%8F%96%E5%AE%8C%E6%95%B4%E5%BD%93%E5%89%8D%E5%9F%9F%E5%90%8D/ rel=bookmark>JavaScript获取完整当前域名</a></h2></header><div class="content list__excerpt post__content clearfix"><p>&lt;p>&lt;pre lay-lang="JavaScript">&lt;code class="JavaScript">window.location.protocol+"//"+window.location.host; // 返回https://mp.csdn.net</p><p>window.location.host; //返回url 的主机部分，例如：mp.csdn.net<br>window.location.hostname; //返回mp.csdn.net
+window.location.href; //返回整个url字符串(在浏览器中就是完整的地址栏)
+window.location.pathname; //返回/a/index.php或者/index.php<br>window.location.protocol; //返回url 的协议部分，例如： http:，ftp:，maito:等等。<br>window.location.port //url 的端口部分，如果采用默认的80端口，那么返回值并不是默认的80而是空字符&lt;/code>&lt;/pre>&lt;p>&lt;code class="JavaScript">&lt;br>&lt;/code>&lt;/p>&lt;p>&lt;code class="JavaScript">&lt;br>&lt;/code>&lt;/p>&lt;p>&lt;code class="JavaScript">&lt;br>&lt;/code>&lt;/p>&lt;p>&lt;code class="JavaScript">&lt;br>&lt;/code>&lt;/p>&lt;p>&lt;code class="JavaScript">&lt;br>&lt;/code>&lt;/p>&lt;/p></p></div></article><article class="list__item post"><header class=list__header><h2 class="list__title post__title"><a href=/choudalao.github.io/posts/2019-10-15-%E8%AE%A9phpstorm%E6%94%AF%E6%8C%81laravel%E8%BF%9B%E8%A1%8C%E4%BB%A3%E7%A0%81%E7%9A%84%E8%87%AA%E5%8A%A8%E6%8F%90%E7%A4%BA/ rel=bookmark>让phpstorm支持laravel,进行代码的自动提示</a></h2></header><div class="content list__excerpt post__content clearfix"><p>&lt;b>&lt;h2>&lt;span>1.开一个laravel项目&lt;/span>&lt;/h2>&lt;p>&lt;span>&lt;br>&lt;/span>&lt;/p>&lt;p style="text-align: center;">&lt;img src="http://www.choudalao.com/uploads/20191015/EZrBePXxRBUiPsPPCE16Mgo3vAipBV8HwpHwlYpl.png" alt="">&lt;/p>&lt;p style="text-align: center;">&lt;br>&lt;/p>&lt;h2 style="text-align: left;">2.在根目录运行如下命令,进行安装&lt;/h2>&lt;p>&lt;br>&lt;/p>&lt;pre lay-lang="PHP">&lt;code class="PHP">composer require barryvdh/laravel-ide-helper&lt;/code>&lt;/pre>&lt;p>&lt;code class="PHP">&lt;br>&lt;/code>&lt;/p>&lt;p style="text-align: left;">&lt;code class="PHP">&lt;br>&lt;/code>&lt;/p>&lt;p style="text-align: center;">&lt;img src="http://www.choudalao.com/uploads/20191015/H3HqtEdrFCwQwHJTkcMQ3JpTrhdv1Zn1H5sD1tf4.png" alt="">&lt;/p>&lt;p>&lt;code class="PHP">&lt;br>&lt;/code>&lt;/p>&lt;h2>&lt;code class="PHP">3.&lt;/code>&lt;span>配置模块&lt;/span>&lt;/h2>&lt;p>&lt;span>&lt;br>&lt;/span>&lt;/p>&lt;/b>&lt;b>&lt;p>&lt;code class="PHP">&lt;span>安装成功后，在 项目中的 conifg/app.php 的providers的数组中&lt;/span>&lt;span>添加类的支持&lt;/span>&lt;/code>&lt;/p>&lt;p>&lt;code class="PHP">&lt;span>&lt;br>&lt;/span>&lt;/code>&lt;/p>&lt;p>&lt;code class="PHP">&lt;/code>&lt;/p>&lt;p>&lt;code class="PHP">&lt;/code>&lt;/p>&lt;pre lay-lang="PHP">&lt;code class="PHP">&lt;code class="PHP">Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,&lt;/code>&lt;/code>&lt;/pre>&lt;p>&lt;/p>&lt;p style="text-align: center;">&lt;code class="PHP">&lt;br>&lt;/code>&lt;/p>&lt;p style="text-align: left;">&lt;code class="PHP">&lt;img src="http://www.choudalao.com/uploads/20191015/Fy60hFwio62OTRQZvthtMQ41acsTQfkGoskpyMBu.png" alt="">&lt;/code>&lt;/p>&lt;p>&lt;code class="PHP">&lt;br>&lt;/code>&lt;/p>&lt;p>&lt;code class="PHP">&lt;/code>&lt;/p>&lt;h2>4.通过命令行生成 _ide_helper.php文件&lt;/h2>&lt;p>&lt;br>&lt;/p>&lt;p>在命令行中，到项目的当前目录下执行如下命令：会产生一个新的文件&lt;/p>&lt;p>&lt;br>&lt;/p>&lt;pre lay-lang="PHP">&lt;code class="PHP">php artisan ide-helper:generate&lt;/code>&lt;/pre>&lt;h2>&lt;span>&lt;br>&lt;/span>&lt;/h2>&lt;h2>&lt;span>5 提示功能验证&lt;/span>&lt;/h2>&lt;p>&lt;br>&lt;/p>&lt;p>&lt;span>重启PhpStorm IDE后，验证是否有代码提示功能。&lt;/span>&lt;/p>&lt;p style="text-align: left;">&lt;img src="http://www.choudalao.com/uploads/20191015/0LGO3FrLFlxpHaeIdrETYQaBr7rahBQ5oEWD8SxO.png" alt="" style="">&lt;/p>&lt;p>&lt;code class="PHP">&lt;br>&lt;/code>&lt;/p>&lt;/b></p></div></article><article class="list__item post"><header class=list__header><h2 class="list__title post__title"><a href=/choudalao.github.io/posts/2019-09-21-input%E7%A6%81%E6%AD%A2%E8%87%AA%E5%8A%A8%E5%A1%AB%E5%85%85/ rel=bookmark>input禁止自动填充</a></h2></header><div class="content list__excerpt post__content clearfix"><p>&lt;p>在表单提交的时候,如果表单中存在账号密码.谷歌浏览器会自动填充数据,有时间我们不需要填充.&lt;/p>&lt;p>解决方法如下:&lt;/p>&lt;pre lay-lang="JavaScript">&lt;code class="JavaScript">1、在form表单或者input中使用autocomplete=”off”
+2、不让页面读取缓存数据
+3、对于type=“password”时禁止自动填充密码的方法有两种：
+（1）去掉input的name和id属性（不推荐）
+（2）加上autocomplete="new-password"属性&lt;/code>&lt;/pre>&lt;p>亲测最后一种效果最好&lt;/p>&lt;p style="text-align: center;">&lt;img src="http://www.choudalao.com/uploads/20190921/tPRipnYnGiKtd4JiuKIsLDwKjgj3mePYZB6ICmZc.png" alt="" style="">&lt;/p></p></div></article><article class="list__item post"><header class=list__header><h2 class="list__title post__title"><a href=/choudalao.github.io/posts/2019-09-21-unable-to-boot-apiserviceprovider-configure-an-api-domain-or-prefix/ rel=bookmark>Unable to boot ApiServiceProvider, configure an API domain or prefix.</a></h2></header><div class="content list__excerpt post__content clearfix"><p>&lt;div yne-bulb-block="paragraph">&lt;span>&lt;b>&lt;p>&lt;span>错误信息:&lt;/span>&lt;/p>&lt;p>&lt;span>&lt;font color="#cc0000">Unable to boot ApiServiceProvider, configure an API domain or prefix&mldr;&lt;/font>&lt;/span>&lt;/p>&lt;p>&lt;span>解决方法:&lt;/span>&lt;/p>&lt;p>&lt;/p>&lt;pre lay-lang="PHP">&lt;code class="PHP">// .env文件增加如下代码</p></div></article><article class="list__item post"><header class=list__header><h2 class="list__title post__title"><a href=/choudalao.github.io/posts/2019-09-21-laravel%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6%E4%B8%8D%E7%94%A8%E8%BD%AF%E8%BF%9E%E6%8E%A5%E7%9B%B4%E6%8E%A5%E5%AD%98public%E4%B8%8B/ rel=bookmark>laravel上传文件不用软连接,直接存public下</a></h2></header><div class="content list__excerpt post__content clearfix"><p>&lt;p>&lt;/p>&lt;pre lay-lang="PHP">&lt;code class="PHP">//配置上传文件config/filesystems.php,在 ‘disks’ 数组中添加uploads数组
+&lsquo;disks&rsquo; =&amp;gt; [
+//自定义上传路径
+&lsquo;uploads&rsquo; =&amp;gt; [
+&lsquo;driver&rsquo; =&amp;gt; &rsquo;local&rsquo;,
+&lsquo;root&rsquo; =&amp;gt; public_path(&lsquo;uploads/&rsquo; . date(&lsquo;Ymd&rsquo;)),
+],
+&mldr;
+],
+//控制器代码
+if ($request-&amp;gt;isMethod(&lsquo;post&rsquo;)) {
+$date = date(&lsquo;Ymd&rsquo;);
+$path = $request-&amp;gt;file(&lsquo;file&rsquo;)-&amp;gt;store(&rsquo;&rsquo;, &lsquo;uploads&rsquo;);
+if ($path) {
+$fileUrl = &lsquo;/uploads/&rsquo; . $date . &lsquo;/&rsquo; . $path;
+return fileUrl;//返回的是文件路径
+} else {
+return "上传失败";
+}
+}&lt;/code>&lt;/pre>&lt;p>&lt;/p></p></div></article><article class="list__item post"><header class=list__header><h2 class="list__title post__title"><a href=/choudalao.github.io/posts/2019-09-21-laravel%E6%89%93%E5%8D%B0%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9F%A5%E8%AF%A2%E8%AF%AD%E5%8F%A5/ rel=bookmark>laravel打印数据库查询语句</a></h2></header><div class="content list__excerpt post__content clearfix"><p>&lt;p>在使用laravel操作数据库的时候,想看条件是否拼接正确,以及查询耗时,可以使用一下方法&lt;/p>&lt;pre lay-lang="PHP">&lt;code class="PHP">//Laravel 5 中需要开启QueryLog
+DB::connection()-&amp;gt;enableQueryLog();
+//这里为查询操作
+dd(DB::getQueryLog());&lt;/code>&lt;/pre></p></div></article><article class="list__item post"><header class=list__header><h2 class="list__title post__title"><a href=/choudalao.github.io/posts/2019-09-21-%E5%89%8D%E7%AB%AF%E5%B8%B8%E7%94%A8%E5%B0%8F%E4%BB%A3%E7%A0%81/ rel=bookmark>前端常用小代码</a></h2></header><div class="content list__excerpt post__content clearfix"><h1 id=jquery通过name属性取值的方法>jquery通过name属性取值的方法</h1><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-php data-lang=php><span style=display:flex><span><span style=color:#75715e>//input
+</span></span></span><span style=display:flex><span><span style=color:#960050;background-color:#1e0010>$</span>(<span style=color:#e6db74>&#34;input[name=&#39;title&#39;]&#34;</span>)<span style=color:#f92672>.</span><span style=color:#a6e22e>val</span>();
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>//textarea
+</span></span></span><span style=display:flex><span><span style=color:#960050;background-color:#1e0010>$</span>(<span style=color:#e6db74>&#34;textarea[name=&#39;remark&#39;]&#34;</span>)<span style=color:#f92672>.</span><span style=color:#a6e22e>val</span>();
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>//select
+</span></span></span><span style=display:flex><span><span style=color:#960050;background-color:#1e0010>$</span>(<span style=color:#e6db74>&#34;select[name=&#39;region[province]&#39;]&#34;</span>)<span style=color:#f92672>.</span><span style=color:#a6e22e>val</span>();
+</span></span><span style=display:flex><span><span style=color:#960050;background-color:#1e0010>$</span>(<span style=color:#e6db74>&#34;select[name=&#39;province&#39;]&#34;</span>)<span style=color:#f92672>.</span><span style=color:#a6e22e>val</span>();
+</span></span><span style=display:flex><span><span style=color:#960050;background-color:#1e0010>$</span>(<span style=color:#e6db74>&#34;#&#34;</span><span style=color:#f92672>+</span><span style=color:#a6e22e>id</span><span style=color:#f92672>+</span><span style=color:#e6db74>&#34; select&#34;</span>)<span style=color:#f92672>.</span><span style=color:#a6e22e>find</span>(<span style=color:#e6db74>&#34;option:first&#34;</span>)<span style=color:#f92672>.</span><span style=color:#a6e22e>prop</span>(<span style=color:#e6db74>&#34;selected&#34;</span>, <span style=color:#66d9ef>true</span>);
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>//checkbox
+</span></span></span><span style=display:flex><span><span style=color:#960050;background-color:#1e0010>$</span>(<span style=color:#e6db74>&#34;input:checkbox[name=&#39;test&#39;]:checked&#34;</span>)<span style=color:#f92672>.</span><span style=color:#a6e22e>each</span>(<span style=color:#66d9ef>function</span>() { <span style=color:#75715e>// 遍历name=test的多选框
+</span></span></span><span style=display:flex><span>  <span style=color:#960050;background-color:#1e0010>$</span>(<span style=color:#66d9ef>this</span>)<span style=color:#f92672>.</span><span style=color:#a6e22e>val</span>();  <span style=color:#75715e>// 每一个被选中项的值
+</span></span></span><span style=display:flex><span>});
+</span></span><span style=display:flex><span><span style=color:#75715e>//设置选中 
+</span></span></span><span style=display:flex><span><span style=color:#960050;background-color:#1e0010>$</span>(<span style=color:#e6db74>&#39;#cb&#39;</span>)<span style=color:#f92672>.</span><span style=color:#a6e22e>prop</span>(<span style=color:#e6db74>&#39;checked&#39;</span>, <span style=color:#66d9ef>true</span>);
+</span></span><span style=display:flex><span><span style=color:#960050;background-color:#1e0010>$</span>(<span style=color:#e6db74>&#34;input[name=&#39;_checkbox&#39;]:checked&#34;</span>);
+</span></span><span style=display:flex><span><span style=color:#960050;background-color:#1e0010>$</span>(<span style=color:#e6db74>&#34;input[name=&#39;sfz&#39;]&#34;</span>)<span style=color:#f92672>.</span><span style=color:#a6e22e>attr</span>(<span style=color:#e6db74>&#34;checked&#34;</span>,<span style=color:#e6db74>&#34;checked&#34;</span>);
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>//获取是否选中 
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>var</span> <span style=color:#a6e22e>isChecked</span> <span style=color:#f92672>=</span> <span style=color:#960050;background-color:#1e0010>$</span>(<span style=color:#e6db74>&#39;#cb&#39;</span>)<span style=color:#f92672>.</span><span style=color:#a6e22e>prop</span>(<span style=color:#e6db74>&#39;checked&#39;</span>);
+</span></span><span style=display:flex><span><span style=color:#75715e>//或 
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>var</span> <span style=color:#a6e22e>isChecked</span> <span style=color:#f92672>=</span> <span style=color:#960050;background-color:#1e0010>$</span>(<span style=color:#e6db74>&#39;#cb&#39;</span>)<span style=color:#f92672>.</span><span style=color:#a6e22e>is</span>(<span style=color:#e6db74>&#34;:checked&#34;</span>);
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#960050;background-color:#1e0010>$</span>(<span style=color:#e6db74>&#34;[name=&#39;https_origin_type&#39;][value=&#39;1&#39;]&#34;</span>)<span style=color:#f92672>.</span><span style=color:#a6e22e>prop</span>(<span style=color:#e6db74>&#34;checked&#34;</span>, <span style=color:#66d9ef>true</span>);<span style=color:#75715e>//设置值为1的为选中
+</span></span></span><span style=display:flex><span><span style=color:#75715e>//radio
+</span></span></span><span style=display:flex><span><span style=color:#960050;background-color:#1e0010>$</span>(<span style=color:#e6db74>&#34;input[name=&#39;&#39;]:checked&#34;</span>)<span style=color:#f92672>.</span><span style=color:#a6e22e>val</span>();
+</span></span><span style=display:flex><span><span style=color:#960050;background-color:#1e0010>$</span>(<span style=color:#e6db74>&#34;:radio[name=&#39;level&#39;]:checked&#34;</span>)<span style=color:#f92672>.</span><span style=color:#a6e22e>val</span>();
+</span></span><span style=display:flex><span><span style=color:#960050;background-color:#1e0010>$</span>(<span style=color:#e6db74>&#39;input:radio:first&#39;</span>)<span style=color:#f92672>.</span><span style=color:#a6e22e>prop</span>(<span style=color:#e6db74>&#39;checked&#39;</span>, <span style=color:#66d9ef>true</span>);
+</span></span><span style=display:flex><span><span style=color:#960050;background-color:#1e0010>$</span>(<span style=color:#e6db74>&#34;input[name=&#39;radioName&#39;][value=2]&#34;</span>)<span style=color:#f92672>.</span><span style=color:#a6e22e>prop</span>(<span style=color:#e6db74>&#34;checked&#34;</span>,<span style=color:#66d9ef>true</span>); 
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>//原生方法
+</span></span></span><span style=display:flex><span><span style=color:#a6e22e>document</span><span style=color:#f92672>.</span><span style=color:#a6e22e>querySelector</span>(<span style=color:#e6db74>&#39;input[name=&#34;control_name&#34;]&#39;</span>)<span style=color:#f92672>.</span><span style=color:#a6e22e>getAttribute</span>(<span style=color:#e6db74>&#39;value&#39;</span>);
+</span></span><span style=display:flex><span><span style=color:#a6e22e>document</span><span style=color:#f92672>.</span><span style=color:#a6e22e>querySelector</span>(<span style=color:#e6db74>&#39;meta[name=&#34;csrf-token&#34;]&#39;</span>)<span style=color:#f92672>.</span><span style=color:#a6e22e>getAttribute</span>(<span style=color:#e6db74>&#39;content&#39;</span>);
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>//Jquery清空（获取）当前页面所有的input和textarea的两种写法
+</span></span></span><span style=display:flex><span><span style=color:#960050;background-color:#1e0010>$</span>(<span style=color:#e6db74>&#34;#myform input,#myform textarea&#34;</span>)<span style=color:#f92672>.</span><span style=color:#a6e22e>each</span>(<span style=color:#66d9ef>function</span>(){
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>this</span><span style=color:#f92672>.</span><span style=color:#a6e22e>value</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>this</span><span style=color:#f92672>.</span><span style=color:#a6e22e>value</span><span style=color:#f92672>.</span><span style=color:#a6e22e>replace</span>(<span style=color:#f92672>/</span><span style=color:#a6e22e>\</span><span style=color:#f92672>&amp;/</span><span style=color:#a6e22e>g</span>,<span style=color:#e6db74>&#34;%26&#34;</span>);<span style=color:#75715e>//也可以清空数据this.value =&#34;&#34;;
+</span></span></span><span style=display:flex><span>})
+</span></span><span style=display:flex><span><span style=color:#960050;background-color:#1e0010>$</span>(<span style=color:#e6db74>&#34;#myform&#34;</span>)<span style=color:#f92672>.</span><span style=color:#a6e22e>find</span>(<span style=color:#e6db74>&#34;input,textarea&#34;</span>)<span style=color:#f92672>.</span><span style=color:#a6e22e>each</span>(<span style=color:#66d9ef>function</span>(){
+</span></span><span style=display:flex><span>   <span style=color:#66d9ef>this</span><span style=color:#f92672>.</span><span style=color:#a6e22e>value</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>this</span><span style=color:#f92672>.</span><span style=color:#a6e22e>value</span><span style=color:#f92672>.</span><span style=color:#a6e22e>replace</span>(<span style=color:#f92672>/</span><span style=color:#a6e22e>\</span><span style=color:#f92672>&amp;/</span><span style=color:#a6e22e>g</span>,<span style=color:#e6db74>&#34;%26&#34;</span>);<span style=color:#75715e>//也可以清空数据this.value =&#34;&#34;;
+</span></span></span><span style=display:flex><span>});
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>$body<span style=color:#f92672>.</span><span style=color:#a6e22e>off</span>(<span style=color:#e6db74>&#39;click&#39;</span>, <span style=color:#a6e22e>options</span><span style=color:#f92672>.</span><span style=color:#a6e22e>elem</span>)<span style=color:#f92672>.</span><span style=color:#a6e22e>on</span>(<span style=color:#e6db74>&#39;click&#39;</span>, <span style=color:#a6e22e>options</span><span style=color:#f92672>.</span><span style=color:#a6e22e>elem</span>, <span style=color:#66d9ef>function</span>(){}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#960050;background-color:#1e0010>$</span>(<span style=color:#e6db74>&#34;.addPackage&#34;</span>)<span style=color:#f92672>.</span><span style=color:#a6e22e>unbind</span>(<span style=color:#e6db74>&#34;click&#34;</span>);
+</span></span><span style=display:flex><span><span style=color:#960050;background-color:#1e0010>$</span>(<span style=color:#e6db74>&#34;.addPackage&#34;</span>)<span style=color:#f92672>.</span><span style=color:#a6e22e>click</span>(<span style=color:#66d9ef>function</span> () {})
+</span></span><span style=display:flex><span> 
+</span></span><span style=display:flex><span><span style=color:#960050;background-color:#1e0010>$</span>(<span style=color:#a6e22e>document</span>)<span style=color:#f92672>.</span><span style=color:#a6e22e>off</span>(<span style=color:#e6db74>&#34;click&#34;</span>,<span style=color:#e6db74>&#39;.change-goods&#39;</span>);
+</span></span><span style=display:flex><span><span style=color:#960050;background-color:#1e0010>$</span>(<span style=color:#a6e22e>document</span>)<span style=color:#f92672>.</span><span style=color:#a6e22e>on</span>(<span style=color:#e6db74>&#39;click&#39;</span>,<span style=color:#e6db74>&#39;.change-goods&#39;</span>,<span style=color:#66d9ef>function</span> () {})
+</span></span></code></pre></div><h1 id=事件冒泡导致栈内存溢出以及jquery的trigger触发事件的问题>事件冒泡导致栈内存溢出以及jquery的trigger触发事件的问题</h1><blockquote><p>$(&rsquo;#demo&rsquo;).trigger(‘click’)并不能触发a标签中内容的点击事件，只是相当于触发了a本身的onclick，而不是像用户点击一样的事件。
+如果需要a标签的点击效果,需要把事件绑定到a标签内部的元素中才可以,正好html结构里面a标签内部有个类名.des的div标签</p></div></article><article class="list__item post"><header class=list__header><h2 class="list__title post__title"><a href=/choudalao.github.io/posts/2019-09-21-jquery%E6%B8%85%E7%A9%BA%E8%8E%B7%E5%8F%96%E5%BD%93%E5%89%8D%E9%A1%B5%E9%9D%A2%E6%89%80%E6%9C%89%E7%9A%84input%E5%92%8Ctextarea%E7%9A%84%E4%B8%A4%E7%A7%8D%E5%86%99%E6%B3%95/ rel=bookmark>Jquery清空（获取）当前页面所有的input和textarea的两种写法</a></h2></header><div class="content list__excerpt post__content clearfix"><p>&lt;p>&lt;/p>&lt;pre lay-lang="JavaScript">&lt;code class="JavaScript">$("#myform input,#myform textarea").each(function(){
+this.value = this.value.replace(/&amp;amp;amp;/g,"%26");//也可以清空数据this.value ="";
+})
+$("#myform").find("input,textarea").each(function(){
+this.value = this.value.replace(/&amp;amp;amp;/g,"%26");//也可以清空数据this.value ="";
+});&lt;/code>&lt;/pre>&lt;p>&lt;/p></p></div></article><article class="list__item post"><header class=list__header><h2 class="list__title post__title"><a href=/choudalao.github.io/posts/2019-08-12-%E5%88%B6%E4%BD%9C%E4%B8%80%E4%B8%AA%E7%AE%80%E6%98%93%E7%9A%84exe%E5%8C%85/ rel=bookmark>制作一个简易的exe包</a></h2></header><div class="content list__excerpt post__content clearfix"><h1 id=需求>需求</h1><p>我们有个pc网页应用,用户希望有个win包,点击点开的同时,浏览器全屏展示</p><h1 id=实现>实现</h1><h3 id=制作bat文件>制作bat文件</h3><p>创建一个 臭大佬.bat 文件</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#960050;background-color:#1e0010>@</span><span style=color:#a6e22e>echo</span> <span style=color:#a6e22e>off</span>
+</span></span><span style=display:flex><span>:: <span style=color:#a6e22e>打开链接</span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>start</span> <span style=color:#e6db74>&#34;&#34;</span> <span style=color:#e6db74>&#34;https://www.choudalao.com/&#34;</span>
+</span></span><span style=display:flex><span>:: <span style=color:#a6e22e>模拟f11全屏打开</span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>powershell</span> <span style=color:#f92672>-</span><span style=color:#a6e22e>Command</span> <span style=color:#e6db74>&#34;&amp; {(New-Object -ComObject WScript.Shell).SendKeys(&#39;{F11}&#39;);}&#34;</span>
+</span></span></code></pre></div><h3 id=bat转换为exe>bat转换为exe</h3><p>Bat To Exe Converter 是一款可以将批处理文件bat转换成exe应用程序的软件。
+软件下载：http://www.pc6.com/softview/SoftView_31106.html</p></div></article></main><div class=pagination><a class="pagination__item pagination__item--prev btn" href=/choudalao.github.io/posts/page/29/>«</a>
+<span class="pagination__item pagination__item--current">30/35</span>
+<a class="pagination__item pagination__item--next btn" href=/choudalao.github.io/posts/page/31/>»</a></div></div><aside class=sidebar><div class="widget-categories widget"><h4 class=widget__title>分类</h4><div class=widget__content><ul class=widget__list><li class=widget__item><a class=widget__link href=/choudalao.github.io/categories/ai/>AI</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/categories/go/>Go</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/categories/linux/>Linux</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/categories/mysql/>MYSQL</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/categories/php/>Php</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/categories/python/>Python</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/categories/%E4%B8%AA%E4%BA%BA/>个人</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/categories/%E5%85%B6%E4%BB%96/>其他</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/categories/%E5%89%8D%E7%AB%AF/>前端</a></li></ul></div></div><div class="widget-recent widget"><h4 class=widget__title>近期文章</h4><div class=widget__content><ul class=widget__list><li class=widget__item><a class=widget__link href=/choudalao.github.io/posts/2025-04-19-cline%E4%B8%AD%E4%BD%BF%E7%94%A8-mysql-mcp-%E6%9C%8D%E5%8A%A1/>Cline中使用 MySql MCP 服务</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/posts/2020-09-03-%E5%9F%BA%E4%BA%8Elaravel%E5%8F%8Alayui%E5%BC%80%E5%8F%91%E7%9A%84%E5%90%8E%E5%8F%B0%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F-laravel-wjfcms/>基于laravel及layui开发的后台管理系统 -- laravel-wjfcms</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/posts/2020-06-02-%E8%85%BE%E8%AE%AF%E4%BA%91%E4%BA%A7%E5%93%81%E5%A4%A7%E4%BF%83/>腾讯云产品大促</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/posts/2019-09-21-git%E6%93%8D%E4%BD%9C/>Git操作</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/posts/2026-01-29-openclaw-%E5%AE%89%E8%A3%85%E5%8F%8A%E4%BD%BF%E7%94%A8/>openclaw 安装及使用</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/posts/2026-01-28-mise-%E5%AE%89%E8%A3%85%E5%8F%8A%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/>mise 安装及使用指南</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/posts/2026-01-26-%E7%94%A8-obsidian-%E6%89%93%E9%80%A0ai%E7%AC%94%E8%AE%B0/>用 Obsidian 打造AI笔记</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/posts/2026-01-22-claude-%E5%AE%98%E6%96%B9-skill-creator-%E4%BB%8B%E7%BB%8D%E5%8F%8A%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/>Claude 官方 Skill-Creator 介绍及使用指南</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/posts/2026-01-22-%E9%80%9A%E8%BF%87qq%E9%82%AE%E7%AE%B1%E4%BB%A3%E6%94%B6gmail%E9%82%AE%E4%BB%B6/>通过QQ邮箱代收Gmail邮件</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/posts/2026-01-19-%E8%A7%A3%E5%86%B3-wsl2-windows-hosts-%E5%BC%80%E5%90%AF-vpn-%E5%90%8E%E6%97%A0%E6%B3%95%E8%AE%BF%E9%97%AE%E6%9C%AC%E5%9C%B0-web-%E6%9C%8D%E5%8A%A1%E7%9A%84%E9%97%AE%E9%A2%98/>解决 WSL2 + Windows Hosts + 开启 VPN 后无法访问本地 Web 服务的问题</a></li></ul></div></div><div class="widget-taglist widget"><h4 class=widget__title>标签</h4><div class=widget__content><a class="widget-taglist__link widget__link btn" href=/choudalao.github.io/tags/php/ title=Php>Php</a>
+<a class="widget-taglist__link widget__link btn" href=/choudalao.github.io/tags/%E5%85%B3%E4%BA%8E/ title=关于>关于</a></div></div></aside></div><footer class=footer><div class="container footer__container flex"><div class=footer__copyright>&copy; 2026 臭大佬博客.
+<span class=footer__copyright-credits>基于 <a href=https://gohugo.io/ rel="nofollow noopener" target=_blank>Hugo</a> 引擎和 <a href=https://github.com/Vimux/Mainroad/ rel="nofollow noopener" target=_blank>Mainroad</a> 主题</span></div></div></footer></div><script async defer src=/choudalao.github.io/js/menu.js></script></body></html>

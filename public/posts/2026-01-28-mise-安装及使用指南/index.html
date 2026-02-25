@@ -1,0 +1,230 @@
+<!doctype html><html class=no-js lang=en><head><meta charset=UTF-8><meta name=viewport content="width=device-width,initial-scale=1"><title>mise 安装及使用指南 - 臭大佬博客</title><script>(function(e,t){e[t]=e[t].replace("no-js","js")})(document.documentElement,"className")</script><meta name=description content="mise是一款用 Rust 编写的高性能多运行时版本管理器，它能够帮助开发者在单个工具中统一管理多种编程语言和工具的版本。"><link rel=preconnect href=https://fonts.gstatic.com crossorigin><link rel=dns-prefetch href=//fonts.googleapis.com><link rel=dns-prefetch href=//fonts.gstatic.com><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700"><link rel=stylesheet href=/choudalao.github.io/css/style.css><link rel="shortcut icon" href=/choudalao.github.io/favicon.ico></head><body class=body><div class="container container--outer"><header class=header><div class="container header__container"><div class=logo><a class=logo__link href=/choudalao.github.io/ title=臭大佬博客 rel=home><div class="logo__item logo__text"><div class=logo__title>臭大佬博客</div></div></a></div><nav class=menu><button class=menu__btn aria-haspopup=true aria-expanded=false tabindex=0>
+<span class=menu__btn-title tabindex=-1>菜单</span></button><ul class=menu__list><li class=menu__item><a class=menu__link href=/choudalao.github.io/><span class=menu__text>首页</span></a></li><li class=menu__item><a class=menu__link href=/choudalao.github.io/categories/><span class=menu__text>分类</span></a></li><li class=menu__item><a class=menu__link href=/choudalao.github.io/tags/><span class=menu__text>标签</span></a></li><li class=menu__item><a class=menu__link href=/choudalao.github.io/posts/><span class=menu__text>归档</span></a></li><li class=menu__item><a class=menu__link href=/choudalao.github.io/about/><span class=menu__text>关于</span></a></li></ul></nav></div></header><div class="wrapper flex"><div class=primary><main class=main role=main><article class=post><header class=post__header><h1 class=post__title>mise 安装及使用指南</h1></header><div class="content post__content clearfix"><h1 id=mise-安装及使用指南>mise 安装及使用指南</h1><h2 id=介绍>介绍</h2><p><a href=https://mise.jdx.dev/>mise</a>（发音同 &ldquo;mice&rdquo;）是一款用 Rust 编写的高性能多运行时版本管理器，它能够帮助开发者在单个工具中统一管理多种编程语言和工具的版本。</p><h3 id=核心价值>核心价值</h3><ul><li><strong>多语言统一管理</strong>：支持 Node.js、Python、Ruby、Go、Java、Rust 等多种语言和工具的版本管理</li><li><strong>高性能</strong>：基于 Rust 开发，执行速度快，启动时间短</li><li><strong>统一接口</strong>：使用一致的命令行界面管理所有语言版本，无需学习多种工具</li><li><strong>项目级配置</strong>：通过配置文件在团队中共享工具版本，确保开发环境一致性</li><li><strong>兼容性</strong>：兼容 asdf 插件系统，支持多种版本文件格式（如 .nvmrc、.python-version）</li><li><strong>任务管理</strong>：内置任务系统，可以替代 npm 或 make 等工具</li></ul><hr><h2 id=安装>安装</h2><h3 id=macoslinux-或-wsl>macOS、Linux 或 WSL</h3><p>使用官方安装脚本：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-bash data-lang=bash><span style=display:flex><span>curl https://mise.run | sh
+</span></span></code></pre></div><p>或者使用 Homebrew（macOS/Linux）：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-bash data-lang=bash><span style=display:flex><span>brew install mise
+</span></span></code></pre></div><h3 id=配置-shell>配置 Shell</h3><p>将 mise 添加到你的 shell 配置文件中：</p><p><strong>对于 Bash (~/.bashrc)</strong>：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-bash data-lang=bash><span style=display:flex><span>echo <span style=color:#e6db74>&#39;eval &#34;$(&#34;$HOME/.local/bin/mise&#34; activate bash)&#34;&#39;</span> &gt;&gt; ~/.bashrc
+</span></span></code></pre></div><p>重新加载配置：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-bash data-lang=bash><span style=display:flex><span>source ~/.bashrc  <span style=color:#75715e># 或 source ~/.zshrc</span>
+</span></span></code></pre></div><h3 id=验证安装>验证安装</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-bash data-lang=bash><span style=display:flex><span>mise --version
+</span></span></code></pre></div><hr><h2 id=常用命令>常用命令</h2><h3 id=基础命令>基础命令</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-bash data-lang=bash><span style=display:flex><span><span style=color:#75715e># 查看所有可用的运行时（语言/工具）</span>
+</span></span><span style=display:flex><span>mise ls-remote
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 查看已安装的版本</span>
+</span></span><span style=display:flex><span>mise list
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 查看当前激活的版本</span>
+</span></span><span style=display:flex><span>mise current
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 安装特定版本</span>
+</span></span><span style=display:flex><span>mise use -g node@20
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 设置全局默认版本</span>
+</span></span><span style=display:flex><span>mise use -g python@3.12
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 在项目目录设置本地版本</span>
+</span></span><span style=display:flex><span>mise use node@20
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 卸载某个版本</span>
+</span></span><span style=display:flex><span>mise uninstall node@20
+</span></span></code></pre></div><h3 id=版本文件管理>版本文件管理</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-bash data-lang=bash><span style=display:flex><span><span style=color:#75715e># 查看当前项目使用的版本配置</span>
+</span></span><span style=display:flex><span>mise ls
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 创建或更新 .tool-versions 文件</span>
+</span></span><span style=display:flex><span>mise use node@20 python@3.12
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 读取 .tool-versions 或其他版本文件</span>
+</span></span><span style=display:flex><span>mise sync
+</span></span></code></pre></div><h3 id=插件管理>插件管理</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-bash data-lang=bash><span style=display:flex><span><span style=color:#75715e># 列出所有可用插件</span>
+</span></span><span style=display:flex><span>mise plugins ls-remote
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 搜索特定语言的插件</span>
+</span></span><span style=display:flex><span>mise plugins ls-remote | grep node
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 添加自定义插件</span>
+</span></span><span style=display:flex><span>mise plugins add node https://github.com/asdf-vm/asdf-nodejs.git
+</span></span></code></pre></div><hr><h2 id=各语言使用指南>各语言使用指南</h2><h3 id=nodejs>Node.js</h3><h4 id=安装-nodejs>安装 Node.js</h4><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-bash data-lang=bash><span style=display:flex><span><span style=color:#75715e># 安装最新 LTS 版本</span>
+</span></span><span style=display:flex><span>mise use -g node@lts
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 安装特定版本</span>
+</span></span><span style=display:flex><span>mise use -g node@20.11.0
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 安装最新版本</span>
+</span></span><span style=display:flex><span>mise use -g node@latest
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 在项目中设置版本</span>
+</span></span><span style=display:flex><span>cd /path/to/project
+</span></span><span style=display:flex><span>mise use node@20
+</span></span></code></pre></div><h4 id=管理多个-nodejs-版本>管理多个 Node.js 版本</h4><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-bash data-lang=bash><span style=display:flex><span><span style=color:#75715e># 查看已安装的 Node.js 版本</span>
+</span></span><span style=display:flex><span>mise list node
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 查看可用的 Node.js 版本</span>
+</span></span><span style=display:flex><span>mise ls-remote node
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 切换全局版本</span>
+</span></span><span style=display:flex><span>mise use -g node@18
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 临时使用某个版本（仅当前会话）</span>
+</span></span><span style=display:flex><span>mise exec node@20 -- node --version
+</span></span></code></pre></div><h4 id=配合-npm-使用>配合 npm 使用</h4><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-bash data-lang=bash><span style=display:flex><span><span style=color:#75715e># 使用 mise 安装的 Node.js 会自动配置 npm</span>
+</span></span><span style=display:flex><span>npm install -g yarn
+</span></span><span style=display:flex><span>npm install -g pnpm
+</span></span></code></pre></div><h4 id=项目配置示例>项目配置示例</h4><p>在项目根目录创建 <code>.tool-versions</code> 文件：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-toml data-lang=toml><span style=display:flex><span><span style=color:#a6e22e>node</span> <span style=color:#ae81ff>20.11</span>.<span style=color:#ae81ff>0</span>
+</span></span></code></pre></div><p>或创建 <code>.mise.toml</code> 文件：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-toml data-lang=toml><span style=display:flex><span>[<span style=color:#a6e22e>tools</span>]
+</span></span><span style=display:flex><span><span style=color:#a6e22e>node</span> = <span style=color:#e6db74>&#34;20.11.0&#34;</span>
+</span></span></code></pre></div><hr><h3 id=python>Python</h3><h4 id=安装-python>安装 Python</h4><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-bash data-lang=bash><span style=display:flex><span><span style=color:#75715e># 安装最新稳定版</span>
+</span></span><span style=display:flex><span>mise use -g python@latest
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 安装特定版本</span>
+</span></span><span style=display:flex><span>mise use -g python@3.12.0
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 安装 Python 3.11</span>
+</span></span><span style=display:flex><span>mise use -g python@3.11
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 在项目中设置版本</span>
+</span></span><span style=display:flex><span>mise use python@3.12
+</span></span></code></pre></div><h4 id=管理虚拟环境>管理虚拟环境</h4><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-bash data-lang=bash><span style=display:flex><span><span style=color:#75715e># 创建虚拟环境</span>
+</span></span><span style=display:flex><span>python -m venv .venv
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 激活虚拟环境</span>
+</span></span><span style=display:flex><span>source .venv/bin/activate  <span style=color:#75715e># Linux/macOS</span>
+</span></span><span style=display:flex><span>.venv<span style=color:#ae81ff>\S</span>cripts<span style=color:#ae81ff>\a</span>ctivate     <span style=color:#75715e># Windows</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 退出虚拟环境</span>
+</span></span><span style=display:flex><span>deactivate
+</span></span></code></pre></div><h4 id=配合-pip-使用>配合 pip 使用</h4><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-bash data-lang=bash><span style=display:flex><span><span style=color:#75715e># 升级 pip</span>
+</span></span><span style=display:flex><span>pip install --upgrade pip
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 安装包</span>
+</span></span><span style=display:flex><span>pip install requests
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 导出依赖</span>
+</span></span><span style=display:flex><span>pip freeze &gt; requirements.txt
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 从 requirements.txt 安装</span>
+</span></span><span style=display:flex><span>pip install -r requirements.txt
+</span></span></code></pre></div><h4 id=项目配置示例-1>项目配置示例</h4><p><code>.tool-versions</code>：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-toml data-lang=toml><span style=display:flex><span><span style=color:#a6e22e>python</span> <span style=color:#ae81ff>3.12</span>.<span style=color:#ae81ff>0</span>
+</span></span></code></pre></div><p><code>.mise.toml</code>：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-toml data-lang=toml><span style=display:flex><span>[<span style=color:#a6e22e>tools</span>]
+</span></span><span style=display:flex><span><span style=color:#a6e22e>python</span> = <span style=color:#e6db74>&#34;3.12.0&#34;</span>
+</span></span></code></pre></div><hr><h3 id=go>Go</h3><h4 id=安装-go>安装 Go</h4><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-bash data-lang=bash><span style=display:flex><span><span style=color:#75715e># 安装最新版本</span>
+</span></span><span style=display:flex><span>mise use -g go@latest
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 安装特定版本</span>
+</span></span><span style=display:flex><span>mise use -g go@1.22.0
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 安装 Go 1.21</span>
+</span></span><span style=display:flex><span>mise use -g go@1.21
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 在项目中设置版本</span>
+</span></span><span style=display:flex><span>mise use go@1.22
+</span></span></code></pre></div><h4 id=配置-go-环境>配置 Go 环境</h4><p>mise 会自动设置 <code>GOPATH</code> 和 <code>GOROOT</code> 环境变量：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-bash data-lang=bash><span style=display:flex><span><span style=color:#75715e># 查看 Go 环境信息</span>
+</span></span><span style=display:flex><span>go env
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 查看当前 Go 版本</span>
+</span></span><span style=display:flex><span>go version
+</span></span></code></pre></div><h4 id=go-module-使用>Go Module 使用</h4><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-bash data-lang=bash><span style=display:flex><span><span style=color:#75715e># 初始化模块</span>
+</span></span><span style=display:flex><span>go mod init example.com/myproject
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 添加依赖</span>
+</span></span><span style=display:flex><span>go get github.com/gin-gonic/gin
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 下载依赖</span>
+</span></span><span style=display:flex><span>go mod download
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 整理依赖</span>
+</span></span><span style=display:flex><span>go mod tidy
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 构建项目</span>
+</span></span><span style=display:flex><span>go build
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 运行项目</span>
+</span></span><span style=display:flex><span>go run main.go
+</span></span></code></pre></div><h4 id=项目配置示例-2>项目配置示例</h4><p><code>.tool-versions</code>：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-toml data-lang=toml><span style=display:flex><span><span style=color:#a6e22e>go</span> <span style=color:#ae81ff>1.22</span>.<span style=color:#ae81ff>0</span>
+</span></span></code></pre></div><p><code>.mise.toml</code>：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-toml data-lang=toml><span style=display:flex><span>[<span style=color:#a6e22e>tools</span>]
+</span></span><span style=display:flex><span><span style=color:#a6e22e>go</span> = <span style=color:#e6db74>&#34;1.22.0&#34;</span>
+</span></span></code></pre></div><hr><h2 id=高级配置>高级配置</h2><h3 id=misetoml-配置文件>.mise.toml 配置文件</h3><p>在项目根目录创建 <code>.mise.toml</code> 文件进行更详细的配置：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-toml data-lang=toml><span style=display:flex><span>[<span style=color:#a6e22e>tools</span>]
+</span></span><span style=display:flex><span><span style=color:#75715e># 指定版本</span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>node</span> = <span style=color:#e6db74>&#34;20.11.0&#34;</span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>python</span> = <span style=color:#e6db74>&#34;3.12.0&#34;</span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>go</span> = <span style=color:#e6db74>&#34;1.22.0&#34;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 使用最新版本</span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>node</span> = <span style=color:#e6db74>&#34;latest&#34;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 使用前缀匹配</span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>python</span> = <span style=color:#e6db74>&#34;3.12&#34;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>[<span style=color:#a6e22e>env</span>]
+</span></span><span style=display:flex><span><span style=color:#75715e># 设置环境变量</span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>NODE_ENV</span> = <span style=color:#e6db74>&#34;development&#34;</span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>PYTHONPATH</span> = <span style=color:#e6db74>&#34;./src&#34;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>[<span style=color:#a6e22e>alias</span>]
+</span></span><span style=display:flex><span><span style=color:#75715e># 创建版本别名</span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>node18</span> = <span style=color:#e6db74>&#34;node@18&#34;</span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>node20</span> = <span style=color:#e6db74>&#34;node@20&#34;</span>
+</span></span></code></pre></div><h3 id=任务系统>任务系统</h3><p>mise 内置任务系统，可以定义和运行任务：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-toml data-lang=toml><span style=display:flex><span>[<span style=color:#a6e22e>tasks</span>.<span style=color:#a6e22e>build</span>]
+</span></span><span style=display:flex><span><span style=color:#a6e22e>run</span> = <span style=color:#e6db74>&#34;npm run build&#34;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>[<span style=color:#a6e22e>tasks</span>.<span style=color:#a6e22e>test</span>]
+</span></span><span style=display:flex><span><span style=color:#a6e22e>run</span> = <span style=color:#e6db74>&#34;npm test&#34;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>[<span style=color:#a6e22e>tasks</span>.<span style=color:#a6e22e>lint</span>]
+</span></span><span style=display:flex><span><span style=color:#a6e22e>run</span> = <span style=color:#e6db74>&#34;eslint src/&#34;</span>
+</span></span></code></pre></div><p>运行任务：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-bash data-lang=bash><span style=display:flex><span><span style=color:#75715e># 列出所有任务</span>
+</span></span><span style=display:flex><span>mise tasks
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 运行任务</span>
+</span></span><span style=display:flex><span>mise run build
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 并行运行多个任务</span>
+</span></span><span style=display:flex><span>mise run build test
+</span></span></code></pre></div><hr><h2 id=实用技巧>实用技巧</h2><h3 id=查看某个版本的安装路径>查看某个版本的安装路径</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-bash data-lang=bash><span style=display:flex><span>mise where node@20
+</span></span><span style=display:flex><span>mise where python@3.12
+</span></span></code></pre></div><h3 id=临时使用某个版本>临时使用某个版本</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-bash data-lang=bash><span style=display:flex><span>mise exec node@18 -- npm install
+</span></span><span style=display:flex><span>mise exec python@3.11 -- python script.py
+</span></span></code></pre></div><h3 id=自动切换版本>自动切换版本</h3><p>mise 会在进入目录时自动读取并切换到 <code>.tool-versions</code> 或 <code>.mise.toml</code> 中定义的版本。</p><h3 id=清理缓存>清理缓存</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-bash data-lang=bash><span style=display:flex><span>mise cache clear
+</span></span></code></pre></div><h3 id=更新-mise>更新 mise</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-bash data-lang=bash><span style=display:flex><span>mise self-update
+</span></span></code></pre></div><hr><h2 id=常见问题>常见问题</h2><h3 id=q-mise-和-asdf-有什么区别>Q: mise 和 asdf 有什么区别？</h3><p>A: mise 是用 Rust 编写的，性能更好，启动更快。它兼容 asdf 的插件系统，可以作为 asdf 的替代品。</p><h3 id=q-如何在项目中固定版本>Q: 如何在项目中固定版本？</h3><p>A: 在项目根目录创建 <code>.tool-versions</code> 或 <code>.mise.toml</code> 文件，团队成员会自动使用相同的版本。</p><h3 id=q-忘记安装某个版本怎么办>Q: 忘记安装某个版本怎么办？</h3><p>A: mise 会在你切换到某个版本时自动下载安装，无需手动预装。</p><h3 id=q-如何查看所有可用的工具和版本>Q: 如何查看所有可用的工具和版本？</h3><p>A: 使用 <code>mise ls-remote</code> 查看所有可用的运行时，<code>mise ls-remote node</code> 查看特定语言的版本。</p><h3 id=q-本地已安装了-npm-全局包如何迁移到-mise>Q: 本地已安装了 npm 全局包，如何迁移到 mise？</h3><p>A: 这是一个常见问题。本地系统安装的 npm 全局包不会自动出现在 mise 管理的 Node.js 中。完整的迁移步骤如下：</p><h4 id=迁移全局包清单>迁移全局包清单</h4><p><strong>第 1 步：导出当前全局包列表</strong></p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-bash data-lang=bash><span style=display:flex><span>npm list -g --depth<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span> &gt; ~/Desktop/npm-global-packages.txt
+</span></span></code></pre></div><p><strong>第 2 步：提取可安装的包名</strong></p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-bash data-lang=bash><span style=display:flex><span>npm list -g --depth<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span> --json | jq -r <span style=color:#e6db74>&#39;.dependencies | keys[]&#39;</span> &gt; ~/Desktop/packages-to-install.txt
+</span></span></code></pre></div><p><strong>第 3 步：切换到 mise 管理的 Node.js</strong></p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-bash data-lang=bash><span style=display:flex><span><span style=color:#75715e># 设置全局 Node 版为你原来的版本（比如 18）</span>
+</span></span><span style=display:flex><span>mise use -g node@18
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 验证切换成功</span>
+</span></span><span style=display:flex><span>node --version
+</span></span><span style=display:flex><span>npm --version
+</span></span></code></pre></div><p><strong>第 4 步：重新安装所有全局包</strong></p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-bash data-lang=bash><span style=display:flex><span><span style=color:#75715e># 方式 1：逐个安装（推荐，能看到进度）</span>
+</span></span><span style=display:flex><span>cat ~/Desktop/packages-to-install.txt | xargs npm install -g
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 方式 2：一次性安装</span>
+</span></span><span style=display:flex><span>npm install -g <span style=color:#66d9ef>$(</span>cat ~/Desktop/packages-to-install.txt<span style=color:#66d9ef>)</span>
+</span></span></code></pre></div><p><strong>第 5 步：验证安装</strong></p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-bash data-lang=bash><span style=display:flex><span>npm list -g --depth<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 验证关键包是否工作</span>
+</span></span><span style=display:flex><span>yarn --version
+</span></span><span style=display:flex><span>pm2 --version
+</span></span></code></pre></div><h4 id=可能遇到的问题及解决方案>可能遇到的问题及解决方案</h4><table><thead><tr><th>问题</th><th>解决方案</th></tr></thead><tbody><tr><td>某些包安装失败</td><td>检查该包是否需要特定的 Node 版本或系统依赖</td></tr><tr><td>权限错误（EACCES）</td><td>通常 mise 安装的 npm 不会有权限问题，但如果有，用 <code>npm config set prefix ~/.npm-global</code></td></tr><tr><td>包版本不一致</td><td>如果需要特定版本，编辑 <code>packages-to-install.txt</code>，改为 <code>package@version</code> 格式</td></tr><tr><td>jq 命令未安装</td><td>macOS: <code>brew install jq</code>；Linux: <code>sudo apt install jq</code>；Windows: 从 <a href=https://stedolan.github.io/jq/>https://stedolan.github.io/jq/</a> 下载</td></tr></tbody></table><h4 id=完整自动化脚本>完整自动化脚本</h4><p>如果你想要一步到位，可以创建迁移脚本：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-bash data-lang=bash><span style=display:flex><span><span style=color:#75715e>#!/bin/bash
+</span></span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 1. 导出包列表</span>
+</span></span><span style=display:flex><span>echo <span style=color:#e6db74>&#34;导出当前全局包...&#34;</span>
+</span></span><span style=display:flex><span>npm list -g --depth<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span> --json | jq -r <span style=color:#e6db74>&#39;.dependencies | keys[]&#39;</span> &gt; /tmp/npm-packages.txt
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 2. 切换到 mise 管理的 Node</span>
+</span></span><span style=display:flex><span>echo <span style=color:#e6db74>&#34;切换到 mise Node...&#34;</span>
+</span></span><span style=display:flex><span>mise use -g node@18  <span style=color:#75715e># 改成你需要的版本</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 3. 重新安装</span>
+</span></span><span style=display:flex><span>echo <span style=color:#e6db74>&#34;重新安装全局包（可能需要几分钟）...&#34;</span>
+</span></span><span style=display:flex><span>cat /tmp/npm-packages.txt | xargs npm install -g
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 4. 验证</span>
+</span></span><span style=display:flex><span>echo <span style=color:#e6db74>&#34;验证安装...&#34;</span>
+</span></span><span style=display:flex><span>npm list -g --depth<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span> | head -20
+</span></span><span style=display:flex><span>echo <span style=color:#e6db74>&#34;迁移完成！&#34;</span>
+</span></span></code></pre></div><h4 id=清理旧的系统-npm可选>清理旧的系统 npm（可选）</h4><p>迁移成功后，如果想完全统一到 mise 管理，可以卸载系统 Node.js：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-bash data-lang=bash><span style=display:flex><span><span style=color:#75715e># macOS</span>
+</span></span><span style=display:flex><span>brew uninstall node
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># Linux (apt)</span>
+</span></span><span style=display:flex><span>sudo apt remove nodejs npm
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># Windows</span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 使用控制面板或 scoop uninstall nodejs</span>
+</span></span></code></pre></div><p>这样可以避免版本混乱的问题。</p><hr><h2 id=参考资源>参考资源</h2><ul><li><a href=https://mise.jdx.dev/>mise 官方文档</a></li><li><a href=https://github.com/jdx/mise>mise GitHub 仓库</a></li><li><a href=https://mise.jdx.dev/langs.html>支持的运行时列表</a></li><li><a href=https://tech.gjlmotea.com/2024/12/windowsmisepython-python.html title="Windows 用mise管理python版本">Windows 用mise管理python版本</a></li></ul></div></article></main></div><aside class=sidebar><div class="widget-categories widget"><h4 class=widget__title>分类</h4><div class=widget__content><ul class=widget__list><li class=widget__item><a class=widget__link href=/choudalao.github.io/categories/ai/>AI</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/categories/go/>Go</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/categories/linux/>Linux</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/categories/mysql/>MYSQL</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/categories/php/>Php</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/categories/python/>Python</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/categories/%E4%B8%AA%E4%BA%BA/>个人</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/categories/%E5%85%B6%E4%BB%96/>其他</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/categories/%E5%89%8D%E7%AB%AF/>前端</a></li></ul></div></div><div class="widget-recent widget"><h4 class=widget__title>近期文章</h4><div class=widget__content><ul class=widget__list><li class=widget__item><a class=widget__link href=/choudalao.github.io/posts/2025-04-19-cline%E4%B8%AD%E4%BD%BF%E7%94%A8-mysql-mcp-%E6%9C%8D%E5%8A%A1/>Cline中使用 MySql MCP 服务</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/posts/2020-09-03-%E5%9F%BA%E4%BA%8Elaravel%E5%8F%8Alayui%E5%BC%80%E5%8F%91%E7%9A%84%E5%90%8E%E5%8F%B0%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F-laravel-wjfcms/>基于laravel及layui开发的后台管理系统 -- laravel-wjfcms</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/posts/2020-06-02-%E8%85%BE%E8%AE%AF%E4%BA%91%E4%BA%A7%E5%93%81%E5%A4%A7%E4%BF%83/>腾讯云产品大促</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/posts/2019-09-21-git%E6%93%8D%E4%BD%9C/>Git操作</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/posts/2026-01-29-openclaw-%E5%AE%89%E8%A3%85%E5%8F%8A%E4%BD%BF%E7%94%A8/>openclaw 安装及使用</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/posts/2026-01-28-mise-%E5%AE%89%E8%A3%85%E5%8F%8A%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/>mise 安装及使用指南</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/posts/2026-01-26-%E7%94%A8-obsidian-%E6%89%93%E9%80%A0ai%E7%AC%94%E8%AE%B0/>用 Obsidian 打造AI笔记</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/posts/2026-01-22-claude-%E5%AE%98%E6%96%B9-skill-creator-%E4%BB%8B%E7%BB%8D%E5%8F%8A%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/>Claude 官方 Skill-Creator 介绍及使用指南</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/posts/2026-01-22-%E9%80%9A%E8%BF%87qq%E9%82%AE%E7%AE%B1%E4%BB%A3%E6%94%B6gmail%E9%82%AE%E4%BB%B6/>通过QQ邮箱代收Gmail邮件</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/posts/2026-01-19-%E8%A7%A3%E5%86%B3-wsl2-windows-hosts-%E5%BC%80%E5%90%AF-vpn-%E5%90%8E%E6%97%A0%E6%B3%95%E8%AE%BF%E9%97%AE%E6%9C%AC%E5%9C%B0-web-%E6%9C%8D%E5%8A%A1%E7%9A%84%E9%97%AE%E9%A2%98/>解决 WSL2 + Windows Hosts + 开启 VPN 后无法访问本地 Web 服务的问题</a></li></ul></div></div><div class="widget-taglist widget"><h4 class=widget__title>标签</h4><div class=widget__content><a class="widget-taglist__link widget__link btn" href=/choudalao.github.io/tags/php/ title=Php>Php</a>
+<a class="widget-taglist__link widget__link btn" href=/choudalao.github.io/tags/%E5%85%B3%E4%BA%8E/ title=关于>关于</a></div></div></aside></div><footer class=footer><div class="container footer__container flex"><div class=footer__copyright>&copy; 2026 臭大佬博客.
+<span class=footer__copyright-credits>基于 <a href=https://gohugo.io/ rel="nofollow noopener" target=_blank>Hugo</a> 引擎和 <a href=https://github.com/Vimux/Mainroad/ rel="nofollow noopener" target=_blank>Mainroad</a> 主题</span></div></div></footer></div><script async defer src=/choudalao.github.io/js/menu.js></script></body></html>

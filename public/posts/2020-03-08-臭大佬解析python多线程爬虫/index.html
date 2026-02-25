@@ -1,0 +1,95 @@
+<!doctype html><html class=no-js lang=en><head><meta charset=UTF-8><meta name=viewport content="width=device-width,initial-scale=1"><title>臭大佬解析Python多线程爬虫 - 臭大佬博客</title><script>(function(e,t){e[t]=e[t].replace("no-js","js")})(document.documentElement,"className")</script><meta name=description content="多线程爬虫"><link rel=preconnect href=https://fonts.gstatic.com crossorigin><link rel=dns-prefetch href=//fonts.googleapis.com><link rel=dns-prefetch href=//fonts.gstatic.com><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700"><link rel=stylesheet href=/choudalao.github.io/css/style.css><link rel="shortcut icon" href=/choudalao.github.io/favicon.ico></head><body class=body><div class="container container--outer"><header class=header><div class="container header__container"><div class=logo><a class=logo__link href=/choudalao.github.io/ title=臭大佬博客 rel=home><div class="logo__item logo__text"><div class=logo__title>臭大佬博客</div></div></a></div><nav class=menu><button class=menu__btn aria-haspopup=true aria-expanded=false tabindex=0>
+<span class=menu__btn-title tabindex=-1>菜单</span></button><ul class=menu__list><li class=menu__item><a class=menu__link href=/choudalao.github.io/><span class=menu__text>首页</span></a></li><li class=menu__item><a class=menu__link href=/choudalao.github.io/categories/><span class=menu__text>分类</span></a></li><li class=menu__item><a class=menu__link href=/choudalao.github.io/tags/><span class=menu__text>标签</span></a></li><li class=menu__item><a class=menu__link href=/choudalao.github.io/posts/><span class=menu__text>归档</span></a></li><li class=menu__item><a class=menu__link href=/choudalao.github.io/about/><span class=menu__text>关于</span></a></li></ul></nav></div></header><div class="wrapper flex"><div class=primary><main class=main role=main><article class=post><header class=post__header><h1 class=post__title>臭大佬解析Python多线程爬虫</h1></header><div class="content post__content clearfix"><h1 id=测试>测试</h1><p>这里拿一个qj的cdn做测试，我们访问 20 次，获得 20 次文件，然后保存在本地。</p><h3 id=普通爬虫>普通爬虫</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-python data-lang=python><span style=display:flex><span><span style=color:#75715e># coding:utf-8</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>import</span> urllib.request
+</span></span><span style=display:flex><span><span style=color:#f92672>import</span> time
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 文本下载函数</span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>def</span> <span style=color:#a6e22e>downloadImage</span>(url, filename):
+</span></span><span style=display:flex><span>    print(<span style=color:#e6db74>&#34;从</span><span style=color:#e6db74>{}</span><span style=color:#e6db74>下载文本……&#34;</span><span style=color:#f92672>.</span>format(url))
+</span></span><span style=display:flex><span>    urllib<span style=color:#f92672>.</span>request<span style=color:#f92672>.</span>urlretrieve(url, filename)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 主函数</span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>def</span> <span style=color:#a6e22e>main</span>():
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>for</span> i <span style=color:#f92672>in</span> range(<span style=color:#ae81ff>20</span>):
+</span></span><span style=display:flex><span>        textName <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;tmp/</span><span style=color:#e6db74>{}</span><span style=color:#e6db74>.jquery.min.js&#34;</span><span style=color:#f92672>.</span>format(i)
+</span></span><span style=display:flex><span>        downloadImage(<span style=color:#e6db74>&#34;https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js&#34;</span>, textName)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>if</span> __name__ <span style=color:#f92672>==</span> <span style=color:#e6db74>&#39;__main__&#39;</span>:
+</span></span><span style=display:flex><span>    t0 <span style=color:#f92672>=</span> time<span style=color:#f92672>.</span>time()
+</span></span><span style=display:flex><span>    main()
+</span></span><span style=display:flex><span>    t1 <span style=color:#f92672>=</span> time<span style=color:#f92672>.</span>time()
+</span></span><span style=display:flex><span>    totaltime <span style=color:#f92672>=</span> t1 <span style=color:#f92672>-</span> t0
+</span></span><span style=display:flex><span>    print(<span style=color:#e6db74>&#34;耗时：&#34;</span>, totaltime)
+</span></span></code></pre></div><p><img src=https://www.choudalao.com/uploads/20200308/20200308154726PBmuhn.png alt>
+我们引入了模块 urllib.request，然后创建了一个函数downloadImage()用于下载文件，创建了一个函数 main()用于对下载函数进行遍历 20 次。耗时 4 秒多。</p><h3 id=多线程>多线程</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-python data-lang=python><span style=display:flex><span><span style=color:#75715e># coding:utf-8</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>import</span> threading
+</span></span><span style=display:flex><span><span style=color:#f92672>import</span> urllib.request
+</span></span><span style=display:flex><span><span style=color:#f92672>import</span> time
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>def</span> <span style=color:#a6e22e>downloadImage</span>(url, filename):
+</span></span><span style=display:flex><span>    print(<span style=color:#e6db74>&#34;从</span><span style=color:#e6db74>{}</span><span style=color:#e6db74>下载文本……&#34;</span><span style=color:#f92672>.</span>format(url))
+</span></span><span style=display:flex><span>    urllib<span style=color:#f92672>.</span>request<span style=color:#f92672>.</span>urlretrieve(url, filename)
+</span></span><span style=display:flex><span>    print(<span style=color:#e6db74>&#34;完成下载&#34;</span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>def</span> <span style=color:#a6e22e>executeThread</span>(i):
+</span></span><span style=display:flex><span>    textName <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;tmp/</span><span style=color:#e6db74>{}</span><span style=color:#e6db74>.jquery.min.js&#34;</span><span style=color:#f92672>.</span>format(i)
+</span></span><span style=display:flex><span>    downloadImage(<span style=color:#e6db74>&#34;https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js&#34;</span>, textName)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>def</span> <span style=color:#a6e22e>main</span>():
+</span></span><span style=display:flex><span>    threads <span style=color:#f92672>=</span> []
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>for</span> i <span style=color:#f92672>in</span> range(<span style=color:#ae81ff>20</span>):
+</span></span><span style=display:flex><span>        thread <span style=color:#f92672>=</span> threading<span style=color:#f92672>.</span>Thread(target<span style=color:#f92672>=</span>executeThread, args<span style=color:#f92672>=</span>(i,))
+</span></span><span style=display:flex><span>        threads<span style=color:#f92672>.</span>append(thread)
+</span></span><span style=display:flex><span>        thread<span style=color:#f92672>.</span>start()
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>for</span> i <span style=color:#f92672>in</span> threads:
+</span></span><span style=display:flex><span>        i<span style=color:#f92672>.</span>join()
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>if</span> __name__ <span style=color:#f92672>==</span> <span style=color:#e6db74>&#39;__main__&#39;</span>:
+</span></span><span style=display:flex><span>    t0 <span style=color:#f92672>=</span> time<span style=color:#f92672>.</span>time()
+</span></span><span style=display:flex><span>    main()
+</span></span><span style=display:flex><span>    t1 <span style=color:#f92672>=</span> time<span style=color:#f92672>.</span>time()
+</span></span><span style=display:flex><span>    total <span style=color:#f92672>=</span> t1 <span style=color:#f92672>-</span> t0
+</span></span><span style=display:flex><span>    print(<span style=color:#e6db74>&#34;消耗时间:</span><span style=color:#e6db74>{}</span><span style=color:#e6db74>&#34;</span><span style=color:#f92672>.</span>format(total))
+</span></span></code></pre></div><p><img src=https://www.choudalao.com/uploads/20200308/20200308155323KqQ8jT.png alt>
+程序的前部分大同小异，后面我们创建了一个 threads 列表，，然后遍历 20 次，创建一个新的线程对象，将其添加到 threads 列表中，然后启动该线程。
+最后，我们通过遍历我们的 threads 列表来调用我们的线程，然后调用 join()方法在每个线程上，这确保我们在下载完文件之前，不会执行剩下的代码。
+运行代码，可以发现程序几乎同时启动了 20 个下载任务，然后在图片下载完成后，再打印出来。耗时 1 秒，效率提高很多</p><h1 id=多线程爬取臭大佬文章>多线程爬取臭大佬文章</h1><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-python data-lang=python><span style=display:flex><span><span style=color:#75715e># coding:utf-8</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>import</span> requests
+</span></span><span style=display:flex><span><span style=color:#f92672>from</span> bs4 <span style=color:#f92672>import</span> BeautifulSoup
+</span></span><span style=display:flex><span><span style=color:#f92672>from</span> multiprocessing <span style=color:#f92672>import</span> Pool
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>def</span> <span style=color:#a6e22e>get_news</span>(page):
+</span></span><span style=display:flex><span>    url <span style=color:#f92672>=</span> <span style=color:#e6db74>&#39;https://www.choudalao.com/?page=&#39;</span><span style=color:#f92672>+</span>str(page)
+</span></span><span style=display:flex><span>    wbdata <span style=color:#f92672>=</span> requests<span style=color:#f92672>.</span>get(url)<span style=color:#f92672>.</span>text
+</span></span><span style=display:flex><span>    soup <span style=color:#f92672>=</span> BeautifulSoup(wbdata, <span style=color:#e6db74>&#39;lxml&#39;</span>)
+</span></span><span style=display:flex><span>    news_titles <span style=color:#f92672>=</span> soup<span style=color:#f92672>.</span>select(<span style=color:#e6db74>&#34;#body_app &gt; article &gt; div.blogs &gt; ul &gt; li &gt; h3 &gt; a&#34;</span>)
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>if</span> news_titles:
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>for</span> n <span style=color:#f92672>in</span> news_titles:
+</span></span><span style=display:flex><span>            <span style=color:#75715e># 提取出标题和连接信息</span>
+</span></span><span style=display:flex><span>            title <span style=color:#f92672>=</span> n<span style=color:#f92672>.</span>get_text()
+</span></span><span style=display:flex><span>            link <span style=color:#f92672>=</span> n<span style=color:#f92672>.</span>get(<span style=color:#e6db74>&#34;href&#34;</span>)
+</span></span><span style=display:flex><span>            <span style=color:#75715e># 将提取出来的信息拼接为一个字典</span>
+</span></span><span style=display:flex><span>            data <span style=color:#f92672>=</span> {
+</span></span><span style=display:flex><span>                <span style=color:#e6db74>&#39;标题&#39;</span>: title,
+</span></span><span style=display:flex><span>                <span style=color:#e6db74>&#39;链接&#39;</span>: link
+</span></span><span style=display:flex><span>            }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>            print(data)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>if</span> __name__ <span style=color:#f92672>==</span> <span style=color:#e6db74>&#39;__main__&#39;</span>:
+</span></span><span style=display:flex><span>    pool <span style=color:#f92672>=</span> Pool()
+</span></span><span style=display:flex><span>    <span style=color:#75715e># 假设我们只爬取9页</span>
+</span></span><span style=display:flex><span>    pool<span style=color:#f92672>.</span>map_async(get_news,range(<span style=color:#ae81ff>1</span>,<span style=color:#ae81ff>9</span>))
+</span></span><span style=display:flex><span>    pool<span style=color:#f92672>.</span>close()
+</span></span><span style=display:flex><span>    pool<span style=color:#f92672>.</span>join()
+</span></span></code></pre></div><p><img src=https://www.choudalao.com/uploads/20200308/20200308173721LzXeIp.png alt></p></div></article></main></div><aside class=sidebar><div class="widget-categories widget"><h4 class=widget__title>分类</h4><div class=widget__content><ul class=widget__list><li class=widget__item><a class=widget__link href=/choudalao.github.io/categories/ai/>AI</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/categories/go/>Go</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/categories/linux/>Linux</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/categories/mysql/>MYSQL</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/categories/php/>Php</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/categories/python/>Python</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/categories/%E4%B8%AA%E4%BA%BA/>个人</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/categories/%E5%85%B6%E4%BB%96/>其他</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/categories/%E5%89%8D%E7%AB%AF/>前端</a></li></ul></div></div><div class="widget-recent widget"><h4 class=widget__title>近期文章</h4><div class=widget__content><ul class=widget__list><li class=widget__item><a class=widget__link href=/choudalao.github.io/posts/2025-04-19-cline%E4%B8%AD%E4%BD%BF%E7%94%A8-mysql-mcp-%E6%9C%8D%E5%8A%A1/>Cline中使用 MySql MCP 服务</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/posts/2020-09-03-%E5%9F%BA%E4%BA%8Elaravel%E5%8F%8Alayui%E5%BC%80%E5%8F%91%E7%9A%84%E5%90%8E%E5%8F%B0%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F-laravel-wjfcms/>基于laravel及layui开发的后台管理系统 -- laravel-wjfcms</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/posts/2020-06-02-%E8%85%BE%E8%AE%AF%E4%BA%91%E4%BA%A7%E5%93%81%E5%A4%A7%E4%BF%83/>腾讯云产品大促</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/posts/2019-09-21-git%E6%93%8D%E4%BD%9C/>Git操作</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/posts/2026-01-29-openclaw-%E5%AE%89%E8%A3%85%E5%8F%8A%E4%BD%BF%E7%94%A8/>openclaw 安装及使用</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/posts/2026-01-28-mise-%E5%AE%89%E8%A3%85%E5%8F%8A%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/>mise 安装及使用指南</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/posts/2026-01-26-%E7%94%A8-obsidian-%E6%89%93%E9%80%A0ai%E7%AC%94%E8%AE%B0/>用 Obsidian 打造AI笔记</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/posts/2026-01-22-claude-%E5%AE%98%E6%96%B9-skill-creator-%E4%BB%8B%E7%BB%8D%E5%8F%8A%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/>Claude 官方 Skill-Creator 介绍及使用指南</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/posts/2026-01-22-%E9%80%9A%E8%BF%87qq%E9%82%AE%E7%AE%B1%E4%BB%A3%E6%94%B6gmail%E9%82%AE%E4%BB%B6/>通过QQ邮箱代收Gmail邮件</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/posts/2026-01-19-%E8%A7%A3%E5%86%B3-wsl2-windows-hosts-%E5%BC%80%E5%90%AF-vpn-%E5%90%8E%E6%97%A0%E6%B3%95%E8%AE%BF%E9%97%AE%E6%9C%AC%E5%9C%B0-web-%E6%9C%8D%E5%8A%A1%E7%9A%84%E9%97%AE%E9%A2%98/>解决 WSL2 + Windows Hosts + 开启 VPN 后无法访问本地 Web 服务的问题</a></li></ul></div></div><div class="widget-taglist widget"><h4 class=widget__title>标签</h4><div class=widget__content><a class="widget-taglist__link widget__link btn" href=/choudalao.github.io/tags/php/ title=Php>Php</a>
+<a class="widget-taglist__link widget__link btn" href=/choudalao.github.io/tags/%E5%85%B3%E4%BA%8E/ title=关于>关于</a></div></div></aside></div><footer class=footer><div class="container footer__container flex"><div class=footer__copyright>&copy; 2026 臭大佬博客.
+<span class=footer__copyright-credits>基于 <a href=https://gohugo.io/ rel="nofollow noopener" target=_blank>Hugo</a> 引擎和 <a href=https://github.com/Vimux/Mainroad/ rel="nofollow noopener" target=_blank>Mainroad</a> 主题</span></div></div></footer></div><script async defer src=/choudalao.github.io/js/menu.js></script></body></html>

@@ -1,0 +1,185 @@
+<!doctype html><html class=no-js lang=en><head><meta charset=UTF-8><meta name=viewport content="width=device-width,initial-scale=1"><title>Python - 臭大佬博客</title><script>(function(e,t){e[t]=e[t].replace("no-js","js")})(document.documentElement,"className")</script><meta name=description content><link rel=preconnect href=https://fonts.gstatic.com crossorigin><link rel=dns-prefetch href=//fonts.googleapis.com><link rel=dns-prefetch href=//fonts.gstatic.com><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700"><link rel=stylesheet href=/choudalao.github.io/css/style.css><link rel=alternate type=application/rss+xml href=/choudalao.github.io/categories/python/index.xml title=臭大佬博客><link rel="shortcut icon" href=/choudalao.github.io/favicon.ico></head><body class=body><div class="container container--outer"><header class=header><div class="container header__container"><div class=logo><a class=logo__link href=/choudalao.github.io/ title=臭大佬博客 rel=home><div class="logo__item logo__text"><div class=logo__title>臭大佬博客</div></div></a></div><nav class=menu><button class=menu__btn aria-haspopup=true aria-expanded=false tabindex=0>
+<span class=menu__btn-title tabindex=-1>菜单</span></button><ul class=menu__list><li class=menu__item><a class=menu__link href=/choudalao.github.io/><span class=menu__text>首页</span></a></li><li class=menu__item><a class=menu__link href=/choudalao.github.io/categories/><span class=menu__text>分类</span></a></li><li class=menu__item><a class=menu__link href=/choudalao.github.io/tags/><span class=menu__text>标签</span></a></li><li class=menu__item><a class=menu__link href=/choudalao.github.io/posts/><span class=menu__text>归档</span></a></li><li class=menu__item><a class=menu__link href=/choudalao.github.io/about/><span class=menu__text>关于</span></a></li></ul></nav></div></header><div class="wrapper flex"><div class=primary><main class="main list" role=main><header class=main__header><h1 class=main__title>Python</h1></header><article class="list__item post"><header class=list__header><h2 class="list__title post__title"><a href=/choudalao.github.io/posts/2020-03-16-%E4%BD%BF%E7%94%A8%E6%96%87%E4%BB%B6%E5%AD%98%E5%82%A8%E6%95%B0%E6%8D%AE-%E8%87%AD%E5%A4%A7%E4%BD%AC/ rel=bookmark>使用文件存储数据 | 臭大佬</a></h2></header><div class="content list__excerpt post__content clearfix"><h1 id=创建一个空文件>创建一个空文件：</h1><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-python data-lang=python><span style=display:flex><span><span style=color:#f92672>import</span> os
+</span></span><span style=display:flex><span>os<span style=color:#f92672>.</span>mknod(<span style=color:#e6db74>&#34;test.txt&#34;</span>)
+</span></span></code></pre></div><h1 id=打开一个文件>打开一个文件：</h1><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-python data-lang=python><span style=display:flex><span>file <span style=color:#f92672>=</span> open(<span style=color:#e6db74>&#39;test.txt&#39;</span>)
+</span></span></code></pre></div><h3 id=关于-open函数对文件的打开模式>关于 open()函数对文件的打开模式：</h3><ul><li>w：以写方式打开</li><li>a：以追加模式打开 (从 EOF 开始, 必要时创建新文件)</li><li>r+：以读写模式打开</li><li>w+：以读写模式打开</li><li>a+：以读写模式打开</li><li>rb：以二进制读模式打开</li><li>wb：以二进制写模式打开</li><li>ab：以二进制追加模式打开</li><li>rb+：以二进制读写模式打开</li><li>wb+：以二进制读写模式打开</li><li>ab+：以二进制读写模式打开</li></ul><h3 id=读取文件内容>读取文件内容</h3><ul><li>file.read([size])：size 为读取的长度，以 byte 为单位</li><li>file.readline([size]) ：读一行，如果定义了 size，有可能返回的只是一行的一部分</li><li>file.readlines([size]) ：把文件每一行作为一个 list 的一个成员，并返回这个 list。其实它的内部是通过循环调用 readline()来实现的。如果提供 size 参数，表示读取内容的总长，也就是说可能只读到文件的一部分。</li></ul><h3 id=写入文件>写入文件</h3><ul><li>file.write(str) ：把 str 写到文件中，write()并不会在 str 后加上一个换行符</li><li>file.writelines(seq)：把 seq 的内容全部写到文件中(多行一次性写入)，既接受一个字符串，</li><li>也接受一个字符串序列。</li></ul><h3 id=关闭文件>关闭文件</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-python data-lang=python><span style=display:flex><span>file<span style=color:#f92672>.</span>close()
+</span></span></code></pre></div><p>除了使用 close()方法对文件进行显示的关闭。我们还能够借助 Python 提供的资源访问控制功能
+with…as 实现文件的打开和关闭：</p></div></article><article class="list__item post"><header class=list__header><h2 class="list__title post__title"><a href=/choudalao.github.io/posts/2020-03-11-%E8%87%AD%E5%A4%A7%E4%BD%AC%E6%95%99%E4%BD%A0%E4%BD%BF%E7%94%A8-selenium-%E6%A8%A1%E6%8B%9F%E6%B5%8F%E8%A7%88%E5%99%A8%E6%93%8D%E4%BD%9C/ rel=bookmark>臭大佬教你使用 Selenium 模拟浏览器操作</a></h2></header><div class="content list__excerpt post__content clearfix"><h1 id=前提>前提</h1><p>除了在网页中使用接口外，还有的网站会在页面中使用大量的 Javascript 函数进行页面的各种交互和数据生成。这样的网站或者数据，我们在浏览器控制的“Network”选项卡中是找不到相关的接口的。那么该怎么办呢？
+我们可以使用一个 Web 的自动化测试工具——Selenium 来调用真实的浏览器内核来进行数据采集。
+Selenium 是一个浏览器自动化测试框架，其能够调用相关的接口来运行浏览器并执行一系列的动作，就像是真正的用户在网页上操作一样。Selenium 最初多用于 Web 应用的功能测试中，后来因为其能够调用浏览器的特性，能够绕过很多的反爬虫机制，日益在爬虫领域流行开来。</p></div></article><article class="list__item post"><header class=list__header><h2 class="list__title post__title"><a href=/choudalao.github.io/posts/2020-03-08-%E8%87%AD%E5%A4%A7%E4%BD%AC%E8%A7%A3%E6%9E%90python%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%88%AC%E8%99%AB/ rel=bookmark>臭大佬解析Python多线程爬虫</a></h2></header><div class="content list__excerpt post__content clearfix"><h1 id=测试>测试</h1><p>这里拿一个qj的cdn做测试，我们访问 20 次，获得 20 次文件，然后保存在本地。</p><h3 id=普通爬虫>普通爬虫</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-python data-lang=python><span style=display:flex><span><span style=color:#75715e># coding:utf-8</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>import</span> urllib.request
+</span></span><span style=display:flex><span><span style=color:#f92672>import</span> time
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 文本下载函数</span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>def</span> <span style=color:#a6e22e>downloadImage</span>(url, filename):
+</span></span><span style=display:flex><span>    print(<span style=color:#e6db74>&#34;从</span><span style=color:#e6db74>{}</span><span style=color:#e6db74>下载文本……&#34;</span><span style=color:#f92672>.</span>format(url))
+</span></span><span style=display:flex><span>    urllib<span style=color:#f92672>.</span>request<span style=color:#f92672>.</span>urlretrieve(url, filename)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 主函数</span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>def</span> <span style=color:#a6e22e>main</span>():
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>for</span> i <span style=color:#f92672>in</span> range(<span style=color:#ae81ff>20</span>):
+</span></span><span style=display:flex><span>        textName <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;tmp/</span><span style=color:#e6db74>{}</span><span style=color:#e6db74>.jquery.min.js&#34;</span><span style=color:#f92672>.</span>format(i)
+</span></span><span style=display:flex><span>        downloadImage(<span style=color:#e6db74>&#34;https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js&#34;</span>, textName)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>if</span> __name__ <span style=color:#f92672>==</span> <span style=color:#e6db74>&#39;__main__&#39;</span>:
+</span></span><span style=display:flex><span>    t0 <span style=color:#f92672>=</span> time<span style=color:#f92672>.</span>time()
+</span></span><span style=display:flex><span>    main()
+</span></span><span style=display:flex><span>    t1 <span style=color:#f92672>=</span> time<span style=color:#f92672>.</span>time()
+</span></span><span style=display:flex><span>    totaltime <span style=color:#f92672>=</span> t1 <span style=color:#f92672>-</span> t0
+</span></span><span style=display:flex><span>    print(<span style=color:#e6db74>&#34;耗时：&#34;</span>, totaltime)
+</span></span></code></pre></div><p><img src=https://www.choudalao.com/uploads/20200308/20200308154726PBmuhn.png alt>
+我们引入了模块 urllib.request，然后创建了一个函数downloadImage()用于下载文件，创建了一个函数 main()用于对下载函数进行遍历 20 次。耗时 4 秒多。</p></div></article><article class="list__item post"><header class=list__header><h2 class="list__title post__title"><a href=/choudalao.github.io/posts/2020-03-06-%E4%BD%BF%E7%94%A8-session-%E4%BC%9A%E8%AF%9D%E6%96%B9%E6%B3%95%E8%87%AA%E5%8A%A8%E7%AE%A1%E7%90%86%E7%99%BB%E5%BD%95%E7%8A%B6%E6%80%81%E8%87%AD%E5%A4%A7%E4%BD%AC/ rel=bookmark>使用 Session 会话方法自动管理登录状态|臭大佬</a></h2></header><div class="content list__excerpt post__content clearfix"><h1 id=代码>代码</h1><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-python data-lang=python><span style=display:flex><span><span style=color:#75715e># coding:utf-8</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>import</span> requests
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 实例一个session会话</span>
+</span></span><span style=display:flex><span>s <span style=color:#f92672>=</span>requests<span style=color:#f92672>.</span>Session()
+</span></span><span style=display:flex><span>urlPost <span style=color:#f92672>=</span> <span style=color:#e6db74>&#39;http://www.lanrenmb.com/User/index.php/Public/checkLogin.html&#39;</span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 设置post数据</span>
+</span></span><span style=display:flex><span>dataPost <span style=color:#f92672>=</span> {
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#39;username&#39;</span>:<span style=color:#e6db74>&#39;00050&#39;</span>,
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#39;password&#39;</span>:<span style=color:#e6db74>&#39;lanren00050&#39;</span>
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span><span style=color:#75715e># 使用post登录</span>
+</span></span><span style=display:flex><span>s<span style=color:#f92672>.</span>post(urlPost,data<span style=color:#f92672>=</span>dataPost)
+</span></span><span style=display:flex><span><span style=color:#75715e># 保持了登录后的 Cookie 参数设置，我们就可以执行登录后的操作了</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>downUrl <span style=color:#f92672>=</span> <span style=color:#e6db74>&#39;http://www.lanrenmb.com/User/index.php/User/downLoad.html?type=downLoad&amp;aid=7230&amp;url=http%3A</span><span style=color:#e6db74>%2F%2F</span><span style=color:#e6db74>www.lanrenmb.com</span><span style=color:#e6db74>%2F</span><span style=color:#e6db74>shenghuofuwu</span><span style=color:#e6db74>%2F</span><span style=color:#e6db74>fangchan</span><span style=color:#e6db74>%2F</span><span style=color:#e6db74>7230.html&#39;</span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 请求下载链接</span>
+</span></span><span style=display:flex><span>wdata <span style=color:#f92672>=</span> s<span style=color:#f92672>.</span>get(downUrl)<span style=color:#f92672>.</span>content
+</span></span><span style=display:flex><span><span style=color:#75715e># 新建文件</span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>with</span> open(<span style=color:#e6db74>&#39;file/text.zip&#39;</span>,<span style=color:#e6db74>&#39;wb&#39;</span>) <span style=color:#66d9ef>as</span> zip:
+</span></span><span style=display:flex><span>    <span style=color:#75715e># 将http响应写入文件</span>
+</span></span><span style=display:flex><span>    zip<span style=color:#f92672>.</span>write(wdata)
+</span></span><span style=display:flex><span>    print(<span style=color:#e6db74>&#39;ok,session test&#39;</span>)
+</span></span></code></pre></div></div></article><article class="list__item post"><header class=list__header><h2 class="list__title post__title"><a href=/choudalao.github.io/posts/2020-03-06-python%E4%B8%8B%E8%BD%BD%E5%B9%B6%E4%BF%9D%E5%AD%98%E5%9B%BE%E7%89%87/ rel=bookmark>python下载并保存图片</a></h2></header><div class="content list__excerpt post__content clearfix"><h1 id=方式一>方式一</h1><h4 id=代码>代码</h4><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-python data-lang=python><span style=display:flex><span><span style=color:#75715e># coding:utf-8</span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 引入requests模块</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>import</span> requests
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 使用get方式请求图片链接</span>
+</span></span><span style=display:flex><span>imgdata <span style=color:#f92672>=</span> requests<span style=color:#f92672>.</span>get(<span style=color:#e6db74>&#39;https://www.choudalao.com/images/config/avatar.jpg&#39;</span>)
+</span></span><span style=display:flex><span><span style=color:#75715e># 新建一个文件并写入响应内容</span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>with</span> open(<span style=color:#e6db74>&#39;avatar.jpg&#39;</span>,<span style=color:#e6db74>&#39;wb&#39;</span>) <span style=color:#66d9ef>as</span> imgs:
+</span></span><span style=display:flex><span>    imgs<span style=color:#f92672>.</span>write(imgdata<span style=color:#f92672>.</span>content)
+</span></span><span style=display:flex><span>    print(<span style=color:#e6db74>&#39;运行完成&#39;</span>)
+</span></span></code></pre></div><h4 id=结果>结果</h4><p><img src=https://www.choudalao.com/uploads/20200306/20200306111949Bx4xn4.png alt></p><h1 id=方式二>方式二</h1><p>在 Python 中有一个内置模块拥有一个与上面请求图片并新建文件保存的代码同样功能的方法
+——urllib.request.urlretrieve</p></div></article><article class="list__item post"><header class=list__header><h2 class="list__title post__title"><a href=/choudalao.github.io/posts/2020-01-22-python-%E4%B8%ADif-else%E7%9A%84%E5%A4%9A%E7%A7%8D%E7%AE%80%E6%B4%81%E7%9A%84%E5%86%99%E6%B3%95/ rel=bookmark>python 中if-else的多种简洁的写法</a></h2></header><div class="content list__excerpt post__content clearfix"><h1 id=普通写法>普通写法</h1><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-python data-lang=python><span style=display:flex><span>a, b, c <span style=color:#f92672>=</span> <span style=color:#ae81ff>1</span>, <span style=color:#ae81ff>2</span>, <span style=color:#ae81ff>3</span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>if</span> a<span style=color:#f92672>&gt;</span>b:
+</span></span><span style=display:flex><span>    c <span style=color:#f92672>=</span> a
+</span></span><span style=display:flex><span><span style=color:#66d9ef>else</span>:
+</span></span><span style=display:flex><span>    c <span style=color:#f92672>=</span> b
+</span></span></code></pre></div><h1 id=一行表达式为真时放if前>一行表达式,为真时放if前</h1><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-python data-lang=python><span style=display:flex><span>c <span style=color:#f92672>=</span> a <span style=color:#66d9ef>if</span> a<span style=color:#f92672>&gt;</span>b <span style=color:#66d9ef>else</span> b
+</span></span></code></pre></div><h1 id=二维列表利用大小判断的01当作索引>二维列表，利用大小判断的0，1当作索引</h1><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-python data-lang=python><span style=display:flex><span>c<span style=color:#f92672>=</span> [b, a][a <span style=color:#f92672>&gt;</span> b]
+</span></span></code></pre></div><h1 id=传说中的黑客利用逻辑运算符进行操作都是最简单的东西却发挥无限能量啊>传说中的黑客，利用逻辑运算符进行操作，都是最简单的东西，却发挥无限能量啊</h1><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-python data-lang=python><span style=display:flex><span>c <span style=color:#f92672>=</span> (a<span style=color:#f92672>&gt;</span>b <span style=color:#f92672>and</span> [a] <span style=color:#f92672>or</span> [b])[<span style=color:#ae81ff>0</span>]
+</span></span><span style=display:flex><span><span style=color:#75715e># 改编版</span>
+</span></span><span style=display:flex><span>c <span style=color:#f92672>=</span> (a<span style=color:#f92672>&gt;</span>b <span style=color:#f92672>and</span> a <span style=color:#f92672>or</span> b)
+</span></span></code></pre></div><p>第四种最有意思了，</p><p>利用and 的特点，若and前位置为假则直接判断为假。</p><p>利用 or的特点，若or前位置为真则判断为真。</p></div></article><article class="list__item post"><header class=list__header><h2 class="list__title post__title"><a href=/choudalao.github.io/posts/2020-01-02-spider%E7%88%AC%E5%8F%96%E6%96%97%E9%B1%BC%E9%A2%9C%E5%80%BC%E4%B8%BB%E6%92%AD%E4%BF%A1%E6%81%AF/ rel=bookmark>Spider爬取斗鱼颜值主播信息</a></h2></header><div class="content list__excerpt post__content clearfix"><h1 id=简介>简介</h1><p>既然学了爬虫了，那就应该做些有意义的事情，比如爬取国外某榴网站，获取视频或者种子的地址，哈哈哈，今天，先写个简单的，爬取斗鱼主播信息。</p><h1 id=创建scrapy项目>创建Scrapy项目</h1><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-shell data-lang=shell><span style=display:flex><span>scrapy startproject douyu
+</span></span></code></pre></div><p><img src=https://www.choudalao.com/uploads/20200102/20200102210731XnqlWi.png alt></p></div></article><article class="list__item post"><header class=list__header><h2 class="list__title post__title"><a href=/choudalao.github.io/posts/2019-12-29-linux-%E5%90%8E%E5%8F%B0%E8%BF%90%E8%A1%8Cpython-sh%E7%AD%89%E7%A8%8B%E5%BA%8F/ rel=bookmark>Linux 后台运行python .sh等程序</a></h2></header><div class="content list__excerpt post__content clearfix"><h1 id=问题>问题</h1><p>这不马上春节了嘛，所以就开始研究抢票程序了，哈哈哈，看看我的程序，</p><p><img src=https://www.choudalao.com/uploads/20191229/20191229201150dBgVBH.png alt></p><p>程序是跑起来了，但是当我关闭终端（xshell）的时候，刷票也就退出了，这不是我要的结果啊，其实很多时候，像python文件以及一些.sh文件操作，我们都希望它在后台一直运行着，那怎么保持后台运行呢？</p></div></article><article class="list__item post"><header class=list__header><h2 class="list__title post__title"><a href=/choudalao.github.io/posts/2019-12-29-%E7%8E%A9%E4%B8%80%E4%B8%8Bitchat/ rel=bookmark>玩一下itchat</a></h2></header><div class="content list__excerpt post__content clearfix"><h1 id=目录>目录</h1><p><img src=https://www.choudalao.com/uploads/20191229/20191229134936q1xeAN.png alt></p><h1 id=代码>代码</h1><p>go.py</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-python data-lang=python><span style=display:flex><span><span style=color:#75715e># coding=utf8</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>import</span> sys
+</span></span><span style=display:flex><span>sys<span style=color:#f92672>.</span>path<span style=color:#f92672>.</span>append(<span style=color:#e6db74>&#39;D:\wwwroot\dev.py.net\itchat\lib&#39;</span>)
+</span></span><span style=display:flex><span><span style=color:#f92672>import</span> wechat
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>wechat<span style=color:#f92672>.</span>loginTo()
+</span></span></code></pre></div><p>lib/wechat.py</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-python data-lang=python><span style=display:flex><span><span style=color:#75715e># coding=utf8</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>import</span> requests
+</span></span><span style=display:flex><span><span style=color:#f92672>import</span> itchat<span style=color:#f92672>,</span> time
+</span></span><span style=display:flex><span><span style=color:#f92672>from</span> itchat.content <span style=color:#f92672>import</span> <span style=color:#f92672>*</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># @itchat.msg_register(TEXT)</span>
+</span></span><span style=display:flex><span><span style=color:#75715e># def _(msg):</span>
+</span></span><span style=display:flex><span><span style=color:#75715e>#     print(msg)</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>@itchat.msg_register</span>([PICTURE, RECORDING, ATTACHMENT, VIDEO])
+</span></span><span style=display:flex><span><span style=color:#66d9ef>def</span> <span style=color:#a6e22e>download_files</span>(msg):
+</span></span><span style=display:flex><span>    msg<span style=color:#f92672>.</span>download(msg<span style=color:#f92672>.</span>fileName)
+</span></span><span style=display:flex><span>    typeSymbol <span style=color:#f92672>=</span> {
+</span></span><span style=display:flex><span>        PICTURE: <span style=color:#e6db74>&#39;img&#39;</span>,
+</span></span><span style=display:flex><span>        VIDEO: <span style=color:#e6db74>&#39;vid&#39;</span>, }<span style=color:#f92672>.</span>get(msg<span style=color:#f92672>.</span>type, <span style=color:#e6db74>&#39;fil&#39;</span>)
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span> <span style=color:#e6db74>&#39;@</span><span style=color:#e6db74>%s</span><span style=color:#e6db74>@</span><span style=color:#e6db74>%s</span><span style=color:#e6db74>&#39;</span> <span style=color:#f92672>%</span> (typeSymbol, msg<span style=color:#f92672>.</span>fileName)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>@itchat.msg_register</span>(FRIENDS)
+</span></span><span style=display:flex><span><span style=color:#66d9ef>def</span> <span style=color:#a6e22e>add_friend</span>(msg):
+</span></span><span style=display:flex><span>    msg<span style=color:#f92672>.</span>user<span style=color:#f92672>.</span>verify()
+</span></span><span style=display:flex><span>    msg<span style=color:#f92672>.</span>user<span style=color:#f92672>.</span>send(<span style=color:#e6db74>&#39;Nice to meet you!&#39;</span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 获取文本信息</span>
+</span></span><span style=display:flex><span><span style=color:#75715e># # 获取自己的用户信息，返回自己的属性字典</span>
+</span></span><span style=display:flex><span><span style=color:#75715e># itchat.search_friends()</span>
+</span></span><span style=display:flex><span><span style=color:#75715e># # 获取特定UserName的用户信息</span>
+</span></span><span style=display:flex><span><span style=color:#75715e># itchat.search_friends(userName=&#39;@abcdefg1234567&#39;)</span>
+</span></span><span style=display:flex><span><span style=color:#75715e># # 获取任何一项等于name键值的用户</span>
+</span></span><span style=display:flex><span><span style=color:#75715e># itchat.search_friends(name=&#39;littlecodersh&#39;)</span>
+</span></span><span style=display:flex><span><span style=color:#75715e># # 获取分别对应相应键值的用户</span>
+</span></span><span style=display:flex><span><span style=color:#75715e># itchat.search_friends(wechatAccount=&#39;littlecodersh&#39;)</span>
+</span></span><span style=display:flex><span><span style=color:#75715e># # 三、四项功能可以一同使用</span>
+</span></span><span style=display:flex><span><span style=color:#75715e># itchat.search_friends(name=&#39;LittleCoder机器人&#39;, wechatAccount=&#39;littlecodersh&#39;)</span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 这里是我们在“1. 实现微信消息的获取”中已经用到过的同样的注册方法</span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>@itchat.msg_register</span>(itchat<span style=color:#f92672>.</span>content<span style=color:#f92672>.</span>TEXT)
+</span></span><span style=display:flex><span><span style=color:#66d9ef>def</span> <span style=color:#a6e22e>tuling_reply</span>(msg):
+</span></span><span style=display:flex><span>    <span style=color:#75715e># 为了保证在图灵Key出现问题的时候仍旧可以回复，这里设置一个默认回复</span>
+</span></span><span style=display:flex><span>    defaultReply <span style=color:#f92672>=</span> <span style=color:#e6db74>&#39;I received: &#39;</span> <span style=color:#f92672>+</span> msg[<span style=color:#e6db74>&#39;Text&#39;</span>]
+</span></span><span style=display:flex><span>    <span style=color:#75715e># 如果图灵Key出现问题，那么reply将会是None</span>
+</span></span><span style=display:flex><span>    reply <span style=color:#f92672>=</span> get_response(msg[<span style=color:#e6db74>&#39;Text&#39;</span>])
+</span></span><span style=display:flex><span>    <span style=color:#75715e># a or b的意思是，如果a有内容，那么返回a，否则返回b</span>
+</span></span><span style=display:flex><span>    <span style=color:#75715e># 有内容一般就是指非空或者非None，你可以用`if a: print(&#39;True&#39;)`来测试</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span> reply <span style=color:#f92672>or</span> defaultReply
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 图灵机器人</span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>def</span> <span style=color:#a6e22e>get_response</span>(msg):
+</span></span><span style=display:flex><span>    <span style=color:#75715e># 这里我们就像在“3. 实现最简单的与图灵机器人的交互”中做的一样</span>
+</span></span><span style=display:flex><span>    <span style=color:#75715e># 构造了要发送给服务器的数据</span>
+</span></span><span style=display:flex><span>    apiUrl <span style=color:#f92672>=</span> <span style=color:#e6db74>&#39;http://www.tuling123.com/openapi/api&#39;</span>
+</span></span><span style=display:flex><span>    data <span style=color:#f92672>=</span> {
+</span></span><span style=display:flex><span>        <span style=color:#e6db74>&#39;key&#39;</span>: <span style=color:#e6db74>&#39;xxxxxxxxxxx&#39;</span>,
+</span></span><span style=display:flex><span>        <span style=color:#e6db74>&#39;info&#39;</span>: msg,
+</span></span><span style=display:flex><span>        <span style=color:#e6db74>&#39;userid&#39;</span>: <span style=color:#e6db74>&#39;wechat-robot&#39;</span>,
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>try</span>:
+</span></span><span style=display:flex><span>        r <span style=color:#f92672>=</span> requests<span style=color:#f92672>.</span>post(apiUrl, data<span style=color:#f92672>=</span>data)<span style=color:#f92672>.</span>json()
+</span></span><span style=display:flex><span>        <span style=color:#75715e># 字典的get方法在字典没有&#39;text&#39;值的时候会返回None而不会抛出异常</span>
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>return</span> r<span style=color:#f92672>.</span>get(<span style=color:#e6db74>&#39;text&#39;</span>)
+</span></span><span style=display:flex><span>    <span style=color:#75715e># 为了防止服务器没有正常响应导致程序异常退出，这里用try-except捕获了异常</span>
+</span></span><span style=display:flex><span>    <span style=color:#75715e># 如果服务器没能正常交互（返回非json或无法连接），那么就会进入下面的return</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>except</span>:
+</span></span><span style=display:flex><span>        <span style=color:#75715e># 将会返回一个None</span>
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>return</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 登录触发</span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>def</span> <span style=color:#a6e22e>lc</span>():
+</span></span><span style=display:flex><span>    print(<span style=color:#e6db74>&#39;finish login&#39;</span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 退出触发</span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>def</span> <span style=color:#a6e22e>ec</span>():
+</span></span><span style=display:flex><span>    print(<span style=color:#e6db74>&#39;exit&#39;</span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>def</span> <span style=color:#a6e22e>test</span>():
+</span></span><span style=display:flex><span>    print(<span style=color:#ae81ff>111</span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#e6db74>&#39;&#39;&#39;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>hotReload:一定时间内重新开启也可以不用重新扫码
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>enableCmdQR:登陆的时候使用命令行显示二维码
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>loginCallback:登录触发
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>exitCallback：退出触发
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>&#39;&#39;&#39;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>def</span> <span style=color:#a6e22e>loginTo</span>(hotReload<span style=color:#f92672>=</span><span style=color:#66d9ef>True</span>, enableCmdQR<span style=color:#f92672>=</span><span style=color:#ae81ff>2</span>, loginCallback<span style=color:#f92672>=</span>lc, exitCallback<span style=color:#f92672>=</span>ec):
+</span></span><span style=display:flex><span>    itchat<span style=color:#f92672>.</span>auto_login(hotReload<span style=color:#f92672>=</span>hotReload, enableCmdQR<span style=color:#f92672>=</span>enableCmdQR, loginCallback<span style=color:#f92672>=</span>loginCallback,
+</span></span><span style=display:flex><span>                      exitCallback<span style=color:#f92672>=</span>exitCallback)
+</span></span><span style=display:flex><span>    itchat<span style=color:#f92672>.</span>run(<span style=color:#66d9ef>True</span>)
+</span></span></code></pre></div><h1 id=测试>测试</h1><p><img src=https://www.choudalao.com/uploads/20191229/20191229135135XbtRv0.png alt></p></div></article><article class="list__item post"><header class=list__header><h2 class="list__title post__title"><a href=/choudalao.github.io/posts/2019-12-26-win10%E4%B8%8B%E5%AE%89%E8%A3%85tensorflow/ rel=bookmark>Win10下安装tensorflow</a></h2></header><div class="content list__excerpt post__content clearfix"><h1 id=前提>前提</h1><p>win安装tensorflow是基于Python的，并且需要从Anaconda仓库中下载</p><h1 id=安装anaconda>安装Anaconda</h1><p>从官网下载：https://www.anaconda.com/download/</p></div></article></main><div class=pagination><a class="pagination__item pagination__item--prev btn" href=/choudalao.github.io/categories/python/page/3/>«</a>
+<span class="pagination__item pagination__item--current">4/6</span>
+<a class="pagination__item pagination__item--next btn" href=/choudalao.github.io/categories/python/page/5/>»</a></div></div><aside class=sidebar><div class="widget-categories widget"><h4 class=widget__title>分类</h4><div class=widget__content><ul class=widget__list><li class=widget__item><a class=widget__link href=/choudalao.github.io/categories/ai/>AI</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/categories/go/>Go</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/categories/linux/>Linux</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/categories/mysql/>MYSQL</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/categories/php/>Php</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/categories/python/>Python</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/categories/%E4%B8%AA%E4%BA%BA/>个人</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/categories/%E5%85%B6%E4%BB%96/>其他</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/categories/%E5%89%8D%E7%AB%AF/>前端</a></li></ul></div></div><div class="widget-recent widget"><h4 class=widget__title>近期文章</h4><div class=widget__content><ul class=widget__list><li class=widget__item><a class=widget__link href=/choudalao.github.io/posts/2025-04-19-cline%E4%B8%AD%E4%BD%BF%E7%94%A8-mysql-mcp-%E6%9C%8D%E5%8A%A1/>Cline中使用 MySql MCP 服务</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/posts/2020-09-03-%E5%9F%BA%E4%BA%8Elaravel%E5%8F%8Alayui%E5%BC%80%E5%8F%91%E7%9A%84%E5%90%8E%E5%8F%B0%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F-laravel-wjfcms/>基于laravel及layui开发的后台管理系统 -- laravel-wjfcms</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/posts/2020-06-02-%E8%85%BE%E8%AE%AF%E4%BA%91%E4%BA%A7%E5%93%81%E5%A4%A7%E4%BF%83/>腾讯云产品大促</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/posts/2019-09-21-git%E6%93%8D%E4%BD%9C/>Git操作</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/posts/2026-01-29-openclaw-%E5%AE%89%E8%A3%85%E5%8F%8A%E4%BD%BF%E7%94%A8/>openclaw 安装及使用</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/posts/2026-01-28-mise-%E5%AE%89%E8%A3%85%E5%8F%8A%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/>mise 安装及使用指南</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/posts/2026-01-26-%E7%94%A8-obsidian-%E6%89%93%E9%80%A0ai%E7%AC%94%E8%AE%B0/>用 Obsidian 打造AI笔记</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/posts/2026-01-22-claude-%E5%AE%98%E6%96%B9-skill-creator-%E4%BB%8B%E7%BB%8D%E5%8F%8A%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/>Claude 官方 Skill-Creator 介绍及使用指南</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/posts/2026-01-22-%E9%80%9A%E8%BF%87qq%E9%82%AE%E7%AE%B1%E4%BB%A3%E6%94%B6gmail%E9%82%AE%E4%BB%B6/>通过QQ邮箱代收Gmail邮件</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/posts/2026-01-19-%E8%A7%A3%E5%86%B3-wsl2-windows-hosts-%E5%BC%80%E5%90%AF-vpn-%E5%90%8E%E6%97%A0%E6%B3%95%E8%AE%BF%E9%97%AE%E6%9C%AC%E5%9C%B0-web-%E6%9C%8D%E5%8A%A1%E7%9A%84%E9%97%AE%E9%A2%98/>解决 WSL2 + Windows Hosts + 开启 VPN 后无法访问本地 Web 服务的问题</a></li></ul></div></div><div class="widget-taglist widget"><h4 class=widget__title>标签</h4><div class=widget__content><a class="widget-taglist__link widget__link btn" href=/choudalao.github.io/tags/php/ title=Php>Php</a>
+<a class="widget-taglist__link widget__link btn" href=/choudalao.github.io/tags/%E5%85%B3%E4%BA%8E/ title=关于>关于</a></div></div></aside></div><footer class=footer><div class="container footer__container flex"><div class=footer__copyright>&copy; 2026 臭大佬博客.
+<span class=footer__copyright-credits>基于 <a href=https://gohugo.io/ rel="nofollow noopener" target=_blank>Hugo</a> 引擎和 <a href=https://github.com/Vimux/Mainroad/ rel="nofollow noopener" target=_blank>Mainroad</a> 主题</span></div></div></footer></div><script async defer src=/choudalao.github.io/js/menu.js></script></body></html>

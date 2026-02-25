@@ -1,0 +1,265 @@
+<!doctype html><html class=no-js lang=en><head><meta charset=UTF-8><meta name=viewport content="width=device-width,initial-scale=1"><title>laravel任务调度+命令行+邮件发送用例 - 臭大佬博客</title><script>(function(e,t){e[t]=e[t].replace("no-js","js")})(document.documentElement,"className")</script><meta name=description content="任务调度实现定时->调用命令行->执行邮件发送功能->发送给我推送结果"><link rel=preconnect href=https://fonts.gstatic.com crossorigin><link rel=dns-prefetch href=//fonts.googleapis.com><link rel=dns-prefetch href=//fonts.gstatic.com><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700"><link rel=stylesheet href=/choudalao.github.io/css/style.css><link rel="shortcut icon" href=/choudalao.github.io/favicon.ico></head><body class=body><div class="container container--outer"><header class=header><div class="container header__container"><div class=logo><a class=logo__link href=/choudalao.github.io/ title=臭大佬博客 rel=home><div class="logo__item logo__text"><div class=logo__title>臭大佬博客</div></div></a></div><nav class=menu><button class=menu__btn aria-haspopup=true aria-expanded=false tabindex=0>
+<span class=menu__btn-title tabindex=-1>菜单</span></button><ul class=menu__list><li class=menu__item><a class=menu__link href=/choudalao.github.io/><span class=menu__text>首页</span></a></li><li class=menu__item><a class=menu__link href=/choudalao.github.io/categories/><span class=menu__text>分类</span></a></li><li class=menu__item><a class=menu__link href=/choudalao.github.io/tags/><span class=menu__text>标签</span></a></li><li class=menu__item><a class=menu__link href=/choudalao.github.io/posts/><span class=menu__text>归档</span></a></li><li class=menu__item><a class=menu__link href=/choudalao.github.io/about/><span class=menu__text>关于</span></a></li></ul></nav></div></header><div class="wrapper flex"><div class=primary><main class=main role=main><article class=post><header class=post__header><h1 class=post__title>laravel任务调度+命令行+邮件发送用例</h1></header><div class="content post__content clearfix"><h1 id=起因>起因</h1><p>最近想把<a href=https://www.choudalao.com title=臭大佬>臭大佬</a>的seo搞起来，所以想让百度更好的收录网站：
+<img src=https://www.choudalao.com/uploads/20191116/20191116213146kua9GE.png alt>
+主动推送和自动推送是互补的，在自动推送的同时，想实现一个主动推送的功能，这里我的思路是利用laravel的<strong>任务调度</strong>+<strong>Artisan命令</strong>+<strong>邮件系统</strong>去实现</p><p>#流程
+任务调度实现定时->调用命令行->执行邮件发送功能->发送推送结果</p><h1 id=邮箱功能>邮箱功能</h1><p>Laravel 支持多种邮件驱动，包括 smtp、Mailgun、Maildrill、Amazon SES、mail 和 sendmail。Mailgun 、 Maildrill 都是第三方邮件服务。mail 驱动使用 PHP 提供的 mail 函数。sendmail 驱动通过 Sendmail/Postfix（Linux）提供的命令发送邮件，smtp 驱动使用支持 ESMTP 的 SMTP 服务器发送邮件。mail 不安全，sendmail 需要安装配置 Sendmail/Postfix，并且信用不高，很容易被当成垃圾邮件，第三方服务的信用是最高的，商业软件推荐使用。</p><h2 id=配置>配置</h2><p>我们以 QQ 邮箱为例，我们将开启 QQ 的 SMTP 功能，并配置项目的 SMTP 邮件发送功能。其他邮箱的配置基本大致相同。</p><p>开启 QQ 邮箱的 SMTP 支持</p><p>首先我们需要在 QQ 邮箱的账号设置里开启 POP3 和 SMTP 服务。具体请查看 如何打开POP3/SMTP/IMAP功能？ 。</p><p>只需要开启以下：</p><p>需要开启POP3和SMTP服务（QQ邮箱登录=》选择设置=》账户=》开启POP3；
+<img src=https://www.choudalao.com/uploads/20191116/20191116122043Fk1Hol.png alt>
+配置的时候需要发送短信进行验证，然后会给你返回一个授权码，需要保存这个授权码，
+<img src=https://www.choudalao.com/uploads/20191116/20191116122221dKapxM.png alt></p><h2 id=修改env>修改.env</h2><p>当设置成功后，需要在.env配置</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-cpp data-lang=cpp><span style=display:flex><span>MAIL_DRIVER<span style=color:#f92672>=</span>smtp
+</span></span><span style=display:flex><span>MAIL_HOST<span style=color:#f92672>=</span>smtp.qq.com
+</span></span><span style=display:flex><span>MAIL_PORT<span style=color:#f92672>=</span><span style=color:#ae81ff>465</span>
+</span></span><span style=display:flex><span>MAIL_USERNAME<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;1937832819@qq.com&#34;</span>
+</span></span><span style=display:flex><span>MAIL_FROM_ADDRESS<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;1937832819@qq.com&#34;</span>
+</span></span><span style=display:flex><span>MAIL_PASSWORD<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;刚才的授权码&#34;</span>
+</span></span><span style=display:flex><span>MAIL_FROM_NAME<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;邮箱名称&#34;</span>
+</span></span><span style=display:flex><span>MAIL_ENCRYPTION<span style=color:#f92672>=</span>ssl
+</span></span><span style=display:flex><span><span style=color:#75715e>//双引号处需要修改，别的默认
+</span></span></span></code></pre></div><p><img src=https://www.choudalao.com/uploads/20191116/20191116122848OINOfQ.png alt></p><blockquote><p>注释：
+MAIL_DRIVER=smtp —— 使用支持 ESMTP 的 SMTP 服务器发送邮件；
+MAIL_HOST=smtp.qq.com —— QQ 邮箱的 SMTP 服务器地址，必须为此值；
+MAIL_PORT=465 —— QQ 邮箱的 SMTP 服务器端口，必须为此值；
+<a href="mailto:MAIL_USERNAME=xxxx@qq.com">MAIL_USERNAME=xxxx@qq.com</a> —— 请将此值换为你的 QQ + @qq.com；
+MAIL_PASSWORD=xxxxxxxxx —— 密码是我们拿到的授权码；
+MAIL_ENCRYPTION=SSL —— 加密类型，选项 null 表示不使用任何加密，其他选项还有 TLS，这里我们使用 SSL 即可。
+<a href="mailto:MAIL_FROM_ADDRESS=xxxxxxxxx@qq.com">MAIL_FROM_ADDRESS=xxxxxxxxx@qq.com</a> —— 此值必须同MAIL_USERNAME 一致；
+MAIL_FROM_NAME=用来作为邮件的发送者名称。</p></blockquote><p> </p><h2 id=编写mail>编写Mail</h2><p> </p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-java data-lang=java><span style=display:flex><span>php artisan make:mail Alarm
+</span></span></code></pre></div><p>编写一个简单的发送内容：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-php data-lang=php><span style=display:flex><span><span style=color:#f92672>&lt;?</span><span style=color:#a6e22e>php</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>namespace</span> <span style=color:#a6e22e>App\Mail</span>;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>use</span> <span style=color:#a6e22e>Illuminate\Bus\Queueable</span>;
+</span></span><span style=display:flex><span><span style=color:#66d9ef>use</span> <span style=color:#a6e22e>Illuminate\Mail\Mailable</span>;
+</span></span><span style=display:flex><span><span style=color:#66d9ef>use</span> <span style=color:#a6e22e>Illuminate\Queue\SerializesModels</span>;
+</span></span><span style=display:flex><span><span style=color:#66d9ef>use</span> <span style=color:#a6e22e>Illuminate\Contracts\Queue\ShouldQueue</span>;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>class</span> <span style=color:#a6e22e>Alarm</span> <span style=color:#66d9ef>extends</span> <span style=color:#a6e22e>Mailable</span>
+</span></span><span style=display:flex><span>{
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>use</span> <span style=color:#a6e22e>Queueable</span>, <span style=color:#a6e22e>SerializesModels</span>;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>/**
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>     * @var string
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>     */</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>private</span> $content <span style=color:#f92672>=</span> <span style=color:#e6db74>&#39;&#39;</span>;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>/**
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>     * Alarm constructor.
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>     * @param $text
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>     */</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>public</span> <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>__construct</span>($text)
+</span></span><span style=display:flex><span>    {
+</span></span><span style=display:flex><span>        <span style=color:#75715e>//设置主题
+</span></span></span><span style=display:flex><span>        $this<span style=color:#f92672>-&gt;</span><span style=color:#a6e22e>subject</span>(<span style=color:#a6e22e>env</span>(<span style=color:#e6db74>&#39;MAIL_FROM_NAME&#39;</span>));
+</span></span><span style=display:flex><span>        <span style=color:#75715e>//设置发件人
+</span></span></span><span style=display:flex><span>        $this<span style=color:#f92672>-&gt;</span><span style=color:#a6e22e>from</span>(<span style=color:#a6e22e>env</span>(<span style=color:#e6db74>&#39;MAIL_FROM_ADDRESS&#39;</span>), <span style=color:#a6e22e>env</span>(<span style=color:#e6db74>&#39;MAIL_FROM_NAME&#39;</span>));
+</span></span><span style=display:flex><span>        <span style=color:#75715e>//设置内容
+</span></span></span><span style=display:flex><span>        $this<span style=color:#f92672>-&gt;</span><span style=color:#a6e22e>setContent</span>($text);
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>/**
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>     * Description:发送
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>     * User: Vijay
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>     * Date: 2019/11/16
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>     * Time: 12:54
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>     * @return Alarm
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>     */</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>public</span> <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>build</span>()
+</span></span><span style=display:flex><span>    {
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>return</span> $this<span style=color:#f92672>-&gt;</span><span style=color:#a6e22e>view</span>(<span style=color:#e6db74>&#39;emails.alarm.text&#39;</span>)<span style=color:#f92672>-&gt;</span><span style=color:#a6e22e>with</span>([
+</span></span><span style=display:flex><span>            <span style=color:#e6db74>&#39;title&#39;</span> <span style=color:#f92672>=&gt;</span> <span style=color:#a6e22e>env</span>(<span style=color:#e6db74>&#39;MAIL_FROM_NAME&#39;</span>),
+</span></span><span style=display:flex><span>            <span style=color:#e6db74>&#39;content&#39;</span> <span style=color:#f92672>=&gt;</span> $this<span style=color:#f92672>-&gt;</span><span style=color:#a6e22e>content</span>,
+</span></span><span style=display:flex><span>        ]);
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>/**
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>     * Description:设置发送内容
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>     * User: Vijay
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>     * Date: 2019/11/16
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>     * Time: 13:10
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>     * @param string $text
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>     * @return $this
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>     */</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>public</span> <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>setContent</span>($text <span style=color:#f92672>=</span> <span style=color:#e6db74>&#39;&#39;</span>)
+</span></span><span style=display:flex><span>    {
+</span></span><span style=display:flex><span>        $this<span style=color:#f92672>-&gt;</span><span style=color:#a6e22e>content</span> <span style=color:#f92672>.=</span> <span style=color:#e6db74>&#39;时间:&#39;</span> <span style=color:#f92672>.</span> <span style=color:#a6e22e>date</span>(<span style=color:#e6db74>&#39;Y-m-d H:i:s&#39;</span>) <span style=color:#f92672>.</span> <span style=color:#e6db74>&#39;，&#39;</span>;
+</span></span><span style=display:flex><span>        $this<span style=color:#f92672>-&gt;</span><span style=color:#a6e22e>content</span> <span style=color:#f92672>.=</span> <span style=color:#e6db74>&#39;内容:&#39;</span> <span style=color:#f92672>.</span> $text;
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>return</span> $this;
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p> </p><h2 id=建立相应视图>建立相应视图</h2><p> </p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-html data-lang=html><span style=display:flex><span>// resources/views/emails/alarm/text.blade.php
+</span></span><span style=display:flex><span><span style=color:#75715e>&lt;!DOCTYPE html&gt;</span>
+</span></span><span style=display:flex><span>&lt;<span style=color:#f92672>html</span> <span style=color:#a6e22e>lang</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;en&#34;</span>&gt;
+</span></span><span style=display:flex><span>&lt;<span style=color:#f92672>head</span>&gt;
+</span></span><span style=display:flex><span>    &lt;<span style=color:#f92672>meta</span> <span style=color:#a6e22e>charset</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;UTF-8&#34;</span>&gt;
+</span></span><span style=display:flex><span>    &lt;<span style=color:#f92672>title</span>&gt;{{ $tilte }}&lt;/<span style=color:#f92672>title</span>&gt;
+</span></span><span style=display:flex><span>&lt;/<span style=color:#f92672>head</span>&gt;
+</span></span><span style=display:flex><span>&lt;<span style=color:#f92672>body</span>&gt;
+</span></span><span style=display:flex><span>&lt;<span style=color:#f92672>div</span>&gt;{{ $content }}&lt;/<span style=color:#f92672>div</span>&gt;
+</span></span><span style=display:flex><span>&lt;/<span style=color:#f92672>body</span>&gt;
+</span></span><span style=display:flex><span>&lt;/<span style=color:#f92672>html</span>&gt;
+</span></span></code></pre></div><p> </p><h2 id=模板方式发送>模板方式发送</h2><p>使用官网提供的方式发送，写法如下（也就是配合上面的内容发送）</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-php data-lang=php><span style=display:flex><span>$toUser <span style=color:#f92672>=</span> <span style=color:#e6db74>&#39;1937832819@qq.com&#39;</span>;
+</span></span><span style=display:flex><span>$res <span style=color:#f92672>=</span> <span style=color:#a6e22e>Mail</span><span style=color:#f92672>::</span><span style=color:#a6e22e>to</span>($toUser)<span style=color:#f92672>-&gt;</span><span style=color:#a6e22e>send</span>(<span style=color:#66d9ef>new</span> <span style=color:#a6e22e>Alarm</span>(<span style=color:#e6db74>&#39;推送成功&#39;</span>));
+</span></span></code></pre></div><p>这里需要使用到编写好的命令行，这边为了统一说明邮箱功能，所以，先写在这里，执行我们编写好的命令行（参考下面方式一）</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-php data-lang=php><span style=display:flex><span><span style=color:#a6e22e>php</span> <span style=color:#a6e22e>artisan</span> <span style=color:#a6e22e>send</span><span style=color:#f92672>:</span><span style=color:#a6e22e>LinkSubmit</span>
+</span></span></code></pre></div><p>运行结果
+<img src=https://www.choudalao.com/uploads/20191116/20191116213957v5gK3x.png alt>
+<img src=https://www.choudalao.com/uploads/20191116/20191116213901GgE8EU.png alt></p><h2 id=模板匿名函数发送>模板匿名函数发送</h2><p>调用<code>Mail::send()</code>发送，</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-php data-lang=php><span style=display:flex><span><span style=color:#75715e>//方式二
+</span></span></span><span style=display:flex><span>$subject <span style=color:#f92672>=</span> <span style=color:#a6e22e>env</span>(<span style=color:#e6db74>&#39;MAIL_FROM_NAME&#39;</span>);
+</span></span><span style=display:flex><span><span style=color:#a6e22e>Mail</span><span style=color:#f92672>::</span><span style=color:#a6e22e>send</span>(<span style=color:#e6db74>&#39;emails.alarm.text&#39;</span>, [
+</span></span><span style=display:flex><span>	<span style=color:#e6db74>&#39;name&#39;</span> <span style=color:#f92672>=&gt;</span> <span style=color:#a6e22e>env</span>(<span style=color:#e6db74>&#39;MAIL_FROM_NAME&#39;</span>),
+</span></span><span style=display:flex><span>	<span style=color:#e6db74>&#39;title&#39;</span> <span style=color:#f92672>=&gt;</span> <span style=color:#a6e22e>env</span>(<span style=color:#e6db74>&#39;MAIL_FROM_NAME&#39;</span>),
+</span></span><span style=display:flex><span>	<span style=color:#e6db74>&#39;content&#39;</span> <span style=color:#f92672>=&gt;</span> $msg,
+</span></span><span style=display:flex><span>], <span style=color:#66d9ef>function</span> ($message) <span style=color:#66d9ef>use</span> ($toUser, $subject) {
+</span></span><span style=display:flex><span>	$message<span style=color:#f92672>-&gt;</span><span style=color:#a6e22e>to</span>($toUser)<span style=color:#f92672>-&gt;</span><span style=color:#a6e22e>subject</span>($subject);
+</span></span><span style=display:flex><span>	<span style=color:#75715e>//发送附件
+</span></span></span><span style=display:flex><span>	<span style=color:#75715e>//$attachment = storage_path(&#39;xls/files/test.xls&#39;);
+</span></span></span><span style=display:flex><span>	<span style=color:#75715e>//$message-&gt;attach($attachment, [&#39;as&#39; =&gt; &#39;中文文档.xls&#39;]);
+</span></span></span><span style=display:flex><span>});
+</span></span></code></pre></div><p><img src=https://www.choudalao.com/uploads/20191116/20191116220245UgIubF.png alt></p><p><img src=https://www.choudalao.com/uploads/20191116/20191116215644pBxyi5.png alt></p><blockquote><p>Mail::send();需要传三个参数，第一个为引用的模板，第二个为给模板传递的变量，第三个为一个闭包，参数绑定Mail类的一个实例。</p></blockquote><h2 id=发送纯文本邮件>发送纯文本邮件</h2><p> </p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-php data-lang=php><span style=display:flex><span><span style=color:#a6e22e>Mail</span><span style=color:#f92672>::</span><span style=color:#a6e22e>raw</span>($msg, <span style=color:#66d9ef>function</span> ($message) <span style=color:#66d9ef>use</span> ($toUser, $subject) {
+</span></span><span style=display:flex><span>     $message<span style=color:#f92672>-&gt;</span><span style=color:#a6e22e>to</span>($toUser)<span style=color:#f92672>-&gt;</span><span style=color:#a6e22e>subject</span>($subject);
+</span></span><span style=display:flex><span>});
+</span></span></code></pre></div><p><img src=https://www.choudalao.com/uploads/20191116/20191116220645NjodC6.png alt></p><h2 id=错误处理>错误处理</h2><p> </p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-php data-lang=php><span style=display:flex><span><span style=color:#66d9ef>if</span> (<span style=color:#a6e22e>count</span>(<span style=color:#a6e22e>Mail</span><span style=color:#f92672>::</span><span style=color:#a6e22e>failures</span>()) <span style=color:#f92672>&lt;</span> <span style=color:#ae81ff>1</span>) {
+</span></span><span style=display:flex><span>   $this<span style=color:#f92672>-&gt;</span><span style=color:#a6e22e>info</span>(<span style=color:#e6db74>&#39;发送邮件成功，请查收！&#39;</span>);
+</span></span><span style=display:flex><span>} <span style=color:#66d9ef>else</span> {
+</span></span><span style=display:flex><span>   $this<span style=color:#f92672>-&gt;</span><span style=color:#a6e22e>info</span>(<span style=color:#e6db74>&#39;发送邮件失败，请重试！&#39;</span>);
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h1 id=编写artisan命令>编写artisan命令</h1><p> </p><h2 id=生成命令>生成命令</h2><p> </p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-php data-lang=php><span style=display:flex><span> <span style=color:#a6e22e>php</span> <span style=color:#a6e22e>artisan</span> <span style=color:#a6e22e>make</span><span style=color:#f92672>:</span><span style=color:#a6e22e>command</span> <span style=color:#a6e22e>SendLinkSubmit</span>
+</span></span></code></pre></div><p>内容如下：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-php data-lang=php><span style=display:flex><span><span style=color:#f92672>&lt;?</span><span style=color:#a6e22e>php</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>namespace</span> <span style=color:#a6e22e>App\Console\Commands</span>;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>use</span> <span style=color:#a6e22e>App\Mail\Alarm</span>;
+</span></span><span style=display:flex><span><span style=color:#66d9ef>use</span> <span style=color:#a6e22e>Illuminate\Console\Command</span>;
+</span></span><span style=display:flex><span><span style=color:#66d9ef>use</span> <span style=color:#a6e22e>Illuminate\Support\Facades\Mail</span>;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>class</span> <span style=color:#a6e22e>SendLinkSubmit</span> <span style=color:#66d9ef>extends</span> <span style=color:#a6e22e>Command</span>
+</span></span><span style=display:flex><span>{
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>/**
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>     * The name and signature of the console command.
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>     *
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>     * @var string
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>     */</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>protected</span> $signature <span style=color:#f92672>=</span> <span style=color:#e6db74>&#39;send:linkSubmit&#39;</span>;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>/**
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>     * The console command description.
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>     *
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>     * @var string
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>     */</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>protected</span> $description <span style=color:#f92672>=</span> <span style=color:#e6db74>&#39;向百度主动提交链接&#39;</span>;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>/**
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>     * Create a new command instance.
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>     *
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>     * @return void
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>     */</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>public</span> <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>__construct</span>()
+</span></span><span style=display:flex><span>    {
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>parent</span><span style=color:#f92672>::</span><span style=color:#a6e22e>__construct</span>();
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>/**
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>     * Description:
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>     * User: Vijay
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>     * Date: 2019/11/16
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>     * Time: 13:00
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>     */</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>public</span> <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>handle</span>()
+</span></span><span style=display:flex><span>    {
+</span></span><span style=display:flex><span>        <span style=color:#75715e>//
+</span></span></span><span style=display:flex><span>        $urls <span style=color:#f92672>=</span> <span style=color:#66d9ef>array</span>(
+</span></span><span style=display:flex><span>            <span style=color:#e6db74>&#39;https://www.choudalao.com/&#39;</span>,
+</span></span><span style=display:flex><span>            <span style=color:#e6db74>&#39;xxxx&#39;</span>,
+</span></span><span style=display:flex><span>        );
+</span></span><span style=display:flex><span>		<span style=color:#75715e>//百度接口
+</span></span></span><span style=display:flex><span>        $api <span style=color:#f92672>=</span> <span style=color:#e6db74>&#39;xxxx&#39;</span>;
+</span></span><span style=display:flex><span>        $ch <span style=color:#f92672>=</span> <span style=color:#a6e22e>curl_init</span>();
+</span></span><span style=display:flex><span>        $options <span style=color:#f92672>=</span> <span style=color:#66d9ef>array</span>(
+</span></span><span style=display:flex><span>            <span style=color:#a6e22e>CURLOPT_URL</span> <span style=color:#f92672>=&gt;</span> $api,
+</span></span><span style=display:flex><span>            <span style=color:#a6e22e>CURLOPT_POST</span> <span style=color:#f92672>=&gt;</span> <span style=color:#66d9ef>true</span>,
+</span></span><span style=display:flex><span>            <span style=color:#a6e22e>CURLOPT_RETURNTRANSFER</span> <span style=color:#f92672>=&gt;</span> <span style=color:#66d9ef>true</span>,
+</span></span><span style=display:flex><span>            <span style=color:#a6e22e>CURLOPT_POSTFIELDS</span> <span style=color:#f92672>=&gt;</span> <span style=color:#a6e22e>implode</span>(<span style=color:#e6db74>&#34;</span><span style=color:#ae81ff>\n</span><span style=color:#e6db74>&#34;</span>, $urls),
+</span></span><span style=display:flex><span>            <span style=color:#a6e22e>CURLOPT_HTTPHEADER</span> <span style=color:#f92672>=&gt;</span> <span style=color:#66d9ef>array</span>(<span style=color:#e6db74>&#39;Content-Type: text/plain&#39;</span>),
+</span></span><span style=display:flex><span>        );
+</span></span><span style=display:flex><span>        <span style=color:#a6e22e>curl_setopt_array</span>($ch, $options);
+</span></span><span style=display:flex><span>        $result <span style=color:#f92672>=</span> <span style=color:#a6e22e>curl_exec</span>($ch);
+</span></span><span style=display:flex><span>        $res <span style=color:#f92672>=</span> <span style=color:#a6e22e>json_decode</span>($result, <span style=color:#66d9ef>true</span>);
+</span></span><span style=display:flex><span>        $this<span style=color:#f92672>-&gt;</span><span style=color:#a6e22e>info</span>($result);
+</span></span><span style=display:flex><span>        $toUser <span style=color:#f92672>=</span> <span style=color:#e6db74>&#39;xxx@qq.com&#39;</span>;
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>if</span> (<span style=color:#a6e22e>isset</span>($res[<span style=color:#e6db74>&#39;success&#39;</span>])) {
+</span></span><span style=display:flex><span>            $msg <span style=color:#f92672>=</span> <span style=color:#e6db74>&#39;推送成功&#39;</span>;
+</span></span><span style=display:flex><span>            $this<span style=color:#f92672>-&gt;</span><span style=color:#a6e22e>info</span>($msg <span style=color:#f92672>.</span> $res[<span style=color:#e6db74>&#39;success&#39;</span>] <span style=color:#f92672>.</span> <span style=color:#e6db74>&#39;条&#39;</span>);
+</span></span><span style=display:flex><span>        } <span style=color:#66d9ef>else</span> {
+</span></span><span style=display:flex><span>            $msg <span style=color:#f92672>=</span> $res[<span style=color:#e6db74>&#39;message&#39;</span>] <span style=color:#f92672>??</span> <span style=color:#e6db74>&#39;请求过于频繁&#39;</span>;
+</span></span><span style=display:flex><span>            $this<span style=color:#f92672>-&gt;</span><span style=color:#a6e22e>info</span>(<span style=color:#e6db74>&#39;推送失败&#39;</span>);
+</span></span><span style=display:flex><span>            $this<span style=color:#f92672>-&gt;</span><span style=color:#a6e22e>info</span>(<span style=color:#e6db74>&#39;原因：&#39;</span> <span style=color:#f92672>.</span> $msg);
+</span></span><span style=display:flex><span>            $subject <span style=color:#f92672>=</span> <span style=color:#a6e22e>env</span>(<span style=color:#e6db74>&#39;MAIL_FROM_NAME&#39;</span>);
+</span></span><span style=display:flex><span>            <span style=color:#75715e>/*//方式一
+</span></span></span><span style=display:flex><span><span style=color:#75715e>            Mail::to($toUser)-&gt;send(new Alarm($msg));
+</span></span></span><span style=display:flex><span><span style=color:#75715e>            //方式二
+</span></span></span><span style=display:flex><span><span style=color:#75715e>            Mail::send(&#39;emails.alarm.text&#39;, [
+</span></span></span><span style=display:flex><span><span style=color:#75715e>                &#39;name&#39; =&gt; env(&#39;MAIL_FROM_NAME&#39;),
+</span></span></span><span style=display:flex><span><span style=color:#75715e>                &#39;title&#39; =&gt; env(&#39;MAIL_FROM_NAME&#39;),
+</span></span></span><span style=display:flex><span><span style=color:#75715e>                &#39;content&#39; =&gt; $msg,
+</span></span></span><span style=display:flex><span><span style=color:#75715e>            ], function ($message) use ($toUser, $subject) {
+</span></span></span><span style=display:flex><span><span style=color:#75715e>                $message-&gt;to($toUser)-&gt;subject($subject);
+</span></span></span><span style=display:flex><span><span style=color:#75715e>                //发送附件
+</span></span></span><span style=display:flex><span><span style=color:#75715e>                //$attachment = storage_path(&#39;xls/files/test.xls&#39;);
+</span></span></span><span style=display:flex><span><span style=color:#75715e>                //$message-&gt;attach($attachment, [&#39;as&#39; =&gt; &#39;中文文档.xls&#39;]);
+</span></span></span><span style=display:flex><span><span style=color:#75715e>            });*/</span>
+</span></span><span style=display:flex><span>            <span style=color:#75715e>//方式三 发送纯文本
+</span></span></span><span style=display:flex><span>            <span style=color:#a6e22e>Mail</span><span style=color:#f92672>::</span><span style=color:#a6e22e>raw</span>($msg, <span style=color:#66d9ef>function</span> ($message) <span style=color:#66d9ef>use</span> ($toUser, $subject) {
+</span></span><span style=display:flex><span>                $message<span style=color:#f92672>-&gt;</span><span style=color:#a6e22e>to</span>($toUser)<span style=color:#f92672>-&gt;</span><span style=color:#a6e22e>subject</span>($subject);
+</span></span><span style=display:flex><span>            });
+</span></span><span style=display:flex><span>            <span style=color:#75715e>//错误处理
+</span></span></span><span style=display:flex><span>            <span style=color:#66d9ef>if</span> (<span style=color:#a6e22e>count</span>(<span style=color:#a6e22e>Mail</span><span style=color:#f92672>::</span><span style=color:#a6e22e>failures</span>()) <span style=color:#f92672>&lt;</span> <span style=color:#ae81ff>1</span>) {
+</span></span><span style=display:flex><span>                $this<span style=color:#f92672>-&gt;</span><span style=color:#a6e22e>info</span>(<span style=color:#e6db74>&#39;发送邮件成功，请查收！&#39;</span>);
+</span></span><span style=display:flex><span>            } <span style=color:#66d9ef>else</span> {
+</span></span><span style=display:flex><span>                $this<span style=color:#f92672>-&gt;</span><span style=color:#a6e22e>info</span>(<span style=color:#e6db74>&#39;发送邮件失败，请重试！&#39;</span>);
+</span></span><span style=display:flex><span>            }
+</span></span><span style=display:flex><span>        }
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p> </p><h2 id=调用>调用</h2><p><code>SendLinkSubmit</code>类中，<code>protected $signature = 'send:linkSubmit';</code>设置的是命令名称，<code>protected $description = '向百度主动提交链接';</code>设置的是命令描述，所以到网站根目录下。运行如下命令就可以执行<code> public function handle()</code>里面的代码。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-php data-lang=php><span style=display:flex><span><span style=color:#a6e22e>php</span> <span style=color:#a6e22e>artisan</span> <span style=color:#a6e22e>send</span><span style=color:#f92672>:</span><span style=color:#a6e22e>LinkSubmit</span>
+</span></span></code></pre></div><p><img src=https://www.choudalao.com/uploads/20191116/20191116221719vTyivA.png alt></p><h1 id=定时任务>定时任务</h1><p>在编写好artisan命令后（也就是<code>SendLinkSubmit。php</code>）,我们在<code>Kernel.php</code>，command 方法传递命令名称或者类来调度一个 Artisan 命令。并写入计划任务</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-php data-lang=php><span style=display:flex><span> <span style=color:#f92672>**</span>
+</span></span><span style=display:flex><span>     <span style=color:#f92672>*</span> <span style=color:#a6e22e>应用中自定义的</span> <span style=color:#a6e22e>Artisan</span> <span style=color:#a6e22e>命令</span>
+</span></span><span style=display:flex><span>     <span style=color:#f92672>*</span> <span style=color:#a6e22e>The</span> <span style=color:#a6e22e>Artisan</span> <span style=color:#a6e22e>commands</span> <span style=color:#a6e22e>provided</span> <span style=color:#a6e22e>by</span> <span style=color:#a6e22e>your</span> <span style=color:#a6e22e>application</span><span style=color:#f92672>.</span>
+</span></span><span style=display:flex><span>     <span style=color:#f92672>*</span>
+</span></span><span style=display:flex><span>     <span style=color:#f92672>*</span> <span style=color:#f92672>@</span><span style=color:#66d9ef>var</span> <span style=color:#66d9ef>array</span>
+</span></span><span style=display:flex><span>     <span style=color:#f92672>*/</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>protected</span> $commands <span style=color:#f92672>=</span> [
+</span></span><span style=display:flex><span>        <span style=color:#75715e>//
+</span></span></span><span style=display:flex><span>        <span style=color:#75715e>//LogInfo::class,
+</span></span></span><span style=display:flex><span>        <span style=color:#a6e22e>SendLinkSubmit</span><span style=color:#f92672>::</span><span style=color:#a6e22e>class</span>,
+</span></span><span style=display:flex><span>    ];
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>/**
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>     * 定义计划任务
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>     * Define the application&#39;s command schedule.
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>     *
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>     * @param  \Illuminate\Console\Scheduling\Schedule  $schedule
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>     * @return void
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>     */</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>protected</span> <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>schedule</span>(<span style=color:#a6e22e>Schedule</span> $schedule)
+</span></span><span style=display:flex><span>    {
+</span></span><span style=display:flex><span>        <span style=color:#75715e>// $schedule-&gt;command(&#39;inspire&#39;)
+</span></span></span><span style=display:flex><span>        <span style=color:#75715e>//          -&gt;hourly();
+</span></span></span><span style=display:flex><span>        <span style=color:#75715e>//log
+</span></span></span><span style=display:flex><span>        <span style=color:#75715e>//$schedule-&gt;command(&#39;lesson:log&#39;)-&gt;everyMinute();
+</span></span></span><span style=display:flex><span>        $schedule<span style=color:#f92672>-&gt;</span><span style=color:#a6e22e>command</span>(<span style=color:#e6db74>&#39;send:linkSubmit&#39;</span>)<span style=color:#f92672>-&gt;</span><span style=color:#a6e22e>everyMinute</span>();
+</span></span><span style=display:flex><span>    }
+</span></span></code></pre></div><h1 id=启用调度器>启用调度器</h1><p>当我们编辑好我们的定时任务后，我们只需要到我们网站的根目录下，启动调度器就可以了。</p><h3 id=找到当前站点运行的php版本>找到当前站点运行的php版本</h3><p> </p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-shell data-lang=shell><span style=display:flex><span>php -v
+</span></span></code></pre></div><p><img src=https://www.choudalao.com/uploads/20191117/20191117111646e0x3Gy.png alt></p><p>我这边有两个php版本，但是运行的是7.3.11版本的。</p><h3 id=查找phpini文件所在的位置>查找PHP.ini文件所在的位置</h3><p> </p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-shell data-lang=shell><span style=display:flex><span>sudo  find / -name php.ini
+</span></span></code></pre></div><p> 
+运行文件在对应的bin里面
+ </p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-shell data-lang=shell><span style=display:flex><span>/www/server/php/73/bin/php
+</span></span></code></pre></div><p> 
+<img src=https://www.choudalao.com/uploads/20191117/20191117111900AtKt4Q.png alt>
+ </p><h3 id=执行crontab--e--在里面添加下面的cron入口>执行crontab -e 在里面添加下面的cron入口</h3><p> </p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-shell data-lang=shell><span style=display:flex><span>sudo crontab -e
+</span></span></code></pre></div><p>在里面加入<code>* * * * * /www/server/php/73/bin/php /www/wwwroot/www.choudalao.com/artisan schedule:run >> /dev/null 2>&amp;1</code>,保存退出。
+<img src=https://www.choudalao.com/uploads/20191117/20191117132549t7G1ZW.png alt></p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-shell data-lang=shell><span style=display:flex><span>*  * * * * /www/server/php/73/bin/php /www/wwwroot/www.choudalao.com/artisan schedule:run &gt;&gt; /dev/null 2&gt;&amp;<span style=color:#ae81ff>1</span>
+</span></span></code></pre></div><p><img src=https://www.choudalao.com/uploads/20191117/20191117112523g9PS6y.png alt></p><p>/www/server/php/73/bin/php是PHP文件所在的位置
+/www/wwwroot/www.choudalao.com/artisan 是项目根目录
+* * * * * 指这个 Cron 为每分钟执行一次 Laravel 的命令行调度器
+当 schedule:run 命令被执行的时候，Laravel 会根据你的调度执行预定的程序。</p><h3 id=执行>执行</h3><p>完成以上工作后，其实已经加到定时任务了，也可以执行命令运行查看效果。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-shell data-lang=shell><span style=display:flex><span>php artisan schedule:run
+</span></span></code></pre></div><p><img src=https://www.choudalao.com/uploads/20191117/20191117132946F6aTjC.png alt></p><p><img src=https://www.choudalao.com/uploads/20191117/20191117133105X7S21P.png alt></p><p>已经可以成功推送了。完成！</p></div></article></main></div><aside class=sidebar><div class="widget-categories widget"><h4 class=widget__title>分类</h4><div class=widget__content><ul class=widget__list><li class=widget__item><a class=widget__link href=/choudalao.github.io/categories/ai/>AI</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/categories/go/>Go</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/categories/linux/>Linux</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/categories/mysql/>MYSQL</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/categories/php/>Php</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/categories/python/>Python</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/categories/%E4%B8%AA%E4%BA%BA/>个人</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/categories/%E5%85%B6%E4%BB%96/>其他</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/categories/%E5%89%8D%E7%AB%AF/>前端</a></li></ul></div></div><div class="widget-recent widget"><h4 class=widget__title>近期文章</h4><div class=widget__content><ul class=widget__list><li class=widget__item><a class=widget__link href=/choudalao.github.io/posts/2025-04-19-cline%E4%B8%AD%E4%BD%BF%E7%94%A8-mysql-mcp-%E6%9C%8D%E5%8A%A1/>Cline中使用 MySql MCP 服务</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/posts/2020-09-03-%E5%9F%BA%E4%BA%8Elaravel%E5%8F%8Alayui%E5%BC%80%E5%8F%91%E7%9A%84%E5%90%8E%E5%8F%B0%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F-laravel-wjfcms/>基于laravel及layui开发的后台管理系统 -- laravel-wjfcms</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/posts/2020-06-02-%E8%85%BE%E8%AE%AF%E4%BA%91%E4%BA%A7%E5%93%81%E5%A4%A7%E4%BF%83/>腾讯云产品大促</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/posts/2019-09-21-git%E6%93%8D%E4%BD%9C/>Git操作</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/posts/2026-01-29-openclaw-%E5%AE%89%E8%A3%85%E5%8F%8A%E4%BD%BF%E7%94%A8/>openclaw 安装及使用</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/posts/2026-01-28-mise-%E5%AE%89%E8%A3%85%E5%8F%8A%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/>mise 安装及使用指南</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/posts/2026-01-26-%E7%94%A8-obsidian-%E6%89%93%E9%80%A0ai%E7%AC%94%E8%AE%B0/>用 Obsidian 打造AI笔记</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/posts/2026-01-22-claude-%E5%AE%98%E6%96%B9-skill-creator-%E4%BB%8B%E7%BB%8D%E5%8F%8A%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/>Claude 官方 Skill-Creator 介绍及使用指南</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/posts/2026-01-22-%E9%80%9A%E8%BF%87qq%E9%82%AE%E7%AE%B1%E4%BB%A3%E6%94%B6gmail%E9%82%AE%E4%BB%B6/>通过QQ邮箱代收Gmail邮件</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/posts/2026-01-19-%E8%A7%A3%E5%86%B3-wsl2-windows-hosts-%E5%BC%80%E5%90%AF-vpn-%E5%90%8E%E6%97%A0%E6%B3%95%E8%AE%BF%E9%97%AE%E6%9C%AC%E5%9C%B0-web-%E6%9C%8D%E5%8A%A1%E7%9A%84%E9%97%AE%E9%A2%98/>解决 WSL2 + Windows Hosts + 开启 VPN 后无法访问本地 Web 服务的问题</a></li></ul></div></div><div class="widget-taglist widget"><h4 class=widget__title>标签</h4><div class=widget__content><a class="widget-taglist__link widget__link btn" href=/choudalao.github.io/tags/php/ title=Php>Php</a>
+<a class="widget-taglist__link widget__link btn" href=/choudalao.github.io/tags/%E5%85%B3%E4%BA%8E/ title=关于>关于</a></div></div></aside></div><footer class=footer><div class="container footer__container flex"><div class=footer__copyright>&copy; 2026 臭大佬博客.
+<span class=footer__copyright-credits>基于 <a href=https://gohugo.io/ rel="nofollow noopener" target=_blank>Hugo</a> 引擎和 <a href=https://github.com/Vimux/Mainroad/ rel="nofollow noopener" target=_blank>Mainroad</a> 主题</span></div></div></footer></div><script async defer src=/choudalao.github.io/js/menu.js></script></body></html>

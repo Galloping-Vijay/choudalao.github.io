@@ -1,0 +1,96 @@
+<!doctype html><html class=no-js lang=en><head><meta charset=UTF-8><meta name=viewport content="width=device-width,initial-scale=1"><title>php的自动加载和命名空间 - 臭大佬博客</title><script>(function(e,t){e[t]=e[t].replace("no-js","js")})(document.documentElement,"className")</script><meta name=description content="php的自动加载和命名空间"><link rel=preconnect href=https://fonts.gstatic.com crossorigin><link rel=dns-prefetch href=//fonts.googleapis.com><link rel=dns-prefetch href=//fonts.gstatic.com><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700"><link rel=stylesheet href=/choudalao.github.io/css/style.css><link rel="shortcut icon" href=/choudalao.github.io/favicon.ico></head><body class=body><div class="container container--outer"><header class=header><div class="container header__container"><div class=logo><a class=logo__link href=/choudalao.github.io/ title=臭大佬博客 rel=home><div class="logo__item logo__text"><div class=logo__title>臭大佬博客</div></div></a></div><nav class=menu><button class=menu__btn aria-haspopup=true aria-expanded=false tabindex=0>
+<span class=menu__btn-title tabindex=-1>菜单</span></button><ul class=menu__list><li class=menu__item><a class=menu__link href=/choudalao.github.io/><span class=menu__text>首页</span></a></li><li class=menu__item><a class=menu__link href=/choudalao.github.io/categories/><span class=menu__text>分类</span></a></li><li class=menu__item><a class=menu__link href=/choudalao.github.io/tags/><span class=menu__text>标签</span></a></li><li class=menu__item><a class=menu__link href=/choudalao.github.io/posts/><span class=menu__text>归档</span></a></li><li class=menu__item><a class=menu__link href=/choudalao.github.io/about/><span class=menu__text>关于</span></a></li></ul></nav></div></header><div class="wrapper flex"><div class=primary><main class=main role=main><article class=post><header class=post__header><h1 class=post__title>php的自动加载和命名空间</h1></header><div class="content post__content clearfix"><h1 id=__autoload>__autoload</h1><p>魔术变量 __autoload()：当需要使用的类没有被引入时，这个函数会在PHP报错前被触发，未定义的类名会被当作参数传入。</p><p><em>注意：Warning
+本特性已自 PHP 7.2.0 起废弃。强烈建议不要使用本特性。
+见官方文档- <a href=https://www.php.net/manual/zh/function.autoload.php title=https://www.php.net/manual/zh/function.autoload.php>https://www.php.net/manual/zh/function.autoload.php</a></em></p><p>本地调用会报如下错误，<del>Deprecated: __autoload() is deprecated, use spl_autoload_register() instead in XXX</del></p><p>所以，PHP 版本号大于 5.12，都可以使用spl_autoload_register 函数来代替。</p><h1 id=命名空间>命名空间</h1><p>命名空间是为了解决命名冲突的问题。
+使用命名空间只是让类名有了前缀，不容易发生冲突，系统仍然不会进行自动导入。</p><h1 id=spl_autoload>spl_autoload</h1><p>一旦调用 spl_autoload_register() 函数，当调用未定义类时，系统就会按顺序调用注册到 spl_autoload_register() 函数的所有函数，而不是自动调用 __autoload() 函数。</p><h1 id=psr-4规范>PSR-4规范</h1><p>PSR-4 是关于由文件路径自动载入对应类的相关规范，规范规定了一个完全限定类名需要具有以下结构：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-php data-lang=php><span style=display:flex><span><span style=color:#a6e22e>\</span><span style=color:#f92672>&lt;</span><span style=color:#a6e22e>顶级命名空间</span><span style=color:#f92672>&gt;</span>(<span style=color:#a6e22e>\</span><span style=color:#f92672>&lt;</span><span style=color:#a6e22e>子命名空间</span><span style=color:#f92672>&gt;</span>)<span style=color:#f92672>*</span><span style=color:#a6e22e>\</span><span style=color:#f92672>&lt;</span><span style=color:#a6e22e>类名</span><span style=color:#f92672>&gt;</span>
+</span></span></code></pre></div><p>PSR-4 规范中必须要有一个顶级命名空间，它的意义在于表示某一个特殊的目录（文件基目录）。子命名空间代表的是类文件相对于文件基目录的这一段路径（相对路径），类名则与文件名保持一致（注意大小写的区别）。</p><h1 id=demo>demo</h1><p>我们来实现以下自动加载功能。目录结构如下：</p><blockquote><p>demo
+&mldr;.one
+&mldr;&mldr;..a.php
+&mldr;.two
+&mldr;&mldr;..a.php
+&mldr;.verdor
+&mldr;&mldr;..Loader.php
+index.php</p></blockquote><p><img src=https://www.choudalao.com/uploads/20201031/20201031144058d333iB.png alt></p><p>代码如下：
+demo/one/a.php</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-php data-lang=php><span style=display:flex><span><span style=color:#f92672>&lt;?</span><span style=color:#a6e22e>php</span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>namespace</span> <span style=color:#a6e22e>app\one</span>;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>class</span> <span style=color:#a6e22e>A</span>
+</span></span><span style=display:flex><span>{
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// 对象实例化时输出当前类名
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>__construct</span>()
+</span></span><span style=display:flex><span>    {
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>echo</span> <span style=color:#e6db74>&#39;one/&#39;</span> <span style=color:#f92672>.</span> <span style=color:#66d9ef>__CLASS__</span>;
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>echo</span> <span style=color:#e6db74>&#34;</span><span style=color:#ae81ff>\r\n</span><span style=color:#e6db74>&#34;</span>;
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>demo/two/a.php</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-php data-lang=php><span style=display:flex><span><span style=color:#f92672>&lt;?</span><span style=color:#a6e22e>php</span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>namespace</span> <span style=color:#a6e22e>app\two</span>;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>class</span> <span style=color:#a6e22e>A</span>
+</span></span><span style=display:flex><span>{
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// 对象实例化时输出当前类名
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>__construct</span>()
+</span></span><span style=display:flex><span>    {
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>echo</span> <span style=color:#e6db74>&#39;two/&#39;</span> <span style=color:#f92672>.</span> <span style=color:#66d9ef>__CLASS__</span>;
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>echo</span> <span style=color:#e6db74>&#34;</span><span style=color:#ae81ff>\r\n</span><span style=color:#e6db74>&#34;</span>;
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>自动加载文件：demo/verdor/Loader.php</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-php data-lang=php><span style=display:flex><span><span style=color:#f92672>&lt;?</span><span style=color:#a6e22e>php</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>class</span> <span style=color:#a6e22e>Loader</span>
+</span></span><span style=display:flex><span>{
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>/**
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>     * 路径映射
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>     */</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>public</span> <span style=color:#66d9ef>static</span> $vendorMap <span style=color:#f92672>=</span> <span style=color:#66d9ef>array</span>(
+</span></span><span style=display:flex><span>        <span style=color:#e6db74>&#39;app&#39;</span> <span style=color:#f92672>=&gt;</span> <span style=color:#66d9ef>__DIR__</span> <span style=color:#f92672>.</span> <span style=color:#a6e22e>DIRECTORY_SEPARATOR</span> <span style=color:#f92672>.</span> <span style=color:#e6db74>&#39;..&#39;</span>,
+</span></span><span style=display:flex><span>    );
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>/**
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>     * 自动加载器
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>     */</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>public</span> <span style=color:#66d9ef>static</span> <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>autoload</span>($class)
+</span></span><span style=display:flex><span>    {
+</span></span><span style=display:flex><span>        $file <span style=color:#f92672>=</span> <span style=color:#a6e22e>self</span><span style=color:#f92672>::</span><span style=color:#a6e22e>findFile</span>($class);
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>if</span> (<span style=color:#a6e22e>file_exists</span>($file)) {
+</span></span><span style=display:flex><span>            <span style=color:#a6e22e>self</span><span style=color:#f92672>::</span><span style=color:#a6e22e>includeFile</span>($file);
+</span></span><span style=display:flex><span>        }
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>/**
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>     * 解析文件路径
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>     */</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>private</span> <span style=color:#66d9ef>static</span> <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>findFile</span>($class)
+</span></span><span style=display:flex><span>    {
+</span></span><span style=display:flex><span>        $vendor <span style=color:#f92672>=</span> <span style=color:#a6e22e>substr</span>($class, <span style=color:#ae81ff>0</span>, <span style=color:#a6e22e>strpos</span>($class, <span style=color:#e6db74>&#39;\\&#39;</span>)); <span style=color:#75715e>// 顶级命名空间
+</span></span></span><span style=display:flex><span>        $vendorDir <span style=color:#f92672>=</span> <span style=color:#a6e22e>self</span><span style=color:#f92672>::</span>$vendorMap[$vendor]; <span style=color:#75715e>// 文件基目录
+</span></span></span><span style=display:flex><span>        $filePath <span style=color:#f92672>=</span> <span style=color:#a6e22e>substr</span>($class, <span style=color:#a6e22e>strlen</span>($vendor)) <span style=color:#f92672>.</span> <span style=color:#e6db74>&#39;.php&#39;</span>; <span style=color:#75715e>// 文件相对路径
+</span></span></span><span style=display:flex><span>        <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>strtr</span>($vendorDir <span style=color:#f92672>.</span> $filePath, <span style=color:#e6db74>&#39;\\&#39;</span>, <span style=color:#a6e22e>DIRECTORY_SEPARATOR</span>); <span style=color:#75715e>// 文件标准路径
+</span></span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>/**
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>     * 引入文件
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>     */</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>private</span> <span style=color:#66d9ef>static</span> <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>includeFile</span>($file)
+</span></span><span style=display:flex><span>    {
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>if</span> (<span style=color:#a6e22e>is_file</span>($file)) {
+</span></span><span style=display:flex><span>            <span style=color:#66d9ef>include</span> $file;
+</span></span><span style=display:flex><span>        }
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>入口文件 demo/index.php</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-php data-lang=php><span style=display:flex><span><span style=color:#f92672>&lt;?</span><span style=color:#a6e22e>php</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>namespace</span> <span style=color:#a6e22e>app</span>;
+</span></span><span style=display:flex><span><span style=color:#75715e>// 引入加载器
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>include</span> <span style=color:#e6db74>&#39;./verdor/Loader.php&#39;</span>; 
+</span></span><span style=display:flex><span><span style=color:#75715e>// 注册自动加载
+</span></span></span><span style=display:flex><span><span style=color:#a6e22e>spl_autoload_register</span>(<span style=color:#e6db74>&#39;Loader::autoload&#39;</span>); 
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>new</span> <span style=color:#a6e22e>one\A</span>();
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>new</span> <span style=color:#a6e22e>two\A</span>();
+</span></span></code></pre></div><p>在demo目录下运行：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-php data-lang=php><span style=display:flex><span><span style=color:#a6e22e>php</span> <span style=color:#a6e22e>index</span><span style=color:#f92672>.</span><span style=color:#a6e22e>php</span>
+</span></span></code></pre></div><blockquote><p>one/app\one\A
+two/app\two\A</p></blockquote><p>这样我们就实现了自动加载。</p></div></article></main></div><aside class=sidebar><div class="widget-categories widget"><h4 class=widget__title>分类</h4><div class=widget__content><ul class=widget__list><li class=widget__item><a class=widget__link href=/choudalao.github.io/categories/ai/>AI</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/categories/go/>Go</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/categories/linux/>Linux</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/categories/mysql/>MYSQL</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/categories/php/>Php</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/categories/python/>Python</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/categories/%E4%B8%AA%E4%BA%BA/>个人</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/categories/%E5%85%B6%E4%BB%96/>其他</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/categories/%E5%89%8D%E7%AB%AF/>前端</a></li></ul></div></div><div class="widget-recent widget"><h4 class=widget__title>近期文章</h4><div class=widget__content><ul class=widget__list><li class=widget__item><a class=widget__link href=/choudalao.github.io/posts/2025-04-19-cline%E4%B8%AD%E4%BD%BF%E7%94%A8-mysql-mcp-%E6%9C%8D%E5%8A%A1/>Cline中使用 MySql MCP 服务</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/posts/2020-09-03-%E5%9F%BA%E4%BA%8Elaravel%E5%8F%8Alayui%E5%BC%80%E5%8F%91%E7%9A%84%E5%90%8E%E5%8F%B0%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F-laravel-wjfcms/>基于laravel及layui开发的后台管理系统 -- laravel-wjfcms</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/posts/2020-06-02-%E8%85%BE%E8%AE%AF%E4%BA%91%E4%BA%A7%E5%93%81%E5%A4%A7%E4%BF%83/>腾讯云产品大促</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/posts/2019-09-21-git%E6%93%8D%E4%BD%9C/>Git操作</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/posts/2026-01-29-openclaw-%E5%AE%89%E8%A3%85%E5%8F%8A%E4%BD%BF%E7%94%A8/>openclaw 安装及使用</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/posts/2026-01-28-mise-%E5%AE%89%E8%A3%85%E5%8F%8A%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/>mise 安装及使用指南</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/posts/2026-01-26-%E7%94%A8-obsidian-%E6%89%93%E9%80%A0ai%E7%AC%94%E8%AE%B0/>用 Obsidian 打造AI笔记</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/posts/2026-01-22-claude-%E5%AE%98%E6%96%B9-skill-creator-%E4%BB%8B%E7%BB%8D%E5%8F%8A%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/>Claude 官方 Skill-Creator 介绍及使用指南</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/posts/2026-01-22-%E9%80%9A%E8%BF%87qq%E9%82%AE%E7%AE%B1%E4%BB%A3%E6%94%B6gmail%E9%82%AE%E4%BB%B6/>通过QQ邮箱代收Gmail邮件</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/posts/2026-01-19-%E8%A7%A3%E5%86%B3-wsl2-windows-hosts-%E5%BC%80%E5%90%AF-vpn-%E5%90%8E%E6%97%A0%E6%B3%95%E8%AE%BF%E9%97%AE%E6%9C%AC%E5%9C%B0-web-%E6%9C%8D%E5%8A%A1%E7%9A%84%E9%97%AE%E9%A2%98/>解决 WSL2 + Windows Hosts + 开启 VPN 后无法访问本地 Web 服务的问题</a></li></ul></div></div><div class="widget-taglist widget"><h4 class=widget__title>标签</h4><div class=widget__content><a class="widget-taglist__link widget__link btn" href=/choudalao.github.io/tags/php/ title=Php>Php</a>
+<a class="widget-taglist__link widget__link btn" href=/choudalao.github.io/tags/%E5%85%B3%E4%BA%8E/ title=关于>关于</a></div></div></aside></div><footer class=footer><div class="container footer__container flex"><div class=footer__copyright>&copy; 2026 臭大佬博客.
+<span class=footer__copyright-credits>基于 <a href=https://gohugo.io/ rel="nofollow noopener" target=_blank>Hugo</a> 引擎和 <a href=https://github.com/Vimux/Mainroad/ rel="nofollow noopener" target=_blank>Mainroad</a> 主题</span></div></div></footer></div><script async defer src=/choudalao.github.io/js/menu.js></script></body></html>

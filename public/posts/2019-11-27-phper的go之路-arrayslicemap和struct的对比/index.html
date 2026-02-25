@@ -1,0 +1,159 @@
+<!doctype html><html class=no-js lang=en><head><meta charset=UTF-8><meta name=viewport content="width=device-width,initial-scale=1"><title>PHPer的Go之路 -- array、slice、map和struct的对比 - 臭大佬博客</title><script>(function(e,t){e[t]=e[t].replace("no-js","js")})(document.documentElement,"className")</script><meta name=description content="这篇讲解go语言中数据存储类型array、slice、map和struct，要清楚它们那些是值传递，那些是指针传递（也就是引用类型），这对后面的数据处理非常重要！"><link rel=preconnect href=https://fonts.gstatic.com crossorigin><link rel=dns-prefetch href=//fonts.googleapis.com><link rel=dns-prefetch href=//fonts.gstatic.com><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700"><link rel=stylesheet href=/choudalao.github.io/css/style.css><link rel="shortcut icon" href=/choudalao.github.io/favicon.ico></head><body class=body><div class="container container--outer"><header class=header><div class="container header__container"><div class=logo><a class=logo__link href=/choudalao.github.io/ title=臭大佬博客 rel=home><div class="logo__item logo__text"><div class=logo__title>臭大佬博客</div></div></a></div><nav class=menu><button class=menu__btn aria-haspopup=true aria-expanded=false tabindex=0>
+<span class=menu__btn-title tabindex=-1>菜单</span></button><ul class=menu__list><li class=menu__item><a class=menu__link href=/choudalao.github.io/><span class=menu__text>首页</span></a></li><li class=menu__item><a class=menu__link href=/choudalao.github.io/categories/><span class=menu__text>分类</span></a></li><li class=menu__item><a class=menu__link href=/choudalao.github.io/tags/><span class=menu__text>标签</span></a></li><li class=menu__item><a class=menu__link href=/choudalao.github.io/posts/><span class=menu__text>归档</span></a></li><li class=menu__item><a class=menu__link href=/choudalao.github.io/about/><span class=menu__text>关于</span></a></li></ul></nav></div></header><div class="wrapper flex"><div class=primary><main class=main role=main><article class=post><header class=post__header><h1 class=post__title>PHPer的Go之路 -- array、slice、map和struct的对比</h1></header><div class="content post__content clearfix"><h1 id=数组array>数组Array</h1><p>1、数组长度也是类型的一部分，因此具有不同长度的数组为不同类型；
+2、注意区分指向数组的指针和指针数组；
+3、数组在Go中为值类型；（这是和Java非常不同的一点）
+4、数组之间可以使用 == 或者 != 进行比较，但不可以使用 &lt; 或 >
+5、可以使用new来创建数组，此方法返回一个指向数组的指针；
+6、Go支持多维数组</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#f92672>package</span> <span style=color:#a6e22e>main</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#f92672>import</span> <span style=color:#e6db74>&#34;fmt&#34;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>main</span>() {
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>arrayTest</span>()
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>arrayTest</span>() {
+</span></span><span style=display:flex><span>	<span style=color:#75715e>//先声明，后赋值</span>
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>var</span> <span style=color:#a6e22e>a</span> [<span style=color:#ae81ff>2</span>] <span style=color:#66d9ef>string</span>
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>a</span>[<span style=color:#ae81ff>0</span>] = <span style=color:#e6db74>&#34;hello&#34;</span>
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>a</span>[<span style=color:#ae81ff>1</span>] = <span style=color:#e6db74>&#34;world&#34;</span>
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span>(<span style=color:#a6e22e>a</span>[<span style=color:#ae81ff>0</span>], <span style=color:#a6e22e>a</span>[<span style=color:#ae81ff>1</span>])
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span>(<span style=color:#a6e22e>a</span>)
+</span></span><span style=display:flex><span>	<span style=color:#75715e>//声明并赋值</span>
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>prime</span> <span style=color:#f92672>:=</span> [<span style=color:#ae81ff>6</span>]<span style=color:#66d9ef>int</span>{<span style=color:#ae81ff>2</span>, <span style=color:#ae81ff>3</span>, <span style=color:#ae81ff>5</span>, <span style=color:#ae81ff>7</span>, <span style=color:#ae81ff>11</span>, <span style=color:#ae81ff>13</span>}
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span>(<span style=color:#a6e22e>prime</span>)
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p><img src=https://www.choudalao.com/uploads/20191127/20191127225947rWabW3.png alt></p><p>区分指向数组的指针和指针数组:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#75715e>//可以利用...不指定数组长度</span>
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>a</span><span style=color:#f92672>:=</span>[<span style=color:#f92672>...</span>]<span style=color:#66d9ef>int</span>{<span style=color:#ae81ff>9</span>:<span style=color:#ae81ff>1</span>}
+</span></span><span style=display:flex><span>	<span style=color:#75715e>//指向数组的指针</span>
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>var</span> <span style=color:#a6e22e>p</span> <span style=color:#f92672>*</span>[<span style=color:#ae81ff>10</span>]<span style=color:#66d9ef>int</span>=<span style=color:#f92672>&amp;</span><span style=color:#a6e22e>a</span>
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span>(<span style=color:#a6e22e>p</span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>x</span>,<span style=color:#a6e22e>y</span> <span style=color:#f92672>:=</span><span style=color:#ae81ff>1</span>,<span style=color:#ae81ff>2</span>
+</span></span><span style=display:flex><span>	<span style=color:#75715e>//指针数组</span>
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>b</span><span style=color:#f92672>:=</span>[<span style=color:#f92672>...</span>]<span style=color:#f92672>*</span><span style=color:#66d9ef>int</span>{<span style=color:#f92672>&amp;</span><span style=color:#a6e22e>x</span>,<span style=color:#f92672>&amp;</span><span style=color:#a6e22e>y</span>}
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span>(<span style=color:#a6e22e>b</span>)
+</span></span></code></pre></div><blockquote><p>λ go run gogo.go
+&[0 0 0 0 0 0 0 0 0 1]
+[0xc000012168 0xc000012180]</p></blockquote><h1 id=切片slice>切片slice</h1><p>1、其本身并不是数组，它指向底层的数组。（切片为引用类型）；
+2、作为变长数组的替代方案，可以关联底层数组的局部或全部；
+3、可以直接创建或从底层数组获取生成；
+4、一般使用make()创建，使用len()获取元素个数，cap()获取容量；
+5、如果多个slice指向相同的底层数组，其中一个的值改变会影响全部。</p><h3 id=创建方式>创建方式</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#75715e>//创建一个切片,跟数组相比没有规定长度</span>
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>p</span><span style=color:#f92672>:=</span>[]<span style=color:#66d9ef>int</span>{<span style=color:#ae81ff>2</span>,<span style=color:#ae81ff>3</span>,<span style=color:#ae81ff>5</span>,<span style=color:#ae81ff>7</span>,<span style=color:#ae81ff>11</span>,<span style=color:#ae81ff>13</span>}
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span>(<span style=color:#e6db74>&#34;p==&#34;</span>,<span style=color:#a6e22e>p</span>)
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>for</span> <span style=color:#a6e22e>i</span> <span style=color:#f92672>:=</span> <span style=color:#ae81ff>0</span>; <span style=color:#a6e22e>i</span> &lt; len(<span style=color:#a6e22e>p</span>); <span style=color:#a6e22e>i</span><span style=color:#f92672>++</span> {
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span>(<span style=color:#a6e22e>i</span>,<span style=color:#a6e22e>p</span>[<span style=color:#a6e22e>i</span>])
+</span></span><span style=display:flex><span>	}
+</span></span><span style=display:flex><span>	<span style=color:#75715e>//利用make创建包含3个元素，容量为10的slice</span>
+</span></span><span style=display:flex><span>	<span style=color:#75715e>//提前分配容量10是为了增加元素而在此分配内存</span>
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>s1</span><span style=color:#f92672>:=</span>make([]<span style=color:#66d9ef>int</span>,<span style=color:#ae81ff>3</span>,<span style=color:#ae81ff>10</span>)
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span>(len(<span style=color:#a6e22e>s1</span>),cap(<span style=color:#a6e22e>s1</span>))
+</span></span><span style=display:flex><span>	<span style=color:#75715e>//注意打印出来的时候只包含三个元素</span>
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span>(<span style=color:#a6e22e>s1</span>)
+</span></span></code></pre></div><blockquote><p>λ go run gogo.go<br>p== [2 3 5 7 11 13]<br>0 2<br>1 3<br>2 5<br>3 7<br>4 11<br>5 13<br>3 10<br>[0 0 0]</p></blockquote><h3 id=reslice的理解>Reslice的理解：</h3><p>1、Reslice时索引以被slice的切片为准；
+2、索引不可以超过被slice的切片的容量cap()值；
+3、索引越界不会导致底层数组的重新分配而引发错误。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#a6e22e>a</span><span style=color:#f92672>:=</span>[]<span style=color:#66d9ef>byte</span>{<span style=color:#e6db74>&#39;a&#39;</span>,<span style=color:#e6db74>&#39;b&#39;</span>,<span style=color:#e6db74>&#39;c&#39;</span>,<span style=color:#e6db74>&#39;d&#39;</span>,<span style=color:#e6db74>&#39;e&#39;</span>,<span style=color:#e6db74>&#39;f&#39;</span>,<span style=color:#e6db74>&#39;g&#39;</span>,<span style=color:#e6db74>&#39;h&#39;</span>,<span style=color:#e6db74>&#39;i&#39;</span>,<span style=color:#e6db74>&#39;j&#39;</span>,<span style=color:#e6db74>&#39;k&#39;</span>}
+</span></span><span style=display:flex><span>	<span style=color:#75715e>//前闭后开</span>
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>sa</span><span style=color:#f92672>:=</span><span style=color:#a6e22e>a</span>[<span style=color:#ae81ff>2</span>:<span style=color:#ae81ff>5</span>]
+</span></span><span style=display:flex><span>	<span style=color:#75715e>//转化为字符串</span>
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span>(string(<span style=color:#a6e22e>sa</span>))
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span>(len(<span style=color:#a6e22e>sa</span>),cap(<span style=color:#a6e22e>sa</span>))
+</span></span><span style=display:flex><span>	<span style=color:#75715e>//从sa中取出元素--reslice功能</span>
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>sb</span><span style=color:#f92672>:=</span><span style=color:#a6e22e>sa</span>[<span style=color:#ae81ff>3</span>:<span style=color:#ae81ff>5</span>]
+</span></span><span style=display:flex><span>	<span style=color:#75715e>//打印出来的是fg，但是sa中并没有fg，这是为什么呢？</span>
+</span></span><span style=display:flex><span>	<span style=color:#75715e>//sa的本质是指针，指向的数组的地址,它会包含从3到最后一个元素的地址。（就像图中阴影部分的元素）</span>
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span>(string(<span style=color:#a6e22e>sb</span>))
+</span></span></code></pre></div><blockquote><p>λ go ru
+cde<br>3 9<br>fg</p></blockquote><h3 id=append的理解>Append的理解：</h3><p>1、可以在slice尾部追加元素；
+2、可以将一个slice追加在另一个slice尾部；
+3、如果最终长度未超过追加到slice的容量则返回原始slice，如果超过追加到的slice的容量则将重新分配数组并拷贝原始数据。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#a6e22e>s1</span><span style=color:#f92672>:=</span>make([]<span style=color:#66d9ef>int</span>,<span style=color:#ae81ff>3</span>,<span style=color:#ae81ff>6</span>)
+</span></span><span style=display:flex><span><span style=color:#75715e>//按格式输出</span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Printf</span>(<span style=color:#e6db74>&#34;%p\n&#34;</span>,<span style=color:#a6e22e>s1</span>)
+</span></span><span style=display:flex><span><span style=color:#a6e22e>s1</span> =append(<span style=color:#a6e22e>s1</span>,<span style=color:#ae81ff>1</span>,<span style=color:#ae81ff>2</span>,<span style=color:#ae81ff>3</span>)
+</span></span><span style=display:flex><span><span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Printf</span>(<span style=color:#e6db74>&#34;%v %p\n&#34;</span>,<span style=color:#a6e22e>s1</span>,<span style=color:#a6e22e>s1</span>)
+</span></span><span style=display:flex><span><span style=color:#a6e22e>s1</span> =append(<span style=color:#a6e22e>s1</span>,<span style=color:#ae81ff>1</span>,<span style=color:#ae81ff>2</span>,<span style=color:#ae81ff>3</span>)
+</span></span><span style=display:flex><span><span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Printf</span>(<span style=color:#e6db74>&#34;%v %p\n&#34;</span>,<span style=color:#a6e22e>s1</span>,<span style=color:#a6e22e>s1</span>)
+</span></span></code></pre></div><blockquote><p>λ go run gogo.go
+0xc00000e360
+[0 0 0 1 2 3] 0xc00000e360
+[0 0 0 1 2 3 1 2 3] 0xc000046060</p></blockquote><h1 id=集合map>集合map</h1><p>1、类似其它语言中哈希表或者字典，以key-value形式存储数据；
+2、Key必须是支持==或!=比较运算的类型，不可以是函数、map或slice；
+3、Map查找比线性搜索快很多，但比使用索引访问数据的类型慢100倍；
+4、Map使用make()创建，支持:=这种简写方式，make([keyType] valueType,cap)，cap表示容量，可省略；超出容量时会自动扩容，但尽量提供一个合理的初始值；使用len()获取元素的个数。
+5、键值对不存在时自动添加，使用delete()删除某键值对，比如delete(m,1)；
+6、使用for range对map和slice进行迭代操作。</p><h3 id=创建>创建</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#75715e>//声明一个map，int是key类型，string是value类型</span>
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>var</span> <span style=color:#a6e22e>m</span> <span style=color:#66d9ef>map</span>[<span style=color:#66d9ef>int</span>]<span style=color:#66d9ef>string</span>
+</span></span><span style=display:flex><span>	<span style=color:#75715e>//初始化map</span>
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>m</span> =<span style=color:#66d9ef>map</span>[<span style=color:#66d9ef>int</span>]<span style=color:#66d9ef>string</span>{}
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Print</span>(<span style=color:#a6e22e>m</span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>	<span style=color:#75715e>//使用make创建一个map</span>
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>n</span><span style=color:#f92672>:=</span>make(<span style=color:#66d9ef>map</span>[<span style=color:#66d9ef>int</span>]<span style=color:#66d9ef>string</span>)
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>n</span>[<span style=color:#ae81ff>1</span>]=<span style=color:#e6db74>&#34;OK&#34;</span>
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>a</span><span style=color:#f92672>:=</span><span style=color:#a6e22e>n</span>[<span style=color:#ae81ff>1</span>]
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span>(<span style=color:#a6e22e>n</span>)
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Print</span>(<span style=color:#a6e22e>a</span>)
+</span></span></code></pre></div><blockquote><p>λ go run gogo.go<br>map[]map[1:OK]<br>OK</p></blockquote><h3 id=range操作>range操作</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#75715e>//创建一个slice</span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>sm</span><span style=color:#f92672>:=</span>make([]<span style=color:#66d9ef>map</span>[<span style=color:#66d9ef>int</span>]<span style=color:#66d9ef>string</span>,<span style=color:#ae81ff>5</span>)
+</span></span><span style=display:flex><span><span style=color:#75715e>//对一个slice进行迭代,并对slice中的map进行初始化（i对代表的索引下标，v是代表对应的值）</span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>for</span> <span style=color:#a6e22e>i</span><span style=color:#f92672>:=</span> <span style=color:#66d9ef>range</span> <span style=color:#a6e22e>sm</span> {
+</span></span><span style=display:flex><span><span style=color:#75715e>//注意是通过索引去改变map中的值，否则只是普通的值拷贝</span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>sm</span>[<span style=color:#a6e22e>i</span>] =make(<span style=color:#66d9ef>map</span>[<span style=color:#66d9ef>int</span>]<span style=color:#66d9ef>string</span>,<span style=color:#ae81ff>1</span>)
+</span></span><span style=display:flex><span><span style=color:#a6e22e>sm</span>[<span style=color:#a6e22e>i</span>][<span style=color:#ae81ff>1</span>] =<span style=color:#e6db74>&#34;OK&#34;</span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span>(<span style=color:#a6e22e>sm</span>[<span style=color:#a6e22e>i</span>])
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span><span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span>(<span style=color:#a6e22e>sm</span>)
+</span></span></code></pre></div><blockquote><p>λ go run gogo.go
+map[1:OK]
+map[1:OK]
+map[1:OK]
+map[1:OK]
+map[1:OK]
+[map[1:OK] map[1:OK] map[1:OK] map[1:OK] map[1:OK]]</p></blockquote><h1 id=结构体struct>结构体struct</h1><p>1、Go中的struct与C中的struct非常相似，并且Go没有class，使用typestruct{} 定义结构，名称遵循可见性规则；
+2、支持指向自身的指针类型成员，支持匿名结构，可用作成员或定义成员变量，匿名结构也可以用于map值；
+3、可以使用字面值对结构进行初始化，允许直接通过指针来读写结构成员；
+4、相同类型的成员可进行直接拷贝赋值；
+5、支持==与!=比较运算，但不支持 > 或 &lt; ；
+6、支持匿名字段，本质上是定义了以某种类型名为名称的字段；
+7、可以使用匿名字段指针；
+8、嵌入结构作为匿名字段看起来像继承，但不是继承。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#f92672>package</span> <span style=color:#a6e22e>main</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#f92672>import</span> <span style=color:#e6db74>&#34;fmt&#34;</span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>type</span> <span style=color:#a6e22e>person</span> <span style=color:#66d9ef>struct</span> {
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>Name</span> <span style=color:#66d9ef>string</span>
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>Age</span> <span style=color:#66d9ef>int</span>
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>main</span>() {
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>a</span><span style=color:#f92672>:=</span><span style=color:#a6e22e>person</span>{}
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>a</span>.<span style=color:#a6e22e>Name</span> =<span style=color:#e6db74>&#34;臭大佬&#34;</span>
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>a</span>.<span style=color:#a6e22e>Age</span> =<span style=color:#ae81ff>26</span>
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Print</span>(<span style=color:#a6e22e>a</span>)
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><blockquote><p>λ go run gogo.go
+{臭大佬 26}</p></blockquote><h3 id=值传递>值传递</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#f92672>package</span> <span style=color:#a6e22e>main</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>import</span> <span style=color:#e6db74>&#34;fmt&#34;</span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>type</span> <span style=color:#a6e22e>person</span> <span style=color:#66d9ef>struct</span> {
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>Name</span> <span style=color:#66d9ef>string</span>
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>Age</span> <span style=color:#66d9ef>int</span>
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>main</span>() {
+</span></span><span style=display:flex><span>	<span style=color:#75715e>//字面值初始化</span>
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>a</span><span style=color:#f92672>:=</span><span style=color:#a6e22e>person</span>{
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>Name</span>:<span style=color:#e6db74>&#34;臭大佬&#34;</span>,
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>Age</span>:<span style=color:#ae81ff>26</span>,
+</span></span><span style=display:flex><span>	}
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span>(<span style=color:#a6e22e>a</span>)
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>A</span>(<span style=color:#a6e22e>a</span>)
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span>(<span style=color:#a6e22e>a</span>)
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>A</span>(<span style=color:#a6e22e>p</span> <span style=color:#a6e22e>person</span>) {
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>p</span>.<span style=color:#a6e22e>Age</span> = <span style=color:#ae81ff>12</span>
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span>(<span style=color:#e6db74>&#34;A:&#34;</span>,<span style=color:#a6e22e>p</span>)
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><blockquote><p>λ go run gogo.go
+{臭大佬 26}
+A: {臭大佬 12}
+{臭大佬 26}</p></blockquote></div></article></main></div><aside class=sidebar><div class="widget-categories widget"><h4 class=widget__title>分类</h4><div class=widget__content><ul class=widget__list><li class=widget__item><a class=widget__link href=/choudalao.github.io/categories/ai/>AI</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/categories/go/>Go</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/categories/linux/>Linux</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/categories/mysql/>MYSQL</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/categories/php/>Php</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/categories/python/>Python</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/categories/%E4%B8%AA%E4%BA%BA/>个人</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/categories/%E5%85%B6%E4%BB%96/>其他</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/categories/%E5%89%8D%E7%AB%AF/>前端</a></li></ul></div></div><div class="widget-recent widget"><h4 class=widget__title>近期文章</h4><div class=widget__content><ul class=widget__list><li class=widget__item><a class=widget__link href=/choudalao.github.io/posts/2025-04-19-cline%E4%B8%AD%E4%BD%BF%E7%94%A8-mysql-mcp-%E6%9C%8D%E5%8A%A1/>Cline中使用 MySql MCP 服务</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/posts/2020-09-03-%E5%9F%BA%E4%BA%8Elaravel%E5%8F%8Alayui%E5%BC%80%E5%8F%91%E7%9A%84%E5%90%8E%E5%8F%B0%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F-laravel-wjfcms/>基于laravel及layui开发的后台管理系统 -- laravel-wjfcms</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/posts/2020-06-02-%E8%85%BE%E8%AE%AF%E4%BA%91%E4%BA%A7%E5%93%81%E5%A4%A7%E4%BF%83/>腾讯云产品大促</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/posts/2019-09-21-git%E6%93%8D%E4%BD%9C/>Git操作</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/posts/2026-01-29-openclaw-%E5%AE%89%E8%A3%85%E5%8F%8A%E4%BD%BF%E7%94%A8/>openclaw 安装及使用</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/posts/2026-01-28-mise-%E5%AE%89%E8%A3%85%E5%8F%8A%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/>mise 安装及使用指南</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/posts/2026-01-26-%E7%94%A8-obsidian-%E6%89%93%E9%80%A0ai%E7%AC%94%E8%AE%B0/>用 Obsidian 打造AI笔记</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/posts/2026-01-22-claude-%E5%AE%98%E6%96%B9-skill-creator-%E4%BB%8B%E7%BB%8D%E5%8F%8A%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/>Claude 官方 Skill-Creator 介绍及使用指南</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/posts/2026-01-22-%E9%80%9A%E8%BF%87qq%E9%82%AE%E7%AE%B1%E4%BB%A3%E6%94%B6gmail%E9%82%AE%E4%BB%B6/>通过QQ邮箱代收Gmail邮件</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/posts/2026-01-19-%E8%A7%A3%E5%86%B3-wsl2-windows-hosts-%E5%BC%80%E5%90%AF-vpn-%E5%90%8E%E6%97%A0%E6%B3%95%E8%AE%BF%E9%97%AE%E6%9C%AC%E5%9C%B0-web-%E6%9C%8D%E5%8A%A1%E7%9A%84%E9%97%AE%E9%A2%98/>解决 WSL2 + Windows Hosts + 开启 VPN 后无法访问本地 Web 服务的问题</a></li></ul></div></div><div class="widget-taglist widget"><h4 class=widget__title>标签</h4><div class=widget__content><a class="widget-taglist__link widget__link btn" href=/choudalao.github.io/tags/php/ title=Php>Php</a>
+<a class="widget-taglist__link widget__link btn" href=/choudalao.github.io/tags/%E5%85%B3%E4%BA%8E/ title=关于>关于</a></div></div></aside></div><footer class=footer><div class="container footer__container flex"><div class=footer__copyright>&copy; 2026 臭大佬博客.
+<span class=footer__copyright-credits>基于 <a href=https://gohugo.io/ rel="nofollow noopener" target=_blank>Hugo</a> 引擎和 <a href=https://github.com/Vimux/Mainroad/ rel="nofollow noopener" target=_blank>Mainroad</a> 主题</span></div></div></footer></div><script async defer src=/choudalao.github.io/js/menu.js></script></body></html>

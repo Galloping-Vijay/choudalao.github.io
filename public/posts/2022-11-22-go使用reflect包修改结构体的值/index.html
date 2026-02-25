@@ -1,0 +1,194 @@
+<!doctype html><html class=no-js lang=en><head><meta charset=UTF-8><meta name=viewport content="width=device-width,initial-scale=1"><title>go使用reflect包修改结构体的值 - 臭大佬博客</title><script>(function(e,t){e[t]=e[t].replace("no-js","js")})(document.documentElement,"className")</script><meta name=description content="go使用reflect包修改结构体的值"><link rel=preconnect href=https://fonts.gstatic.com crossorigin><link rel=dns-prefetch href=//fonts.googleapis.com><link rel=dns-prefetch href=//fonts.gstatic.com><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700"><link rel=stylesheet href=/choudalao.github.io/css/style.css><link rel="shortcut icon" href=/choudalao.github.io/favicon.ico></head><body class=body><div class="container container--outer"><header class=header><div class="container header__container"><div class=logo><a class=logo__link href=/choudalao.github.io/ title=臭大佬博客 rel=home><div class="logo__item logo__text"><div class=logo__title>臭大佬博客</div></div></a></div><nav class=menu><button class=menu__btn aria-haspopup=true aria-expanded=false tabindex=0>
+<span class=menu__btn-title tabindex=-1>菜单</span></button><ul class=menu__list><li class=menu__item><a class=menu__link href=/choudalao.github.io/><span class=menu__text>首页</span></a></li><li class=menu__item><a class=menu__link href=/choudalao.github.io/categories/><span class=menu__text>分类</span></a></li><li class=menu__item><a class=menu__link href=/choudalao.github.io/tags/><span class=menu__text>标签</span></a></li><li class=menu__item><a class=menu__link href=/choudalao.github.io/posts/><span class=menu__text>归档</span></a></li><li class=menu__item><a class=menu__link href=/choudalao.github.io/about/><span class=menu__text>关于</span></a></li></ul></nav></div></header><div class="wrapper flex"><div class=primary><main class=main role=main><article class=post><header class=post__header><h1 class=post__title>go使用reflect包修改结构体的值</h1></header><div class="content post__content clearfix"><h1 id=问题>问题</h1><p>有个方法是通用的,参数是Interface,可以丢进来任何结构体,这时候,就不知道 interface 里面有哪些成员了,假设我们知道 interface 里面有 ShopId 字段,并且我们要修改它的值,该怎么操作呢?</p><h1 id=方法>方法</h1><p>直接上代码</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#f92672>package</span> <span style=color:#a6e22e>test</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#f92672>import</span> (
+</span></span><span style=display:flex><span>	<span style=color:#e6db74>&#34;reflect&#34;</span>
+</span></span><span style=display:flex><span>	<span style=color:#e6db74>&#34;testing&#34;</span>
+</span></span><span style=display:flex><span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>TestA</span>(<span style=color:#a6e22e>t</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>testing</span>.<span style=color:#a6e22e>T</span>) {
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>type</span> <span style=color:#a6e22e>shop</span> <span style=color:#66d9ef>struct</span> {
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>ShopId</span> <span style=color:#66d9ef>int64</span>
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>Name</span>   <span style=color:#66d9ef>string</span>
+</span></span><span style=display:flex><span>	}
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>d</span> <span style=color:#f92672>:=</span> <span style=color:#f92672>&amp;</span><span style=color:#a6e22e>shop</span>{
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>ShopId</span>: <span style=color:#ae81ff>2</span>,
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>Name</span>:   <span style=color:#e6db74>&#34;测试一下&#34;</span>,
+</span></span><span style=display:flex><span>	}
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>var</span> <span style=color:#a6e22e>e</span> <span style=color:#66d9ef>int64</span> = <span style=color:#ae81ff>40</span>
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>changeValue</span>(<span style=color:#a6e22e>d</span>, <span style=color:#a6e22e>e</span>)
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>t</span>.<span style=color:#a6e22e>Log</span>(<span style=color:#a6e22e>d</span>)
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>// changeValue 修改 s 的 shopId 的值</span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>changeValue</span>(<span style=color:#a6e22e>s</span> <span style=color:#66d9ef>interface</span>{}, <span style=color:#a6e22e>value</span> <span style=color:#66d9ef>int64</span>) {
+</span></span><span style=display:flex><span>	<span style=color:#75715e>// 使用ValueOf()获取到变量的Value对象</span>
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>ref</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>reflect</span>.<span style=color:#a6e22e>ValueOf</span>(<span style=color:#a6e22e>s</span>)
+</span></span><span style=display:flex><span>	<span style=color:#75715e>// value是一个指针,这里获取了该指针指向的值,相当于value.Elem()</span>
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>ref</span> = <span style=color:#a6e22e>reflect</span>.<span style=color:#a6e22e>Indirect</span>(<span style=color:#a6e22e>ref</span>)
+</span></span><span style=display:flex><span>	<span style=color:#75715e>// 如果是结构体,才往下走</span>
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>if</span> <span style=color:#a6e22e>ref</span>.<span style=color:#a6e22e>Kind</span>() <span style=color:#f92672>!=</span> <span style=color:#a6e22e>reflect</span>.<span style=color:#a6e22e>Struct</span> {
+</span></span><span style=display:flex><span>		<span style=color:#66d9ef>return</span>
+</span></span><span style=display:flex><span>	}
+</span></span><span style=display:flex><span>	<span style=color:#75715e>//获取结构体shop中的ShopId字段的值</span>
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>val</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>ref</span>.<span style=color:#a6e22e>FieldByName</span>(<span style=color:#e6db74>&#34;ShopId&#34;</span>)
+</span></span><span style=display:flex><span>	<span style=color:#75715e>// 要先判断是否有这个值,如果类型为 reflect.Invalid,则不存在这个成员</span>
+</span></span><span style=display:flex><span>	<span style=color:#75715e>// val.Kind() 获取对象或者变量的类型, 如果类型不为 Invalid ,则赋值</span>
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>if</span> <span style=color:#a6e22e>val</span>.<span style=color:#a6e22e>Kind</span>() <span style=color:#f92672>==</span> <span style=color:#a6e22e>reflect</span>.<span style=color:#a6e22e>Int64</span> {
+</span></span><span style=display:flex><span>		<span style=color:#75715e>// ShopId 的值设为 value</span>
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>val</span>.<span style=color:#a6e22e>SetInt</span>(<span style=color:#a6e22e>value</span>)
+</span></span><span style=display:flex><span>	}
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>结果
+<em>=== RUN TestA
+a_test.go: 19: &{40 测试一下}
+&mdash; PASS: TestA (0.00s)
+PASS</em></p><p>如果不存在要修改的成员名会不会出问题呢?我们把结构体的 ShopId 改成 ShopIds 看一下结果:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#f92672>package</span> <span style=color:#a6e22e>test</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#f92672>import</span> (
+</span></span><span style=display:flex><span>	<span style=color:#e6db74>&#34;reflect&#34;</span>
+</span></span><span style=display:flex><span>	<span style=color:#e6db74>&#34;testing&#34;</span>
+</span></span><span style=display:flex><span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>TestA</span>(<span style=color:#a6e22e>t</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>testing</span>.<span style=color:#a6e22e>T</span>) {
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>type</span> <span style=color:#a6e22e>shop</span> <span style=color:#66d9ef>struct</span> {
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>ShopIds</span> <span style=color:#66d9ef>int64</span>
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>Name</span>    <span style=color:#66d9ef>string</span>
+</span></span><span style=display:flex><span>	}
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>d</span> <span style=color:#f92672>:=</span> <span style=color:#f92672>&amp;</span><span style=color:#a6e22e>shop</span>{
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>ShopIds</span>: <span style=color:#ae81ff>2</span>,
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>Name</span>:    <span style=color:#e6db74>&#34;测试一下&#34;</span>,
+</span></span><span style=display:flex><span>	}
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>var</span> <span style=color:#a6e22e>e</span> <span style=color:#66d9ef>int64</span> = <span style=color:#ae81ff>40</span>
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>changeValue</span>(<span style=color:#a6e22e>d</span>, <span style=color:#a6e22e>e</span>)
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>t</span>.<span style=color:#a6e22e>Log</span>(<span style=color:#a6e22e>d</span>)
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>// changeValue 修改 s 的 shopId 的值</span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>changeValue</span>(<span style=color:#a6e22e>s</span> <span style=color:#66d9ef>interface</span>{}, <span style=color:#a6e22e>value</span> <span style=color:#66d9ef>int64</span>) {
+</span></span><span style=display:flex><span>	<span style=color:#75715e>// 使用ValueOf()获取到变量的Value对象</span>
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>ref</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>reflect</span>.<span style=color:#a6e22e>ValueOf</span>(<span style=color:#a6e22e>s</span>)
+</span></span><span style=display:flex><span>	<span style=color:#75715e>// value是一个指针,这里获取了该指针指向的值,相当于value.Elem()</span>
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>ref</span> = <span style=color:#a6e22e>reflect</span>.<span style=color:#a6e22e>Indirect</span>(<span style=color:#a6e22e>ref</span>)
+</span></span><span style=display:flex><span>	<span style=color:#75715e>//获取结构体shop中的ShopId字段的值</span>
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>val</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>ref</span>.<span style=color:#a6e22e>FieldByName</span>(<span style=color:#e6db74>&#34;ShopId&#34;</span>)
+</span></span><span style=display:flex><span>	<span style=color:#75715e>// 要先判断是否有这个值,如果类型为 reflect.Invalid,则不存在这个成员</span>
+</span></span><span style=display:flex><span>	<span style=color:#75715e>// val.Kind() 获取对象或者变量的类型, 如果类型不为 Invalid ,则赋值</span>
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>if</span> <span style=color:#a6e22e>val</span>.<span style=color:#a6e22e>Kind</span>() <span style=color:#f92672>!=</span> <span style=color:#a6e22e>reflect</span>.<span style=color:#a6e22e>Invalid</span> {
+</span></span><span style=display:flex><span>		<span style=color:#75715e>// ShopId 的值设为 value</span>
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>val</span>.<span style=color:#a6e22e>SetInt</span>(<span style=color:#a6e22e>value</span>)
+</span></span><span style=display:flex><span>	}
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>结果
+<em>=== RUN TestA
+a_test.go: 19: &{2 测试一下}
+&mdash; PASS: TestA (0.00s)
+PASS</em></p><p>并没有出来恐慌或者错误.</p><h1 id=反射结构体>反射结构体</h1><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#f92672>package</span> <span style=color:#a6e22e>main</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#f92672>import</span> (
+</span></span><span style=display:flex><span>	<span style=color:#e6db74>&#34;fmt&#34;</span>
+</span></span><span style=display:flex><span>	<span style=color:#e6db74>&#34;reflect&#34;</span>
+</span></span><span style=display:flex><span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>type</span> <span style=color:#a6e22e>Order</span> <span style=color:#66d9ef>struct</span> {
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>orderId</span> <span style=color:#66d9ef>string</span> <span style=color:#e6db74>`json:&#34;order_id&#34;`</span>
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>price</span>   <span style=color:#66d9ef>int</span>    <span style=color:#e6db74>`json:&#34;price&#34;`</span>
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>main</span>() {
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>type</span> <span style=color:#a6e22e>InfoData</span> <span style=color:#66d9ef>struct</span> {
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>ShopUuid</span> <span style=color:#66d9ef>string</span> <span style=color:#e6db74>`json:&#34;shopUuid&#34;`</span>
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>UserUuid</span> <span style=color:#66d9ef>string</span> <span style=color:#e6db74>`json:&#34;userUuid&#34;`</span>
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>Types</span>    <span style=color:#66d9ef>int64</span>  <span style=color:#e6db74>`json:&#34;types&#34;`</span>
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>Status</span>   <span style=color:#66d9ef>int64</span>  <span style=color:#e6db74>`json:&#34;status&#34;`</span>
+</span></span><span style=display:flex><span>	}
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>d</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>InfoData</span>{
+</span></span><span style=display:flex><span>		<span style=color:#e6db74>&#34;Sfx135&#34;</span>, <span style=color:#e6db74>&#34;sd54&#34;</span>, <span style=color:#ae81ff>1</span>, <span style=color:#ae81ff>2</span>,
+</span></span><span style=display:flex><span>	}
+</span></span><span style=display:flex><span>	<span style=color:#75715e>// 返回原始值的值信息</span>
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>v</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>reflect</span>.<span style=color:#a6e22e>ValueOf</span>(<span style=color:#a6e22e>d</span>)
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>if</span> <span style=color:#a6e22e>v</span>.<span style=color:#a6e22e>Kind</span>() <span style=color:#f92672>!=</span> <span style=color:#a6e22e>reflect</span>.<span style=color:#a6e22e>Struct</span> {
+</span></span><span style=display:flex><span>		<span style=color:#66d9ef>return</span>
+</span></span><span style=display:flex><span>	}
+</span></span><span style=display:flex><span>	<span style=color:#75715e>// 获得结构体成员的详细信息</span>
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>f</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>reflect</span>.<span style=color:#a6e22e>TypeOf</span>(<span style=color:#a6e22e>d</span>)
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>for</span> <span style=color:#a6e22e>i</span> <span style=color:#f92672>:=</span> <span style=color:#ae81ff>0</span>; <span style=color:#a6e22e>i</span> &lt; <span style=color:#a6e22e>f</span>.<span style=color:#a6e22e>NumField</span>(); <span style=color:#a6e22e>i</span><span style=color:#f92672>++</span> {
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>field</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>f</span>.<span style=color:#a6e22e>Field</span>(<span style=color:#a6e22e>i</span>)
+</span></span><span style=display:flex><span>		<span style=color:#75715e>// field.Name 可以获取key</span>
+</span></span><span style=display:flex><span>		<span style=color:#75715e>// v.Field(i).String() 获取对应的值</span>
+</span></span><span style=display:flex><span>		<span style=color:#66d9ef>switch</span> <span style=color:#a6e22e>field</span>.<span style=color:#a6e22e>Name</span> {
+</span></span><span style=display:flex><span>		<span style=color:#66d9ef>case</span> <span style=color:#e6db74>&#34;ShopUuid&#34;</span>:
+</span></span><span style=display:flex><span>			<span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Printf</span>(<span style=color:#e6db74>&#34;key:%s val:%s type: %v\n&#34;</span>, <span style=color:#a6e22e>field</span>.<span style=color:#a6e22e>Name</span>, <span style=color:#a6e22e>v</span>.<span style=color:#a6e22e>Field</span>(<span style=color:#a6e22e>i</span>).<span style=color:#a6e22e>String</span>(), <span style=color:#a6e22e>field</span>.<span style=color:#a6e22e>Type</span>)
+</span></span><span style=display:flex><span>		<span style=color:#66d9ef>case</span> <span style=color:#e6db74>&#34;UserUuid&#34;</span>:
+</span></span><span style=display:flex><span>			<span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Printf</span>(<span style=color:#e6db74>&#34;key:%s val:%s type: %v\n&#34;</span>, <span style=color:#a6e22e>field</span>.<span style=color:#a6e22e>Name</span>, <span style=color:#a6e22e>v</span>.<span style=color:#a6e22e>Field</span>(<span style=color:#a6e22e>i</span>).<span style=color:#a6e22e>String</span>(), <span style=color:#a6e22e>field</span>.<span style=color:#a6e22e>Type</span>)
+</span></span><span style=display:flex><span>		<span style=color:#66d9ef>case</span> <span style=color:#e6db74>&#34;Status&#34;</span>:
+</span></span><span style=display:flex><span>			<span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Printf</span>(<span style=color:#e6db74>&#34;key:%s val:%d type: %v\n&#34;</span>, <span style=color:#a6e22e>field</span>.<span style=color:#a6e22e>Name</span>, <span style=color:#a6e22e>v</span>.<span style=color:#a6e22e>Field</span>(<span style=color:#a6e22e>i</span>).<span style=color:#a6e22e>Int</span>(), <span style=color:#a6e22e>field</span>.<span style=color:#a6e22e>Type</span>)
+</span></span><span style=display:flex><span>		}
+</span></span><span style=display:flex><span>	}
+</span></span><span style=display:flex><span>	<span style=color:#75715e>// 取字段</span>
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>vv</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>reflect</span>.<span style=color:#a6e22e>ValueOf</span>(<span style=color:#f92672>&amp;</span><span style=color:#a6e22e>d</span>)
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>vv</span> = <span style=color:#a6e22e>vv</span>.<span style=color:#a6e22e>Elem</span>()
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>vf</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>vv</span>.<span style=color:#a6e22e>FieldByName</span>(<span style=color:#e6db74>&#34;ShopUuid&#34;</span>)
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>if</span> <span style=color:#a6e22e>vf</span>.<span style=color:#a6e22e>Kind</span>() <span style=color:#f92672>==</span> <span style=color:#a6e22e>reflect</span>.<span style=color:#a6e22e>String</span> {
+</span></span><span style=display:flex><span>		<span style=color:#75715e>// 原值</span>
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Printf</span>(<span style=color:#e6db74>&#34;原值:%v\n&#34;</span>, <span style=color:#a6e22e>vf</span>.<span style=color:#a6e22e>String</span>())
+</span></span><span style=display:flex><span>		<span style=color:#75715e>// 修改值</span>
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>vf</span>.<span style=color:#a6e22e>SetString</span>(<span style=color:#e6db74>&#34;SW56&#34;</span>)
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Printf</span>(<span style=color:#e6db74>&#34;新值:%v\n&#34;</span>, <span style=color:#a6e22e>vf</span>.<span style=color:#a6e22e>String</span>())
+</span></span><span style=display:flex><span>	}
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Print</span>(<span style=color:#a6e22e>d</span>)
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>结果:
+<em>key:ShopUuid val:Sfx135 type: string
+key:UserUuid val:sd54 type: string
+key:Status val:2 type: int64
+原值:Sfx135
+新值:SW56
+{SW56 sd54 1 2}</em></p><h1 id=指针结构体>指针结构体</h1><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#f92672>package</span> <span style=color:#a6e22e>main</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#f92672>import</span> (
+</span></span><span style=display:flex><span>	<span style=color:#e6db74>&#34;fmt&#34;</span>
+</span></span><span style=display:flex><span>	<span style=color:#e6db74>&#34;reflect&#34;</span>
+</span></span><span style=display:flex><span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>type</span> <span style=color:#a6e22e>User</span> <span style=color:#66d9ef>struct</span> {
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>Name</span>     <span style=color:#66d9ef>string</span> <span style=color:#e6db74>`json:&#34;name&#34;`</span>
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>Age</span>      <span style=color:#66d9ef>int</span>    <span style=color:#e6db74>`json:&#34;age&#34;`</span>
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>Location</span> <span style=color:#66d9ef>string</span> <span style=color:#e6db74>`json:&#34;location&#34;`</span>
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>main</span>() {
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>user</span> <span style=color:#f92672>:=</span> <span style=color:#f92672>&amp;</span><span style=color:#a6e22e>User</span>{
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>Name</span>:     <span style=color:#e6db74>&#34;Alice&#34;</span>,
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>Age</span>:      <span style=color:#ae81ff>25</span>,
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>Location</span>: <span style=color:#e6db74>&#34;New York&#34;</span>,
+</span></span><span style=display:flex><span>	}
+</span></span><span style=display:flex><span><span style=color:#75715e>// 获取指针类型</span>
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>userType</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>reflect</span>.<span style=color:#a6e22e>TypeOf</span>(<span style=color:#a6e22e>user</span>)
+</span></span><span style=display:flex><span>	<span style=color:#75715e>// 解引用指针获取结构体类型</span>
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>structType</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>userType</span>.<span style=color:#a6e22e>Elem</span>()
+</span></span><span style=display:flex><span><span style=color:#75715e>// 遍历结构体字段</span>
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>for</span> <span style=color:#a6e22e>i</span> <span style=color:#f92672>:=</span> <span style=color:#ae81ff>0</span>; <span style=color:#a6e22e>i</span> &lt; <span style=color:#a6e22e>structType</span>.<span style=color:#a6e22e>NumField</span>(); <span style=color:#a6e22e>i</span><span style=color:#f92672>++</span> {
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>field</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>structType</span>.<span style=color:#a6e22e>Field</span>(<span style=color:#a6e22e>i</span>)
+</span></span><span style=display:flex><span>		<span style=color:#75715e>// 获取字段名</span>
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>name</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>field</span>.<span style=color:#a6e22e>Name</span>
+</span></span><span style=display:flex><span>		<span style=color:#75715e>// 获取字段标签</span>
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>tag</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>field</span>.<span style=color:#a6e22e>Tag</span>.<span style=color:#a6e22e>Get</span>(<span style=color:#e6db74>&#34;json&#34;</span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>value</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>reflect</span>.<span style=color:#a6e22e>ValueOf</span>(<span style=color:#a6e22e>user</span>).<span style=color:#a6e22e>Elem</span>().<span style=color:#a6e22e>FieldByName</span>(<span style=color:#a6e22e>name</span>)
+</span></span><span style=display:flex><span>		<span style=color:#75715e>// 获取类型</span>
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>valueType</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>value</span>.<span style=color:#a6e22e>Type</span>()
+</span></span><span style=display:flex><span>		<span style=color:#75715e>// 获取字段值</span>
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>fieldValue</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>value</span>.<span style=color:#a6e22e>Interface</span>()
+</span></span><span style=display:flex><span>		<span style=color:#75715e>// 获取 Kind</span>
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>kind</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>valueType</span>.<span style=color:#a6e22e>Kind</span>()
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Printf</span>(<span style=color:#e6db74>&#34;Field Name: %s, Tag: %s, Value: %v, Type: %v; Kind:%v\n&#34;</span>, <span style=color:#a6e22e>name</span>, <span style=color:#a6e22e>tag</span>, <span style=color:#a6e22e>fieldValue</span>, <span style=color:#a6e22e>valueType</span>, <span style=color:#a6e22e>kind</span>)
+</span></span><span style=display:flex><span>	}
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>结果:
+Field Name: Name, Tag: name, Value: Alice, Type: string; Kind:string
+Field Name: Age, Tag: age, Value: 25, Type: int; Kind:int
+Field Name: Location, Tag: location, Value: New York, Type: string; Kind:string</p></div></article></main></div><aside class=sidebar><div class="widget-categories widget"><h4 class=widget__title>分类</h4><div class=widget__content><ul class=widget__list><li class=widget__item><a class=widget__link href=/choudalao.github.io/categories/ai/>AI</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/categories/go/>Go</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/categories/linux/>Linux</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/categories/mysql/>MYSQL</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/categories/php/>Php</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/categories/python/>Python</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/categories/%E4%B8%AA%E4%BA%BA/>个人</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/categories/%E5%85%B6%E4%BB%96/>其他</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/categories/%E5%89%8D%E7%AB%AF/>前端</a></li></ul></div></div><div class="widget-recent widget"><h4 class=widget__title>近期文章</h4><div class=widget__content><ul class=widget__list><li class=widget__item><a class=widget__link href=/choudalao.github.io/posts/2025-04-19-cline%E4%B8%AD%E4%BD%BF%E7%94%A8-mysql-mcp-%E6%9C%8D%E5%8A%A1/>Cline中使用 MySql MCP 服务</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/posts/2020-09-03-%E5%9F%BA%E4%BA%8Elaravel%E5%8F%8Alayui%E5%BC%80%E5%8F%91%E7%9A%84%E5%90%8E%E5%8F%B0%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F-laravel-wjfcms/>基于laravel及layui开发的后台管理系统 -- laravel-wjfcms</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/posts/2020-06-02-%E8%85%BE%E8%AE%AF%E4%BA%91%E4%BA%A7%E5%93%81%E5%A4%A7%E4%BF%83/>腾讯云产品大促</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/posts/2019-09-21-git%E6%93%8D%E4%BD%9C/>Git操作</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/posts/2026-01-29-openclaw-%E5%AE%89%E8%A3%85%E5%8F%8A%E4%BD%BF%E7%94%A8/>openclaw 安装及使用</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/posts/2026-01-28-mise-%E5%AE%89%E8%A3%85%E5%8F%8A%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/>mise 安装及使用指南</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/posts/2026-01-26-%E7%94%A8-obsidian-%E6%89%93%E9%80%A0ai%E7%AC%94%E8%AE%B0/>用 Obsidian 打造AI笔记</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/posts/2026-01-22-claude-%E5%AE%98%E6%96%B9-skill-creator-%E4%BB%8B%E7%BB%8D%E5%8F%8A%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/>Claude 官方 Skill-Creator 介绍及使用指南</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/posts/2026-01-22-%E9%80%9A%E8%BF%87qq%E9%82%AE%E7%AE%B1%E4%BB%A3%E6%94%B6gmail%E9%82%AE%E4%BB%B6/>通过QQ邮箱代收Gmail邮件</a></li><li class=widget__item><a class=widget__link href=/choudalao.github.io/posts/2026-01-19-%E8%A7%A3%E5%86%B3-wsl2-windows-hosts-%E5%BC%80%E5%90%AF-vpn-%E5%90%8E%E6%97%A0%E6%B3%95%E8%AE%BF%E9%97%AE%E6%9C%AC%E5%9C%B0-web-%E6%9C%8D%E5%8A%A1%E7%9A%84%E9%97%AE%E9%A2%98/>解决 WSL2 + Windows Hosts + 开启 VPN 后无法访问本地 Web 服务的问题</a></li></ul></div></div><div class="widget-taglist widget"><h4 class=widget__title>标签</h4><div class=widget__content><a class="widget-taglist__link widget__link btn" href=/choudalao.github.io/tags/php/ title=Php>Php</a>
+<a class="widget-taglist__link widget__link btn" href=/choudalao.github.io/tags/%E5%85%B3%E4%BA%8E/ title=关于>关于</a></div></div></aside></div><footer class=footer><div class="container footer__container flex"><div class=footer__copyright>&copy; 2026 臭大佬博客.
+<span class=footer__copyright-credits>基于 <a href=https://gohugo.io/ rel="nofollow noopener" target=_blank>Hugo</a> 引擎和 <a href=https://github.com/Vimux/Mainroad/ rel="nofollow noopener" target=_blank>Mainroad</a> 主题</span></div></div></footer></div><script async defer src=/choudalao.github.io/js/menu.js></script></body></html>
